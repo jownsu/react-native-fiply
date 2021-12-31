@@ -1,20 +1,25 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React from "react"
+import Routes from "./src/Routes"
+import AppLoading from "expo-app-loading"
+import { useFonts } from "expo-font"
+import { Provider as PaperProvider } from "react-native-paper"
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+const App = () => {
+
+  let [ fontsLoaded ] = useFonts({
+    'EncodeSansExpaded-Medium': require('./assets/fonts/EncodeSansExpanded-Medium.ttf'),
+    'EncodeSansExpaded-Light': require('./assets/fonts/EncodeSansExpanded-Light.ttf'),
+    'EncodeSansExpaded-SemiBold': require('./assets/fonts/EncodeSansExpanded-SemiBold.ttf'),
+    'EncodeSansExpaded-Bold': require('./assets/fonts/EncodeSansExpanded-Bold.ttf')
+  })
+
+  return (!fontsLoaded) 
+    ? <AppLoading/> 
+    : 
+      <PaperProvider>
+        <Routes />
+      </PaperProvider>
+
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default App
