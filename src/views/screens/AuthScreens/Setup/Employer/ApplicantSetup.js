@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import { StyleSheet } from 'react-native'
-import { SafeAreaView, Container, Text, FiplyLogo, WaveHeader, Button, Dropdown } from '../../../../components/FiplyComponents' 
+import { SafeAreaView, Container, Text, FiplyLogo, WaveHeader, Button, Dropdown, InputDropdown } from '../../../../components/FiplyComponents' 
 const ApplicantSetup = ({navigation}) => {
 
     const [showDropDown, setShowDropDown] = useState({levelOfExperience: false, fieldOfExpertise: false, location: false});
@@ -11,56 +11,56 @@ const ApplicantSetup = ({navigation}) => {
 
     const levelOfExperienceList = [
         {
-          label: "Entry Level",
-          value: "Entry Level",
+          id: "1",
+          name: "Entry Level",
         },
         {
-          label: "Intermediate",
-          value: "Intermediate",
+          id: "2",
+          name: "Intermediate",
         },
         {
-          label: "Mid Level",
-          value: "Mid Level",
+          id: "3",
+          name: "Mid Level",
         },
         {
-          label: "Senior Level",
-          value: "Senior Level",
+          id: "4",
+          name: "Senior Level",
         },
       ];
     const fieldOfExpertiseList = [
         {
-          label: "Business and Entrepreneurship",
-          value: "Business and Entrepreneurship",
+          id: "1",
+          name: "Business and Entrepreneurship",
         },
         {
-          label: "Creativity and Aesthetics",
-          value: "Creativity and Aesthetics",
+          id: "2",
+          name: "Creativity and Aesthetics",
         },
         {
-          label: "Math, Data and Computing",
-          value: "Math, Data and Computing",
+          id: "3",
+          name: "Math, Data and Computing",
         },
         {
-          label: "Technology and Realization",
-          value: "Technology and Realization",
+          id: "4",
+          name: "Technology and Realization",
         },
         {
-          label: "User and Society",
-          value: "User and Society",
+          id: "5",
+          name: "User and Society",
         },
       ];
     const locationList = [
         {
-            label: "Cavite",
-            value: "Cavite",
+            id: "1",
+            name: "Cavite",
         },
         {
-            label: "Quezon City",
-            value: "Quezon City",
+            id: "2",
+            name: "Quezon City",
         },
         {
-            label: "Caloocan City",
-            value: "Caloocan City",
+            id: "3",
+            name: "Caloocan City",
         },
       ];
 
@@ -83,40 +83,60 @@ const ApplicantSetup = ({navigation}) => {
     return (
         <SafeAreaView>
             <WaveHeader waveimg={require('../../../../../assets/img/waves/4.png')} />
-            <Container center>
+            <Container center onPress={() => setShowDropDown({})}>
                 <FiplyLogo />
                 <Text center size={17} style={{ marginVertical: 25 }}>What kind of applicant are you looking for?</Text>
-                <Dropdown
+
+                <InputDropdown
                     label={"Level of experience"}
-                    visible={showDropDown.levelOfExperience}
-                    showDropDown={() => setShowDropDown({...showDropDown, levelOfExperience: true})}
-                    onDismiss={() => setShowDropDown({...showDropDown, levelOfExperience: false})}
+                    visibleDropdown={showDropDown.levelOfExperience}
                     value={levelOfExperience}
-                    setValue={ value => handleSetValue('levelOfExperience', value)}
-                    list={levelOfExperienceList}
+                    data={levelOfExperienceList}
+                    onFocus={() => setShowDropDown({...showDropDown, levelOfExperience: true})}
                     style={{ marginBottom: 10 }}
-                />
-                <Dropdown
-                    label={"Field of expertise"}
-                    visible={showDropDown.fieldOfExpertise}
-                    showDropDown={() => setShowDropDown({...showDropDown, fieldOfExpertise: true})}
-                    onDismiss={() => setShowDropDown({...showDropDown, fieldOfExpertise: false})}
-                    value={fieldOfExpertise}
-                    setValue={ value => handleSetValue('fieldOfExpertise', value)}
-                    list={fieldOfExpertiseList}
-                    style={{ marginBottom: 10 }}
-                />
-                <Dropdown
-                    label={"Location"}
-                    visible={showDropDown.location}
-                    showDropDown={() => setShowDropDown({...showDropDown, location: true})}
-                    onDismiss={() => setShowDropDown({...showDropDown, location: false})}
-                    value={location}
-                    setValue={ value => handleSetValue('location', value)}
-                    list={locationList}
-                    style={{ marginBottom: 10 }}
+                    onChangeText={setLevelOfExperience}
+                    onListPress={name => {
+                      setLevelOfExperience(name)
+                      setShowDropDown({...showDropDown, levelOfExperience: false})
+                    }}
+                    nonEditable
+                    onInputPress={() => setShowDropDown({...showDropDown, levelOfExperience: true})}
+                    dropdownIcon
                 />
 
+                <InputDropdown
+                    label={"Field of expertise"}
+                    visibleDropdown={showDropDown.fieldOfExpertise}
+                    value={fieldOfExpertise}
+                    data={fieldOfExpertiseList}
+                    onFocus={() => setShowDropDown({...showDropDown, fieldOfExpertise: true})}
+                    style={{ marginBottom: 10 }}
+                    onChangeText={setFieldOfExpertise}
+                    onListPress={name => {
+                      setFieldOfExpertise(name)
+                      setShowDropDown({...showDropDown, fieldOfExpertise: false})
+                    }}
+                    nonEditable
+                    onInputPress={() => setShowDropDown({...showDropDown, fieldOfExpertise: true})}
+                    dropdownIcon
+                />
+
+                <InputDropdown
+                    label={"Location"}
+                    visibleDropdown={showDropDown.location}
+                    value={location}
+                    data={locationList}
+                    onFocus={() => setShowDropDown({...showDropDown, location: true})}
+                    style={{ marginBottom: 10 }}
+                    onChangeText={setLocation}
+                    onListPress={name => {
+                      setLocation(name)
+                      setShowDropDown({...showDropDown, location: false})
+                    }}
+                    nonEditable
+                    onInputPress={() => setShowDropDown({...showDropDown, location: true})}
+                    dropdownIcon
+                />
 
                 <Button 
                     title="Done" 

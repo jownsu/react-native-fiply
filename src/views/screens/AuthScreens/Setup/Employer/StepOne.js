@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { StyleSheet, View } from 'react-native'
-import { SafeAreaView, Text, TextInput, Button, SecondaryButton, Container } from '../../../../components/FiplyComponents'
+import { SafeAreaView, Text, TextInput, Button, InputDropdown, Container } from '../../../../components/FiplyComponents'
 import Colors from '../../../../../utils/Colors'
 import { Formik } from 'formik'
 import * as yup from 'yup'
@@ -14,6 +14,22 @@ const StepOne = ({navigation}) => {
         position: yup.string().trim().required('Position is required'),
         location : yup.string().trim().required('Location is required')
     })
+
+    const [showDropDown, setShowDropDown] = useState({location: false});
+    const locationList = [
+        {
+          id: "1",
+          name: "Cavite",
+        },
+        {
+          id: "2",
+          name: "Quezon City",
+        },
+        {
+          id: "3",
+          name: "Caloocan City",
+        },
+      ];
 
     return (
         <SafeAreaView>
@@ -33,7 +49,7 @@ const StepOne = ({navigation}) => {
                             onSubmit={(values) => navigation.navigate('StepTwo')}
                         >   
 
-                        {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
+                        {({ handleChange, handleBlur, handleSubmit, values, errors, touched, setFieldValue }) => (
 
                             <View>
                                 <TextInput
@@ -42,17 +58,14 @@ const StepOne = ({navigation}) => {
                                     onChangeText={handleChange('company')}
                                     onBlur={ handleBlur('company')}
                                     error={(touched.company && errors.company) ? true : false}
-                                    style={{ marginTop: 5 }}
                                     errorMsg={(touched.company && errors.company) ? errors.company : ''}
                                 />
-
                                 <TextInput
                                     label="Company Registration Number"
                                     value={values.companyRegNum}
                                     onChangeText={handleChange('companyRegNum')}
                                     onBlur={ handleBlur('companyRegNum')}
                                     error={(touched.companyRegNum && errors.companyRegNum) ? true : false}
-                                    style={{ marginTop: 5 }}
                                     errorMsg={(touched.companyRegNum && errors.companyRegNum) ? errors.companyRegNum : ''}
                                 />
                                 <TextInput
@@ -61,19 +74,24 @@ const StepOne = ({navigation}) => {
                                     onChangeText={handleChange('position')}
                                     onBlur={ handleBlur('position')}
                                     error={(touched.position && errors.position) ? true : false}
-                                    style={{ marginTop: 5 }}
                                     errorMsg={(touched.position && errors.position) ? errors.position : ''}
                                 />
-                                <TextInput
-                                    label="Location"
+                                <InputDropdown
+                                    label={"Location"}
+                                    visibleDropdown={showDropDown.location}
                                     value={values.location}
+                                    data={locationList}
+                                    onFocus={() => setShowDropDown({location: true})}
+                                    style={{ marginBottom: 10 }}
                                     onChangeText={handleChange('location')}
+                                    onListPress={name => {
+                                        setFieldValue('location', name)
+                                        setShowDropDown({...showDropDown, location: false})
+                                    }}
                                     onBlur={ handleBlur('location')}
                                     error={(touched.location && errors.location) ? true : false}
-                                    style={{ marginTop: 5 }}
                                     errorMsg={(touched.location && errors.location) ? errors.location : ''}
                                 />
-
                                 <Button 
                                     title='Continue'
                                     onPress={() => handleSubmit()}

@@ -1,14 +1,19 @@
 import React from 'react'
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet, View, TouchableWithoutFeedback, Keyboard } from 'react-native'
 
-export const Container = ({ children, style, center }) => {
+export const Container = ({ children, style, center, onPress }) => {
 
     const centerStyle =  center ? {justifyContent: 'center'} : {}
 
     return (
-        <View style={{ ...styles.container, ...centerStyle ,...style }}>
-            {children}
-        </View>
+        <TouchableWithoutFeedback onPress={() => {
+                onPress ? onPress() : null
+                Keyboard.dismiss()
+            }}>
+            <View style={{ ...styles.container, ...centerStyle ,...style }} >
+                {children}
+            </View>
+        </TouchableWithoutFeedback>
     )
 }
 

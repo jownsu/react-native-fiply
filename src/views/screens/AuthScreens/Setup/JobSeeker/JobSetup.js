@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import { StyleSheet, View } from 'react-native'
-import { SafeAreaView, Container, Text, FiplyLogo, WaveHeader, Button, Dropdown } from '../../../../components/FiplyComponents' 
+import { SafeAreaView, Container, Text, FiplyLogo, WaveHeader, Button, Dropdown, InputDropdown } from '../../../../components/FiplyComponents' 
 const JobSetup = ({navigation}) => {
 
     const [showDropDown, setShowDropDown] = useState({jobTitle: false, jobLocation: false, jobType: false});
@@ -10,44 +10,44 @@ const JobSetup = ({navigation}) => {
 
     const jobTitleList = [
         {
-          label: "Fullstack Developer",
-          value: "Fullstack Developer",
+          id: "Fullstack Developer",
+          name: "Fullstack Developer",
         },
         {
-          label: "Backend Developer",
-          value: "Backend Developer",
+          id: "Backend Developer",
+          name: "Backend Developer",
         },
         {
-          label: "Frontend Developer",
-          value: "Frontend Developer",
+          id: "Frontend Developer",
+          name: "Frontend Developer",
         },
       ];
     const jobLocationList = [
         {
-          label: "Cavite",
-          value: "Cavite",
+          id: "Cavite",
+          name: "Cavite",
         },
         {
-          label: "Quezon City",
-          value: "Quezon City",
+          id: "Quezon City",
+          name: "Quezon City",
         },
         {
-          label: "Caloocan City",
-          value: "Caloocan City",
+          id: "Caloocan City",
+          name: "Caloocan City",
         },
       ];
     const jobTypeList = [
         {
-          label: "Full time",
-          value: "Full time",
+          id: "Full time",
+          name: "Full time",
         },
         {
-          label: "Part time",
-          value: "Part time",
+          id: "Part time",
+          name: "Part time",
         },
         {
-          label: "Work from home",
-          value: "Work from home",
+          id: "Work from home",
+          name: "Work from home",
         },
       ];
 
@@ -70,39 +70,52 @@ const JobSetup = ({navigation}) => {
     return (
         <SafeAreaView>
             <WaveHeader waveimg={require('../../../../../assets/img/waves/4.png')} />
-            <Container center>
+            <Container center onPress={() => setShowDropDown({jobTitle: false, jobLocationList: false})}>
                 <FiplyLogo />
                 <Text center size={17} style={{ marginVertical: 25 }}>What kind of job are you looking for?</Text>
-                <Dropdown
+                <InputDropdown
                     label={"Job Title"}
-                    visible={showDropDown.jobTitle}
-                    showDropDown={() => setShowDropDown({...showDropDown, jobTitle: true})}
-                    onDismiss={() => setShowDropDown({...showDropDown, jobTitle: false})}
+                    visibleDropdown={showDropDown.jobTitle}
                     value={jobTitle}
-                    setValue={ value => handleSetValue('jobTitle', value)}
-                    list={jobTitleList}
+                    data={jobTitleList}
+                    onFocus={() => setShowDropDown({...showDropDown, jobTitle: true})}
                     style={{ marginBottom: 10 }}
+                    onChangeText={setJobTitle}
+                    onListPress={name => {
+                      setJobTitle(name)
+                      setShowDropDown({...showDropDown, jobTitle: false})
+                    }}
                 />
-                <Dropdown
+                <InputDropdown
                     label={"Job Location"}
-                    visible={showDropDown.jobLocation}
-                    showDropDown={() => setShowDropDown({...showDropDown, jobLocation: true})}
-                    onDismiss={() => setShowDropDown({...showDropDown, jobLocation: false})}
+                    visibleDropdown={showDropDown.jobLocation}
                     value={jobLocation}
-                    setValue={ value => handleSetValue('jobLocation', value)}
-                    list={jobLocationList}
+                    data={jobLocationList}
+                    onFocus={() => setShowDropDown({...showDropDown, jobLocation: true})}
                     style={{ marginBottom: 10 }}
+                    onChangeText={setJobLocation}
+                    onListPress={name => {
+                      setJobLocation(name)
+                      setShowDropDown({...showDropDown, jobLocation: false})
+                    }}
                 />
-                <Dropdown
+                <InputDropdown
                     label={"Job Type"}
-                    visible={showDropDown.jobType}
-                    showDropDown={() => setShowDropDown({...showDropDown, jobType: true})}
-                    onDismiss={() => setShowDropDown({...showDropDown, jobType: false})}
+                    visibleDropdown={showDropDown.jobType}
                     value={jobType}
-                    setValue={ value => handleSetValue('jobType', value)}
-                    list={jobTypeList}
+                    data={jobTypeList}
+                    onFocus={() => setShowDropDown({...showDropDown, jobType: true})}
                     style={{ marginBottom: 10 }}
+                    onChangeText={setJobType}
+                    onListPress={name => {
+                      setJobType(name)
+                      setShowDropDown({...showDropDown, jobType: false})
+                    }}
+                    nonEditable
+                    onInputPress={() => setShowDropDown({...showDropDown, jobType: true})}
+                    dropdownIcon
                 />
+                
                 <Button 
                     title="Done" 
                     style={{ marginVertical: 25 }} 
