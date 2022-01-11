@@ -6,7 +6,7 @@ const Routes = () => {
 
     return (
         <NavigationContainer>
-            <AuthStack />
+            <AppStack />
         </NavigationContainer>
     )
 }

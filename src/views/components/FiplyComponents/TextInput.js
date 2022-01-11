@@ -18,7 +18,9 @@ export const TextInput = ({
         onFocus, 
         onEndEditting,
         nonEditable,
-        active
+        active,
+        roundness = 5,
+        multiline = false
     
     }) => {
     return (
@@ -33,7 +35,11 @@ export const TextInput = ({
                 outlineColor={ active ? Colors.primary : Colors.light}
                 activeOutlineColor={Colors.primary}
                 onBlur={ onBlur }
-                theme={{ colors: { text: Colors.black, placeholder: active ? Colors.primary : Colors.light}, fonts: {regular: { fontFamily: 'EncodeSansExpaded-Medium' }} }}
+                theme={{ 
+                    colors: { text: Colors.black, placeholder: active ? Colors.primary : Colors.light}, 
+                    fonts: {regular: { fontFamily: 'EncodeSansExpaded-Medium'}}, 
+                    roundness: roundness,
+                }}
                 error={error}
                 secureTextEntry={secureTextEntry}
                 style={style}
@@ -41,6 +47,8 @@ export const TextInput = ({
                 onFocus={onFocus}
                 // onEndEditing={onEndEditting}
                 editable={nonEditable ? false : true}
+                multiline={multiline}
+                textAlignVertical='center'
             />
             {
             errorMsg 

@@ -1,12 +1,13 @@
 import React from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
+import BottomNavigator from '../views/screens/Employee/BottomNavigator';
 
 const Stack = createStackNavigator();
 
 const AppStack = () => {
     return (
         <Stack.Navigator>
-            {/* <Stack.Screen options={{ headerShown: false }} name={''} component={} ></Stack.Screen> */}
+            <Stack.Screen options={{ headerShown: false }} name={'BottomNavigator'} component={BottomNavigator}></Stack.Screen>
         </Stack.Navigator>
     )
 }

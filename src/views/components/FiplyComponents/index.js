@@ -1,6 +1,7 @@
 export * from './Button'
 export * from './SecondaryButton'
 export * from './Container'
+export * from './Container2'
 export * from './FiplyLogo'
 export * from './Text'
 export * from './TextInput'

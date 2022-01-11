@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { StyleSheet, View } from 'react-native'
-import {Text, Container, WaveHeader, InputDropdown, SafeAreaView, TextInput} from '../../components/FiplyComponents'
+import {Text, Container2, WaveHeader, InputDropdown, SafeAreaView, TextInput} from '../../components/FiplyComponents'
 
 import Colors from '../../../utils/Colors'
 
@@ -42,7 +42,7 @@ const TestScreen = () => {
     return (
         <SafeAreaView>
             <WaveHeader waveimg={waveImg}/>
-            <Container center onPress={() => setShowDropdown({one: false, two: false}) }>
+            <Container2 center onPress={() => setShowDropdown({one: false, two: false}) }>
             <InputDropdown
                 label={'Dropdown one'}
                 value={textOne}
@@ -69,7 +69,7 @@ const TestScreen = () => {
                     setShowDropdown({...showDropdown, two: false})
                 }}
             />
-            </Container>
+            </Container2>
 
         </SafeAreaView>
     )

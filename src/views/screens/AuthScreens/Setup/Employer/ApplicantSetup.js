@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import { StyleSheet } from 'react-native'
-import { SafeAreaView, Container, Text, FiplyLogo, WaveHeader, Button, Dropdown, InputDropdown } from '../../../../components/FiplyComponents' 
+import { SafeAreaView, Container2, Text, FiplyLogo, WaveHeader, Button, Dropdown, InputDropdown } from '../../../../components/FiplyComponents' 
 const ApplicantSetup = ({navigation}) => {
 
     const [showDropDown, setShowDropDown] = useState({levelOfExperience: false, fieldOfExpertise: false, location: false});
@@ -83,7 +83,7 @@ const ApplicantSetup = ({navigation}) => {
     return (
         <SafeAreaView>
             <WaveHeader waveimg={require('../../../../../assets/img/waves/4.png')} />
-            <Container center onPress={() => setShowDropDown({})}>
+            <Container2 center onPress={() => setShowDropDown({})}>
                 <FiplyLogo />
                 <Text center size={17} style={{ marginVertical: 25 }}>What kind of applicant are you looking for?</Text>
 
@@ -144,7 +144,7 @@ const ApplicantSetup = ({navigation}) => {
                     disabled={( levelOfExperience && fieldOfExpertise && location ) ? false : true} 
                     onPress={() => navigation.navigate('BasicUser')}    
                 />
-            </Container>
+            </Container2>
 
 
         </SafeAreaView>

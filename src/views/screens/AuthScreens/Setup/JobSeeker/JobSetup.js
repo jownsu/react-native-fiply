@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import { StyleSheet, View } from 'react-native'
-import { SafeAreaView, Container, Text, FiplyLogo, WaveHeader, Button, Dropdown, InputDropdown } from '../../../../components/FiplyComponents' 
+import { SafeAreaView, Container2, Text, FiplyLogo, WaveHeader, Button, Dropdown, InputDropdown } from '../../../../components/FiplyComponents' 
 const JobSetup = ({navigation}) => {
 
     const [showDropDown, setShowDropDown] = useState({jobTitle: false, jobLocation: false, jobType: false});
@@ -70,7 +70,7 @@ const JobSetup = ({navigation}) => {
     return (
         <SafeAreaView>
             <WaveHeader waveimg={require('../../../../../assets/img/waves/4.png')} />
-            <Container center onPress={() => setShowDropDown({jobTitle: false, jobLocationList: false})}>
+            <Container2 center onPress={() => setShowDropDown({jobTitle: false, jobLocationList: false})}>
                 <FiplyLogo />
                 <Text center size={17} style={{ marginVertical: 25 }}>What kind of job are you looking for?</Text>
                 <InputDropdown
@@ -122,7 +122,7 @@ const JobSetup = ({navigation}) => {
                     disabled={( jobTitle && jobLocation && jobType ) ? false : true} 
                     onPress={() => navigation.navigate('BasicUser')}    
                 />
-            </Container>
+            </Container2>
         </SafeAreaView>
     )
 }

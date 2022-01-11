@@ -6,14 +6,9 @@ export const Container = ({ children, style, center, onPress }) => {
     const centerStyle =  center ? {justifyContent: 'center'} : {}
 
     return (
-        <TouchableWithoutFeedback onPress={() => {
-                onPress ? onPress() : null
-                Keyboard.dismiss()
-            }}>
-            <View style={{ ...styles.container, ...centerStyle ,...style }} >
-                {children}
-            </View>
-        </TouchableWithoutFeedback>
+        <View style={{ ...styles.container, ...centerStyle ,...style }} >
+            {children}
+        </View>
     )
 }
 
