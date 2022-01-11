@@ -4,7 +4,7 @@ import { Text } from '../FiplyComponents'
 import { MaterialCommunityIcons, FontAwesome5, FontAwesome } from '@expo/vector-icons'
 import Colors from '../../../utils/Colors'
 
-const PostList = () => {
+const PostList = ({optionOnPress}) => {
 
     const postList = [
         {
@@ -44,7 +44,7 @@ const PostList = () => {
                                 <Text weight="medium" >{item.author}{'\u30FB'}{item.posted_at}</Text>
                             </View>
 
-                            <TouchableOpacity>
+                            <TouchableOpacity onPress={() => optionOnPress()}>
                                 <MaterialCommunityIcons name="dots-horizontal" size={24} color={Colors.black} />
                             </TouchableOpacity>
                         </View>

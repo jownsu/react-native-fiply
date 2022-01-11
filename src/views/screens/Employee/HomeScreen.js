@@ -1,12 +1,33 @@
-import React from 'react'
+import React, { useCallback, useMemo, useRef, useState } from 'react'
 import { StyleSheet, View, TouchableOpacity } from 'react-native'
-import { SafeAreaView, Container, Text, TextInput } from '../../components/FiplyComponents'
+import { SafeAreaView, Container, Text, TextInput, Button, BottomSheetModal } from '../../components/FiplyComponents'
 import SearchHeader from '../../components/headers/SearchHeader'
 import { FontAwesome5, FontAwesome } from '@expo/vector-icons'
 import Colors from '../../../utils/Colors'
 import PostList from '../../components/lists/PostList'
 
+
+
+
 const HomeScreen = () => {
+
+  // ref
+  const bottomSheetModalRef = useRef(null);
+
+  // variables
+
+  // callbacks
+  const handlePresentModalPress = useCallback(() => {
+    bottomSheetModalRef.current?.present();
+  }, []);
+
+//   const handleSheetChanges = useCallback((index) => {
+//     console.log('handleSheetChanges', index);
+//   }, []);
+
+    const [index, setIndex] = useState(-1)
+
+
     return (
         <SafeAreaView>
 
@@ -41,9 +62,38 @@ const HomeScreen = () => {
                     </View>
                 </View>
 
-                <PostList />
+                <PostList 
+                    optionOnPress={() => handlePresentModalPress()}
+                />
+
 
             </Container>
+
+            <BottomSheetModal 
+                bottomSheetModalRef={bottomSheetModalRef}
+            >
+                <View style={styles.btmSheetContainer}>
+                    <TouchableOpacity style={styles.btmActionContainer}>
+                        <FontAwesome name="bookmark" size={28} color={Colors.black} style={styles.btmActionBtn}/>
+                        <Text weight='medium' color={Colors.black}>Bookmark</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.btmActionContainer}>
+                        <FontAwesome name="share-alt" size={28} color={Colors.black} style={styles.btmActionBtn}/>
+                        <Text weight='medium' color={Colors.black}>Share Via</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.btmActionContainer}>
+                        <FontAwesome5 name="font-awesome-flag" size={28} color={Colors.black} style={styles.btmActionBtn}/>
+                        <Text weight='medium' color={Colors.black}>Report this post</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.btmActionContainer}>
+                        <FontAwesome name="tasks" size={28} color={Colors.black} style={styles.btmActionBtn}/>
+                        <Text weight='medium' color={Colors.black}>Improve my feed</Text>
+                    </TouchableOpacity>
+                </View>
+    
+            </BottomSheetModal>
+
+
         </SafeAreaView>
     )
 }
@@ -56,7 +106,6 @@ const styles = StyleSheet.create({
         padding: 10,
         borderWidth: 1,
         borderColor: Colors.light,
-        elevation: 3,
         borderRadius: 15
     },
     postActionContainer:{
@@ -75,5 +124,17 @@ const styles = StyleSheet.create({
     txtInputStyle:{
         marginBottom: 20,
         maxHeight: 200
+    },
+    btmSheetContainer:{
+        paddingVertical: 10,
+        paddingHorizontal: 20
+    },
+    btmActionContainer:{
+        flexDirection: 'row',
+        paddingVertical: 5,
+        alignItems : 'center',
+    },
+    btmActionBtn:{
+        width: 40
     }
 })
