@@ -4,33 +4,12 @@ import { Text } from '../FiplyComponents'
 import { MaterialCommunityIcons, FontAwesome5, FontAwesome } from '@expo/vector-icons'
 import Colors from '../../../utils/Colors'
 
-const PostList = ({optionOnPress}) => {
-
-    const postList = [
-        {
-            id: '1', 
-            author: 'Saturn Inc.', 
-            post: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-            posted_at: '10h'
-        }, 
-        {
-            id: '2', 
-            author: 'Saturn Inc.', 
-            post: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-            posted_at: '10h'
-        }, 
-        {
-            id: '3', 
-            author: 'Saturn Inc.', 
-            post: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-            posted_at: '10h'
-        }, 
-    ]
+const PostList = ({data, optionOnPress}) => {
 
     return (
         <View style={styles.container}>
             <FlatList
-                data={postList} 
+                data={data} 
                 keyExtractor={item => item.id}
                 showsVerticalScrollIndicator={false}
                 renderItem={({item}) => (
@@ -40,6 +19,7 @@ const PostList = ({optionOnPress}) => {
                                 <Image 
                                     source={require('../../../assets/img/logo.png')} 
                                     style={styles.authorImg}    
+                                    resizeMode='contain'
                                 />
                                 <Text weight="medium" >{item.author}{'\u30FB'}{item.posted_at}</Text>
                             </View>

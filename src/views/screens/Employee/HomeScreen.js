@@ -11,6 +11,27 @@ import PostList from '../../components/lists/PostList'
 
 const HomeScreen = () => {
 
+    const postList = [
+        {
+            id: '1', 
+            author: 'Saturn Inc.', 
+            post: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+            posted_at: '10h'
+        }, 
+        {
+            id: '2', 
+            author: 'Saturn Inc.', 
+            post: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+            posted_at: '10h'
+        }, 
+        {
+            id: '3', 
+            author: 'Saturn Inc.', 
+            post: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+            posted_at: '10h'
+        }, 
+    ]
+
   // ref
   const bottomSheetModalRef = useRef(null);
 
@@ -32,7 +53,7 @@ const HomeScreen = () => {
         <SafeAreaView>
 
             <SearchHeader
-                leftIcon={ () => (<FontAwesome5 name="th-large" size={24} color={Colors.grey} />)}
+                leftIcon={ () => <FontAwesome5 name="th-large" size={24} color={Colors.grey} />}
                 rightIcon={ () => <FontAwesome name="paper-plane" size={24} color={Colors.secondary} />}
             /> 
             <Container style={{ paddingHorizontal: 10 }}>
@@ -63,6 +84,7 @@ const HomeScreen = () => {
                 </View>
 
                 <PostList 
+                    data={postList}
                     optionOnPress={() => handlePresentModalPress()}
                 />
 

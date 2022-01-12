@@ -6,7 +6,7 @@ import Animated, {
   useAnimatedStyle,
 } from "react-native-reanimated";
 
-const CustomBackdrop = ({ animatedIndex, style }: BottomSheetBackdropProps) => {
+const CustomBackdrop = ({ animatedIndex, style }) => {
   // animated variables
   const containerAnimatedStyle = useAnimatedStyle(() => ({
     opacity: interpolate(

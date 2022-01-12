@@ -3,7 +3,13 @@ import { StyleSheet, Text, View } from 'react-native'
 import { Button as XButton } from 'react-native-paper'
 import Colors from '../../../utils/Colors'
 
-export const SecondaryButton = ({onPress, title, disabled = false, loading = false, style, labelStyle }) => {
+export const SecondaryButton = ({
+    onPress, 
+    title, 
+    disabled = false, 
+    loading = false, 
+    style, 
+    labelStyle }) => {
 
     let btnStyle = disabled ? { borderColor: Colors.light } : { borderColor: Colors.primary }
     let lblStyle = disabled ? { color: Colors.light } : { color: Colors.primary }
