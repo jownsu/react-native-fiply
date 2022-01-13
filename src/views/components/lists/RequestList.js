@@ -66,10 +66,11 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.white,
         flexDirection: 'row',
         borderBottomWidth: 1,
-        paddingVertical: 10,
+        paddingVertical: 15,
+        paddingHorizontal: 10,
         borderColor: Colors.light,
         elevation: 3,
-        marginVertical: 2 
+        marginBottom: 5 
         // background color must be set
     },
     cardInfoContainer:{

@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { StyleSheet, View, TouchableOpacity } from 'react-native'
 import { SafeAreaView, Text, Container } from '../../components/FiplyComponents'
 import SearchHeader from '../../components/headers/SearchHeader'
 import Colors from '../../../utils/Colors'
-import { FontAwesome5, FontAwesome, Fontisto } from '@expo/vector-icons'
-import CommunityList from '../../components/lists/CommunityList'
+import { FontAwesome, Fontisto } from '@expo/vector-icons'
 
 import DiscoverList from '../../components/lists/DiscoverList'
 import FellowList from '../../components/lists/FellowList'
@@ -15,7 +14,6 @@ import ForumList from '../../components/lists/ForumList'
 const CommunityScreen = () => {
 
     const [navIndex, setNavIndex] = useState(0)
-    const [dataList, setDataList] = useState({})
 
     const discoverList = [
         {
@@ -194,17 +192,13 @@ const CommunityScreen = () => {
         }
     }
 
-    useEffect(() => {
-        setDataList(discoverList)
-    },[])
-
     return (
         <SafeAreaView>
             <SearchHeader
                 rightIcon={ () => <FontAwesome name="paper-plane" size={24} color={Colors.secondary} />}
             /> 
 
-            <Container style={{ paddingHorizontal: 10 }}>
+            <Container style={{ paddingHorizontal: 0 }}>
                 <View style={styles.headerContainer} >
                     <Text weight={'medium'} color={Colors.primary}>COMMUNITY</Text>
                     <Fontisto name="equalizer" size={24} color="black" />
@@ -215,7 +209,6 @@ const CommunityScreen = () => {
                         style={styles.topNavigationBtn} 
                         onPress={() => {
                                 setNavIndex(0)
-                                setDataList(discoverList)    
                             }}>
                         <Text 
                             size={12}
@@ -229,7 +222,6 @@ const CommunityScreen = () => {
                         style={styles.topNavigationBtn} 
                         onPress={() => {
                                 setNavIndex(1)
-                                setDataList(fellowList)
                             }}>
                         <Text 
                             size={12}
@@ -252,7 +244,6 @@ const CommunityScreen = () => {
                         style={styles.topNavigationBtn} 
                         onPress={() => {
                                 setNavIndex(3)
-                                setDataList(companyList)
                             }}>
                         <Text 
                             size={12}
@@ -292,7 +283,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         marginVertical: 5,
-        marginHorizontal: 10
+        marginHorizontal: 20
     },
     topNavigationContainer:{
         flexDirection: 'row',
@@ -300,6 +291,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         paddingVertical: 10,
+        marginHorizontal: 15,
+        marginBottom: 10,
         borderRadius: 10,
         borderWidth: 1,
         borderColor: Colors.light
