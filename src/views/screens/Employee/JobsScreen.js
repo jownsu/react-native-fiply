@@ -6,6 +6,8 @@ import Colors from '../../../utils/Colors'
 import { FontAwesome, Fontisto } from '@expo/vector-icons'
 import DiscoverList from '../../components/lists/jobs/DiscoverList'
 import PendingList from '../../components/lists/jobs/PendingList'
+import TitleFilter from '../../components/headers/TitleFilter'
+import TopNavigation from '../../components/headers/TopNavigation'
 
 const JobsScreen = () => {
 
@@ -123,65 +125,20 @@ const JobsScreen = () => {
             /> 
 
             <Container style={{ paddingHorizontal: 0 }}>
-                <View style={styles.headerContainer} >
-                    <Text weight={'medium'} color={Colors.primary}>JOBS</Text>
-                    <Fontisto name="equalizer" size={24} color="black" />
-                </View>
+                <TitleFilter 
+                    title='JOBS'
+                    titleColor={Colors.primary}
+                    hideLine
+                />
 
-                <View style={styles.topNavigationContainer}>
-                    <TouchableOpacity 
-                        style={styles.topNavigationBtn} 
-                        onPress={() => {
-                                setNavIndex(0)
-                            }}>
-                        <Text 
-                            size={12}
-                            color={navIndex == 0 ? Colors.primary : Colors.black}
-                            weight={navIndex == 0 ? 'bold' : 'light'}
-                        >
-                            Discover
-                        </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity 
-                        style={styles.topNavigationBtn} 
-                        onPress={() => {
-                                setNavIndex(1)
-                            }}>
-                        <Text 
-                            size={12}
-                            color={navIndex == 1 ? Colors.primary : Colors.black}
-                            weight={navIndex == 1 ? 'bold' : 'light'}
-                        >
-                            Saved
-                        </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.topNavigationBtn} onPress={() => setNavIndex(2)}>
-                        <Text 
-                            size={12}
-                            color={navIndex == 2 ? Colors.primary : Colors.black}
-                            weight={navIndex == 2 ? 'bold' : 'light'}
-                        >
-                            Applied
-                        </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity 
-                        style={styles.topNavigationBtn} 
-                        onPress={() => {
-                                setNavIndex(3)
-                            }}>
-                        <Text 
-                            size={12}
-                            color={navIndex == 3 ? Colors.primary : Colors.black}
-                            weight={navIndex == 3 ? 'bold' : 'light'}
-                        >
-                            Pending
-                        </Text>
-                    </TouchableOpacity>
-                </View>
+                <TopNavigation
+                    navTitles={['Discover', 'Saved', 'Applied', 'Pending']}
+                    index={navIndex}
+                    onBtnPress={i => setNavIndex(i)}
+                    btnStyles={{ paddingHorizontal: 15 }}
+                />
 
-                {
-                    renderList(navIndex)
-                }
+                { renderList(navIndex) }
 
             </Container>
 
@@ -194,31 +151,4 @@ const JobsScreen = () => {
 export default JobsScreen
 
 const styles = StyleSheet.create({
-    headerContainer:{
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        paddingHorizontal: 10,
-        marginVertical: 5,
-        marginHorizontal: 10
-    },
-    topNavigationContainer:{
-        flexDirection: 'row',
-        backgroundColor: Colors.white,
-        alignItems: 'center',
-        justifyContent: 'center',
-        paddingVertical: 10,
-        borderRadius: 10,
-        marginHorizontal: 10,
-        borderWidth: 1,
-        borderColor: Colors.light,
-        marginBottom: 10
-    },
-    topNavigationBtn:{
-        alignItems: 'center',
-        paddingHorizontal: 15
-    },
-    activeBtn:{
-        color: Colors.primary,
-    }
 })

@@ -5,6 +5,7 @@ import SearchHeader from '../../components/headers/SearchHeader'
 import { FontAwesome5, FontAwesome, Fontisto } from '@expo/vector-icons'
 import Colors from '../../../utils/Colors'
 import NotificationList from '../../components/lists/NotificationList'
+import TitleFilter from '../../components/headers/TitleFilter'
 
 const NotificationScreen = () => {
 
@@ -40,10 +41,11 @@ const NotificationScreen = () => {
             /> 
 
             <Container style={{ paddingHorizontal: 0 }}>
-                <View style={styles.headerContainer} >
-                    <Text weight={'medium'} color={Colors.primary}>NOTIFICATION</Text>
-                    <Fontisto name="equalizer" size={24} color="black" />
-                </View>
+                <TitleFilter 
+                    title='NOTIFICATION'
+                    titleColor={Colors.primary}
+                    hideLine
+                />
 
                 <NotificationList 
                     data={notificationList}
@@ -60,11 +62,5 @@ const NotificationScreen = () => {
 export default NotificationScreen
 
 const styles = StyleSheet.create({
-    headerContainer:{
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginVertical: 5,
-        marginHorizontal: 20
-    },
+
 })

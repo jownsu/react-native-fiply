@@ -4,7 +4,8 @@ import { SafeAreaView, Text, Container } from '../../components/FiplyComponents'
 import SearchHeader from '../../components/headers/SearchHeader'
 import Colors from '../../../utils/Colors'
 import { FontAwesome, Fontisto } from '@expo/vector-icons'
-
+import TitleFilter from '../../components/headers/TitleFilter'
+import TopNavigation from '../../components/headers/TopNavigation'
 import DiscoverList from '../../components/lists/DiscoverList'
 import FellowList from '../../components/lists/FellowList'
 import CompanyList from '../../components/lists/CompanyList'
@@ -199,74 +200,19 @@ const CommunityScreen = () => {
             /> 
 
             <Container style={{ paddingHorizontal: 0 }}>
-                <View style={styles.headerContainer} >
-                    <Text weight={'medium'} color={Colors.primary}>COMMUNITY</Text>
-                    <Fontisto name="equalizer" size={24} color="black" />
-                </View>
+                <TitleFilter 
+                    title='COMMUNITY'
+                    titleColor={Colors.primary}
+                    hideLine
+                />
 
-                <View style={styles.topNavigationContainer}>
-                    <TouchableOpacity 
-                        style={styles.topNavigationBtn} 
-                        onPress={() => {
-                                setNavIndex(0)
-                            }}>
-                        <Text 
-                            size={12}
-                            color={navIndex == 0 ? Colors.primary : Colors.black}
-                            weight={navIndex == 0 ? 'bold' : 'light'}
-                        >
-                            Discover
-                        </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity 
-                        style={styles.topNavigationBtn} 
-                        onPress={() => {
-                                setNavIndex(1)
-                            }}>
-                        <Text 
-                            size={12}
-                            color={navIndex == 1 ? Colors.primary : Colors.black}
-                            weight={navIndex == 1 ? 'bold' : 'light'}
-                        >
-                            Fellows
-                        </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.topNavigationBtn} onPress={() => setNavIndex(2)}>
-                        <Text 
-                            size={12}
-                            color={navIndex == 2 ? Colors.primary : Colors.black}
-                            weight={navIndex == 2 ? 'bold' : 'light'}
-                        >
-                            Forums
-                        </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity 
-                        style={styles.topNavigationBtn} 
-                        onPress={() => {
-                                setNavIndex(3)
-                            }}>
-                        <Text 
-                            size={12}
-                            color={navIndex == 3 ? Colors.primary : Colors.black}
-                            weight={navIndex == 3 ? 'bold' : 'light'}
-                        >
-                            Companies
-                        </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.topNavigationBtn} onPress={() => setNavIndex(4)}>
-                        <Text 
-                            size={12}
-                            color={navIndex == 4 ? Colors.primary : Colors.black}
-                            weight={navIndex == 4 ? 'bold' : 'light'}
-                        >
-                            Requests
-                        </Text>
-                    </TouchableOpacity>
-                </View>
+                <TopNavigation 
+                    navTitles={['Discover', 'Fellows', 'Forums', 'Companies', 'Requests']}
+                    index={navIndex}
+                    onBtnPress={i => setNavIndex(i)}
+                />
 
-                {
-                    renderList(navIndex)
-                }
+                { renderList(navIndex) }
 
             </Container>
 
@@ -278,30 +224,5 @@ const CommunityScreen = () => {
 export default CommunityScreen
 
 const styles = StyleSheet.create({
-    headerContainer:{
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginVertical: 5,
-        marginHorizontal: 20
-    },
-    topNavigationContainer:{
-        flexDirection: 'row',
-        backgroundColor: Colors.white,
-        alignItems: 'center',
-        justifyContent: 'center',
-        paddingVertical: 10,
-        marginHorizontal: 15,
-        marginBottom: 10,
-        borderRadius: 10,
-        borderWidth: 1,
-        borderColor: Colors.light
-    },
-    topNavigationBtn:{
-        alignItems: 'center',
-        paddingHorizontal: 5
-    },
-    activeBtn:{
-        color: Colors.primary,
-    }
+
 })

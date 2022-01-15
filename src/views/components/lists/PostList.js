@@ -4,7 +4,7 @@ import { Text } from '../FiplyComponents'
 import { MaterialCommunityIcons, FontAwesome5, FontAwesome } from '@expo/vector-icons'
 import Colors from '../../../utils/Colors'
 
-const PostList = ({data, optionOnPress}) => {
+const PostList = ({data, optionOnPress = () => {}}) => {
 
     return (
         <View style={styles.container}>
