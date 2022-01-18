@@ -5,7 +5,7 @@ import { FontAwesome5 } from '@expo/vector-icons'
 import Colors from '../../../utils/Colors'
 import { borderColor } from 'react-native/Libraries/Components/View/ReactNativeStyleAttributes'
 
-const RecommendedList = ({onIdPress, style, data}) => {
+const RecommendedList = ({onIdPress = () => {}, style, data}) => {
 
     return (
         <View style={{ ...style }}>

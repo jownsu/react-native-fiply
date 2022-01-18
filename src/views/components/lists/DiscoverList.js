@@ -8,7 +8,7 @@ const cardWidth = (width / 2 ) - 20;
 
 const DiscoverList = ({
         data, 
-        onPressBtn
+        onPressBtn = () => {}
     }) => {
     return (
         <View style={styles.container}>

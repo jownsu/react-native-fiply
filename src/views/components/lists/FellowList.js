@@ -10,7 +10,7 @@ const cardWidth = (width / 2 ) - 20;
 
 const FellowList = ({
         data, 
-        onPressBtn,
+        onPressBtn = () => {},
     }) => {
 
         const [activeIndex, setActiveIndex] = useState(-1)

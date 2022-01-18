@@ -92,30 +92,28 @@ const HomeScreen = () => {
             </Container>
 
             <BottomSheetModal 
-                bottomSheetModalRef={bottomSheetModalRef}
-            >
-                <View style={styles.btmSheetContainer}>
-                    <TouchableOpacity style={styles.btmActionContainer}>
-                        <FontAwesome name="bookmark" size={28} color={Colors.black} style={styles.btmActionBtn}/>
-                        <Text weight='medium' color={Colors.black}>Bookmark</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.btmActionContainer}>
-                        <FontAwesome name="share-alt" size={28} color={Colors.black} style={styles.btmActionBtn}/>
-                        <Text weight='medium' color={Colors.black}>Share Via</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.btmActionContainer}>
-                        <FontAwesome5 name="font-awesome-flag" size={28} color={Colors.black} style={styles.btmActionBtn}/>
-                        <Text weight='medium' color={Colors.black}>Report this post</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.btmActionContainer}>
-                        <FontAwesome name="tasks" size={28} color={Colors.black} style={styles.btmActionBtn}/>
-                        <Text weight='medium' color={Colors.black}>Improve my feed</Text>
-                    </TouchableOpacity>
-                </View>
-    
+                    bottomSheetModalRef={bottomSheetModalRef}
+                    pointsSnap={[225]}
+                >
+                    <View style={styles.btmSheetContainer}>
+                        <TouchableOpacity style={styles.btmActionContainer}>
+                            <FontAwesome name="bookmark" size={28} color={Colors.black} style={styles.btmActionBtn}/>
+                            <Text weight='medium' color={Colors.black}>Bookmark</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.btmActionContainer}>
+                            <FontAwesome name="share-alt" size={28} color={Colors.black} style={styles.btmActionBtn}/>
+                            <Text weight='medium' color={Colors.black}>Share Via</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.btmActionContainer}>
+                            <FontAwesome5 name="font-awesome-flag" size={28} color={Colors.black} style={styles.btmActionBtn}/>
+                            <Text weight='medium' color={Colors.black}>Report this post</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.btmActionContainer}>
+                            <FontAwesome name="tasks" size={28} color={Colors.black} style={styles.btmActionBtn}/>
+                            <Text weight='medium' color={Colors.black}>Improve my feed</Text>
+                        </TouchableOpacity>
+                    </View>
             </BottomSheetModal>
-
-
         </SafeAreaView>
     )
 }
@@ -149,7 +147,7 @@ const styles = StyleSheet.create({
     },
     btmSheetContainer:{
         paddingVertical: 10,
-        paddingHorizontal: 20
+        paddingHorizontal: 20,
     },
     btmActionContainer:{
         flexDirection: 'row',

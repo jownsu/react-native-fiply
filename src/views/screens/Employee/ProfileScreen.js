@@ -3,7 +3,7 @@ import { StyleSheet, View, TouchableOpacity, ScrollView } from 'react-native'
 import { SafeAreaView, Text, Container } from '../../components/FiplyComponents'
 import Colors from '../../../utils/Colors'
 import { LinearGradient } from 'expo-linear-gradient'
-import { FontAwesome5, MaterialCommunityIcons, Fontisto } from '@expo/vector-icons';
+import { FontAwesome5 } from '@expo/vector-icons';
 import ProfileHeader from '../../components/profile/ProfileHeader'
 import CardInfo from '../../components/profile/CardInfo'
 import PostList from '../../components/lists/PostList'

@@ -3,24 +3,35 @@ import { StyleSheet, Text, View } from 'react-native'
 import {
     BottomSheetModal as BSM,
     BottomSheetModalProvider,
+    BottomSheetBackdrop 
   } from '@gorhom/bottom-sheet'
 
 import Colors from '../../../utils/Colors'
-import CustomBackdrop from '../CustomBackdrop'
 
-export const BottomSheetModal = ({bottomSheetModalRef = null, children }) => {
+export const BottomSheetModal = ({bottomSheetModalRef = null, children, pointsSnap = ['25%'], appearsOnIndex = 0 }) => {
 
 
-    const snapPoints = useMemo(() => ['25%', '35%'], []);
+    const snapPoints = useMemo(() => pointsSnap, []);
+
+    const renderBackdrop = useCallback(
+        props => (
+          <BottomSheetBackdrop
+            {...props}
+            appearsOnIndex={appearsOnIndex}
+            disappearsOnIndex={-1}
+          />
+        ),
+        []
+      );
     
     return (
-        <BottomSheetModalProvider            >
+        <BottomSheetModalProvider >
             <View style={styles.container}>
                 <BSM
                     ref={bottomSheetModalRef}
-                    index={1}
+                    index={0}
                     snapPoints={snapPoints}
-                    backdropComponent={CustomBackdrop}
+                    backdropComponent={renderBackdrop}
                 >
                 <View style={styles.contentContainer}>
                     {children}
