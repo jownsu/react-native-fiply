@@ -18,7 +18,7 @@ const TitleFilter = ({
         <View style={{ ...styles.container, ...style }}>
             <Text color={titleColor} weight='medium'>{title}</Text>
             <View style={{ ...styles.horizontalLine, ...lineStyle }}/>
-            <Fontisto name="equalizer" size={21} color="black" onPress={onFilterPress}/>
+            <Fontisto name="equalizer" size={21} color={Colors.black} onPress={onFilterPress}/>
         </View>
     )
 }

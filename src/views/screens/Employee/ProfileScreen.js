@@ -9,8 +9,11 @@ import CardInfo from '../../components/profile/CardInfo'
 import PostList from '../../components/lists/PostList'
 import TitleFilter from '../../components/headers/TitleFilter'
 import TopNavigation from '../../components/headers/TopNavigation'
+import PostFilterDialog from '../../components/dialog/PostFilterDialog'
 
 const ProfileScreen = () => {
+
+    const [showModal, setShowModal] = useState(false)
 
     const profileInfo = {
         fullname: 'Jhones Digno',
@@ -122,10 +125,16 @@ const ProfileScreen = () => {
                     <View style={{ flex: 1 }}>
                         <TitleFilter 
                             title={'Posts'}
+                            onFilterPress={() => setShowModal(true)}
                         />
                         
                         <PostList
                             data={postList}
+                        />
+
+                        <PostFilterDialog 
+                            visible={showModal}
+                            onDismiss={() => setShowModal(false)}
                         />
                     </View>
                 )
