@@ -4,14 +4,14 @@ import { Text } from '../FiplyComponents'
 import { FontAwesome5 } from '@expo/vector-icons'
 import Colors from '../../../utils/Colors'
 
-const Header = ({onBackPress, title, centerTitle, rightIcon = false}) => {
+const Header = ({onBackPress, title, centerTitle, rightIcon = false, style={}}) => {
 
     let containerStyle = centerTitle ? { justifyContent: 'center' } : {}
 
     return (
-        <View style={{ ...styles.container, ...containerStyle }}>
+        <View style={{ ...styles.container, ...containerStyle, ...style }}>
             <TouchableOpacity onPress={() => onBackPress()} style={styles.backIcon}>
-                <FontAwesome5 name="angle-left" size={24} color="black" />
+                <FontAwesome5 name="angle-left" size={24} color={Colors.black} />
             </TouchableOpacity>
             <Text 
                 weight='semi-bold' 

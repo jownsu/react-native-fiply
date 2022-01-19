@@ -1,7 +1,7 @@
 import React from 'react'
 import { StyleSheet, View, FlatList, Image, Dimensions } from 'react-native'
-import { Text, SecondaryButton } from '../FiplyComponents'
-import Colors from '../../../utils/Colors'
+import { Text, SecondaryButton } from '../../FiplyComponents'
+import Colors from '../../../../utils/Colors'
 
 const { width } = Dimensions.get('screen');
 const cardWidth = (width / 2 ) - 20;

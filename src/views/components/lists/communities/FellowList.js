@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { StyleSheet, View, FlatList, Image, Dimensions, TouchableOpacity } from 'react-native'
-import { Text, SecondaryButton } from '../FiplyComponents'
-import Colors from '../../../utils/Colors'
+import { Text, SecondaryButton } from '../../FiplyComponents'
+import Colors from '../../../../utils/Colors'
 import { Entypo } from '@expo/vector-icons'
 import { FontAwesome5 } from '@expo/vector-icons'
 

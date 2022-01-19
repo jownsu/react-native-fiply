@@ -6,11 +6,12 @@ import Colors from '../../../utils/Colors'
 import { FontAwesome, Fontisto } from '@expo/vector-icons'
 import TitleFilter from '../../components/headers/TitleFilter'
 import TopNavigation from '../../components/headers/TopNavigation'
-import DiscoverList from '../../components/lists/DiscoverList'
-import FellowList from '../../components/lists/FellowList'
-import CompanyList from '../../components/lists/CompanyList'
-import RequestList from '../../components/lists/RequestList'
-import ForumList from '../../components/lists/ForumList'
+
+import DiscoverList from '../../components/lists/communities/DiscoverList'
+import FellowList from '../../components/lists/communities/FellowList'
+import CompanyList from '../../components/lists/communities/CompanyList'
+import RequestList from '../../components/lists/communities/RequestList'
+import ForumList from '../../components/lists/communities/ForumList'
 
 const CommunityScreen = () => {
 

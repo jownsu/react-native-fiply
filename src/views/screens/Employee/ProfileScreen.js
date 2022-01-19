@@ -196,7 +196,6 @@ const ProfileScreen = () => {
                     onBtnPress={i => setNavIndex(i)}
                     index={navIndex}
                     style={{ marginHorizontal: 0, marginTop: 5, marginBottom: 5 }}
-                    btnStyles={{ paddingHorizontal: 10 }}
                 />
 
                 { renderList(navIndex) }

@@ -1,9 +1,9 @@
 import React from 'react'
 import { StyleSheet, View, Image, FlatList, TouchableOpacity } from 'react-native'
-import { Text, SecondaryButton } from '../FiplyComponents'
-import Colors from '../../../utils/Colors'
+import { Text, SecondaryButton } from '../../FiplyComponents'
+import Colors from '../../../../utils/Colors'
 
-const RequestList = ({data}) => {
+const ForumList = ({data}) => {
     return (
         <View style={styles.container}>
             <FlatList
@@ -15,29 +15,19 @@ const RequestList = ({data}) => {
                             <Image 
                                 source={item.image}
                                 style={styles.img}
+                                resizeMode='contain'
                             />
                             <View style={styles.cardInfoContainer}>
                                 <Text weight='semi-bold'>{item.name}</Text>
-                                <TouchableOpacity>
-                                    <Text color={Colors.primary} weight='medium'>
-                                        View Profile
-                                    </Text>
+                                <Text>{item.description}</Text>
+                            </View>
+                                
+                            <View style={styles.btnContainer}>
+                                <TouchableOpacity style={styles.btn} >
+                                    <Text color={Colors.primary} weight='medium' size={14}>JOIN</Text>
                                 </TouchableOpacity>
                             </View>
 
-                            <View style={styles.cardSideInfoContainer}>
-                                <Text>{item.date}</Text>
-                                
-                                <View style={styles.btnContainers}>
-                                    <TouchableOpacity style={styles.btn} >
-                                        <Text color={Colors.primary} weight='medium' size={11}>ACCEPT</Text>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity style={styles.btn} >
-                                        <Text color={Colors.primary} weight='medium' size={11}>REMOVE</Text>
-                                    </TouchableOpacity>
-                                </View>
-
-                            </View>
 
                         </View>
                     )
@@ -48,7 +38,7 @@ const RequestList = ({data}) => {
     )
 }
 
-export default RequestList
+export default ForumList
 
 const styles = StyleSheet.create({
     container:{
@@ -66,33 +56,26 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.white,
         flexDirection: 'row',
         borderBottomWidth: 1,
-        paddingVertical: 15,
+        paddingVertical: 10,
         paddingHorizontal: 10,
         borderColor: Colors.light,
         elevation: 3,
-        marginBottom: 5 
-        // background color must be set
+        marginVertical: 2,
     },
     cardInfoContainer:{
         justifyContent: 'center',
-        flex: 1
-    },
-    cardSideInfoContainer:{
         flex: 1,
-        justifyContent: 'space-between',
-        alignItems: 'flex-end',
-        paddingVertical: 5
     },
-    btnContainers:{
-        flexDirection: 'row',
+    btnContainer:{
+        marginLeft: 5,
+        alignSelf: 'flex-end',
     },
     btn:{
         borderRadius: 25,
         borderWidth: 1,
         borderColor: Colors.primary,
         alignItems: 'center',
-        paddingHorizontal: 7,
+        paddingHorizontal: 15,
         paddingVertical: 3,
-        marginHorizontal: 2
     },
 })

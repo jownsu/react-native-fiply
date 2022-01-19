@@ -4,8 +4,8 @@ import { Text } from '../FiplyComponents'
 import Colors from '../../../utils/Colors'
 
 const TopNavigation = ({
-        index= 0, 
-        navTitles= [], 
+        index = 0, 
+        navTitles = [], 
         onBtnPress = () => {},
         btnStyles = {},
         style = {}
@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         backgroundColor: Colors.white,
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'space-evenly',
         paddingVertical: 10,
         marginHorizontal: 15,
         marginBottom: 10,
@@ -55,6 +55,6 @@ const styles = StyleSheet.create({
     },
     navBtn:{
         alignItems: 'center',
-        paddingHorizontal: 5
+        paddingHorizontal: 5,
     },
 })

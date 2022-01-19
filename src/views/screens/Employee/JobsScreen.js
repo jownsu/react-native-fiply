@@ -135,7 +135,6 @@ const JobsScreen = () => {
                     navTitles={['Discover', 'Saved', 'Applied', 'Pending']}
                     index={navIndex}
                     onBtnPress={i => setNavIndex(i)}
-                    btnStyles={{ paddingHorizontal: 15 }}
                 />
 
                 { renderList(navIndex) }
