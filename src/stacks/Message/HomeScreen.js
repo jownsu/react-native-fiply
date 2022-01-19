@@ -99,25 +99,42 @@ const archivedMessageList = [
     }
 ]
 
-const HomeScreen = () => {
+const HomeScreen = ({navigation}) => {
 
     const [navIndex, setNavIndex] = useState(0)
 
     const renderList = (id) => {
         switch (id) {
             case 0:
-                return <MessageList data={allMesageList} />
+                return <MessageList 
+                            data={allMesageList} 
+                            onMessagePress={(item) => navigation.push('MessageScreen', {data: item})}
+                        />
             case 1:
-                return <MessageList data={unreadMessageList} />
+                return <MessageList 
+                            data={unreadMessageList} 
+                            onMessagePress={(item) => navigation.push('MessageScreen', {data: item})} 
+                            noMessageText='Messages have already been received and read.'
+                        />
             case 2:
-                return <MessageList data={forumMessageList} />
+                return <MessageList 
+                            data={forumMessageList} 
+                            onMessagePress={(item) => navigation.push('MessageScreen', {data: item})} 
+                            noMessageText='To view messages, join on forums'    
+                        />
             case 3:
-                return <MessageList data={archivedMessageList} />
+                return <MessageList 
+                            data={archivedMessageList} 
+                            onMessagePress={(item) => navigation.push('MessageScreen', {data: item})} 
+                            noMessageText='There are no messages in archive'
+                        />
             default:
-                return <MessageList data={allMesageList} />
+                return <MessageList 
+                            data={allMesageList} 
+                            onMessagePress={(item) => navigation.push('MessageScreen', {data: item})} 
+                        />
         }
     }
-
 
     return (
         <SafeAreaView>
@@ -127,6 +144,7 @@ const HomeScreen = () => {
                 centerTitle
                 rightIcon={() => <FontAwesome name="gear" size={24} color={Colors.black} />}
                 style={{ backgroundColor: Colors.white }}
+                onBackPress={() => navigation.pop()}
             />
             <TopNavigation 
                 navTitles={['All', 'Unread', 'Forums', 'Archived']}

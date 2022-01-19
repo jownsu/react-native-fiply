@@ -2,14 +2,14 @@ import React, { useCallback, useMemo, useRef, useState } from 'react'
 import { StyleSheet, View, TouchableOpacity } from 'react-native'
 import { SafeAreaView, Container, Text, TextInput, Button, BottomSheetModal } from '../../components/FiplyComponents'
 import SearchHeader from '../../components/headers/SearchHeader'
-import { FontAwesome5, FontAwesome } from '@expo/vector-icons'
+import { FontAwesome5, FontAwesome, MaterialCommunityIcons  } from '@expo/vector-icons'
 import Colors from '../../../utils/Colors'
 import PostList from '../../components/lists/PostList'
 
 
 
 
-const HomeScreen = () => {
+const HomeScreen = ({navigation}) => {
 
     const postList = [
         {
@@ -54,7 +54,11 @@ const HomeScreen = () => {
 
             <SearchHeader
                 leftIcon={ () => <FontAwesome5 name="th-large" size={24} color={Colors.grey} />}
-                rightIcon={ () => <FontAwesome name="paper-plane" size={24} color={Colors.secondary} />}
+                rightIcon={ () => 
+                    <TouchableOpacity  onPress={() => navigation.navigate('MessageStack')} activeOpacity={.5}>
+                        <MaterialCommunityIcons name="message-processing-outline" size={24} color={Colors.secondary} />
+                    </TouchableOpacity>
+                }
             /> 
             <Container style={{ paddingHorizontal: 10 }}>
                 <View style={styles.createPostContainer}>

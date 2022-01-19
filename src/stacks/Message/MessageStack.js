@@ -9,8 +9,8 @@ const Stack = createStackNavigator();
 const MessageStack = () => {
     return (
         <Stack.Navigator>
-            <Stack.Screen options={{ headerShown: false }} name='MessageScreen' component={MessageScreen}></Stack.Screen>
             <Stack.Screen options={{ headerShown: false }} name='HomeScreen' component={HomeScreen}></Stack.Screen>
+            <Stack.Screen options={{ headerShown: false }} name='MessageScreen' component={MessageScreen}></Stack.Screen>
         </Stack.Navigator>
     )
 }

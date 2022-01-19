@@ -2,28 +2,30 @@ import React from 'react'
 import { StyleSheet, View, Image, FlatList, TouchableOpacity } from 'react-native'
 import { Text } from '../../FiplyComponents'
 import Colors from '../../../../utils/Colors'
-import { borderColor } from 'react-native/Libraries/Components/View/ReactNativeStyleAttributes'
 
-const MessageList = ({data}) => {
+const MessageList = ({ data = [], onMessagePress= () => {}, noMessageText = 'There are no messages' }) => {
     return (
         <View style={styles.container}>
-            <FlatList
-                data={data}
-                keyExtractor={item => item.id}
-                renderItem={({item}) => {
-                    return (
-                        <View style={styles.cardContainer}>
-                            <View style={[styles.imgContainer, {borderColor: item.isActive ? Colors.primary : Colors.light } ]}>
-                                <Image 
-                                    source={item.image}
-                                    style={styles.img}
-                                    resizeMode='contain'
-                                />
-                            </View>
 
-                            <View style={styles.cardInfoContainer}>
-                                <Text weight='semi-bold'>{item.name}</Text>
-                                <TouchableOpacity>
+            {
+                data.length > 0 
+                ? (
+                    <FlatList
+                        data={data}
+                        keyExtractor={item => item.id}
+                        renderItem={({item}) => {
+                        return (
+                            <TouchableOpacity activeOpacity={.7} style={styles.cardContainer} onPress={() => onMessagePress(item)}>
+                                <View style={[styles.imgContainer, {borderColor: item.isActive ? Colors.primary : Colors.light } ]}>
+                                    <Image 
+                                        source={item.image}
+                                        style={styles.img}
+                                        resizeMode='contain'
+                                    />
+                                </View>
+    
+                                <View style={styles.cardInfoContainer}>
+                                    <Text weight='semi-bold'>{item.name}</Text>
                                     <Text 
                                         size={12} 
                                         color={item.isRead ? Colors.black : Colors.primary} 
@@ -31,15 +33,26 @@ const MessageList = ({data}) => {
                                     >
                                         {item.lastMessage}
                                     </Text>
-                                </TouchableOpacity>
-                            </View>
-
-                            <Text>{item.date}</Text>
+                                </View>
+    
+                                <Text>{item.date}</Text>
+                            </TouchableOpacity>
+                        )
+                        }}
+                    />
+                ) 
+                : (
+                    <View style={styles.noMessageContainer}>
+                        <Text weight='medium' size={18} center>{noMessageText}</Text>
+                        <View style={styles.nmImageContainer}>
+                            <Image 
+                                source={ require('../../../../assets/img/nomessage.png') }
+                                style={styles.nmImage}
+                            />
                         </View>
-                    )
-                }}
-            
-            />
+                    </View>
+                )}
+
         </View>
     )
 }
@@ -79,4 +92,20 @@ const styles = StyleSheet.create({
     cardInfoContainer:{
         flex: 1,
     },
+    //no message styles
+    noMessageContainer:{
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginHorizontal: 20
+    },
+    nmImageContainer:{
+        width: 325,
+        height: 325
+    },
+    nmImage:{
+        height: '100%',
+        width: '100%',
+        resizeMode: 'contain'
+    }
 })

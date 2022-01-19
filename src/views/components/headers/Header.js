@@ -4,7 +4,7 @@ import { Text } from '../FiplyComponents'
 import { FontAwesome5 } from '@expo/vector-icons'
 import Colors from '../../../utils/Colors'
 
-const Header = ({onBackPress, title, centerTitle, rightIcon = false, style={}}) => {
+const Header = ({onBackPress = () => {}, title, centerTitle, rightIcon = false, style={}}) => {
 
     let containerStyle = centerTitle ? { justifyContent: 'center' } : {}
 
