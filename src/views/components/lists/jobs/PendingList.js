@@ -6,7 +6,8 @@ import { Ionicons, FontAwesome, FontAwesome5  } from '@expo/vector-icons';
 
 const PendingList = ({
         data, 
-        onPressBtn
+        onProceedPress = () => {},
+        onCancelPress = () => {}
     }) => {
     return (
         <View style={styles.container}>
@@ -76,12 +77,12 @@ const PendingList = ({
                             </View>
 
                             <View style={styles.cardFooterContainer}>
-                                <TouchableOpacity activeOpacity={.7} style={styles.btnSave}>
+                                <TouchableOpacity activeOpacity={.7} style={styles.btnSave} onPress={() => onProceedPress(item.questions)}>
                                     <Text weight='medium' color={ Colors.primary}>
                                         PROCEED
                                     </Text>
                                 </TouchableOpacity>
-                                <TouchableOpacity activeOpacity={.7} style={styles.btnApply}>
+                                <TouchableOpacity activeOpacity={.7} style={styles.btnApply} onPress={onCancelPress}>
                                     <Text weight='medium' color={ Colors.black}>
                                         CANCEL
                                     </Text>

@@ -1,15 +1,15 @@
 import React, { useState } from 'react'
-import { StyleSheet, View, TouchableOpacity } from 'react-native'
-import { SafeAreaView, Text, Container } from '../../components/FiplyComponents'
+import { StyleSheet } from 'react-native'
+import { SafeAreaView, Container } from '../../components/FiplyComponents'
 import SearchHeader from '../../components/headers/SearchHeader'
 import Colors from '../../../utils/Colors'
-import { FontAwesome, Fontisto } from '@expo/vector-icons'
+import { FontAwesome } from '@expo/vector-icons'
 import DiscoverList from '../../components/lists/jobs/DiscoverList'
 import PendingList from '../../components/lists/jobs/PendingList'
 import TitleFilter from '../../components/headers/TitleFilter'
 import TopNavigation from '../../components/headers/TopNavigation'
 
-const JobsScreen = () => {
+const JobsScreen = ({navigation}) => {
 
     const [navIndex, setNavIndex] = useState(0)
 
@@ -89,6 +89,30 @@ const JobsScreen = () => {
             location: 'Caloocan City',
             image: require('../../../assets/img/companies/google.png'),
             status: 'Initial Interview',
+            questions: [
+                {
+                    id: 1,
+                    questionType: 'paragraph',
+                    question: 'Tell me about your self'
+                },
+                {
+                    id: 2,
+                    questionType: 'paragraph',
+                    question: 'How do you keep up with the latest trends in this field?'
+                },
+                {
+                    id: 3,
+                    questionType: 'radiobutton',
+                    question: 'Are you willing to relocate?',
+                    options: ['Yes', 'No']
+                },
+                {
+                    id: 4,
+                    questionType: 'checkbox',
+                    question: 'Languages that you are familiar with',
+                    options: ['Javascript', 'React' , 'HTML/CSS', 'Laravel']
+                }
+            ]
         },
         {
             id: '2',
@@ -112,7 +136,10 @@ const JobsScreen = () => {
             case 2: 
                 return <DiscoverList data={appliedList} />
             case 3:
-                return <PendingList data={pendingList} />
+                return <PendingList 
+                            data={pendingList} 
+                            onProceedPress={(questions) => navigation.navigate('InitialInterviewScreen', {questions})}
+                        />
             default:
                 return <DiscoverList data={discoverList} />
         }
