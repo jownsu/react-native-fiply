@@ -4,11 +4,11 @@ import Text from './Text'
 import logo from '../../../assets/img/logo.png'
 import Colors from '../../../utils/Colors'
 
-export const FiplyLogo = ({style}) => {
+export const FiplyLogo = ({style, textColor = Colors.black}) => {
     return (
         <View style={{ ...styles.container, ...style }}>
             <Image source={logo} style={styles.logo}/>
-            <Text weight='bold' style={styles.textLogo}>Fiply</Text>
+            <Text color={textColor} weight='bold' style={styles.textLogo}>fiply</Text>
         </View>
     ) 
 }

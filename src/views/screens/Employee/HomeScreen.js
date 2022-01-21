@@ -46,8 +46,6 @@ const HomeScreen = ({navigation}) => {
 //     console.log('handleSheetChanges', index);
 //   }, []);
 
-    const [index, setIndex] = useState(-1)
-
 
     return (
         <SafeAreaView>
@@ -70,8 +68,8 @@ const HomeScreen = ({navigation}) => {
                     />
 
                     <View style={styles.postActionContainer}>
-                        <TouchableOpacity style={styles.actionBtn}>
-                            <FontAwesome name="briefcase" size={24} color={Colors.secondary} />
+                        <TouchableOpacity style={styles.actionBtn} onPress={() => navigation.navigate('CreateJobScreen')}>
+                            <FontAwesome name="briefcase" size={24} color={Colors.secondary} onPress={() => navigation.navigate('CreateJobScreen')}/>
                             <Text weight='medium' style={styles.actionText}>HIRE NOW</Text>
                         </TouchableOpacity>
 
