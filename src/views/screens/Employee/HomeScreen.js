@@ -46,30 +46,26 @@ const HomeScreen = ({navigation}) => {
 //     console.log('handleSheetChanges', index);
 //   }, []);
 
-
     return (
         <SafeAreaView>
 
             <SearchHeader
                 leftIcon={ () => <FontAwesome5 name="th-large" size={24} color={Colors.grey} />}
                 rightIcon={ () => 
-                    <TouchableOpacity  onPress={() => navigation.navigate('MessageStack')} activeOpacity={.5}>
+                    <TouchableOpacity onPress={() => navigation.navigate('MessageStack')} activeOpacity={.5}>
                         <MaterialCommunityIcons name="message-processing-outline" size={24} color={Colors.secondary} />
                     </TouchableOpacity>
                 }
             /> 
             <Container style={{ paddingHorizontal: 10 }}>
                 <View style={styles.createPostContainer}>
-                    <TextInput 
-                        label={'Create a Post'}
-                        style={styles.txtInputStyle}
-                        multiline
-                        roundness={25}
-                    />
+                    <TouchableOpacity activeOpacity={.5} style={styles.textInputContainer} onPress={() => navigation.push('CreatePostScreen')}>
+                        <Text>Create a post</Text>
+                    </TouchableOpacity>
 
                     <View style={styles.postActionContainer}>
                         <TouchableOpacity style={styles.actionBtn} onPress={() => navigation.navigate('CreateJobScreen')}>
-                            <FontAwesome name="briefcase" size={24} color={Colors.secondary} onPress={() => navigation.navigate('CreateJobScreen')}/>
+                            <FontAwesome name="briefcase" size={24} color={Colors.secondary} onPress={() => navigation.push('CreateJobScreen')}/>
                             <Text weight='medium' style={styles.actionText}>HIRE NOW</Text>
                         </TouchableOpacity>
 
@@ -143,9 +139,12 @@ const styles = StyleSheet.create({
         fontSize: 12,
         marginTop: 5
     },
-    txtInputStyle:{
-        marginBottom: 20,
-        maxHeight: 200
+    textInputContainer:{
+        borderWidth: 1,
+        padding: 10,
+        borderRadius: 100,
+        borderColor: Colors.light,
+        marginVertical: 10
     },
     btmSheetContainer:{
         paddingVertical: 10,

@@ -19,7 +19,12 @@ export const InputDropdown = ({
         onListPress,
         nonEditable,
         onInputPress,
-        dropdownIcon
+        dropdownIcon,
+        textInputStyle,
+        iconStyle,
+        iconSize = 32,
+        dropdownTextContainerStyle,
+        dropdownTextStyle
      }) => {
 
     const [filteredData, setFilteredData] = useState([])
@@ -55,9 +60,11 @@ export const InputDropdown = ({
                     onFocus={onFocus}
                     error={error}
                     errorMsg={errorMsg}
-                    right={dropdownIcon ? <TxtInput.Icon name="chevron-down" color={visibleDropdown ? Colors.primary : Colors.light} size={32} onPress={() => onInputPress ? onInputPress() : null} /> : null}
+                    right={dropdownIcon ? <TxtInput.Icon name="chevron-down" color={visibleDropdown ? Colors.primary : Colors.light} size={iconSize} style={{ ...iconStyle }} onPress={() => onInputPress ? onInputPress() : null} /> : null}
                     nonEditable={nonEditable ? true : false}
                     active={visibleDropdown}
+                    style={{ ...textInputStyle }}
+                    dense
                 />
             </TouchableOpacity>
 
@@ -70,8 +77,8 @@ export const InputDropdown = ({
                                     keyExtractor={item => item.id}
                                     renderItem={({item}) => {
                                         return (
-                                            <TouchableOpacity style={styles.dropdownTextContainer} onPress={ onListPress ? () => onListPress(item.name) : null}>
-                                                <Text style={styles.dropdownText}>{item.name}</Text>
+                                            <TouchableOpacity style={{ ...styles.dropdownTextContainer, ...dropdownTextContainerStyle }} onPress={ onListPress ? () => onListPress(item.name) : null}>
+                                                <Text style={{ ...dropdownTextStyle }}>{item.name}</Text>
                                             </TouchableOpacity>
                                         )
                                     }}
@@ -97,7 +104,8 @@ const styles = StyleSheet.create({
     dropdownTextContainer:{
         padding: 15,
         borderBottomWidth: 1,
-        borderColor: Colors.light
+        borderColor: Colors.light,
+        zIndex: 100000
     },
     dropdownText:{
     },
