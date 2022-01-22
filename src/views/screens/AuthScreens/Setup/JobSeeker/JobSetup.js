@@ -1,9 +1,11 @@
 import React, {useState} from 'react'
 import { StyleSheet, View } from 'react-native'
-import { SafeAreaView, Container2, Text, FiplyLogo, WaveHeader, Button, Dropdown, InputDropdown } from '../../../../components/FiplyComponents' 
+import { SafeAreaView, Container, Text, FiplyLogo, WaveHeader, Button, Dropdown } from '../../../../components/FiplyComponents' 
+import { Formik } from 'formik'
+import * as yup from 'yup'
+
 const JobSetup = ({navigation}) => {
 
-    const [showDropDown, setShowDropDown] = useState({jobTitle: false, jobLocation: false, jobType: false});
     const [jobTitle, setJobTitle] = useState('')
     const [jobLocation, setJobLocation] = useState('')
     const [jobType, setJobType] = useState('')
@@ -51,78 +53,78 @@ const JobSetup = ({navigation}) => {
         },
       ];
 
-      const handleSetValue = (field, value) => {
-        switch (field) {
-            case 'jobTitle':
-                setJobTitle(value)
-                break
-            case 'jobLocation':
-                setJobLocation(value)
-            case 'jobType':
-                setJobType(value)
-                break
-            default:
-                alert('Select Field')
-                break;
-        }
-      }
+      const formSchema = yup.object({
+        jobTitle: yup.string().trim().required('Job title is required'),
+        jobLocation: yup.string().trim().required('Job location is required'),
+        jobType: yup.string().trim().required('Job type is required')
+      })
+
 
     return (
         <SafeAreaView>
             <WaveHeader waveimg={require('../../../../../assets/img/waves/4.png')} />
-            <Container2 center onPress={() => setShowDropDown({jobTitle: false, jobLocationList: false})}>
+            <Container center >
                 <FiplyLogo />
                 <Text center size={17} style={{ marginVertical: 25 }}>What kind of job are you looking for?</Text>
-                <InputDropdown
-                    label={"Job Title"}
-                    visibleDropdown={showDropDown.jobTitle}
-                    value={jobTitle}
-                    data={jobTitleList}
-                    onFocus={() => setShowDropDown({...showDropDown, jobTitle: true})}
-                    style={{ marginBottom: 10 }}
-                    onChangeText={setJobTitle}
-                    onListPress={name => {
-                      setJobTitle(name)
-                      setShowDropDown({...showDropDown, jobTitle: false})
-                    }}
-                />
-                <InputDropdown
-                    label={"Job Location"}
-                    visibleDropdown={showDropDown.jobLocation}
-                    value={jobLocation}
-                    data={jobLocationList}
-                    onFocus={() => setShowDropDown({...showDropDown, jobLocation: true})}
-                    style={{ marginBottom: 10 }}
-                    onChangeText={setJobLocation}
-                    onListPress={name => {
-                      setJobLocation(name)
-                      setShowDropDown({...showDropDown, jobLocation: false})
-                    }}
-                />
-                <InputDropdown
-                    label={"Job Type"}
-                    visibleDropdown={showDropDown.jobType}
-                    value={jobType}
-                    data={jobTypeList}
-                    onFocus={() => setShowDropDown({...showDropDown, jobType: true})}
-                    style={{ marginBottom: 10 }}
-                    onChangeText={setJobType}
-                    onListPress={name => {
-                      setJobType(name)
-                      setShowDropDown({...showDropDown, jobType: false})
-                    }}
-                    nonEditable
-                    onInputPress={() => setShowDropDown({...showDropDown, jobType: true})}
-                    dropdownIcon
-                />
-                
-                <Button 
-                    title="Done" 
-                    style={{ marginVertical: 25 }} 
-                    disabled={( jobTitle && jobLocation && jobType ) ? false : true} 
-                    onPress={() => navigation.navigate('BasicUser')}    
-                />
-            </Container2>
+
+                <Formik
+                  initialValues={{ 
+                    jobTitle: '',
+                    jobLocation: '',
+                    jobType: ''
+                  }}
+                  validationSchema={formSchema}
+                  onSubmit={values => navigation.navigate('BasicUser')}
+                >
+
+                  {({handleChange, handleBlur, handleSubmit, values, errors, touched, setFieldValue}) => (
+                    <View>
+                      <Dropdown
+                          label={"Job Title"}
+                          value={values.jobTitle}
+                          data={jobTitleList}
+                          style={{ marginBottom: 5 }}
+                          onChangeText={handleChange('jobTitle')}
+                          error={(touched.jobTitle && errors.jobTitle) ? true : false}
+                          errorMsg={(touched.jobTitle && errors.jobTitle) ? errors.jobTitle : ''}
+                      />
+                      <Dropdown
+                          label={"Job Location"}
+                          value={values.jobLocation}
+                          data={jobLocationList}
+                          style={{ marginBottom: 5 }}
+                          onChangeText={handleChange('jobLocation')}
+                          error={(touched.jobLocation && errors.jobLocation) ? true : false}
+                          errorMsg={(touched.jobLocation && errors.jobLocation) ? errors.jobLocation : ''}
+                      />
+                      <Dropdown
+                          label={"Job Type"}
+                          value={values.jobType}
+                          data={jobTypeList}
+                          style={{ marginBottom: 5 }}
+                          onChangeText={handleChange('jobType')}
+                          noTextInput
+                          dropdownIcon
+                          error={(touched.jobType && errors.jobType) ? true : false}
+                          errorMsg={(touched.jobType && errors.jobType) ? errors.jobType : ''}
+                      />
+                      
+                      <Button 
+                          title="Done" 
+                          style={{ marginVertical: 25 }} 
+                          disabled={( 
+                            values.jobTitle && 
+                            values.jobLocation && 
+                            values.jobType 
+                          ) ? false : true
+                        } 
+                          onPress={handleSubmit}    
+                      />
+                    </View>
+                  )}
+
+                </Formik>
+            </Container>
         </SafeAreaView>
     )
 }

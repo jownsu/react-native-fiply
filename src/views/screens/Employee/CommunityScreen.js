@@ -13,7 +13,7 @@ import CompanyList from '../../components/lists/communities/CompanyList'
 import RequestList from '../../components/lists/communities/RequestList'
 import ForumList from '../../components/lists/communities/ForumList'
 
-const CommunityScreen = () => {
+const CommunityScreen = ({ navigation }) => {
 
     const [navIndex, setNavIndex] = useState(0)
 
@@ -197,8 +197,13 @@ const CommunityScreen = () => {
     return (
         <SafeAreaView>
             <SearchHeader
-                rightIcon={ () => <FontAwesome name="paper-plane" size={24} color={Colors.secondary} />}
-            /> 
+                rightIcon={ () => 
+                    <TouchableOpacity onPress={() => navigation.navigate('MessageStack')} activeOpacity={.5}>
+                        <FontAwesome name="paper-plane" size={24} color={Colors.secondary} />
+                    </TouchableOpacity>
+                }
+
+            />
 
             <Container style={{ paddingHorizontal: 0 }}>
                 <TitleFilter 

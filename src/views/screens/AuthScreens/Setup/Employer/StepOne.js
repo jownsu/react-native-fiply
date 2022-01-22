@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { StyleSheet, View } from 'react-native'
-import { SafeAreaView, Text, TextInput, Button, InputDropdown, Container } from '../../../../components/FiplyComponents'
+import { SafeAreaView, Text, TextInput, Button, Dropdown, Container } from '../../../../components/FiplyComponents'
 import Colors from '../../../../../utils/Colors'
 import { Formik } from 'formik'
 import * as yup from 'yup'
@@ -15,7 +15,6 @@ const StepOne = ({navigation}) => {
         location : yup.string().trim().required('Location is required')
     })
 
-    const [showDropDown, setShowDropDown] = useState({location: false});
     const locationList = [
         {
           id: "1",
@@ -76,19 +75,12 @@ const StepOne = ({navigation}) => {
                                     error={(touched.position && errors.position) ? true : false}
                                     errorMsg={(touched.position && errors.position) ? errors.position : ''}
                                 />
-                                <InputDropdown
+                                <Dropdown
                                     label={"Location"}
-                                    visibleDropdown={showDropDown.location}
                                     value={values.location}
                                     data={locationList}
-                                    onFocus={() => setShowDropDown({location: true})}
-                                    style={{ marginBottom: 10 }}
+                                    style={{ marginBottom: 5 }}
                                     onChangeText={handleChange('location')}
-                                    onListPress={name => {
-                                        setFieldValue('location', name)
-                                        setShowDropDown({...showDropDown, location: false})
-                                    }}
-                                    onBlur={ handleBlur('location')}
                                     error={(touched.location && errors.location) ? true : false}
                                     errorMsg={(touched.location && errors.location) ? errors.location : ''}
                                 />
@@ -96,6 +88,13 @@ const StepOne = ({navigation}) => {
                                     title='Continue'
                                     onPress={() => handleSubmit()}
                                     style={{ marginVertical: 25 }}
+                                    disabled={(
+                                        values.company &&
+                                        values.companyRegNum && 
+                                        values.position && 
+                                        values.location
+                                    ) ? false : true
+                                }
                                 />
                             </View>
                         )}

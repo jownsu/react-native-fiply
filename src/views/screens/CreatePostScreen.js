@@ -1,6 +1,6 @@
 import { StyleSheet, View, Image, TextInput, TouchableOpacity, KeyboardAvoidingView } from 'react-native'
 import React, { useState } from 'react'
-import { Text, SafeAreaView, Container2, Container, Dropdown, InputDropdown } from '../components/FiplyComponents'
+import { Text, SafeAreaView, Container2, Container, InputDropdown, Dropdown } from '../components/FiplyComponents'
 import Header from '../components/headers/Header'
 import Colors from '../../utils/Colors'
 import { FontAwesome5 } from '@expo/vector-icons'
@@ -12,7 +12,7 @@ const CreatePostScreen = ({navigation}) => {
   const [postText, setPostText] = useState('')
   
   return (
-        <SafeAreaView>
+        <SafeAreaView flex>
           <View style={{ backgroundColor: Colors.white, position: 'absolute',top: 0, height: 50, width: '100%'  }}/>
           <Header 
             title='Create Post'
@@ -26,7 +26,7 @@ const CreatePostScreen = ({navigation}) => {
               )}
             onBackPress={() => navigation.pop()}
           />
-          <Container onPress={() => setShowDropdown(false)}>
+          <Container>
             <View style={styles.container}>
               <View style={styles.headerContainer}>
                 <View style={styles.imgContainer}>
@@ -37,23 +37,16 @@ const CreatePostScreen = ({navigation}) => {
                 </View>
                 <View style={styles.headerDetails}>
                   <Text weight='medium' size={16}>Jhones Digno</Text>
-                  <InputDropdown 
+                  <Dropdown 
                     data={[{id: 1, name: 'Public'}, {id: 2, name: 'Friends'}]}
-                    visibleDropdown={showDropdown}
-                    onListPress={name => {
-                        setPostStatus(name)
-                        setShowDropdown(false)
-                      }}
-                    value={postStatus }
-                    nonEditable
-                    onInputPress={() => setShowDropdown(true)}
+                    value={postStatus}
+                    noTextInput
+                    onChangeText={text => setPostStatus(text)}
                     dropdownIcon
                     style={{ height: 25, width: 100, }}
                     textInputStyle={{ height: 25, width: 100, fontSize: 11 }}
                     iconStyle={{ marginTop: 15 }}
                     iconSize={26}
-                    dropdownTextContainerStyle={{ padding: 5 }}
-                    dropdownTextStyle={{ fontSize: 12 }}
                   />
                 </View>
               </View>

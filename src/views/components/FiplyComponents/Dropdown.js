@@ -51,15 +51,17 @@ export const Dropdown = ({
                     error={error}
                     errorMsg={errorMsg}
                     nonEditable
+                    style={{ ...textInputStyle }}
                     right={
                         dropdownIcon 
                             ? (
                                 <TxtInput.Icon 
                                     name="chevron-down" 
-                                    color={Colors.light} 
+                                    color={Colors.black} 
                                     size={iconSize} 
                                     style={{ ...iconStyle }} 
-                                    onPress={() => setVisibleDialog(true)}
+                                    onPress={() => {}}
+                                    disabled
                                 />
                             )
                             : null

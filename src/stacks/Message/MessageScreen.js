@@ -93,7 +93,7 @@ const MessageScreen = ({navigation, route}) => {
         )
     }
     return (
-        <SafeAreaView>
+        <SafeAreaView flex>
             <View style={{ backgroundColor: Colors.white, position: 'absolute',top: 0, height: 50, width: '100%'  }}/>
             <Header
                 title={data.name}

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { StyleSheet } from 'react-native'
+import { StyleSheet, TouchableOpacity } from 'react-native'
 import { SafeAreaView, Container } from '../../components/FiplyComponents'
 import SearchHeader from '../../components/headers/SearchHeader'
 import Colors from '../../../utils/Colors'
@@ -148,7 +148,11 @@ const JobsScreen = ({navigation}) => {
     return (
         <SafeAreaView>
             <SearchHeader
-                rightIcon={ () => <FontAwesome name="paper-plane" size={24} color={Colors.secondary} />}
+                rightIcon={ () => 
+                    <TouchableOpacity onPress={() => navigation.navigate('MessageStack')} activeOpacity={.5}>
+                        <FontAwesome name="paper-plane" size={24} color={Colors.secondary} />
+                    </TouchableOpacity>
+                }
             /> 
 
             <Container style={{ paddingHorizontal: 0 }}>

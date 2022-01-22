@@ -1,13 +1,10 @@
-import React, {useState} from 'react'
-import { StyleSheet } from 'react-native'
-import { SafeAreaView, Container2, Text, FiplyLogo, WaveHeader, Button, Dropdown, InputDropdown } from '../../../../components/FiplyComponents' 
+import React from 'react'
+import { StyleSheet, View } from 'react-native'
+import { SafeAreaView, Container, Text, FiplyLogo, WaveHeader, Button, Dropdown } from '../../../../components/FiplyComponents'
+import { Formik } from 'formik'
+import * as yup from 'yup'
+
 const ApplicantSetup = ({navigation}) => {
-
-    const [showDropDown, setShowDropDown] = useState({levelOfExperience: false, fieldOfExpertise: false, location: false});
-
-    const [levelOfExperience, setLevelOfExperience] = useState('')
-    const [fieldOfExpertise, setFieldOfExpertise] = useState('')
-    const [location, setLocation] = useState('')
 
     const levelOfExperienceList = [
         {
@@ -64,87 +61,77 @@ const ApplicantSetup = ({navigation}) => {
         },
       ];
 
-      const handleSetValue = (field, value) => {
-        switch (field) {
-            case 'levelOfExperience':
-                setLevelOfExperience(value)
-                break
-            case 'fieldOfExpertise':
-                setFieldOfExpertise(value)
-            case 'location':
-                setLocation(value)
-                break
-            default:
-                alert('Select Field')
-                break;
-        }
-      }
+    const formSchema = yup.object({
+      levelOfExperience: yup.string().trim().required('Level of experience required'),
+      fieldOfExpertise: yup.string().trim().required('Field of expertise required'),
+      location: yup.string().trim().required('Location is required')
+    })
 
     return (
         <SafeAreaView>
             <WaveHeader waveimg={require('../../../../../assets/img/waves/4.png')} />
-            <Container2 center onPress={() => setShowDropDown({})}>
+            <Container center >
                 <FiplyLogo />
                 <Text center size={17} style={{ marginVertical: 25 }}>What kind of applicant are you looking for?</Text>
 
-                <InputDropdown
-                    label={"Level of experience"}
-                    visibleDropdown={showDropDown.levelOfExperience}
-                    value={levelOfExperience}
-                    data={levelOfExperienceList}
-                    onFocus={() => setShowDropDown({...showDropDown, levelOfExperience: true})}
-                    style={{ marginBottom: 10 }}
-                    onChangeText={setLevelOfExperience}
-                    onListPress={name => {
-                      setLevelOfExperience(name)
-                      setShowDropDown({...showDropDown, levelOfExperience: false})
-                    }}
-                    nonEditable
-                    onInputPress={() => setShowDropDown({...showDropDown, levelOfExperience: true})}
-                    dropdownIcon
-                />
+                <Formik
+                  initialValues={{ 
+                    levelOfExperience: '',
+                    fieldOfExpertise: '',
+                    location: ''
+                   }}
+                   validationSchema={formSchema}
+                   onSubmit={(values) => navigation.navigate('BasicUser')}
+                >
 
-                <InputDropdown
-                    label={"Field of expertise"}
-                    visibleDropdown={showDropDown.fieldOfExpertise}
-                    value={fieldOfExpertise}
-                    data={fieldOfExpertiseList}
-                    onFocus={() => setShowDropDown({...showDropDown, fieldOfExpertise: true})}
-                    style={{ marginBottom: 10 }}
-                    onChangeText={setFieldOfExpertise}
-                    onListPress={name => {
-                      setFieldOfExpertise(name)
-                      setShowDropDown({...showDropDown, fieldOfExpertise: false})
-                    }}
-                    nonEditable
-                    onInputPress={() => setShowDropDown({...showDropDown, fieldOfExpertise: true})}
-                    dropdownIcon
-                />
+                  {({handleChange, handleBlur, handleSubmit, values, errors, touched, setFieldValue}) => (
+                    <View>
+                      <Dropdown
+                          label={"Level of experience"}
+                          value={values.levelOfExperience}
+                          data={levelOfExperienceList}
+                          style={{ marginBottom: 5 }}
+                          onChangeText={handleChange('levelOfExperience')}
+                          noTextInput
+                          dropdownIcon
+                          error={(touched.levelOfExperience && errors.levelOfExperience) ? true : false}
+                          errorMsg={(touched.levelOfExperience && errors.levelOfExperience) ? errors.levelOfExperience : ''}
+                      />
 
-                <InputDropdown
-                    label={"Location"}
-                    visibleDropdown={showDropDown.location}
-                    value={location}
-                    data={locationList}
-                    onFocus={() => setShowDropDown({...showDropDown, location: true})}
-                    style={{ marginBottom: 10 }}
-                    onChangeText={setLocation}
-                    onListPress={name => {
-                      setLocation(name)
-                      setShowDropDown({...showDropDown, location: false})
-                    }}
-                    nonEditable
-                    onInputPress={() => setShowDropDown({...showDropDown, location: true})}
-                    dropdownIcon
-                />
+                      <Dropdown
+                          label={"Field of expertise"}
+                          value={values.fieldOfExpertise}
+                          data={fieldOfExpertiseList}
+                          style={{ marginBottom: 5 }}
+                          onChangeText={handleChange('fieldOfExpertise')}
+                          error={(touched.fieldOfExpertise && errors.fieldOfExpertise) ? true : false}
+                          errorMsg={(touched.fieldOfExpertise && errors.fieldOfExpertise) ? errors.fieldOfExpertise : ''}
+                      />
 
-                <Button 
-                    title="Done" 
-                    style={{ marginVertical: 25 }} 
-                    disabled={( levelOfExperience && fieldOfExpertise && location ) ? false : true} 
-                    onPress={() => navigation.navigate('BasicUser')}    
-                />
-            </Container2>
+                      <Dropdown
+                          label={"Location"}
+                          value={values.location}
+                          data={locationList}
+                          style={{ marginBottom: 5 }}
+                          onChangeText={handleChange('location')}
+                          dropdownIcon
+                          error={(touched.location && errors.location) ? true : false}
+                          errorMsg={(touched.location && errors.location) ? errors.location : ''}
+                      />
+
+                      <Button 
+                          title="Done" 
+                          style={{ marginVertical: 25 }} 
+                          disabled={( values.levelOfExperience && values.fieldOfExpertise && values.location ) ? false : true} 
+                          onPress={handleSubmit}    
+                      />
+                    </View>
+                  )}
+
+
+
+                </Formik>
+            </Container>
 
 
         </SafeAreaView>

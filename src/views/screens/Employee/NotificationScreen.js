@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet, View, TouchableOpacity } from 'react-native'
 import { SafeAreaView, Text, Container } from '../../components/FiplyComponents'
 import SearchHeader from '../../components/headers/SearchHeader'
 import { FontAwesome5, FontAwesome, Fontisto } from '@expo/vector-icons'
@@ -7,7 +7,7 @@ import Colors from '../../../utils/Colors'
 import NotificationList from '../../components/lists/NotificationList'
 import TitleFilter from '../../components/headers/TitleFilter'
 
-const NotificationScreen = () => {
+const NotificationScreen = ({ navigation }) => {
 
     const notificationList = [
         {
@@ -37,7 +37,11 @@ const NotificationScreen = () => {
     return (
         <SafeAreaView>
             <SearchHeader
-                rightIcon={ () => <FontAwesome name="paper-plane" size={24} color={Colors.secondary} />}
+                rightIcon={ () => 
+                <TouchableOpacity onPress={() => navigation.navigate('MessageStack')} activeOpacity={.5}>
+                    <FontAwesome name="paper-plane" size={24} color={Colors.secondary} />
+                </TouchableOpacity>
+                }
             /> 
 
             <Container style={{ paddingHorizontal: 0 }}>

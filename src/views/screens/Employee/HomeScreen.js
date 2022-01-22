@@ -53,7 +53,7 @@ const HomeScreen = ({navigation}) => {
                 leftIcon={ () => <FontAwesome5 name="th-large" size={24} color={Colors.grey} />}
                 rightIcon={ () => 
                     <TouchableOpacity onPress={() => navigation.navigate('MessageStack')} activeOpacity={.5}>
-                        <MaterialCommunityIcons name="message-processing-outline" size={24} color={Colors.secondary} />
+                        <FontAwesome name="paper-plane" size={24} color={Colors.secondary} />
                     </TouchableOpacity>
                 }
             /> 

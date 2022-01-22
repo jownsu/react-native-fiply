@@ -1,6 +1,6 @@
 import { StyleSheet, View } from 'react-native'
 import React, { useState } from 'react'
-import { Text, SafeAreaView, Container2, TextInput, InputDropdown, Button, FiplyLogo } from '../components/FiplyComponents'
+import { Text, SafeAreaView, Container, TextInput, Dropdown, Button, FiplyLogo } from '../components/FiplyComponents'
 import { Formik } from 'formik'
 import * as yup from 'yup'
 import Header from '../components/headers/Header'
@@ -92,7 +92,7 @@ const CreateJobScreen = ({navigation}) => {
         onBackPress={() => navigation.pop()}
       />
 
-      <Container2 onPress={() => setShowDropDown({})}>
+      <Container>
 
             <Formik
               initialValues={{ 
@@ -110,76 +110,41 @@ const CreateJobScreen = ({navigation}) => {
 
               {({ handleChange, handleBlur, handleSubmit, values, errors, touched, setFieldValue }) => (
                 <View>
-                  <InputDropdown 
+                  <Dropdown
                     label='Job Title'
-                    visibleDropdown={showDropDown.jobTitle}
                     value={values.jobTitle}
                     data={jobTitleList}
-                    onFocus={() => setShowDropDown({...showDropDown, jobTitle: true})}
                     style={{ marginBottom: 5 }}
                     onChangeText={handleChange('jobTitle')}
-                    onListPress={name => {
-                      setFieldValue('jobTitle', name)
-                      setShowDropDown({...showDropDown, jobTitle: false})
-                    }}
-                    onInputPress={() => setShowDropDown({...showDropDown, jobTitle: true})}
-                    dropdownIcon
-                    onBlur={handleBlur('jobTitle')}
                     error={(touched.jobTitle && errors.jobTitle) ? true : false}
                     errorMsg={(touched.jobTitle && errors.jobTitle) ? errors.jobTitle : ''}
                   />
-                  <InputDropdown
+                  <Dropdown
                     label={"Job Type"}
-                    visibleDropdown={showDropDown.jobType}
                     value={values.jobType}
                     data={jobTypeList}
-                    onFocus={() => setShowDropDown({...showDropDown, jobType: true})}
                     style={{ marginBottom: 5 }}
                     onChangeText={handleChange('jobType')}
-                    onListPress={name => {
-                      setFieldValue('jobType', name)
-                      setShowDropDown({...showDropDown, jobType: false})
-                    }}
-                    onInputPress={() => setShowDropDown({...showDropDown, jobType: true})}
-                    nonEditable
-                    dropdownIcon
-                    onBlur={handleBlur('jobType')}
                     error={(touched.jobType && errors.jobType) ? true : false}
                     errorMsg={(touched.jobType && errors.jobType) ? errors.jobType : ''}
+                    noTextInput
+                    dropdownIcon
                   />
-                  <InputDropdown
+                  <Dropdown
                     label={"Company"}
-                    visibleDropdown={showDropDown.company}
                     value={values.company}
                     data={companyList}
-                    onFocus={() => setShowDropDown({...showDropDown, company: true})}
                     style={{ marginBottom: 5 }}
                     onChangeText={handleChange('company')}
-                    onListPress={name => {
-                      setFieldValue('company', name)
-                      setShowDropDown({...showDropDown, company: false})
-                  }}
-                    onInputPress={() => setShowDropDown({...showDropDown, company: true})}
-                    dropdownIcon
-                    onBlur={handleBlur('company')}
                     error={(touched.company && errors.company) ? true : false}
                     errorMsg={(touched.company && errors.company) ? errors.company : ''}
                   />
-                  <InputDropdown
+                  <Dropdown
                     label={"Location"}
-                    visibleDropdown={showDropDown.location}
                     value={values.location}
                     data={locationList}
-                    onFocus={() => setShowDropDown({...showDropDown, location: true})}
                     style={{ marginBottom: 5 }}
                     onChangeText={handleChange('location')}
-                    onListPress={name => {
-                      setFieldValue('location', name)
-                      setShowDropDown({...showDropDown, location: false})
-                  }}
-                    onInputPress={() => setShowDropDown({...showDropDown, location: true})}
-                    dropdownIcon
-                    onBlur={handleBlur('location')}
                     error={(touched.location && errors.location) ? true : false}
                     errorMsg={(touched.location && errors.location) ? errors.location : ''}
                   />
@@ -198,6 +163,14 @@ const CreateJobScreen = ({navigation}) => {
                     title='Submit'
                     style={{ marginTop: 35 }}
                     onPress={handleSubmit}
+                    disabled={(
+                        values.jobTitle && 
+                        values.jobType && 
+                        values.company && 
+                        values.location && 
+                        values.description
+                      ) ? false : true
+                  }
                   />
                 </View>
               )}
@@ -206,7 +179,7 @@ const CreateJobScreen = ({navigation}) => {
 
               <FiplyLogo style={{ flex: 1 }} textColor={Colors.secondary} />
 
-      </Container2>
+      </Container>
     </SafeAreaView>
   );
 };

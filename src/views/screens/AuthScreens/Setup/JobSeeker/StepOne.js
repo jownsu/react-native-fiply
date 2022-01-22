@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { StyleSheet, View } from 'react-native'
-import { SafeAreaView, Text, TextInput, Button, SecondaryButton, Container, InputDropdown, Dropdown } from '../../../../components/FiplyComponents'
+import { SafeAreaView, Text, TextInput, Button, SecondaryButton, Container, Dropdown } from '../../../../components/FiplyComponents'
 import Colors from '../../../../../utils/Colors'
 import { Formik } from 'formik'
 import * as yup from 'yup'
@@ -123,7 +123,7 @@ const StepOne = ({navigation}) => {
             <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 35 }}>
                 <StepIndicator active/>
             </View>
-            <Container center onPress={() => setShowDropdown({})} >
+            <Container center>
                 <Text color={Colors.secondary} weight='medium' size={24} center style={{ marginBottom: 20 }}>Step 1</Text>
                     <View style={{ display: hideStudentForm ? 'flex' : 'none'}}>
                         <Formik
@@ -191,6 +191,13 @@ const StepOne = ({navigation}) => {
                                 <Button 
                                     title='Continue'
                                     onPress={() => handleSubmit()}
+                                    disabled={(
+                                        values.recentJob && 
+                                        values.employmentType && 
+                                        values.recentCompany && 
+                                        values.location
+                                    ) ? false : true
+                                }
                                 />
                             </View>
                         )}
@@ -261,6 +268,13 @@ const StepOne = ({navigation}) => {
                                 <Button 
                                     title='Continue'
                                     onPress={() => handleSubmit()}
+                                    disabled={(
+                                            values.school && 
+                                            values.degree && 
+                                            values.fieldOfStudy && 
+                                            values.year
+                                        ) ? false : true
+                                    }
                                 />
 
                             </View>

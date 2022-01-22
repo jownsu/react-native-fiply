@@ -7,6 +7,7 @@ import Colors from '../../../../utils/Colors'
 import { TextInput as TxtInput } from 'react-native-paper'
 
 import {Text, FiplyLogo, WaveHeader, Container, Button, TextInput, SafeAreaView} from '../../../components/FiplyComponents'
+import { error } from 'react-native-gifted-chat/lib/utils'
 
 
 const SignupScreen = ({navigation}) => {
@@ -84,6 +85,7 @@ const SignupScreen = ({navigation}) => {
                                         <Button 
                                             title={'Agree & Join'}
                                             onPress={() => setHideSecondForm(false)}
+                                            disabled={ ((values.email && !errors.email) && values.password && values.password_confirmation) ? false : true}
                                         />
 
                                     </View>
@@ -113,6 +115,16 @@ const SignupScreen = ({navigation}) => {
                                             title={'Continue'}
                                             onPress={() => handleSubmit()}
                                             style={{ marginTop: 30 }}
+                                            disabled={
+                                                (
+                                                    (values.email && !errors.email) 
+                                                    && values.password 
+                                                    && values.password_confirmation 
+                                                    && values.firstname 
+                                                    && values.lastname
+                                                )
+                                                    ? false : true
+                                                }
                                         />
 
                                         <TouchableOpacity style={{ marginTop: 20 }} onPress={() => setHideSecondForm(true)}>
