@@ -22,7 +22,9 @@ export const TextInput = ({
         roundness = 5,
         multiline = false,
         mode = 'outlined',
-        dense = false
+        dense = false,
+        autoFocus = false,
+        ref
     
     }) => {
     return (
@@ -46,7 +48,7 @@ export const TextInput = ({
                 error={error}
                 secureTextEntry={secureTextEntry}
                 dense={dense}
-                style={style}
+                style={{ backgroundColor: Colors.white, ...style }}
                 right={right}
                 onFocus={onFocus}
                 // onEndEditing={onEndEditting}
@@ -58,6 +60,8 @@ export const TextInput = ({
                         style={[innerProps.style, {textAlignVertical: 'center'}]}
                     />
                 )}
+                autoFocus={autoFocus}
+                ref={ref}
             />
             {
             errorMsg 

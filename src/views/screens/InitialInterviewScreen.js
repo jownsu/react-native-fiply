@@ -1,7 +1,7 @@
 import React from 'react'
 import { StyleSheet, View, Image } from 'react-native'
 import { Colors } from 'react-native/Libraries/NewAppScreen'
-import { SafeAreaView, Container, Button, Text } from '../components/FiplyComponents'
+import { SafeAreaView, Container, Text } from '../components/FiplyComponents'
 import Header from '../components/headers/Header'
 import Questionnaire from '../components/Questionnaire'
 
@@ -26,11 +26,6 @@ const InitialInterviewScreen = ({navigation, route}) => {
                     <View>
                         <Questionnaire
                             data={questions}
-                        />
-
-                        <Button
-                            style={{ marginTop: 15 }}
-                            title='Submit'
                         />
                     </View>
                 : 

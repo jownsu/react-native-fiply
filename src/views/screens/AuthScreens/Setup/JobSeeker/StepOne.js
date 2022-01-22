@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { StyleSheet, View } from 'react-native'
-import { SafeAreaView, Text, TextInput, Button, SecondaryButton, Container2, InputDropdown } from '../../../../components/FiplyComponents'
+import { SafeAreaView, Text, TextInput, Button, SecondaryButton, Container, InputDropdown, Dropdown } from '../../../../components/FiplyComponents'
 import Colors from '../../../../../utils/Colors'
 import { Formik } from 'formik'
 import * as yup from 'yup'
@@ -24,32 +24,34 @@ const StepOne = ({navigation}) => {
         year: yup.string().trim().required('Year is required')
     })
 
-//
-
-    const [showDropdown, setShowDropdown] = useState({
-        recentJob: false, 
-        employmentType: false, 
-        recentCompany: false, 
-        location: false,
-        school: false,
-        degree: false,
-        fieldOfStudy: false
-    })
-
-
-
     const jobList = [
         {
             id: "1",
-            name: "Fullstack Developer",
+            name: "Astronaut",
         },
         {
             id: "2",
-            name: "Backend Developer",
+            name: "Axie Scholar",
         },
         {
             id: "3",
             name: "Frontend Developer",
+        },
+        {
+            id: "4",
+            name: "Laravel Developer",
+        },
+        {
+            id: "5",
+            name: "UI/UX Designer",
+        },
+        {
+            id: "6",
+            name: "Web Designer",
+        },
+        {
+            id: "7",
+            name: "Full Stack Developer",
         },
     ]
     const employmentTypeList = [
@@ -121,7 +123,7 @@ const StepOne = ({navigation}) => {
             <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 35 }}>
                 <StepIndicator active/>
             </View>
-            <Container2 center onPress={() => setShowDropdown({})} >
+            <Container center onPress={() => setShowDropdown({})} >
                 <Text color={Colors.secondary} weight='medium' size={24} center style={{ marginBottom: 20 }}>Step 1</Text>
                     <View style={{ display: hideStudentForm ? 'flex' : 'none'}}>
                         <Formik
@@ -133,81 +135,50 @@ const StepOne = ({navigation}) => {
                             }}
                             validationSchema={experienceSchema}
                             onSubmit={(values) => navigation.navigate('StepTwo')}
-                        >   
+                        >
 
                         {({ handleChange, handleBlur, handleSubmit, values, errors, touched, setFieldValue }) => (
 
                             <View>
-                                <InputDropdown
+                                <Dropdown
                                     label={"Most recent job"}
-                                    visibleDropdown={showDropdown.recentJob}
                                     value={values.recentJob}
-                                    data={jobList}
-                                    onFocus={() => setShowDropdown({...showDropdown, recentJob: true})}
-                                    style={{ marginBottom: 10 }}
                                     onChangeText={handleChange('recentJob')}
-                                    onBlur={handleBlur('recentJob')}
+                                    data={jobList}
                                     error={(touched.recentJob && errors.recentJob) ? true : false}
                                     errorMsg={(touched.recentJob && errors.recentJob) ? errors.recentJob : ''}
-                                    onListPress={name => {
-                                        setFieldValue('recentJob', name)
-                                        setShowDropdown({...showDropdown, recentJob: false})
-                                    }}
+                                    style={{ marginBottom: 5 }}
                                 />
 
-                                <InputDropdown
+                                <Dropdown
                                     label={"Employment Type"}
-                                    visibleDropdown={showDropdown.employmentType}
                                     value={values.employmentType}
                                     data={employmentTypeList}
-                                    onFocus={() => setShowDropdown({...showDropdown, employmentType: true})}
-                                    style={{ marginBottom: 10 }}
                                     onChangeText={handleChange('employmentType')}
-                                    onBlur={handleBlur('employmentType')}
                                     error={(touched.employmentType && errors.employmentType) ? true : false}
                                     errorMsg={(touched.employmentType && errors.employmentType) ? errors.employmentType : ''}
-                                    onListPress={name => {
-                                        setFieldValue('employmentType', name)
-                                        setShowDropdown({...showDropdown, employmentType: false})
-                                    }}
-                                    onInputPress={() => setShowDropdown({...showDropdown, employmentType: true})}
-                                    nonEditable
+                                    style={{ marginBottom: 5 }}
+                                    noTextInput
                                     dropdownIcon
                                 />
 
-                                <InputDropdown
+                                <Dropdown
                                     label={"Most recent company"}
-                                    visibleDropdown={showDropdown.recentCompany}
                                     value={values.recentCompany}
                                     data={companyList}
-                                    onFocus={() => setShowDropdown({...showDropdown, recentCompany: true})}
-                                    style={{ marginBottom: 10 }}
                                     onChangeText={handleChange('recentCompany')}
-                                    onBlur={handleBlur('recentCompany')}
                                     error={(touched.recentCompany && errors.recentCompany) ? true : false}
                                     errorMsg={(touched.recentCompany && errors.recentCompany) ? errors.recentCompany : ''}
-                                    onListPress={name => {
-                                        setFieldValue('recentCompany', name)
-                                        setShowDropdown({...showDropdown, recentCompany: false})
-                                    }}
+                                    style={{ marginBottom: 5 }}
                                 />
 
-                                <InputDropdown
+                                <Dropdown
                                     label={"Location"}
-                                    visibleDropdown={showDropdown.location}
                                     value={values.location}
                                     data={locationList}
-                                    onFocus={() => setShowDropdown({...showDropdown, location: true})}
-                                    style={{ marginBottom: 10 }}
                                     onChangeText={handleChange('location')}
-                                    onBlur={handleBlur('location')}
                                     error={(touched.location && errors.location) ? true : false}
                                     errorMsg={(touched.location && errors.location) ? errors.location : ''}
-                                    onListPress={name => {
-                                        // handleChange(name)
-                                        setFieldValue('location', name)
-                                        setShowDropdown({...showDropdown, location: false})
-                                    }}
                                 />
 
 
@@ -241,55 +212,34 @@ const StepOne = ({navigation}) => {
 
                             <View>
 
-                                <InputDropdown
+                                <Dropdown
                                     label={"School"}
-                                    visibleDropdown={showDropdown.school}
                                     value={values.school}
                                     data={schoolList}
-                                    onFocus={() => setShowDropdown({...showDropdown, school: true})}
-                                    style={{ marginBottom: 10 }}
+                                    style={{ marginBottom: 5 }}
                                     onChangeText={handleChange('school')}
-                                    onBlur={handleBlur('school')}
                                     error={(touched.school && errors.school) ? true : false}
                                     errorMsg={(touched.school && errors.school) ? errors.school : ''}
-                                    onListPress={name => {
-                                        setFieldValue('school', name)
-                                        setShowDropdown({...showDropdown, school: false})
-                                    }}
                                 />
 
-                                <InputDropdown
+                                <Dropdown
                                     label={"Degree"}
-                                    visibleDropdown={showDropdown.degree}
                                     value={values.degree}
                                     data={degreeList}
-                                    onFocus={() => setShowDropdown({...showDropdown, degree: true})}
-                                    style={{ marginBottom: 10 }}
+                                    style={{ marginBottom: 5 }}
                                     onChangeText={handleChange('degree')}
-                                    onBlur={handleBlur('degree')}
                                     error={(touched.degree && errors.degree) ? true : false}
                                     errorMsg={(touched.degree && errors.degree) ? errors.degree : ''}
-                                    onListPress={name => {
-                                        setFieldValue('degree', name)
-                                        setShowDropdown({...showDropdown, degree: false})
-                                    }}
                                 />
 
-                                <InputDropdown
+                                <Dropdown
                                     label={"Field of study"}
-                                    visibleDropdown={showDropdown.fieldOfStudy}
                                     value={values.fieldOfStudy}
                                     data={fieldOfStudyList}
-                                    onFocus={() => setShowDropdown({...showDropdown, fieldOfStudy: true})}
-                                    style={{ marginBottom: 10 }}
+                                    style={{ marginBottom: 5 }}
                                     onChangeText={handleChange('fieldOfStudy')}
-                                    onBlur={handleBlur('fieldOfStudy')}
                                     error={(touched.fieldOfStudy && errors.fieldOfStudy) ? true : false}
                                     errorMsg={(touched.fieldOfStudy && errors.fieldOfStudy) ? errors.fieldOfStudy : ''}
-                                    onListPress={name => {
-                                        setFieldValue('fieldOfStudy', name)
-                                        setShowDropdown({...showDropdown, fieldOfStudy: false})
-                                    }}
                                 />
 
                                 <TextInput
@@ -317,7 +267,7 @@ const StepOne = ({navigation}) => {
                         )}
                         </Formik>
                     </View>
-            </Container2>
+            </Container>
         </SafeAreaView>
     )
 }

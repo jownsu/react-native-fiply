@@ -2,7 +2,8 @@ import React from 'react';
 import { View, FlatList } from 'react-native'
 import MultipleCheckbox from './questionnaire/MultipleCheckbox'
 import MultipleRadioButton from './questionnaire/MultipleRadioButton'
-import Paragraph from './questionnaire/Paragraph';
+import Paragraph from './questionnaire/Paragraph'
+import { Text, Button } from '../components/FiplyComponents'
 
 const Questionnaire = ({data}) => {
 
@@ -32,6 +33,11 @@ const Questionnaire = ({data}) => {
                     </View>
                 )
             }}
+            ListFooterComponent={() => 
+                <Button
+                    style={{ marginVertical: 15 }}
+                    title='Submit'
+                />}
         />
     </View>
   );

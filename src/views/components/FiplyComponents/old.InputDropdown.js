@@ -64,7 +64,6 @@ export const InputDropdown = ({
                     nonEditable={nonEditable ? true : false}
                     active={visibleDropdown}
                     style={{ ...textInputStyle }}
-                    dense
                 />
             </TouchableOpacity>
 
