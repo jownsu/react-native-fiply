@@ -47,7 +47,7 @@ const HomeScreen = ({navigation}) => {
 //   }, []);
 
     return (
-        <SafeAreaView>
+        <SafeAreaView flex>
 
             <SearchHeader
                 leftIcon={ () => <FontAwesome5 name="th-large" size={24} color={Colors.grey} />}
@@ -58,35 +58,12 @@ const HomeScreen = ({navigation}) => {
                 }
             /> 
             <Container style={{ paddingHorizontal: 10 }}>
-                <View style={styles.createPostContainer}>
-                    <TouchableOpacity activeOpacity={.5} style={styles.textInputContainer} onPress={() => navigation.push('CreatePostScreen')}>
-                        <Text>Create a post</Text>
-                    </TouchableOpacity>
-
-                    <View style={styles.postActionContainer}>
-                        <TouchableOpacity style={styles.actionBtn} onPress={() => navigation.navigate('CreateJobScreen')}>
-                            <FontAwesome name="briefcase" size={24} color={Colors.secondary} onPress={() => navigation.push('CreateJobScreen')}/>
-                            <Text weight='medium' style={styles.actionText}>HIRE NOW</Text>
-                        </TouchableOpacity>
-
-                        <TouchableOpacity style={styles.actionBtn} onPress={() => navigation.navigate('CreateQuestionnaireScreen')}>
-                            <FontAwesome5 name="calendar-week" size={24} color={Colors.primary} />
-                            <Text weight='medium' style={styles.actionText}>SET EVENT</Text>
-                        </TouchableOpacity>
-
-                        <TouchableOpacity style={styles.actionBtn}>
-                            <FontAwesome5 name="poll" size={24} color={Colors.grey} />
-                            <Text weight='medium' style={styles.actionText}>POLL</Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-
                 <PostList 
                     data={postList}
                     optionOnPress={() => handlePresentModalPress()}
+                    onHireNowPress={() => navigation.navigate('CreateJobScreen')}
+                    onSetEventPress={() => navigation.navigate('CreateQuestionnaireScreen')}
                 />
-
-
             </Container>
 
             <BottomSheetModal 

@@ -4,13 +4,14 @@ import { Text } from '../../FiplyComponents'
 import Colors from '../../../../utils/Colors'
 import { Ionicons, FontAwesome, FontAwesome5  } from '@expo/vector-icons';
 
-const PendingList = ({
+const InterviewList = ({
         data, 
         onProceedPress = () => {},
         onCancelPress = () => {}
     }) => {
     return (
         <View style={styles.container}>
+        
             <FlatList
                 data={data}
                 keyExtractor={item => item.id}
@@ -42,24 +43,14 @@ const PendingList = ({
                                         <Text size={11} >{item.location}</Text>
                                     </View>
                                     <View>
-                                        {
-                                            item.status 
-                                                ? 
-                                                <View style={{ flexDirection: 'row' }}>
-                                                    <Text size={12} weight='semi-bold' color={Colors.primary}>Status: </Text>
-                                                    <Text size={12}>{item.status}</Text>
-                                                </View>
-                                                : null
-                                        }
-                                        {
-                                            item.when 
-                                                ? 
-                                                <View style={{ flexDirection: 'row' }}>
-                                                    <Text size={12} weight='semi-bold' color={Colors.primary}>When: </Text>
-                                                    <Text size={12}>{item.when}</Text>
-                                                </View>
-                                                : null
-                                        }
+                                        <View style={{ flexDirection: 'row' }}>
+                                            <Text size={12} weight='semi-bold' color={Colors.primary}>Employer: </Text>
+                                            <Text size={12}>{item.employer}</Text>
+                                        </View>
+                                        <View style={{ flexDirection: 'row' }}>
+                                            <Text size={12} weight='semi-bold' color={Colors.primary}>When: </Text>
+                                            <Text size={12}>{item.when}</Text>
+                                        </View>
                                     </View>
 
                                 </View>
@@ -74,7 +65,7 @@ const PendingList = ({
                                 </TouchableOpacity>
                                 <TouchableOpacity activeOpacity={.7} style={styles.btnApply} onPress={onCancelPress}>
                                     <Text weight='medium' color={ Colors.black}>
-                                        CANCEL
+                                        CALL OFF
                                     </Text>
                                 </TouchableOpacity>
                             </View>
@@ -87,27 +78,11 @@ const PendingList = ({
     )
 }
 
-export default PendingList
+export default InterviewList
 
 const styles = StyleSheet.create({
     container:{
-    },
-    myInterviewContainer:{
-        backgroundColor: Colors.white,
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginBottom: 10,
-        flexDirection: 'row',
-        marginLeft: 10,
-        padding: 10,
-        borderRadius: 15,
-        borderWidth: 1,
-        borderColor: Colors.light,
-        width: 200,
-        elevation: 3
-    },
-    interviewDetailsContainer:{
-        marginRight: 10
+        flex: 1
     },
     img:{
         height: 75,

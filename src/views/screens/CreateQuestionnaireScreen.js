@@ -5,13 +5,14 @@ import Header from '../components/headers/Header'
 import Colors from '../../utils/Colors'
 import CreateQuestionnaire from '../components/CreateQuestionnaire'
 
-const CreateQuestionnaireScreen = () => {
+const CreateQuestionnaireScreen = ({ navigation }) => {
   return (
     <SafeAreaView flex>
         <View style={{ backgroundColor: Colors.white, position: 'absolute',top: 0, height: 50, width: '100%'  }}/>
         <Header
             title='Create a questionnaire'
             style={{ backgroundColor: Colors.white }}
+            onBackPress={() => navigation.pop()}
         />
         <Container>
             <CreateQuestionnaire 

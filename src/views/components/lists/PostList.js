@@ -4,7 +4,13 @@ import { Text } from '../FiplyComponents'
 import { MaterialCommunityIcons, FontAwesome5, FontAwesome } from '@expo/vector-icons'
 import Colors from '../../../utils/Colors'
 
-const PostList = ({data, optionOnPress = () => {}}) => {
+const PostList = ({
+        data, 
+        optionOnPress = () => {}, 
+        onHireNowPress = () => {},
+        onSetEventPress = () => {},
+        onPollPress = () => {}
+    }) => {
 
     return (
         <View style={styles.container}>
@@ -57,6 +63,30 @@ const PostList = ({data, optionOnPress = () => {}}) => {
                         </View>
                     </View>
                 )}
+                ListHeaderComponent={
+                    <View style={styles.createPostContainer}>
+                    <TouchableOpacity activeOpacity={.5} style={styles.textInputContainer} onPress={() => navigation.push('CreatePostScreen')}>
+                        <Text>Create a post</Text>
+                    </TouchableOpacity>
+
+                    <View style={styles.postActionContainer}>
+                        <TouchableOpacity style={styles.actionBtn} onPress={() => onHireNowPress()}>
+                            <FontAwesome name="briefcase" size={24} color={Colors.secondary}/>
+                            <Text weight='medium' style={styles.actionText}>HIRE NOW</Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity style={styles.actionBtn} onPress={() => onSetEventPress()}>
+                            <FontAwesome5 name="calendar-week" size={24} color={Colors.primary} />
+                            <Text weight='medium' style={styles.actionText}>SET EVENT</Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity style={styles.actionBtn} onPress={() => onPollPress()}>
+                            <FontAwesome5 name="poll" size={24} color={Colors.grey} />
+                            <Text weight='medium' style={styles.actionText}>POLL</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+                }
             />
         </View>
     )
@@ -106,6 +136,48 @@ const styles = StyleSheet.create({
     postAction:{
         flexDirection: 'row',
         paddingHorizontal: 7,
+    },
+
+
+
+    createPostContainer:{
+        backgroundColor: Colors.white,
+        padding: 10,
+        borderWidth: 1,
+        borderColor: Colors.light,
+        borderRadius: 15
+    },
+    postActionContainer:{
+        flexDirection: 'row',
+        justifyContent: 'center'
+    },
+    actionBtn:{
+        justifyContent: 'center',
+        alignItems: 'center',
+        flex: 1
+    },
+    actionText:{
+        fontSize: 12,
+        marginTop: 5
+    },
+    textInputContainer:{
+        borderWidth: 1,
+        padding: 10,
+        borderRadius: 100,
+        borderColor: Colors.light,
+        marginVertical: 10
+    },
+    btmSheetContainer:{
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+    },
+    btmActionContainer:{
+        flexDirection: 'row',
+        paddingVertical: 5,
+        alignItems : 'center',
+    },
+    btmActionBtn:{
+        width: 40
     }
 
 

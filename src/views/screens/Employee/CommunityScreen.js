@@ -195,7 +195,7 @@ const CommunityScreen = ({ navigation }) => {
     }
 
     return (
-        <SafeAreaView>
+        <SafeAreaView flex>
             <SearchHeader
                 rightIcon={ () => 
                     <TouchableOpacity onPress={() => navigation.navigate('MessageStack')} activeOpacity={.5}>
@@ -214,7 +214,6 @@ const CommunityScreen = ({ navigation }) => {
 
                 <TopNavigation 
                     navTitles={['Discover', 'Fellows', 'Forums', 'Companies', 'Requests']}
-                    index={navIndex}
                     onBtnPress={i => setNavIndex(i)}
                 />
 

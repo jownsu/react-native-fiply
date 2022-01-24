@@ -6,6 +6,7 @@ import InitialInterviewScreen from '../views/screens/InitialInterviewScreen'
 import CreateJobScreen from '../views/screens/CreateJobScreen'
 import CreatePostScreen from '../views/screens/CreatePostScreen'
 import CreateQuestionnaireScreen from '../views/screens/CreateQuestionnaireScreen'
+import MyInterviewScreen from '../views/screens/MyInterviewScreen'
 
 const Stack = createStackNavigator();
 
@@ -18,6 +19,7 @@ const AppStack = () => {
             <Stack.Screen options={{ headerShown: false }} name={'MessageStack'} component={MessageStack}></Stack.Screen>
             <Stack.Screen options={{ headerShown: false }} name={'CreateJobScreen'} component={CreateJobScreen}></Stack.Screen>
             <Stack.Screen options={{ headerShown: false }} name={'CreateQuestionnaireScreen'} component={CreateQuestionnaireScreen}></Stack.Screen>
+            <Stack.Screen options={{ headerShown: false }} name={'MyInterviewScreen'} component={MyInterviewScreen}></Stack.Screen>
         </Stack.Navigator>
     )
 }

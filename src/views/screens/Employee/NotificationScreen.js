@@ -35,7 +35,7 @@ const NotificationScreen = ({ navigation }) => {
 
 
     return (
-        <SafeAreaView>
+        <SafeAreaView flex>
             <SearchHeader
                 rightIcon={ () => 
                 <TouchableOpacity onPress={() => navigation.navigate('MessageStack')} activeOpacity={.5}>

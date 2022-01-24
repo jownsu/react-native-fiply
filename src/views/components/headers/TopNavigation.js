@@ -1,15 +1,17 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { StyleSheet, View, TouchableOpacity } from 'react-native'
 import { Text } from '../FiplyComponents'
 import Colors from '../../../utils/Colors'
 
 const TopNavigation = ({
-        index = 0, 
         navTitles = [], 
         onBtnPress = () => {},
         btnStyles = {},
         style = {}
     }) => {
+
+    const [navIndex, setNavIndex] = useState(0);
+
     return (
         <View style={{ ...styles.container, ...style }}> 
 
@@ -20,12 +22,13 @@ const TopNavigation = ({
                         key={ind} 
                         style={{ ...styles.navBtn, ...btnStyles }} 
                         onPress={() => {
+                                setNavIndex(ind)
                                 onBtnPress(ind)
                             }}>
                         <Text 
                             size={12}
-                            color={index == ind ? Colors.primary : Colors.black}
-                            weight={index == ind ? 'bold' : 'light'}
+                            color={navIndex == ind ? Colors.primary : Colors.black}
+                            weight={navIndex == ind ? 'bold' : 'light'}
                         >
                             {item}
                         </Text>
