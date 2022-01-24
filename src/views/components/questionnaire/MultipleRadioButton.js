@@ -9,7 +9,7 @@ const MultipleRadioButton = ({item, index}) => {
 
   return (
     <View style={styles.container}>
-        <Text weight='medium' style={styles.question}>{index}. {item.question}</Text>
+        <Text weight='medium' style={styles.question}>{index ? index + ' . ' : ''}{item.question}</Text>
         <View style={styles.optionsContainer}>
 
         { item.options.map((item, index) => (

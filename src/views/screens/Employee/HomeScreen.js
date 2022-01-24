@@ -69,7 +69,7 @@ const HomeScreen = ({navigation}) => {
                             <Text weight='medium' style={styles.actionText}>HIRE NOW</Text>
                         </TouchableOpacity>
 
-                        <TouchableOpacity style={styles.actionBtn}>
+                        <TouchableOpacity style={styles.actionBtn} onPress={() => navigation.navigate('CreateQuestionnaireScreen')}>
                             <FontAwesome5 name="calendar-week" size={24} color={Colors.primary} />
                             <Text weight='medium' style={styles.actionText}>SET EVENT</Text>
                         </TouchableOpacity>

@@ -13,6 +13,7 @@ export const TextInput = ({
         error, 
         secureTextEntry=false, 
         style, 
+        containerStyle,
         right, 
         errorMsg = '', 
         onFocus, 
@@ -24,11 +25,11 @@ export const TextInput = ({
         mode = 'outlined',
         dense = false,
         autoFocus = false,
-        ref
+        disabled
     
     }) => {
     return (
-        <View>
+        <View style={{ ...containerStyle }}>
             <XTextInput
                 label={label}
                 value={value}
@@ -61,7 +62,7 @@ export const TextInput = ({
                     />
                 )}
                 autoFocus={autoFocus}
-                ref={ref}
+                disabled={disabled}
             />
             {
             errorMsg 

@@ -7,7 +7,7 @@ import CreateQuestionnaire from '../components/CreateQuestionnaire'
 
 const CreateQuestionnaireScreen = () => {
   return (
-    <SafeAreaView>
+    <SafeAreaView flex>
         <View style={{ backgroundColor: Colors.white, position: 'absolute',top: 0, height: 50, width: '100%'  }}/>
         <Header
             title='Create a questionnaire'
@@ -15,6 +15,7 @@ const CreateQuestionnaireScreen = () => {
         />
         <Container>
             <CreateQuestionnaire 
+                onSubmit={questions => console.log(questions)}
             />
         </Container>
     </SafeAreaView>

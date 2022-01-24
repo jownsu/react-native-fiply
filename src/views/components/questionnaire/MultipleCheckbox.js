@@ -5,7 +5,7 @@ import Colors from '../../../utils/Colors'
 
 import React, { useState } from 'react';
 
-const MultipleCheckbox = ({item, index}) => {
+const MultipleCheckbox = ({item, index, disabled = false}) => {
     const [indexCB, setIndexCB] = useState([])
 
     const handleOnPress = (i) => {
@@ -18,13 +18,14 @@ const MultipleCheckbox = ({item, index}) => {
 
   return (
     <View style={styles.container}>
-        <Text weight='medium' style={styles.question}>{index}. {item.question}</Text>
+        <Text weight='medium' style={styles.question}>{index ? index + ' . ' : ''}{item.question}</Text>
         <View style={styles.optionsContainer}>
             {item.options.map((item, index) => (
                     <View key={index} style={styles.options}>
                         <Checkbox
                             status={indexCB.includes(index) ? 'checked' : 'unchecked'}
                             onPress={() => handleOnPress(index)}
+                            disabled={disabled}
                         />
                         <Text>{item}</Text>
                     </View>
