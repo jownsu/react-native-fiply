@@ -39,6 +39,10 @@ const CreateQuestionnaire = ({onSubmit = () => {}}) => {
         resetForm()
     }
 
+    const handleRemove =  (index) => {
+        setQuestionList(questionList.filter((item, i) => (i + 1) != index ))
+    }
+
     const isError = () => {
         let err = false
         if(question == ''){
@@ -178,13 +182,37 @@ const CreateQuestionnaire = ({onSubmit = () => {}}) => {
 
         switch (item.questionType) {
             case 'Paragraph':
-                return <Paragraph item={item} index={index} disabled />
+                return <Paragraph 
+                            item={item} 
+                            index={index} 
+                            disabled 
+                            onCloseButton={() => handleRemove(index)} 
+                            showCloseButton 
+                        />
             case 'Multiple Choice':
-                return <MultipleCheckbox item={item} index={index} disabled />
+                return <MultipleCheckbox 
+                            item={item} 
+                            index={index} 
+                            disabled 
+                            onCloseButton={() => handleRemove(index)} 
+                            showCloseButton  
+                        />
             case 'Radio Button':
-                return <MultipleRadioButton item={item} index={index} disabled />
+                return <MultipleRadioButton 
+                            item={item} 
+                            index={index} 
+                            disabled 
+                            onCloseButton={() => handleRemove(index)} 
+                            showCloseButton 
+                        />
             default:
-                return <Paragraph item={item} index={index} disabled />
+                return <Paragraph 
+                            item={item} 
+                            index={index} 
+                            disabled 
+                            onCloseButton={() => handleRemove(index)} 
+                            showCloseButton 
+                        />
         }
     }
 
