@@ -11,7 +11,7 @@ import TitleFilter from '../../components/headers/TitleFilter'
 import TopNavigation from '../../components/headers/TopNavigation'
 import PostFilterDialog from '../../components/dialog/PostFilterDialog'
 
-const ProfileScreen = () => {
+const ProfileScreen = ({navigation}) => {
 
     const [showModal, setShowModal] = useState(false)
 
@@ -189,7 +189,10 @@ const ProfileScreen = () => {
             </View>
 
             <Container style={{ paddingHorizontal: 10 }}>
-                <ProfileHeader data={profileInfo} />
+                <ProfileHeader 
+                    data={profileInfo} 
+                    onEditPress={() => navigation.push('EditProfileScreen')}    
+                />
 
                 <TopNavigation
                     navTitles={['About', 'Activity', 'Background', 'Attainment']}

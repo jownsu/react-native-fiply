@@ -9,7 +9,7 @@ const CardInfo = ({title, headers, infos}) => {
         <View style={styles.container}>
             <View style={styles.headerContainer}>
                 <Text center weight='medium' size={14}>{title}</Text>
-                <FontAwesome name="edit" size={21} color={Colors.black} style={styles.editIcon}/> 
+                {/* <FontAwesome name="edit" size={21} color={Colors.black} style={styles.editIcon}/>  */}
             </View>
 
             <View style={styles.bodyContainer}>

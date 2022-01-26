@@ -1,10 +1,10 @@
 import React from 'react'
-import { StyleSheet, View, Image } from 'react-native'
+import { StyleSheet, View, Image, TouchableOpacity } from 'react-native'
 import { Text } from '../FiplyComponents'
 import Colors from '../../../utils/Colors'
 import { FontAwesome } from '@expo/vector-icons'
 
-const ProfileHeader = ({data}) => {
+const ProfileHeader = ({data, onEditPress = () => {}}) => {
     return (
         <View style={ styles.container}>
             <View style={styles.imgContainer}>
@@ -14,7 +14,9 @@ const ProfileHeader = ({data}) => {
                     resizeMode='contain'
                 />
             </View>
-            <FontAwesome name="edit" size={24} color={Colors.black} style={styles.editIcon} />
+            <TouchableOpacity onPress={onEditPress} style={styles.editIcon}>
+                <FontAwesome name="edit" size={24} color={Colors.black} />
+            </TouchableOpacity>
 
             <View style={styles.bodyContainer} >
                 <Text weight='semi-bold' size={16} numberOfLines={1} >{data.fullname}</Text>
