@@ -83,8 +83,7 @@ const CreateJobScreen = ({navigation}) => {
 
 
   return (
-    <SafeAreaView>
-      <View style={{ backgroundColor: Colors.white, position: 'absolute',top: 0, height: 50, width: '100%'  }}/>
+    <SafeAreaView statusBarColor={Colors.white} >
       <Header 
         title='Create a Job'
         centerTitle

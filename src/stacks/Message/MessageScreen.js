@@ -5,6 +5,7 @@ import Header from '../../views/components/headers/Header'
 import { FontAwesome5, FontAwesome } from '@expo/vector-icons'
 import Colors from '../../utils/Colors'
 import { GiftedChat, Bubble, Send, Avatar, Message } from 'react-native-gifted-chat'
+
 const MessageScreen = ({navigation, route}) => {
     const [messages, setMessages] = useState([]);
 
@@ -94,7 +95,6 @@ const MessageScreen = ({navigation, route}) => {
     }
     return (
         <SafeAreaView flex>
-            <View style={{ backgroundColor: Colors.white, position: 'absolute',top: 0, height: 50, width: '100%'  }}/>
             <Header
                 title={data.name}
                 centerTitle

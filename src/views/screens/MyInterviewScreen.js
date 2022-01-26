@@ -69,8 +69,7 @@ const MyInterviewScreen = ({ navigation }) => {
     }
 
   return (
-    <SafeAreaView flex>
-        <View style={{ backgroundColor: Colors.white, position: 'absolute',top: 0, height: 50, width: '100%'  }}/>
+    <SafeAreaView flex statusBarColor={Colors.white} >
         <Header
             title='My Interviews'
             onBackPress={() => navigation.pop()}

@@ -8,7 +8,6 @@ import PostList from '../../components/lists/PostList'
 
 
 
-
 const HomeScreen = ({navigation}) => {
 
     const postList = [
@@ -48,7 +47,6 @@ const HomeScreen = ({navigation}) => {
 
     return (
         <SafeAreaView flex>
-
             <SearchHeader
                 leftIcon={ () => <FontAwesome5 name="th-large" size={24} color={Colors.grey} />}
                 rightIcon={ () => 
