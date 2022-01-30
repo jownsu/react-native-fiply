@@ -1,137 +1,72 @@
 import React, { useState } from 'react'
-import { StyleSheet, View } from 'react-native'
-import { Text, SafeAreaView, Container } from '../../views/components/FiplyComponents'
+import { StyleSheet, View, TouchableOpacity, Image } from 'react-native'
+import { Text, SafeAreaView, Container, FlatList } from '../../views/components/FiplyComponents'
 import Colors from '../../utils/Colors'
 import Header from '../../views/components/headers/Header'
 import TopNavigation from '../../views/components/headers/TopNavigation'
 import { FontAwesome } from '@expo/vector-icons'
-import MessageList from '../../views/components/lists/messages/MessageList'
-
-const allMesageList = [
-    {
-        id: '1',
-        name: 'Dan Kagi Briones',
-        date: 'Dec 21',
-        lastMessage: 'musta boi',
-        image: require('../../assets/img/members/briones.png'),
-        isRead: false,
-        isActive: true,
-    },
-    {
-        id: '2',
-        name: 'Roy Ben Tumanon',
-        date: 'Oct 12',
-        lastMessage: 'send sauce',
-        image: require('../../assets/img/members/tumanon.jpg'),
-        isRead: false,
-        isActive: false,
-    },
-    {
-        id: '3',
-        name: 'Macy Hular',
-        date: 'June 01',
-        lastMessage: 'Ang funny.',
-        image: require('../../assets/img/members/hular.jpg'),
-        isRead: true,
-        isActive: true,
-    },
-]
-
-const unreadMessageList = [
-    {
-        id: '1',
-        name: 'Jerald Dionson',
-        date: 'Sept 21',
-        lastMessage: 'boss, pa isko',
-        image: require('../../assets/img/members/dionson.png'),
-        isRead: false
-    },
-    {
-        id: '2',
-        name: 'Marvin Ryan Velasquez',
-        date: 'July 21',
-        lastMessage: 'pa isko boss',
-        image: require('../../assets/img/members/velasquez.png'),
-        isRead: false
-    },
-
-]
-
-const forumMessageList = [
-    {
-        id: '1',
-        name: 'Backend Developers',
-        date: 'Aug 21',
-        lastMessage: 'See this link that might help you in developing your skills....',
-        image: require('../../assets/img/forums/backend.png'),
-        isRead: true,
-        isActive: false
-    },
-    {
-        id: '2',
-        name: 'White Hackers 2021',
-        date: 'Sept 21',
-        lastMessage: 'Welcome White Hackers! Today is a very special day....',
-        image: require('../../assets/img/forums/whitehacker.png'),
-        isRead: true,
-        isActive: false
-    },
-    {
-        id: '3',
-        name: 'UCC NORTH CSD',
-        date: 'May 21',
-        lastMessage: 'Announcement! No Final Defense for Thesis C...',
-        image: require('../../assets/img/forums/csd.png'),
-        isRead: true,
-        isActive: true
-    },
-]
-
-const archivedMessageList = [
-    {
-        id: '1',
-        name: 'Ace Diendo',
-        date: 'Aug 21',
-        lastMessage: 'Papasa bold',
-        image: require('../../assets/img/members/diendo.jpg'),
-        isRead: false,
-        isActive: false
-    }
-]
+import SampleData from '../../utils/SampleData'
 
 const HomeScreen = ({navigation}) => {
 
     const [navIndex, setNavIndex] = useState(0)
 
+    const renderMessageList = (item) => (
+        <TouchableOpacity activeOpacity={.7} style={styles.cardContainer} onPress={() => navigation.push('MessageScreen', {data: item})}>
+            <View style={[styles.imgContainer, {borderColor: item.isActive ? Colors.primary : Colors.light } ]}>
+                <Image 
+                    source={item.image}
+                    style={styles.img}
+                    resizeMode='contain'
+                />
+            </View>
+
+            <View style={styles.cardInfoContainer}>
+                <Text weight='semi-bold'>{item.name}</Text>
+                <Text 
+                    size={12} 
+                    color={item.isRead ? Colors.black : Colors.primary} 
+                    weight={item.isRead ? 'light' : 'medium'}
+                >
+                    {item.lastMessage}
+                </Text>
+            </View>
+
+            <Text>{item.date}</Text>
+        </TouchableOpacity>
+    )
+
     const renderList = (id) => {
         switch (id) {
             case 0:
-                return <MessageList 
-                            data={allMesageList} 
-                            onMessagePress={(item) => navigation.push('MessageScreen', {data: item})}
+                return <FlatList 
+                            data={SampleData.messageAllList} 
+                            renderItem={item => renderMessageList(item)}
+                            noDataMessage='No Messages'
                         />
             case 1:
-                return <MessageList 
-                            data={unreadMessageList} 
-                            onMessagePress={(item) => navigation.push('MessageScreen', {data: item})} 
-                            noMessageText='Messages have already been received and read.'
+                return <FlatList 
+                            data={SampleData.messageUnreadList} 
+                            renderItem={item => renderMessageList(item)}
+                            noDataMessage='Messages have already been received and read.'
                         />
             case 2:
-                return <MessageList 
-                            data={forumMessageList} 
-                            onMessagePress={(item) => navigation.push('MessageScreen', {data: item})} 
-                            noMessageText='To view messages, join on forums'    
+                return <FlatList 
+                            data={SampleData.messageForumList} 
+                            renderItem={item => renderMessageList(item)}
+                            noDataMessage='To view messages, join on forums'    
                         />
             case 3:
-                return <MessageList 
-                            data={archivedMessageList} 
-                            onMessagePress={(item) => navigation.push('MessageScreen', {data: item})} 
-                            noMessageText='There are no messages in archive'
+                return <FlatList 
+                            data={SampleData.messageArchivedList} 
+                            renderItem={item => renderMessageList(item)}
+                            noDataMessage='There are no messages in archive'
                         />
             default:
-                return <MessageList 
-                            data={allMesageList} 
-                            onMessagePress={(item) => navigation.push('MessageScreen', {data: item})} 
+                return <FlatList 
+                            data={SampleData.messageAllList} 
+                            renderItem={item => renderMessageList(item)}
+                            noDataMessage='No Messages'
                         />
         }
     }
@@ -160,4 +95,33 @@ const HomeScreen = ({navigation}) => {
 
 export default HomeScreen
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+    imgContainer:{
+        height: 50,
+        width: 50,
+        borderRadius: 100,
+        borderWidth: 1,
+        marginRight: 10,
+        overflow: 'hidden',
+        borderColor: Colors.light
+    },
+    img:{
+        height: '100%',
+        width: '100%',
+        borderRadius: 100,
+        backgroundColor: Colors.white,
+    },
+    cardContainer:{
+        backgroundColor: Colors.white,
+        flexDirection: 'row',
+        borderBottomWidth: 1,
+        paddingVertical: 10,
+        paddingHorizontal: 10,
+        borderColor: Colors.light,
+        elevation: 3,
+        marginBottom: 5,
+    },
+    cardInfoContainer:{
+        flex: 1,
+    },
+})

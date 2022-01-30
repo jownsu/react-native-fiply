@@ -1,14 +1,14 @@
 import React from 'react'
 import { StyleSheet, FlatList, View, TouchableOpacity } from 'react-native'
-import { Container, Text } from '../FiplyComponents'
+import { ActivityIndicator, Text } from '../FiplyComponents'
 import { FontAwesome5 } from '@expo/vector-icons'
 import Colors from '../../../utils/Colors'
-import { borderColor } from 'react-native/Libraries/Components/View/ReactNativeStyleAttributes'
 
-const RecommendedList = ({onIdPress = () => {}, style, data}) => {
+const RecommendedList = ({onIdPress = () => {}, style, data, isLoading = false}) => {
 
     return (
         <View style={{ ...style }}>
+            { isLoading ? <ActivityIndicator/> : false }
             <FlatList
                 data={data}
                 keyExtractor={item => item.id}

@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react'
 import { StyleSheet, View, TouchableOpacity, FlatList} from 'react-native'
 import Colors from '../../../utils/Colors'
 import { TextInput } from './TextInput'
+import { ActivityIndicator } from './ActivityIndicator'
 import { TextInput as TxtInput, Dialog, Portal } from 'react-native-paper'
 import { Text } from './Text'
 
@@ -18,7 +19,8 @@ export const Dropdown = ({
     dropdownIcon,
     iconSize = 32,
     iconStyle,
-    noTextInput
+    noTextInput,
+    isLoading = false
     
 }) => {
 
@@ -93,6 +95,8 @@ export const Dropdown = ({
                             : null
                     }
 
+                    { isLoading ? <ActivityIndicator /> : null }
+                    
                     <FlatList
                         data={ filteredData }
                         keyExtractor={item => item.id}

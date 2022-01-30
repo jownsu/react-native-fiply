@@ -6,10 +6,6 @@ import * as yup from 'yup'
 
 const JobSetup = ({navigation}) => {
 
-    const [jobTitle, setJobTitle] = useState('')
-    const [jobLocation, setJobLocation] = useState('')
-    const [jobType, setJobType] = useState('')
-
     const jobTitleList = [
         {
           id: "Fullstack Developer",
@@ -38,7 +34,7 @@ const JobSetup = ({navigation}) => {
           name: "Caloocan City",
         },
       ];
-    const jobTypeList = [
+    const employmentTypeList = [
         {
           id: "Full time",
           name: "Full time",
@@ -56,7 +52,7 @@ const JobSetup = ({navigation}) => {
       const formSchema = yup.object({
         jobTitle: yup.string().trim().required('Job title is required'),
         jobLocation: yup.string().trim().required('Job location is required'),
-        jobType: yup.string().trim().required('Job type is required')
+        employmentType: yup.string().trim().required('Employment type is required')
       })
 
 
@@ -71,7 +67,7 @@ const JobSetup = ({navigation}) => {
                   initialValues={{ 
                     jobTitle: '',
                     jobLocation: '',
-                    jobType: ''
+                    employmentType: ''
                   }}
                   validationSchema={formSchema}
                   onSubmit={values => navigation.navigate('BasicUser')}
@@ -89,7 +85,7 @@ const JobSetup = ({navigation}) => {
                           errorMsg={(touched.jobTitle && errors.jobTitle) ? errors.jobTitle : ''}
                       />
                       <Dropdown
-                          label={"Job Location"}
+                          label={"Location"}
                           value={values.jobLocation}
                           data={jobLocationList}
                           style={{ marginBottom: 5 }}
@@ -98,15 +94,15 @@ const JobSetup = ({navigation}) => {
                           errorMsg={(touched.jobLocation && errors.jobLocation) ? errors.jobLocation : ''}
                       />
                       <Dropdown
-                          label={"Job Type"}
-                          value={values.jobType}
-                          data={jobTypeList}
+                          label={"Employment Type"}
+                          value={values.employmentType}
+                          data={employmentTypeList}
                           style={{ marginBottom: 5 }}
-                          onChangeText={handleChange('jobType')}
+                          onChangeText={handleChange('employmentType')}
                           noTextInput
                           dropdownIcon
-                          error={(touched.jobType && errors.jobType) ? true : false}
-                          errorMsg={(touched.jobType && errors.jobType) ? errors.jobType : ''}
+                          error={(touched.employmentType && errors.employmentType) ? true : false}
+                          errorMsg={(touched.employmentType && errors.employmentType) ? errors.employmentType : ''}
                       />
                       
                       <Button 
@@ -115,7 +111,7 @@ const JobSetup = ({navigation}) => {
                           disabled={( 
                             values.jobTitle && 
                             values.jobLocation && 
-                            values.jobType 
+                            values.employmentType 
                           ) ? false : true
                         } 
                           onPress={handleSubmit}    

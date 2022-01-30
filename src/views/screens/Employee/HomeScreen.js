@@ -1,35 +1,13 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react'
-import { StyleSheet, View, TouchableOpacity } from 'react-native'
-import { SafeAreaView, Container, Text, TextInput, Button, BottomSheetModal } from '../../components/FiplyComponents'
+import React, { useCallback, useRef } from 'react'
+import { StyleSheet, View, TouchableOpacity, Image } from 'react-native'
+import { SafeAreaView, Container, Text, FlatList, BottomSheetModal } from '../../components/FiplyComponents'
 import SearchHeader from '../../components/headers/SearchHeader'
 import { FontAwesome5, FontAwesome, MaterialCommunityIcons  } from '@expo/vector-icons'
 import Colors from '../../../utils/Colors'
-import PostList from '../../components/lists/PostList'
-
+import SampleData from '../../../utils/SampleData'
 
 
 const HomeScreen = ({navigation}) => {
-
-    const postList = [
-        {
-            id: '1', 
-            author: 'Saturn Inc.', 
-            post: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-            posted_at: '10h'
-        }, 
-        {
-            id: '2', 
-            author: 'Saturn Inc.', 
-            post: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-            posted_at: '10h'
-        }, 
-        {
-            id: '3', 
-            author: 'Saturn Inc.', 
-            post: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-            posted_at: '10h'
-        }, 
-    ]
 
   // ref
   const bottomSheetModalRef = useRef(null);
@@ -45,6 +23,78 @@ const HomeScreen = ({navigation}) => {
 //     console.log('handleSheetChanges', index);
 //   }, []);
 
+
+    const renderPost = (item) => (
+        <View style={postStyles.postContainer}>
+            <View style={postStyles.postHeaderContainer}>
+                <View style={postStyles.postAuthorContainer} >
+                    <Image 
+                        source={require('../../../assets/img/logo.png')} 
+                        style={postStyles.authorImg}    
+                        resizeMode='contain'
+                    />
+                    <Text weight="medium" >{item.author}{'\u30FB'}{item.posted_at}</Text>
+                </View>
+
+                <TouchableOpacity onPress={() => handlePresentModalPress()}>
+                    <MaterialCommunityIcons name="dots-horizontal" size={24} color={Colors.black} />
+                </TouchableOpacity>
+            </View>
+
+            <View style={postStyles.postBodyContainer}>
+                <Text>{item.post}</Text>
+                <Image 
+                    source={require('../../../assets/img/postimg.png')}
+                    style={postStyles.postImg}
+                />
+            </View>
+
+            <View style={postStyles.postFooterContainer}>
+                <TouchableOpacity style={postStyles.postAction}>
+                    <FontAwesome5 style={{ marginRight: 5 }} name="caret-up" size={17} color={Colors.black} />
+                    <Text>Up</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={postStyles.postAction}>
+                    <FontAwesome style={{ marginRight: 5 }} name="commenting" size={17} color={Colors.primary} />
+                    <Text>Comment</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={postStyles.postAction}>
+                    <FontAwesome style={{ marginRight: 5 }} name="share" size={17} color={Colors.secondary} />
+                    <Text>Share</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={postStyles.postAction}>
+                    <FontAwesome style={{ marginRight: 5 }} name="paper-plane" size={17} color={Colors.secondary} />
+                    <Text>Send</Text>
+                </TouchableOpacity>
+            </View>
+        </View>
+    )
+
+    const renderHeader = () => (
+        <View style={createPostySTyles.createPostContainer}>
+            <TouchableOpacity activeOpacity={.5} style={createPostySTyles.textInputContainer} onPress={() => navigation.push('CreatePostScreen')}>
+                <Text>Create a post</Text>
+            </TouchableOpacity>
+
+            <View style={createPostySTyles.postActionContainer}>
+                <TouchableOpacity style={createPostySTyles.actionBtn} onPress={() => navigation.navigate('CreateJobScreen')}>
+                    <FontAwesome name="briefcase" size={24} color={Colors.secondary}/>
+                    <Text weight='medium' style={styles.actionText}>HIRE NOW</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity style={createPostySTyles.actionBtn} onPress={() => navigation.navigate('CreateQuestionnaireScreen')}>
+                    <FontAwesome5 name="calendar-week" size={24} color={Colors.primary} />
+                    <Text weight='medium' style={createPostySTyles.actionText}>SET EVENT</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity style={createPostySTyles.actionBtn}>
+                    <FontAwesome5 name="poll" size={24} color={Colors.grey} />
+                    <Text weight='medium' style={createPostySTyles.actionText}>POLL</Text>
+                </TouchableOpacity>
+            </View>
+        </View>
+    )
+
     return (
         <SafeAreaView flex>
             <SearchHeader
@@ -56,11 +106,11 @@ const HomeScreen = ({navigation}) => {
                 }
             /> 
             <Container style={{ paddingHorizontal: 10 }}>
-                <PostList 
-                    data={postList}
-                    optionOnPress={() => handlePresentModalPress()}
-                    onHireNowPress={() => navigation.navigate('CreateJobScreen')}
-                    onSetEventPress={() => navigation.navigate('CreateQuestionnaireScreen')}
+                <FlatList 
+                    data={SampleData.postList}
+                    renderItem={item => renderPost(item)}
+                    renderHeader={renderHeader()}
+                    noDataMessage='No Posts'
                 />
             </Container>
 
@@ -94,6 +144,90 @@ const HomeScreen = ({navigation}) => {
 export default HomeScreen
 
 const styles = StyleSheet.create({
+    createPostContainer:{
+        backgroundColor: Colors.white,
+        padding: 10,
+        borderWidth: 1,
+        borderColor: Colors.light,
+        borderRadius: 15
+    },
+    postActionContainer:{
+        flexDirection: 'row',
+        justifyContent: 'center'
+    },
+    actionBtn:{
+        justifyContent: 'center',
+        alignItems: 'center',
+        flex: 1
+    },
+    actionText:{
+        fontSize: 12,
+        marginTop: 5
+    },
+    textInputContainer:{
+        borderWidth: 1,
+        padding: 10,
+        borderRadius: 100,
+        borderColor: Colors.light,
+        marginVertical: 10
+    },
+    btmSheetContainer:{
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+    },
+    btmActionContainer:{
+        flexDirection: 'row',
+        paddingVertical: 5,
+        alignItems : 'center',
+    },
+    btmActionBtn:{
+        width: 40
+    }
+})
+
+const postStyles = StyleSheet.create({
+    postContainer:{
+        backgroundColor: Colors.white,
+        borderWidth: 1,
+        borderColor: Colors.light,
+        borderRadius: 15,
+        padding: 10,
+        elevation: 2,
+        marginVertical: 5
+    },
+    postHeaderContainer:{
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between'
+    },
+    postAuthorContainer:{
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
+    authorImg:{
+        height: 35,
+        width: 35,
+        marginRight: 10
+    },
+    postBodyContainer:{
+
+    },
+    postImg:{
+        width: '100%',
+        marginVertical: 7
+    },
+    postFooterContainer:{
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    postAction:{
+        flexDirection: 'row',
+        paddingHorizontal: 7,
+    },
+})
+
+const createPostySTyles = StyleSheet.create({
     createPostContainer:{
         backgroundColor: Colors.white,
         padding: 10,

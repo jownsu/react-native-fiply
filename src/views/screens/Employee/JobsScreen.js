@@ -1,140 +1,131 @@
 import React, { useState } from 'react'
-import { StyleSheet, TouchableOpacity, View } from 'react-native'
-import { SafeAreaView, Container, Text } from '../../components/FiplyComponents'
+import { StyleSheet, TouchableOpacity, View, Image } from 'react-native'
+import { SafeAreaView, Container, Text, FlatList } from '../../components/FiplyComponents'
 import SearchHeader from '../../components/headers/SearchHeader'
 import Colors from '../../../utils/Colors'
-import { FontAwesome, FontAwesome5 } from '@expo/vector-icons'
-import DiscoverList from '../../components/lists/jobs/DiscoverList'
-import PendingList from '../../components/lists/jobs/PendingList'
+import { FontAwesome, FontAwesome5, Ionicons } from '@expo/vector-icons'
 import TitleFilter from '../../components/headers/TitleFilter'
 import TopNavigation from '../../components/headers/TopNavigation'
+import SampleData from '../../../utils/SampleData'
 
 const JobsScreen = ({navigation}) => {
 
     const [navIndex, setNavIndex] = useState(0)
 
-    const discoverList = [
-        {
-            id: '1',
-            title: 'Frontend Developers',
-            company: 'White Hackers Inc.',
-            type: 'Full Time',
-            location: 'National Capital Region',
-            image: require('../../../assets/img/forums/whitehacker.png'),
-            isSave: true,
-            isApply: true
-        },
-        {
-            id: '2',
-            title: 'React Developers',
-            company: '2GREEN2ORANGE',
-            type: 'Part Time',
-            location: 'Glori Bayan',
-            image: require('../../../assets/img/forums/backend.png'),
-            isSave: true,
-            isApply: false
-        },
-        {
-            id: '3',
-            title: 'Laravel Developers',
-            company: 'Facebook, Inc.',
-            type: 'Part Time',
-            location: 'Caloocan City',
-            image: require('../../../assets/img/companies/google.png'),
-            isSave: false,
-            isApply: false
-        },
-    ]
-    const savedList = [
-        {
-            id: '1',
-            title: 'Laravel Developers',
-            company: 'Facebook, Inc.',
-            type: 'Part Time',
-            location: 'Caloocan City',
-            image: require('../../../assets/img/companies/facebook.png'),
-            isSave: true,
-            isApply: false
-        },
+    const renderJobList = (item, isPending = false) => (
+        <View style={jobListTyle.cardContainer}>
+            <View style={jobListTyle.cardHeaderContainer}>
+                <Text weight='semi-bold' color={Colors.primary} style={jobListTyle.txtTitle}>{item.title}</Text>
+                <Text style={{ marginHorizontal: 10 }}>{'\u25CF'}</Text>
+                <Text size={11}>{ item.type }</Text>
+            </View>
 
-    ]
-    const appliedList = [
-        {
-            id: '1',
-            title: 'Laravel Developers',
-            company: 'Facebook, Inc.',
-            type: 'Part Time',
-            location: 'Caloocan City',
-            image: require('../../../assets/img/companies/facebook.png'),
-            isSave: true,
-            isApply: true
-        },
-        {
-            id: '2',
-            title: 'React Developers',
-            company: 'Google, Inc.',
-            type: 'Part Time',
-            location: 'Glori Bayan',
-            image: require('../../../assets/img/companies/google.png'),
-            isSave: true,
-            isApply: true
-        },
-    ]
-    const pendingList = [
-        {
-            id: '1',
-            title: 'Laravel Developers',
-            company: 'Facebook, Inc.',
-            type: 'Part Time',
-            location: 'Caloocan City',
-            image: require('../../../assets/img/companies/google.png'),
-            status: 'Initial Interview',
-            questions: [
+            <View style={jobListTyle.cardBodyContainer}>
+                <View style={jobListTyle.bodyHeadContainer}>
+                    <View style={jobListTyle.imgContainer}>
+                        <Image 
+                            source={item.image}
+                            style={jobListTyle.img}
+                            resizeMode='contain'
+                        />
+                    </View>
+
+                    <Text weight='medium' style={jobListTyle.txtCompany}>{item.company}</Text>
+                </View>
+
+                { !isPending ? renderJobListBodyFoot(item) : renderPendingBodyFoot(item)}
+
+                { !isPending ? renderJobListFooter(item) : renderPendingFooter(item) }
+
+            </View>
+
+        </View>
+    )
+
+    const renderJobListBodyFoot = (item) => (
+        <View style={jobListTyle.bodyFootContainer}>
+            <Ionicons name="location-sharp" size={24} color={Colors.primary} style={{ marginRight: 10 }}/>
+            <Text size={11} >{item.location}</Text>
+        </View>
+    )
+
+    const renderJobListFooter = (item) => (
+        <View style={jobListTyle.cardFooterContainer}>
+            <TouchableOpacity activeOpacity={.7} style={{ ...jobListTyle.footerBtn, borderRightWidth: .5}}>
+                <FontAwesome name="bookmark" size={24} color={ item.isSave ? Colors.black : Colors.primary} style={{ marginRight: 15 }}/>
+                <Text weight='medium' color={ item.isSave ? Colors.black : Colors.primary}>
+                    {item.isSave ? 'REMOVE' : 'SAVE' }                                        
+                </Text>
+            </TouchableOpacity>
+            <TouchableOpacity activeOpacity={.7} style={{ ...jobListTyle.footerBtn,  borderLeftWidth: .5}}>
+                <Text weight='medium' color={ item.isApply ? Colors.black : Colors.primary}>
+                    {item.isApply ? 'APPLIED' : 'APPLY' }
+                </Text>
+            </TouchableOpacity>
+        </View>
+    )
+
+    const renderPendingBodyFoot = (item) => (
+        <View style={{ ...jobListTyle.bodyFootContainer, justifyContent: 'space-between'}}>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <Ionicons name="location-sharp" size={24} color={Colors.primary} style={{ marginRight: 5 }}/>
+                <Text size={11} >{item.location}</Text>
+            </View>
+            <View>
                 {
-                    id: 1,
-                    questionType: 'paragraph',
-                    question: 'Tell me about your self'
-                },
-                {
-                    id: 2,
-                    questionType: 'paragraph',
-                    question: 'How do you keep up with the latest trends in this field?'
-                },
-                {
-                    id: 3,
-                    questionType: 'radiobutton',
-                    question: 'Are you willing to relocate?',
-                    options: ['Yes', 'No']
-                },
-                {
-                    id: 4,
-                    questionType: 'checkbox',
-                    question: 'Languages that you are familiar with',
-                    options: ['Javascript', 'React' , 'HTML/CSS', 'Laravel']
+                    item.status 
+                        ? 
+                        <View style={{ flexDirection: 'row' }}>
+                            <Text size={12} weight='semi-bold' color={Colors.primary}>Status: </Text>
+                            <Text size={12}>{item.status}</Text>
+                        </View>
+                        : null
                 }
-            ]
-        },
-        {
-            id: '2',
-            title: 'React Native Developers',
-            company: 'White Hackers Inc.',
-            type: 'Full Time',
-            location: 'National Capital Region',
-            image: require('../../../assets/img/forums/whitehacker.png'),
-            status: 'Video Call Interiview',
-            when: '10/25/21 | 1PM - 2PM'
+                {
+                    item.when 
+                        ? 
+                        <View style={{ flexDirection: 'row' }}>
+                            <Text size={12} weight='semi-bold' color={Colors.primary}>When: </Text>
+                            <Text size={12}>{item.when}</Text>
+                        </View>
+                        : null
+                }
+            </View>
+        </View>
+    )
 
-        }
-    ]
+    const renderPendingFooter = (item) => (
+        <View style={jobListTyle.cardFooterContainer}>
+            <TouchableOpacity activeOpacity={.7} style={{ ...jobListTyle.footerBtn, borderRightWidth: .5}} onPress={() => navigation.navigate('InitialInterviewScreen', {questions: item.questions})}>
+                <Text weight='medium' color={ Colors.primary }>
+                    PROCEED                                       
+                </Text>
+            </TouchableOpacity>
+            <TouchableOpacity activeOpacity={.7} style={{ ...jobListTyle.footerBtn, borderLeftWidth: .5}}>
+                <Text weight='medium' color={ Colors.black }>
+                    CANCEL
+                </Text>
+            </TouchableOpacity>
+        </View>
+    )
 
     const renderList = (id) => {
         switch (id) {
             case 0:
-                return <DiscoverList data={discoverList} />
+                return <FlatList 
+                            data={SampleData.jobDiscoverList}
+                            renderItem={item => renderJobList(item)} 
+                        />
             case 1: 
-                return <DiscoverList data={savedList} />
+                return <FlatList 
+                            data={SampleData.jobSavedList}
+                            renderItem={item => renderJobList(item)} 
+                        />
             case 2: 
-                return <DiscoverList data={appliedList} />
+                return <FlatList 
+                            data={SampleData.jobAppliedList}
+                            renderItem={item => renderJobList(item)} 
+                        />
             case 3:
                 return (
                     <View style={{ flex: 1 }}>
@@ -146,14 +137,23 @@ const JobsScreen = ({navigation}) => {
                             </View>
                             <FontAwesome name="angle-right" size={38} color={Colors.light} />
                         </TouchableOpacity>
-                        <PendingList 
-                            data={pendingList} 
-                            onProceedPress={(questions) => navigation.navigate('InitialInterviewScreen', {questions})}
+
+                        <FlatList 
+                            data={SampleData.jobPendingList}
+                            renderItem={item => renderJobList(item, true)} 
                         />
+                        
+                        {/* <PendingList 
+                            data={SampleData.jobPendingList} 
+                            onProceedPress={(questions) => navigation.navigate('InitialInterviewScreen', {questions})}
+                        /> */}
                     </View>
                 )
             default:
-                return <DiscoverList data={discoverList} />
+                return <FlatList 
+                            data={SampleData.jobDiscoverList}
+                            renderItem={item => renderJobList(item)} 
+                        />
         }
     }
 
@@ -210,3 +210,62 @@ const styles = StyleSheet.create({
         marginRight: 10
     },
 })
+
+const jobListTyle = StyleSheet.create({
+    img:{
+        height: 75,
+        width: 75,
+        borderRadius: 100,
+        backgroundColor: Colors.white,
+        borderWidth: 1 
+    },
+    imgContainer:{
+        borderRadius: 50,
+        overflow: 'hidden',
+        marginRight: 15
+    },
+    cardContainer:{
+        flex: 1,
+        paddingHorizontal: 10,
+        paddingTop: 15,
+        backgroundColor: Colors.white,
+        marginBottom: 10,
+        elevation: 5
+    },
+    cardHeaderContainer:{
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
+    txtTitle:{
+        textTransform: 'uppercase'
+    },
+    bodyHeadContainer:{
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginVertical: 10
+    },
+    txtCompany:{
+        textTransform: 'uppercase'
+    },
+    bodyFootContainer:{
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 10
+    },
+    cardFooterContainer:{
+        flexDirection: 'row',
+        justifyContent: 'center',
+        paddingVertical: 10,
+        borderTopWidth: 1,
+        borderColor: Colors.grey
+    },
+    footerBtn:{
+        flexDirection: 'row',
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderColor: Colors.grey
+    },
+})
+
+
