@@ -40,7 +40,7 @@ const CreatePostScreen = ({navigation}) => {
                     data={[{id: 1, name: 'Public'}, {id: 2, name: 'Friends'}]}
                     value={postStatus}
                     noTextInput
-                    onChangeText={text => setPostStatus(text)}
+                    onSubmit={(text) => setPostStatus(text)}
                     dropdownIcon
                     style={{ height: 25, width: 100, }}
                     textInputStyle={{ height: 25, width: 100, fontSize: 11 }}

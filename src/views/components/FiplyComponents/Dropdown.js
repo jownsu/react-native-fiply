@@ -14,18 +14,24 @@ export const Dropdown = ({
     textInputStyle,
     value,
     onChangeText = () => {},
+    onSubmit = () => {},
     error,
     errorMsg,
     dropdownIcon,
     iconSize = 32,
     iconStyle,
     noTextInput,
-    isLoading = false
+    isLoading = false,
+    onChangeTextDelay = () => {},
+    delay = 500
     
 }) => {
 
     const [filteredData, setFilteredData] = useState(data)
     const [visibleDialog, setVisibleDialog] = useState(false)
+    const [txtVal, setTxtVal] = useState('')
+    const [timer, setTimer] = useState(null)
+
 
     const onSearch  = (txt) =>{
         if(txt){
@@ -47,30 +53,29 @@ export const Dropdown = ({
                     activeOpacity={0.6} 
                     onPress={() => setVisibleDialog(true)}
                 >
-                <TextInput
-                    label={label}
-                    value={value}
-                    error={error}
-                    errorMsg={errorMsg}
-                    nonEditable
-                    style={{ ...textInputStyle }}
-                    right={
-                        dropdownIcon 
-                            ? (
-                                <TxtInput.Icon 
-                                    name="chevron-down" 
-                                    color={Colors.black} 
-                                    size={iconSize} 
-                                    style={{ ...iconStyle }} 
-                                    onPress={() => {}}
-                                    disabled
-                                />
-                            )
-                            : null
-                        
-                        }
+                    <TextInput
+                        label={label}
+                        value={value}
+                        error={error}
+                        errorMsg={errorMsg}
+                        nonEditable
+                        style={{ ...textInputStyle }}
+                        right={
+                            dropdownIcon 
+                                ? (
+                                    <TxtInput.Icon 
+                                        name="chevron-down" 
+                                        color={Colors.black} 
+                                        size={iconSize} 
+                                        style={{ ...iconStyle }} 
+                                        onPress={() => {}}
+                                        disabled
+                                    />
+                                )
+                                : null
+                            }
 
-                />
+                    />
             </TouchableOpacity>
 
             <Portal>
@@ -81,10 +86,20 @@ export const Dropdown = ({
                             ? (
                                 <TextInput
                                     label={label}
-                                    value={value}
+                                    value={txtVal}
                                     onChangeText={text => {
-                                        onChangeText(text)
+                                        clearTimeout(timer)
+                                        const newTimer = setTimeout(() => {
+                                            onChangeTextDelay(text)
+                                        }, delay)
+                                        setTimer(newTimer)
                                         onSearch(text)
+                                        setTxtVal(text)
+                                    }}
+                                    onSubmitEditing={() => {
+                                        // onChangeText(text)
+                                        onSubmit(txtVal)
+                                        setVisibleDialog(false)
                                     }}
                                     active={visibleDropdown}
                                     style={{ ...textInputStyle }}
@@ -105,7 +120,7 @@ export const Dropdown = ({
                                 <TouchableOpacity 
                                     style={{ ...styles.dropdownTextContainer }} 
                                     onPress={() => {
-                                        onChangeText(item.name)
+                                        onSubmit(item.name)
                                         setVisibleDialog(false)
                                     }}
                                 >
@@ -120,7 +135,10 @@ export const Dropdown = ({
                             ? (
                             <TouchableOpacity 
                                 activeOpacity={.8} 
-                                onPress={() => setVisibleDialog(false)}
+                                onPress={() => {
+                                            onSubmit(txtVal)
+                                            setVisibleDialog(false)
+                                        }}
                                 style={{ alignSelf: 'flex-end', alignItems: 'center', width: 60, padding: 5 }}
                             >
                                 <Text weight='medium' color={Colors.secondary}>Done</Text>

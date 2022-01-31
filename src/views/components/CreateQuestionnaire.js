@@ -239,7 +239,7 @@ const CreateQuestionnaire = ({onSubmit = () => {}}) => {
                 <Dropdown 
                     data={questionTypeList}
                     value={questionType}
-                    onChangeText={text => setQuestionType(text)}
+                    onSubmit={text => setQuestionType(text)}
                     noTextInput
                     dropdownIcon
                     textInputStyle={{ height: 30, width: 150, fontSize: 12 }}

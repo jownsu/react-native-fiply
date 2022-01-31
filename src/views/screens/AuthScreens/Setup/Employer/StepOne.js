@@ -80,7 +80,8 @@ const StepOne = ({navigation}) => {
                                     value={values.location}
                                     data={locationList}
                                     style={{ marginBottom: 5 }}
-                                    onChangeText={handleChange('location')}
+                                    onChangeTextDelay={() => console.log('API CALLED')}
+                                    onSubmit={(text) => setFieldValue('location', text)}
                                     error={(touched.location && errors.location) ? true : false}
                                     errorMsg={(touched.location && errors.location) ? errors.location : ''}
                                 />

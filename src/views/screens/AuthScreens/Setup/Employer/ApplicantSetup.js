@@ -91,7 +91,7 @@ const ApplicantSetup = ({navigation}) => {
                           value={values.levelOfExperience}
                           data={levelOfExperienceList}
                           style={{ marginBottom: 5 }}
-                          onChangeText={handleChange('levelOfExperience')}
+                          onSubmit={(text) => setFieldValue('levelOfExperience', text)}
                           noTextInput
                           dropdownIcon
                           error={(touched.levelOfExperience && errors.levelOfExperience) ? true : false}
@@ -103,7 +103,8 @@ const ApplicantSetup = ({navigation}) => {
                           value={values.fieldOfExpertise}
                           data={fieldOfExpertiseList}
                           style={{ marginBottom: 5 }}
-                          onChangeText={handleChange('fieldOfExpertise')}
+                          onChangeTextDelay={() => console.log('API CALLED')}
+                          onSubmit={(text) => setFieldValue('fieldOfExpertise', text)}
                           error={(touched.fieldOfExpertise && errors.fieldOfExpertise) ? true : false}
                           errorMsg={(touched.fieldOfExpertise && errors.fieldOfExpertise) ? errors.fieldOfExpertise : ''}
                       />
@@ -113,7 +114,8 @@ const ApplicantSetup = ({navigation}) => {
                           value={values.location}
                           data={locationList}
                           style={{ marginBottom: 5 }}
-                          onChangeText={handleChange('location')}
+                          onChangeTextDelay={() => console.log('API CALLED')}
+                          onSubmit={(text) => setFieldValue('location', text)}
                           dropdownIcon
                           error={(touched.location && errors.location) ? true : false}
                           errorMsg={(touched.location && errors.location) ? errors.location : ''}

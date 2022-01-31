@@ -18,6 +18,7 @@ export const TextInput = ({
         errorMsg = '', 
         onFocus, 
         onEndEditting,
+        onSubmitEditing,
         nonEditable,
         active,
         roundness = 5,
@@ -61,6 +62,7 @@ export const TextInput = ({
                         style={[innerProps.style, {textAlignVertical: 'center'}]}
                     />
                 )}
+                onSubmitEditing={onSubmitEditing}
                 autoFocus={autoFocus}
                 disabled={disabled}
             />

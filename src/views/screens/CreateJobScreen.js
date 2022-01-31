@@ -114,7 +114,8 @@ const CreateJobScreen = ({navigation}) => {
                     value={values.jobTitle}
                     data={jobTitleList}
                     style={{ marginBottom: 5 }}
-                    onChangeText={handleChange('jobTitle')}
+                    onChangeTextDelay={() => console.log('API CALLED')}
+                    onSubmit={(text) => setFieldValue('jobTitle', text)}
                     error={(touched.jobTitle && errors.jobTitle) ? true : false}
                     errorMsg={(touched.jobTitle && errors.jobTitle) ? errors.jobTitle : ''}
                   />
@@ -123,7 +124,7 @@ const CreateJobScreen = ({navigation}) => {
                     value={values.jobType}
                     data={jobTypeList}
                     style={{ marginBottom: 5 }}
-                    onChangeText={handleChange('jobType')}
+                    onSubmit={(text) => setFieldValue('jobType', text)}
                     error={(touched.jobType && errors.jobType) ? true : false}
                     errorMsg={(touched.jobType && errors.jobType) ? errors.jobType : ''}
                     noTextInput
@@ -134,7 +135,8 @@ const CreateJobScreen = ({navigation}) => {
                     value={values.company}
                     data={companyList}
                     style={{ marginBottom: 5 }}
-                    onChangeText={handleChange('company')}
+                    onChangeTextDelay={() => console.log('API CALLED')}
+                    onSubmit={(text) => setFieldValue('company', text)}
                     error={(touched.company && errors.company) ? true : false}
                     errorMsg={(touched.company && errors.company) ? errors.company : ''}
                   />
@@ -143,7 +145,8 @@ const CreateJobScreen = ({navigation}) => {
                     value={values.location}
                     data={locationList}
                     style={{ marginBottom: 5 }}
-                    onChangeText={handleChange('location')}
+                    onChangeTextDelay={() => console.log('API CALLED')}
+                    onSubmit={(text) => setFieldValue('location', text)}
                     error={(touched.location && errors.location) ? true : false}
                     errorMsg={(touched.location && errors.location) ? errors.location : ''}
                   />

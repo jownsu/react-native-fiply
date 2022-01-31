@@ -48,7 +48,7 @@ const JobSetup = ({navigation}) => {
           name: "Work from home",
         },
       ];
-
+      
       const formSchema = yup.object({
         jobTitle: yup.string().trim().required('Job title is required'),
         jobLocation: yup.string().trim().required('Job location is required'),
@@ -80,7 +80,8 @@ const JobSetup = ({navigation}) => {
                           value={values.jobTitle}
                           data={jobTitleList}
                           style={{ marginBottom: 5 }}
-                          onChangeText={handleChange('jobTitle')}
+                          onChangeTextDelay={() => console.log('API CALLED')}
+                          onSubmit={(text) => setFieldValue('jobTitle', text)}
                           error={(touched.jobTitle && errors.jobTitle) ? true : false}
                           errorMsg={(touched.jobTitle && errors.jobTitle) ? errors.jobTitle : ''}
                       />
@@ -89,7 +90,8 @@ const JobSetup = ({navigation}) => {
                           value={values.jobLocation}
                           data={jobLocationList}
                           style={{ marginBottom: 5 }}
-                          onChangeText={handleChange('jobLocation')}
+                          onChangeTextDelay={() => console.log('API CALLED')}
+                          onSubmit={(text) => setFieldValue('jobLocation', text)}
                           error={(touched.jobLocation && errors.jobLocation) ? true : false}
                           errorMsg={(touched.jobLocation && errors.jobLocation) ? errors.jobLocation : ''}
                       />
@@ -98,7 +100,7 @@ const JobSetup = ({navigation}) => {
                           value={values.employmentType}
                           data={employmentTypeList}
                           style={{ marginBottom: 5 }}
-                          onChangeText={handleChange('employmentType')}
+                          onSubmit={(text) => setFieldValue('employmentType', text)}
                           noTextInput
                           dropdownIcon
                           error={(touched.employmentType && errors.employmentType) ? true : false}
