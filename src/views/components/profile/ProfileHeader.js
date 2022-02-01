@@ -9,7 +9,7 @@ const ProfileHeader = ({data, onEditPress = () => {}}) => {
         <View style={ styles.container}>
             <View style={styles.imgContainer}>
                 <Image
-                    source={require('../../../assets/img/members/digno.jpg')}
+                    source={{uri: data.avatar}}
                     style={styles.img}
                     resizeMode='contain'
                 />
@@ -19,14 +19,14 @@ const ProfileHeader = ({data, onEditPress = () => {}}) => {
             </TouchableOpacity>
 
             <View style={styles.bodyContainer} >
-                <Text weight='semi-bold' size={16} numberOfLines={1} >{data.fullname}</Text>
-                <Text size={13} numberOfLines={1}>{data.description}</Text>
-                <Text size={11} numberOfLines={1} adjustsFontSizeToFit>{data.address}</Text>
+                <Text weight='semi-bold' size={16} numberOfLines={1} center>{data.fullname}</Text>
+                <Text size={13} numberOfLines={1} center style={{ marginVertical: 2 }}>{data.email}</Text>
+                <Text size={11} numberOfLines={1} center style={{  }}>{data.location}</Text>
             </View>
 
             <View style={styles.footerContainer}>
                 <Text weight='medium' color={Colors.primary}>{data.status}</Text>
-                <Text>{data.showExp.join(' | ')}</Text>
+                <Text>{data.description}</Text>
             </View>
         </View>
     )
@@ -38,8 +38,6 @@ const styles = StyleSheet.create({
     container:{
         backgroundColor: Colors.white,
         borderRadius: 20,
-        alignItems: 'center',
-        paddingHorizontal: 10,
         paddingVertical: 15,
         borderWidth: 1,
         borderColor: Colors.light
@@ -51,7 +49,8 @@ const styles = StyleSheet.create({
         elevation: 3,
         borderRadius: 100,
         position: 'absolute',
-        top: -50
+        top: -50,
+        alignSelf: 'center'
     },
     img:{
         height: 100,
@@ -65,7 +64,6 @@ const styles = StyleSheet.create({
     bodyContainer:{
         marginTop: 50,
         marginBottom: 15,
-        alignItems: 'center'
     },
     footerContainer:{
         justifyContent: 'center',

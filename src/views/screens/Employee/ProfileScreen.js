@@ -1,4 +1,4 @@
-import React, { useState }  from 'react'
+import React, { useState, useEffect }  from 'react'
 import { StyleSheet, View, TouchableOpacity, ScrollView, Image } from 'react-native'
 import { SafeAreaView, Text, Container, FlatList } from '../../components/FiplyComponents'
 import Colors from '../../../utils/Colors'
@@ -11,11 +11,21 @@ import TopNavigation from '../../components/headers/TopNavigation'
 import PostFilterDialog from '../../components/dialog/PostFilterDialog'
 import SampleData from '../../../utils/SampleData'
 
+import useProfile from '../../../api/hooks/user/useProfile'
+import useExperience from '../../../api/hooks/user/useExperience'
+import useEducationalBackground from '../../../api/hooks/user/useEducationalBackground'
+
 const ProfileScreen = ({navigation}) => {
 
     const [showModal, setShowModal] = useState(false)
     const [navIndex, setNavIndex] = useState(0)
+    const { getUserInfo, profile, basicInfo, contactInfo } = useProfile()
+    const { getExperiences, experiences } = useExperience()
+    const { getEducationalBackgrounds, educationalBackgrounds } = useEducationalBackground()
 
+    useEffect(() => {
+        getUserInfo()
+    }, [])
     
     const renderPost = (item) => (
         <View style={postStyles.postContainer}>
@@ -71,18 +81,18 @@ const ProfileScreen = ({navigation}) => {
                         <CardInfo
                             title={'Basic Information'}
                             headers={['Gender', 'Age', 'Birthday', 'Language', 'Status']}
-                            infos={SampleData.profileBasicInformation}
+                            infos={basicInfo}
                         />
                         <CardInfo
                             title={'Contact Information'}
                             headers={['Mobile', 'Telephone', 'Email', 'Website']}
-                            infos={SampleData.profileContactInfo}
+                            infos={contactInfo}
                         />
-                        <CardInfo
+                        {/* <CardInfo
                             title={'Job Locations'}
                             headers={['Job Title/s', 'Job Location']}
                             infos={SampleData.profileJobPreference}
-                        />
+                        /> */}
                     </ScrollView>
                 )
             case 1: 
@@ -107,32 +117,56 @@ const ProfileScreen = ({navigation}) => {
             case 2:
                 return (
                     <ScrollView showsVerticalScrollIndicator={false}>
-                        <CardInfo 
-                            title='Education'
-                            headers={['School', 'Degree', 'Field of Study', 'Year', 'Credentials']}
-                            infos={SampleData.profileEducationInfo}
-                        />
-                        <CardInfo 
-                            title='Work Experience'
-                            headers={['Company', 'Location', 'Title', 'Employment Type', 'Date Started', 'Date Ended']}
-                            infos={SampleData.profileWorkExperience}
-                        />
+                        {
+                            experiences.map((item, index) => (
+                                <CardInfo 
+                                    key={index}
+                                    title='Work Experience'
+                                    headers={['Company', 'Location', 'Title', 'Employment Type', 'Date Started', 'Date Ended']}
+                                    infos={{
+                                        company: item.company,
+                                        location: item.location,
+                                        title: item.job_title,
+                                        employment_type: item.employment_type,
+                                        starting_date: item.starting_date,
+                                        completion_date: item.completion_date,
+                                        }}
+                                />
+                            ))
+                        }
+{/* 
                         <CardInfo 
                             title='Certifications'
                             headers={['Title', 'Organization', 'Date', 'Credentials']}
                             infos={SampleData.profileCertificationInfo}
-                        />
+                        /> */}
 
                     </ScrollView>
                 )
             case 3:
                 return (
                     <ScrollView showsVerticalScrollIndicator={false}>
-                        <CardInfo 
+                        {/* <CardInfo 
                             title='Publications'
                             headers={['Title', 'Author', 'Publisher', 'Date', 'URL']}
                             infos={SampleData.profilePublication}
-                        />
+                        /> */}
+                                                {
+                        educationalBackgrounds.map((item,index) => (
+                                <CardInfo 
+                                    key={index}
+                                    title='Education'
+                                    headers={['School', 'Degree', 'Field of Study', 'Starting Date', 'Completion Date']}
+                                    infos={{ 
+                                        school: item.school,
+                                        degree: item.degree,
+                                        fieldOfStudy: item.field_of_study,
+                                        startingDate: item.starting_date,
+                                        completionDate: item.completion_date,
+                                    }}
+                                />
+                            ))
+                        }
                     </ScrollView>
 
                 )
@@ -155,13 +189,23 @@ const ProfileScreen = ({navigation}) => {
 
             <Container style={{ paddingHorizontal: 10 }}>
                 <ProfileHeader 
-                    data={SampleData.profileInfo} 
+                    data={profile} 
                     onEditPress={() => navigation.push('EditProfileScreen')}    
                 />
 
                 <TopNavigation
-                    navTitles={['About', 'Activity', 'Background', 'Attainment']}
-                    onBtnPress={i => setNavIndex(i)}
+                    navTitles={['About', 'Activity', 'Background', 'Education']}
+                    onBtnPress={i => {
+                        setNavIndex(i)
+                        switch (i) {
+                            case 2:
+                                getExperiences()                                
+                                break;
+                            case 3:
+                                getEducationalBackgrounds()                                
+                                break;
+                        }
+                    }}
                     index={navIndex}
                     style={{ marginHorizontal: 0, marginTop: 5, marginBottom: 5 }}
                 />

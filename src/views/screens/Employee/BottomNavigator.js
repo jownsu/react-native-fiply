@@ -15,14 +15,13 @@ import ProfileScreen from './ProfileScreen'
 import NotificationScreen from './NotificationScreen'
 import JobsScreen from './JobsScreen'
 
-
 const Tab = createBottomTabNavigator()
 
 
 
 const BottomNavigator = ({navigation}) => {
 
-    const { logout } = useContext(AuthContext);
+    const { logout, user } = useContext(AuthContext);
 
     const bottomSheetModalRef = useRef(null);
 
@@ -108,6 +107,7 @@ const BottomNavigator = ({navigation}) => {
                 >
                 </Tab.Screen>
             </Tab.Navigator>
+
             <BottomSheetModal 
                 bottomSheetModalRef={bottomSheetModalRef}
                 pointsSnap={[200]}
@@ -116,26 +116,25 @@ const BottomNavigator = ({navigation}) => {
                     <View style={styles.btmHeaderContainer}>
                     <View style={{ flexDirection: 'row', alignItems: 'center' }} >
                         <View style={styles.imgContainer}>
-                            <Image style={styles.img} source={require('../../../assets/img/members/digno.jpg')} resizeMode='contain'/>
+                            <Image style={styles.img} source={{ uri: user.avatar }} resizeMode='contain'/>
                         </View>
-                        <View>
-                            <Text weight='medium' size={18}>Jhones Digno</Text>
+                        <View style={{ flex: 1 }}>
+                            <Text weight='medium' size={18} adjustsFontSizeToFit numberOfLines={1}>{user.fullname}</Text>
                             <TouchableOpacity activeOpacity={.7} onPress={() => { 
-                                    navigation.navigate('ProfileScreen')
-                                    handleClosePress()
+                                        navigation.navigate('ProfileScreen')
+                                        handleClosePress()
                                     }}>
                                 <Text color={Colors.secondary}>See your profile</Text>
                             </TouchableOpacity>
                         </View>
-
                     </View>
-                        <View>
+                        {/* <View>
                             <Text color={Colors.secondary} weight='medium' size={16}>Basic User</Text>
-                        </View>
+                        </View> */}
                     </View>
                     <View style={styles.btmBodyContainer}>
-                        <Text color={Colors.primary} center weight='medium'>Ready to Work</Text>
-                        <Text center>Laravel Developer | React Native Developer</Text>
+                        <Text color={Colors.primary} center weight='medium'>{user.status}</Text>
+                        <Text center>{user.description}</Text>
                     </View>
                     <View style={styles.btmFooterContainer}>
                         <TouchableOpacity style={styles.footerBtn}>
@@ -177,7 +176,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     bottomSheetContainer:{
-        paddingHorizontal: 20
+        paddingHorizontal: 20,
     },
     btmHeaderContainer:{
         flexDirection: 'row',

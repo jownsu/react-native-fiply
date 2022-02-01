@@ -23,10 +23,7 @@ const AuthProvider = ({children}) => {
                 email,
                 password
             }).then(response => {
-                    const userData = {
-                        ...response.data.data.user,
-                        token: response.data.data.token
-                    }
+                    const userData = response.data.data
                     setUser(userData)
                     setError(null)
                     SecureStore.setItemAsync('user', JSON.stringify(userData))
