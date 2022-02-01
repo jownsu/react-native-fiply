@@ -1,17 +1,24 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { StyleSheet, View, Image, TouchableOpacity } from 'react-native'
 import { Formik } from 'formik'
 import * as yup from 'yup'
 import Colors from '../../../utils/Colors'
+import { AuthContext } from '../../../providers/AuthProvider'
 
 import {Text, TextInput, WaveHeader, Container, Button, SafeAreaView} from '../../components/FiplyComponents'
 
 const SignInScreen = ({navigation}) => {
 
+    const { login, loading } = useContext(AuthContext);
+
     const signInSchema = yup.object({
         email: yup.string().trim().email('Invalid Email').required('Email is required'),
         password: yup.string().trim().required('Password is required')
     })
+
+    const handleOnSubmit = (values) => {
+        login(values.email, values.password)
+    }
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
@@ -22,8 +29,7 @@ const SignInScreen = ({navigation}) => {
                 </View>
                 <Formik
                     initialValues={{ email: '', password: '' }}
-                    onSubmit={ (values) => {
-                        console.log(values) }}
+                    onSubmit={ (values) => handleOnSubmit(values) }
                     validationSchema={signInSchema}
                 >
                     {({handleChange, handleBlur, handleSubmit, values, errors, touched}) => (
@@ -55,6 +61,7 @@ const SignInScreen = ({navigation}) => {
                             <Button 
                                 title="Sign In"
                                 onPress={() => handleSubmit()}
+                                loading={loading}
                             />
 
                         </View>

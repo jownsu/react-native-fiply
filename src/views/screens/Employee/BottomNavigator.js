@@ -1,6 +1,7 @@
-import React, { useRef, useCallback } from 'react'
+import React, { useRef, useCallback, useContext } from 'react'
 import { StyleSheet, View, TouchableOpacity, Image } from 'react-native'
 import { Text } from '../../components/FiplyComponents'
+import { AuthContext } from '../../../providers/AuthProvider'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { FontAwesome5, MaterialIcons } from '@expo/vector-icons'
 import 'react-native-gesture-handler'
@@ -21,6 +22,8 @@ const Tab = createBottomTabNavigator()
 
 const BottomNavigator = ({navigation}) => {
 
+    const { logout } = useContext(AuthContext);
+
     const bottomSheetModalRef = useRef(null);
 
     const handlePresentModalPress = useCallback(() => {
@@ -28,6 +31,8 @@ const BottomNavigator = ({navigation}) => {
     }, []);
 
     const handleClosePress = () => bottomSheetModalRef.current.close()
+
+    const handleSignoutPress = () => logout()
 
     return (
         <View style={{ flex: 1 }}>
@@ -138,7 +143,7 @@ const BottomNavigator = ({navigation}) => {
                             <Text weight='medium'>Settings</Text>
                         </TouchableOpacity>
 
-                        <TouchableOpacity style={styles.footerBtn}>
+                        <TouchableOpacity style={styles.footerBtn} onPress={() => handleSignoutPress()}>
                             <FontAwesome5 name="sign-out-alt" size={24} color={Colors.red} style={{ marginRight: 5 }}/>
                             <Text color={Colors.red} weight='medium'>Sign out</Text>
                         </TouchableOpacity>
