@@ -40,12 +40,13 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         paddingVertical: 15,
         borderWidth: 1,
-        borderColor: Colors.light
+        borderColor: Colors.light,
     },
     imgContainer:{
         overflow: 'hidden',
         borderWidth: 1,
         borderColor: Colors.grey,
+        backgroundColor: Colors.white,
         elevation: 3,
         borderRadius: 100,
         position: 'absolute',

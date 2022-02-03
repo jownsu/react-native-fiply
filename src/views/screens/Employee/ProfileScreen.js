@@ -1,6 +1,6 @@
 import React, { useState, useEffect }  from 'react'
-import { StyleSheet, View, TouchableOpacity, ScrollView, Image } from 'react-native'
-import { SafeAreaView, Text, Container, FlatList } from '../../components/FiplyComponents'
+import { StyleSheet, View, TouchableOpacity, ScrollView, Image, RefreshControl, FlatList } from 'react-native'
+import { SafeAreaView, Text, Container } from '../../components/FiplyComponents'
 import Colors from '../../../utils/Colors'
 import { LinearGradient } from 'expo-linear-gradient'
 import { FontAwesome5, MaterialCommunityIcons, FontAwesome } from '@expo/vector-icons';
@@ -19,7 +19,7 @@ const ProfileScreen = ({navigation}) => {
 
     const [showModal, setShowModal] = useState(false)
     const [navIndex, setNavIndex] = useState(0)
-    const { getUserInfo, profile, basicInfo, contactInfo } = useProfile()
+    const { getUserInfo, profile, basicInfo, contactInfo, loading } = useProfile()
     const { getExperiences, experiences } = useExperience()
     const { getEducationalBackgrounds, educationalBackgrounds } = useEducationalBackground()
 
@@ -77,7 +77,7 @@ const ProfileScreen = ({navigation}) => {
         switch (id) {
             case 0:
                 return (
-                    <ScrollView showsVerticalScrollIndicator={false}>
+                    <View>
                         <CardInfo
                             title={'Basic Information'}
                             headers={['Gender', 'Age', 'Birthday', 'Language', 'Status']}
@@ -93,7 +93,7 @@ const ProfileScreen = ({navigation}) => {
                             headers={['Job Title/s', 'Job Location']}
                             infos={SampleData.profileJobPreference}
                         /> */}
-                    </ScrollView>
+                    </View>
                 )
             case 1: 
                 return (
@@ -106,6 +106,7 @@ const ProfileScreen = ({navigation}) => {
                         <FlatList
                             data={SampleData.postList}
                             renderItem={item => renderPost(item)}
+                            nestedScrollEnabled={true} 
                         />
 
                         <PostFilterDialog 
@@ -116,7 +117,7 @@ const ProfileScreen = ({navigation}) => {
                 )
             case 2:
                 return (
-                    <ScrollView showsVerticalScrollIndicator={false}>
+                    <View>
                         {
                             experiences.map((item, index) => (
                                 <CardInfo 
@@ -134,24 +135,23 @@ const ProfileScreen = ({navigation}) => {
                                 />
                             ))
                         }
-{/* 
+                    {/* 
                         <CardInfo 
                             title='Certifications'
                             headers={['Title', 'Organization', 'Date', 'Credentials']}
                             infos={SampleData.profileCertificationInfo}
                         /> */}
-
-                    </ScrollView>
+                    </View>
                 )
             case 3:
                 return (
-                    <ScrollView showsVerticalScrollIndicator={false}>
+                    <View>
                         {/* <CardInfo 
                             title='Publications'
                             headers={['Title', 'Author', 'Publisher', 'Date', 'URL']}
                             infos={SampleData.profilePublication}
                         /> */}
-                                                {
+                    {
                         educationalBackgrounds.map((item,index) => (
                                 <CardInfo 
                                     key={index}
@@ -167,8 +167,7 @@ const ProfileScreen = ({navigation}) => {
                                 />
                             ))
                         }
-                    </ScrollView>
-
+                        </View>
                 )
             default:
                 break;
@@ -176,46 +175,59 @@ const ProfileScreen = ({navigation}) => {
     }
 
     return (
-        <SafeAreaView flex>
-            <LinearGradient
-                colors={[Colors.primary, Colors.secondary]}
-                end={{ x: 1, y: 0 }}
-                style={styles.gradientView}
+        <View >
+
+
+            <FlatList
+                ListHeaderComponent={
+                    <View style={{ paddingTop: 30 }}>
+                        <LinearGradient
+                            colors={[Colors.primary, Colors.secondary]}
+                            end={{ x: 1, y: 0 }}
+                            style={styles.gradientView}
+                        />
+                        <View style={styles.cameraContainer}>
+                            <FontAwesome5 name="camera" size={18} color={Colors.black} />
+                        </View>
+                        <ProfileHeader 
+                            data={profile} 
+                            onEditPress={() => navigation.push('EditProfileScreen')}    
+                        />
+                        <TopNavigation
+                            navTitles={['About', 'Activity', 'Background', 'Education']}
+                            onBtnPress={i => {
+                                setNavIndex(i)
+                                switch (i) {
+                                    case 2:
+                                        getExperiences()                                
+                                        break;
+                                    case 3:
+                                        getEducationalBackgrounds()                                
+                                        break;
+                                }
+                            }}
+                            index={navIndex}
+                            style={{ marginHorizontal: 0, marginTop: 5, marginBottom: 5 }}
+                        />
+                        { renderList(navIndex) }
+                    </View>
+ 
+                }
+                // data={[]}
+                // keyExtractor={(item, index) => index}
+                // renderItem={({item}) => (
+                //     renderList(navIndex) 
+                // )}
+
+                // refreshControl={
+                //     <RefreshControl
+                //         refreshing={loading}
+                //         onRefresh={() => getUserInfo()}
+                //     />
+                // }>
+
             />
-
-            <View style={styles.cameraContainer}>
-                <FontAwesome5 name="camera" size={18} color={Colors.black} />
-            </View>
-
-            <Container style={{ paddingHorizontal: 10 }}>
-                <ProfileHeader 
-                    data={profile} 
-                    onEditPress={() => navigation.push('EditProfileScreen')}    
-                />
-
-                <TopNavigation
-                    navTitles={['About', 'Activity', 'Background', 'Education']}
-                    onBtnPress={i => {
-                        setNavIndex(i)
-                        switch (i) {
-                            case 2:
-                                getExperiences()                                
-                                break;
-                            case 3:
-                                getEducationalBackgrounds()                                
-                                break;
-                        }
-                    }}
-                    index={navIndex}
-                    style={{ marginHorizontal: 0, marginTop: 5, marginBottom: 5 }}
-                />
-
-                { renderList(navIndex) }
-                
-            </Container>
-
-        </SafeAreaView>
-
+        </View>
         
     )
 }

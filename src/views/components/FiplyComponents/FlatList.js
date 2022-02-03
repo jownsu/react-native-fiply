@@ -11,7 +11,8 @@ export const FlatList = ({
     numColumns = 1,
     styles = {},
     noDataMessage = 'No Data',
-    renderHeader
+    renderHeader,
+    nestedScrollEnabled = false
 }) => {
   return (
     <View style={{ flex: 1, ...styles }}	>
@@ -41,6 +42,7 @@ export const FlatList = ({
                     showsVerticalScrollIndicator={false}
                     renderItem={({item, index}) => renderItem(item, index)}
                     ListHeaderComponent={renderHeader}
+                    nestedScrollEnabled={nestedScrollEnabled}
                 />
             )
             : (

@@ -1,6 +1,6 @@
 import React from 'react'
 import { SafeAreaView as SAView } from 'react-native-safe-area-context'
-import { Dimensions } from 'react-native'
+import { Dimensions, ScrollView } from 'react-native'
 import { StatusBar } from 'expo-status-bar'
 import Colors from '../../../utils/Colors'
 
@@ -11,8 +11,9 @@ export const SafeAreaView = ({children, flex, statusBarColor = 'rgba(0, 0, 0, 0)
 
     return (
         <SAView style={{ height: height, ...flexStyle }}>
-            <StatusBar backgroundColor={statusBarColor} />
-            {children}
+                <StatusBar backgroundColor={statusBarColor} />
+
+                {children}
         </SAView>
     )
 }

@@ -1,10 +1,11 @@
 import React, { useState, useContext } from 'react'
 import { AuthContext } from '../../../providers/AuthProvider'
+import * as SecureStore from 'expo-secure-store'
 import api from '../../api'
 
 
 const useProfile = () => {
-    const { user } = useContext(AuthContext)
+    const { user, setUser } = useContext(AuthContext)
     const [loading, setLoading] = useState(false)
     const [profile, setProfile] = useState({})
     const [basicInfo, setBasicInfo] = useState({})
@@ -16,6 +17,14 @@ const useProfile = () => {
         await api({token: user.token}).get('/users')
             .then(res => {
               let profileData = res.data.data
+              let userData = {
+                id          : profileData.id,
+                fullname    : profileData.fullname,
+                status      : profileData.status,
+                description : profileData.description,
+                avatar      : profileData.avatar,
+              }
+              setUser({...user, ...userData});
 
               setProfile({
                   fullname: profileData.fullname,
