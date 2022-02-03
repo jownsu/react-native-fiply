@@ -30,24 +30,24 @@ const useProfile = () => {
                   fullname: profileData.fullname,
                   email: profileData.email,
                   location: profileData.location,
-                  status: profileData.status,
+                  status: profileData.status ?? 'Not Verified',
                   description: profileData.description,
                   avatar: profileData.avatar
               })
 
               setBasicInfo({
-                  gender: profileData.gender,
-                  age: profileData.age,
-                  birthday: profileData.birthday,
-                  language: profileData.language,
-                  status: profileData.status
+                  gender: profileData.gender ?? 'Nothing to show',
+                  age: profileData.age ?? 'Nothing to show',
+                  birthday: profileData.birthday ?? 'Nothing to show',
+                  language: profileData.language ?? 'Nothing to show',
+                  status: profileData.status ?? 'Nothing to show'
               })
 
               setContactInfo({
-                mobile_no: profileData.mobile_no,
-                telephone_no: profileData.telephone_no,
-                email: profileData.email,
-                website: profileData.website,
+                mobile_no: profileData.mobile_no ?? 'Nothing to show',
+                telephone_no: profileData.telephone_no ?? 'Nothing to show',
+                email: profileData.email ?? 'Nothing to show',
+                website: profileData.website ?? 'Nothing to show',
               })
             })
             .catch(err => console.log(err)) 

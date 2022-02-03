@@ -10,7 +10,7 @@ const SignupStack = () => {
     return (
         <Stack.Navigator>
             <Stack.Screen options={{ headerShown: false }} name={"SignupScreen"} component={SignupScreen}></Stack.Screen>
-            <Stack.Screen options={{ headerShown: false }} name={"ConfirmEmailScreen"} component={ConfirmEmailScreen}></Stack.Screen>
+            {/* <Stack.Screen options={{ headerShown: false }} name={"ConfirmEmailScreen"} component={ConfirmEmailScreen}></Stack.Screen> */}
             <Stack.Screen options={{ headerShown: false }} name={"SelectUserTypeStack"} component={SelectUserTypeStack}></Stack.Screen>
         </Stack.Navigator>
     )

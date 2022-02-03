@@ -1,6 +1,6 @@
-import React, { useState, useEffect }  from 'react'
+import React, { useState, useEffect, useCallback, useRef }  from 'react'
 import { StyleSheet, View, TouchableOpacity, ScrollView, Image, RefreshControl, FlatList } from 'react-native'
-import { SafeAreaView, Text, Container } from '../../components/FiplyComponents'
+import { SafeAreaView, Text, Container, FlatList as FFlatList, BottomSheetModal } from '../../components/FiplyComponents'
 import Colors from '../../../utils/Colors'
 import { LinearGradient } from 'expo-linear-gradient'
 import { FontAwesome5, MaterialCommunityIcons, FontAwesome } from '@expo/vector-icons';
@@ -22,6 +22,11 @@ const ProfileScreen = ({navigation}) => {
     const { getUserInfo, profile, basicInfo, contactInfo, loading } = useProfile()
     const { getExperiences, experiences } = useExperience()
     const { getEducationalBackgrounds, educationalBackgrounds } = useEducationalBackground()
+
+    const bottomSheetModalRef = useRef(null);
+    const handlePresentModalPress = useCallback(() => {
+        bottomSheetModalRef.current?.present();
+      }, []);
 
     useEffect(() => {
         getUserInfo()
@@ -103,10 +108,11 @@ const ProfileScreen = ({navigation}) => {
                             onFilterPress={() => setShowModal(true)}
                         />
                         
-                        <FlatList
+                        <FFlatList
                             data={SampleData.postList}
                             renderItem={item => renderPost(item)}
                             nestedScrollEnabled={true} 
+                            noDataMessage='No Posts'
                         />
 
                         <PostFilterDialog 
@@ -118,41 +124,33 @@ const ProfileScreen = ({navigation}) => {
             case 2:
                 return (
                     <View>
-                        {
-                            experiences.map((item, index) => (
+                        <FFlatList
+                            data={experiences}
+                            renderItem={(item, index) => (
                                 <CardInfo 
                                     key={index}
                                     title='Work Experience'
                                     headers={['Company', 'Location', 'Title', 'Employment Type', 'Date Started', 'Date Ended']}
                                     infos={{
-                                        company: item.company,
-                                        location: item.location,
-                                        title: item.job_title,
-                                        employment_type: item.employment_type,
-                                        starting_date: item.starting_date,
-                                        completion_date: item.completion_date,
-                                        }}
+                                        company         : item.company,
+                                        location        : item.location,
+                                        title           : item.job_title,
+                                        employment_type : item.employment_type,
+                                        starting_date   : item.starting_date,
+                                        completion_date : item.completion_date,
+                                    }}
                                 />
-                            ))
-                        }
-                    {/* 
-                        <CardInfo 
-                            title='Certifications'
-                            headers={['Title', 'Organization', 'Date', 'Credentials']}
-                            infos={SampleData.profileCertificationInfo}
-                        /> */}
+                            )}
+
+                        />
                     </View>
                 )
             case 3:
                 return (
                     <View>
-                        {/* <CardInfo 
-                            title='Publications'
-                            headers={['Title', 'Author', 'Publisher', 'Date', 'URL']}
-                            infos={SampleData.profilePublication}
-                        /> */}
-                    {
-                        educationalBackgrounds.map((item,index) => (
+                        <FFlatList
+                            data={educationalBackgrounds}
+                            renderItem={(item, index) => (
                                 <CardInfo 
                                     key={index}
                                     title='Education'
@@ -165,9 +163,11 @@ const ProfileScreen = ({navigation}) => {
                                         completionDate: item.completion_date,
                                     }}
                                 />
-                            ))
-                        }
-                        </View>
+                            )}
+                            noDataMessage='No Education to show'
+
+                        />
+                    </View>
                 )
             default:
                 break;
@@ -175,10 +175,14 @@ const ProfileScreen = ({navigation}) => {
     }
 
     return (
-        <View >
-
-
+        <View>
             <FlatList
+                refreshControl={
+                    <RefreshControl
+                        refreshing={loading}
+                        onRefresh={() => getUserInfo()}
+                    />
+                }
                 ListHeaderComponent={
                     <View style={{ paddingTop: 30 }}>
                         <LinearGradient
@@ -227,6 +231,30 @@ const ProfileScreen = ({navigation}) => {
                 // }>
 
             />
+
+                <BottomSheetModal 
+                    bottomSheetModalRef={bottomSheetModalRef}
+                    pointsSnap={[225]}
+                >
+                    <View style={styles.btmSheetContainer}>
+                        <TouchableOpacity style={styles.btmActionContainer}>
+                            <FontAwesome name="bookmark" size={28} color={Colors.black} style={styles.btmActionBtn}/>
+                            <Text weight='medium' color={Colors.black}>Bookmark</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.btmActionContainer}>
+                            <FontAwesome name="share-alt" size={28} color={Colors.black} style={styles.btmActionBtn}/>
+                            <Text weight='medium' color={Colors.black}>Share Via</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.btmActionContainer}>
+                            <FontAwesome5 name="font-awesome-flag" size={28} color={Colors.black} style={styles.btmActionBtn}/>
+                            <Text weight='medium' color={Colors.black}>Report this post</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.btmActionContainer}>
+                            <FontAwesome name="tasks" size={28} color={Colors.black} style={styles.btmActionBtn}/>
+                            <Text weight='medium' color={Colors.black}>Improve my feed</Text>
+                        </TouchableOpacity>
+                    </View>
+            </BottomSheetModal>
         </View>
         
     )
@@ -251,7 +279,19 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-end',
         marginHorizontal: 10,
         marginBottom: 25
-      },
+    },
+      btmSheetContainer:{
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+    },
+    btmActionContainer:{
+        flexDirection: 'row',
+        paddingVertical: 5,
+        alignItems : 'center',
+    },
+    btmActionBtn:{
+        width: 40
+    }
 })
 
 const postStyles = StyleSheet.create({

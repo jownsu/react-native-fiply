@@ -110,31 +110,31 @@ const BottomNavigator = ({navigation}) => {
 
             <BottomSheetModal 
                 bottomSheetModalRef={bottomSheetModalRef}
-                pointsSnap={[200]}
+                pointsSnap={[175]}
             >   
                 <View style={styles.bottomSheetContainer}>
                     <View style={styles.btmHeaderContainer}>
-                    <View style={{ flexDirection: 'row', alignItems: 'center' }} >
-                        <View style={styles.imgContainer}>
-                            <Image style={styles.img} source={{ uri: user.avatar }} resizeMode='contain'/>
+                        <View style={{ flexDirection: 'row', alignItems: 'center' }} >
+                            <View style={styles.imgContainer}>
+                                <Image style={styles.img} source={{ uri: user.avatar }} resizeMode='contain'/>
+                            </View>
+                            <View style={{ flex: 1 }}>
+                                <Text weight='medium' size={18} adjustsFontSizeToFit numberOfLines={1}>{user.fullname}</Text>
+                                <TouchableOpacity activeOpacity={.7} onPress={() => { 
+                                            navigation.navigate('ProfileScreen')
+                                            handleClosePress()
+                                        }}>
+                                    <Text color={Colors.secondary}>See your profile</Text>
+                                </TouchableOpacity>
+                            </View>
                         </View>
-                        <View style={{ flex: 1 }}>
-                            <Text weight='medium' size={18} adjustsFontSizeToFit numberOfLines={1}>{user.fullname}</Text>
-                            <TouchableOpacity activeOpacity={.7} onPress={() => { 
-                                        navigation.navigate('ProfileScreen')
-                                        handleClosePress()
-                                    }}>
-                                <Text color={Colors.secondary}>See your profile</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
                         {/* <View>
                             <Text color={Colors.secondary} weight='medium' size={16}>Basic User</Text>
                         </View> */}
                     </View>
                     <View style={styles.btmBodyContainer}>
                         <Text color={Colors.primary} center weight='medium'>{user.status}</Text>
-                        <Text center>{user.description}</Text>
+                        { user.description ? <Text center>{user.description}</Text> : null }
                     </View>
                     <View style={styles.btmFooterContainer}>
                         <TouchableOpacity style={styles.footerBtn}>
@@ -177,11 +177,13 @@ const styles = StyleSheet.create({
     },
     bottomSheetContainer:{
         paddingHorizontal: 20,
+        flex: 1,
+        justifyContent: 'space-between'
     },
     btmHeaderContainer:{
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
     },
     imgContainer:{
         borderWidth: 1,
@@ -196,15 +198,13 @@ const styles = StyleSheet.create({
         width: 50
     },
     btmBodyContainer:{
-        marginTop: 25
     },
     btmFooterContainer:{
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
     },
     footerBtn:{
-        marginTop: 15,
         flexDirection: 'row',
         alignItems: 'center',
     },

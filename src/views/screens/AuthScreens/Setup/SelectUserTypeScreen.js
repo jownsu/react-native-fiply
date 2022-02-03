@@ -3,7 +3,7 @@ import { StyleSheet, View, TouchableOpacity } from 'react-native'
 import Colors from '../../../../utils/Colors'
 import { FontAwesome5 } from '@expo/vector-icons'
 
-import {Text, FiplyLogo, WaveHeader, Container, Button, SafeAreaView} from '../../../components/FiplyComponents'
+import {Text, FiplyLogo, WaveHeader, Container, Button, SafeAreaView, SecondaryButton} from '../../../components/FiplyComponents'
 
 
 const SelectUserTypeScreen = ({navigation}) => {
@@ -54,7 +54,8 @@ const SelectUserTypeScreen = ({navigation}) => {
                     </TouchableOpacity>
                 </View>
 
-                <Button title='Continue' style={{ marginTop: 100 }} disabled={btnDisabled} onPress={() => handleButtonPress()} />
+                <Button title='Continue' style={{ marginTop: 100, marginBottom: 20 }} disabled={btnDisabled} onPress={() => handleButtonPress()} />
+                <SecondaryButton title='Later' style={{ borderWidth: 2 }} />
             </Container>
         </SafeAreaView>
     )

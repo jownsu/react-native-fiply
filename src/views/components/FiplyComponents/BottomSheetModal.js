@@ -46,5 +46,6 @@ const styles = StyleSheet.create({
     container:{
     },
     contentContainer:{
+      flex: 1
     }
 })

@@ -1,19 +1,19 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { StyleSheet, View, TouchableOpacity } from 'react-native'
+import { AuthContext } from '../../../../providers/AuthProvider'
 import { Formik } from 'formik'
 import * as yup from 'yup'
-
 import Colors from '../../../../utils/Colors'
 import { TextInput as TxtInput } from 'react-native-paper'
 
 import {Text, FiplyLogo, WaveHeader, Container, Button, TextInput, SafeAreaView} from '../../../components/FiplyComponents'
-import { error } from 'react-native-gifted-chat/lib/utils'
 
 
 const SignupScreen = ({navigation}) => {
 
     const [hideSecondForm, setHideSecondForm] = useState(true)
     const [hidePassword, setHidePassword] = useState(true)
+    const { signup, loading } = useContext(AuthContext)
     
     const signupSchema = yup.object({
         email: yup.string().trim().email('Invalid email').required('Email is required'), 
@@ -37,8 +37,8 @@ const SignupScreen = ({navigation}) => {
                         firstname: '', 
                         lastname: '' }}
                     onSubmit={(values) => {
-                        console.log(values)
-                        navigation.navigate('ConfirmEmailScreen')
+                        signup(values)
+                        // navigation.navigate('SelectUserTypeStack')
                     }}
                     validationSchema={signupSchema}
                 >
@@ -124,7 +124,8 @@ const SignupScreen = ({navigation}) => {
                                                     && values.lastname
                                                 )
                                                     ? false : true
-                                                }
+                                            }
+                                            loading={loading}
                                         />
 
                                         <TouchableOpacity style={{ marginTop: 20 }} onPress={() => setHideSecondForm(true)}>

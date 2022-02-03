@@ -21,12 +21,12 @@ const ProfileHeader = ({data, onEditPress = () => {}}) => {
             <View style={styles.bodyContainer} >
                 <Text weight='semi-bold' size={16} numberOfLines={1} center>{data.fullname}</Text>
                 <Text size={13} numberOfLines={1} center style={{ marginVertical: 2 }}>{data.email}</Text>
-                <Text size={11} numberOfLines={1} center style={{  }}>{data.location}</Text>
+                { data.location ? <Text size={11} numberOfLines={1} center style={{  }}>{data.location}</Text> : null}
             </View>
 
             <View style={styles.footerContainer}>
                 <Text weight='medium' color={Colors.primary}>{data.status}</Text>
-                <Text>{data.description}</Text>
+                { data.description ? <Text>{data.description}</Text> : null}
             </View>
         </View>
     )

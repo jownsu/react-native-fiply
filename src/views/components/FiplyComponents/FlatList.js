@@ -12,7 +12,8 @@ export const FlatList = ({
     styles = {},
     noDataMessage = 'No Data',
     renderHeader,
-    nestedScrollEnabled = false
+    nestedScrollEnabled = false,
+    extraData
 }) => {
   return (
     <View style={{ flex: 1, ...styles }}	>
@@ -43,6 +44,7 @@ export const FlatList = ({
                     renderItem={({item, index}) => renderItem(item, index)}
                     ListHeaderComponent={renderHeader}
                     nestedScrollEnabled={nestedScrollEnabled}
+                    extraData
                 />
             )
             : (

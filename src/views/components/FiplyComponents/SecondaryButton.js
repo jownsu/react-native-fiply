@@ -4,7 +4,7 @@ import { Button as XButton } from 'react-native-paper'
 import Colors from '../../../utils/Colors'
 
 export const SecondaryButton = ({
-    onPress, 
+    onPress = () => {}, 
     title, 
     disabled = false, 
     loading = false, 
