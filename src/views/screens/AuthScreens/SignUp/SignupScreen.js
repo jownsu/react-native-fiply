@@ -37,8 +37,7 @@ const SignupScreen = ({navigation}) => {
                         firstname: '', 
                         lastname: '' }}
                     onSubmit={(values) => {
-                        signup(values)
-                        // navigation.navigate('SelectUserTypeStack')
+                        signup(values, () => navigation.navigate('SelectUserTypeStack'))
                     }}
                     validationSchema={signupSchema}
                 >

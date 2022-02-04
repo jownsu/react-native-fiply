@@ -1,15 +1,17 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { StyleSheet, View, Image, TouchableOpacity } from 'react-native'
 import { Formik } from 'formik'
 import * as yup from 'yup'
 import Colors from '../../../utils/Colors'
 import { AuthContext } from '../../../providers/AuthProvider'
+import { TextInput as TxtInput } from 'react-native-paper'
 
 import {Text, TextInput, WaveHeader, Container, Button, SafeAreaView} from '../../components/FiplyComponents'
 
 const SignInScreen = ({navigation}) => {
 
     const { login, loading } = useContext(AuthContext);
+    const [hidePassword, setHidePassword] = useState(true);
 
     const signInSchema = yup.object({
         email: yup.string().trim().email('Invalid Email').required('Email is required'),
@@ -52,6 +54,8 @@ const SignInScreen = ({navigation}) => {
                                 secureTextEntry={true}
                                 errorMsg={(touched.password && errors.password) ? errors.password : ''}
                                 style={{ marginTop: 10 }}
+                                secureTextEntry={hidePassword}
+                                right={<TxtInput.Icon name="eye" color={Colors.light} onPress={() => setHidePassword(!hidePassword)}/>}
                             />
 
                             <TouchableOpacity style={styles.forgotpass}>

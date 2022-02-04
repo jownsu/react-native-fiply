@@ -1,14 +1,15 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { StyleSheet, View, TouchableOpacity } from 'react-native'
 import Colors from '../../../../utils/Colors'
 import { FontAwesome5 } from '@expo/vector-icons'
-
+import { AuthContext } from '../../../../providers/AuthProvider'
 import {Text, FiplyLogo, WaveHeader, Container, Button, SafeAreaView, SecondaryButton} from '../../../components/FiplyComponents'
 
 
 const SelectUserTypeScreen = ({navigation}) => {
     const [userType, setUserType] = useState({jobseeker: false, employer: false})
     const [btnDisabled, setBtnDisabled] = useState(true)
+    const { setLogged_in } = useContext(AuthContext)
 
     const handleCardPress = (usertype) => {
         setBtnDisabled(false)
@@ -55,7 +56,7 @@ const SelectUserTypeScreen = ({navigation}) => {
                 </View>
 
                 <Button title='Continue' style={{ marginTop: 100, marginBottom: 20 }} disabled={btnDisabled} onPress={() => handleButtonPress()} />
-                <SecondaryButton title='Later' style={{ borderWidth: 2 }} />
+                <SecondaryButton title='Later' style={{ borderWidth: 2 }} onPress={() => setLogged_in('true')}/>
             </Container>
         </SafeAreaView>
     )
