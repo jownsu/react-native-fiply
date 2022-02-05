@@ -14,14 +14,17 @@ import SampleData from '../../../utils/SampleData'
 import useProfile from '../../../api/hooks/user/useProfile'
 import useExperience from '../../../api/hooks/user/useExperience'
 import useEducationalBackground from '../../../api/hooks/user/useEducationalBackground'
+import usePost from '../../../api/hooks/usePost'
+import PostList from '../../components/lists/PostList'
 
 const ProfileScreen = ({navigation}) => {
 
     const [showModal, setShowModal] = useState(false)
     const [navIndex, setNavIndex] = useState(0)
-    const { getUserInfo, profile, basicInfo, contactInfo, loading } = useProfile()
-    const { getExperiences, experiences } = useExperience()
-    const { getEducationalBackgrounds, educationalBackgrounds } = useEducationalBackground()
+    const { getUserInfo, profile, basicInfo, contactInfo, loading: profileLoading } = useProfile()
+    const { getExperiences, experiences, loading : experienceLoading } = useExperience()
+    const { getEducationalBackgrounds, educationalBackgrounds, loading: ebLoading } = useEducationalBackground()
+    const { posts, getPosts, nextPath, morePosts, loading: postLoading } = usePost()
 
     const bottomSheetModalRef = useRef(null);
     const handlePresentModalPress = useCallback(() => {
@@ -32,52 +35,6 @@ const ProfileScreen = ({navigation}) => {
         getUserInfo()
     }, [])
     
-    const renderPost = (item) => (
-        <View style={postStyles.postContainer}>
-            <View style={postStyles.postHeaderContainer}>
-                <View style={postStyles.postAuthorContainer} >
-                    <Image 
-                        source={require('../../../assets/img/logo.png')} 
-                        style={postStyles.authorImg}    
-                        resizeMode='contain'
-                    />
-                    <Text weight="medium" >{item.author}{'\u30FB'}{item.posted_at}</Text>
-                </View>
-
-                <TouchableOpacity onPress={() => handlePresentModalPress()}>
-                    <MaterialCommunityIcons name="dots-horizontal" size={24} color={Colors.black} />
-                </TouchableOpacity>
-            </View>
-
-            <View style={postStyles.postBodyContainer}>
-                <Text>{item.post}</Text>
-                <Image 
-                    source={require('../../../assets/img/postimg.png')}
-                    style={postStyles.postImg}
-                />
-            </View>
-
-            <View style={postStyles.postFooterContainer}>
-                <TouchableOpacity style={postStyles.postAction}>
-                    <FontAwesome5 style={{ marginRight: 5 }} name="caret-up" size={17} color={Colors.black} />
-                    <Text>Up</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={postStyles.postAction}>
-                    <FontAwesome style={{ marginRight: 5 }} name="commenting" size={17} color={Colors.primary} />
-                    <Text>Comment</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={postStyles.postAction}>
-                    <FontAwesome style={{ marginRight: 5 }} name="share" size={17} color={Colors.secondary} />
-                    <Text>Share</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={postStyles.postAction}>
-                    <FontAwesome style={{ marginRight: 5 }} name="paper-plane" size={17} color={Colors.secondary} />
-                    <Text>Send</Text>
-                </TouchableOpacity>
-            </View>
-        </View>
-    )
-
     const renderList = (id) => {
         switch (id) {
             case 0:
@@ -109,10 +66,12 @@ const ProfileScreen = ({navigation}) => {
                         />
                         
                         <FFlatList
-                            data={SampleData.postList}
-                            renderItem={item => renderPost(item)}
+                            data={posts}
+                            renderItem={item => <PostList data={item} handleDotPress={handlePresentModalPress} />}
                             nestedScrollEnabled={true} 
-                            noDataMessage='No Posts'
+                            onEndReached={() => morePosts()}
+                            onEndReachedThreshold={0.2}
+                            isLoading={postLoading}
                         />
 
                         <PostFilterDialog 
@@ -141,7 +100,7 @@ const ProfileScreen = ({navigation}) => {
                                     }}
                                 />
                             )}
-
+                            isLoading={experienceLoading}
                         />
                     </View>
                 )
@@ -165,6 +124,7 @@ const ProfileScreen = ({navigation}) => {
                                 />
                             )}
                             noDataMessage='No Education to show'
+                            isLoading={ebLoading}
 
                         />
                     </View>
@@ -179,7 +139,7 @@ const ProfileScreen = ({navigation}) => {
             <FlatList
                 refreshControl={
                     <RefreshControl
-                        refreshing={loading}
+                        refreshing={profileLoading}
                         onRefresh={() => getUserInfo()}
                     />
                 }
@@ -202,6 +162,8 @@ const ProfileScreen = ({navigation}) => {
                             onBtnPress={i => {
                                 setNavIndex(i)
                                 switch (i) {
+                                    case 1:
+                                        getPosts('/users/posts')
                                     case 2:
                                         getExperiences()                                
                                         break;
@@ -217,19 +179,6 @@ const ProfileScreen = ({navigation}) => {
                     </View>
  
                 }
-                // data={[]}
-                // keyExtractor={(item, index) => index}
-                // renderItem={({item}) => (
-                //     renderList(navIndex) 
-                // )}
-
-                // refreshControl={
-                //     <RefreshControl
-                //         refreshing={loading}
-                //         onRefresh={() => getUserInfo()}
-                //     />
-                // }>
-
             />
 
                 <BottomSheetModal 
@@ -292,46 +241,4 @@ const styles = StyleSheet.create({
     btmActionBtn:{
         width: 40
     }
-})
-
-const postStyles = StyleSheet.create({
-    postContainer:{
-        backgroundColor: Colors.white,
-        borderWidth: 1,
-        borderColor: Colors.light,
-        borderRadius: 15,
-        padding: 10,
-        elevation: 2,
-        marginVertical: 5
-    },
-    postHeaderContainer:{
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between'
-    },
-    postAuthorContainer:{
-        flexDirection: 'row',
-        alignItems: 'center'
-    },
-    authorImg:{
-        height: 35,
-        width: 35,
-        marginRight: 10
-    },
-    postBodyContainer:{
-
-    },
-    postImg:{
-        width: '100%',
-        marginVertical: 7
-    },
-    postFooterContainer:{
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
-    postAction:{
-        flexDirection: 'row',
-        paddingHorizontal: 7,
-    },
 })

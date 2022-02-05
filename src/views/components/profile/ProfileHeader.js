@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
         borderRadius: 100,
         position: 'absolute',
         top: -50,
-        alignSelf: 'center'
+        alignSelf: 'center',
     },
     img:{
         height: 100,

@@ -10,21 +10,7 @@ const useExperience = () => {
   const getExperiences = async() => {
     setLoading(true)
     await api({token: user.token}).get('/users/experiences')
-            .then(res => {
-              let data = res.data.data
-
-              setExperiences(data)
-              console.log(data) 
-
-              // setExperiences({
-              //   company: data.company,
-              //   location: data.location,
-              //   title: data.title,
-              //   employment_type: data.employment_type,
-              //   starting_date: data.starting_date,
-              //   completion_date: data.completion_date,
-              // })
-            })
+            .then(res => setExperiences(res.data.data))
             .catch(err => console.log(err))
             .finally(() => setLoading(false))
   }

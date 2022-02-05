@@ -1,21 +1,21 @@
-import React, { useCallback, useRef } from 'react'
+import React, { useCallback, useRef, useEffect } from 'react'
 import { StyleSheet, View, TouchableOpacity, Image } from 'react-native'
+import usePost from '../../../api/hooks/usePost'
 import { SafeAreaView, Container, Text, FlatList, BottomSheetModal } from '../../components/FiplyComponents'
 import SearchHeader from '../../components/headers/SearchHeader'
 import { FontAwesome5, FontAwesome, MaterialCommunityIcons  } from '@expo/vector-icons'
 import Colors from '../../../utils/Colors'
 import SampleData from '../../../utils/SampleData'
-
+import PostList from '../../components/lists/PostList'
 
 const HomeScreen = ({navigation}) => {
 
-  // ref
-  const bottomSheetModalRef = useRef(null);
+    const { posts, getPosts, loading, morePosts } = usePost();
 
-  // variables
+    // bottom sheet reference
+    const bottomSheetModalRef = useRef(null);
 
-  // callbacks
-  const handlePresentModalPress = useCallback(() => {
+    const handlePresentModalPress = useCallback(() => {
     bottomSheetModalRef.current?.present();
   }, []);
 
@@ -24,51 +24,6 @@ const HomeScreen = ({navigation}) => {
 //   }, []);
 
 
-    const renderPost = (item) => (
-        <View style={postStyles.postContainer}>
-            <View style={postStyles.postHeaderContainer}>
-                <View style={postStyles.postAuthorContainer} >
-                    <Image 
-                        source={require('../../../assets/img/logo.png')} 
-                        style={postStyles.authorImg}    
-                        resizeMode='contain'
-                    />
-                    <Text weight="medium" >{item.author}{'\u30FB'}{item.posted_at}</Text>
-                </View>
-
-                <TouchableOpacity onPress={() => handlePresentModalPress()}>
-                    <MaterialCommunityIcons name="dots-horizontal" size={24} color={Colors.black} />
-                </TouchableOpacity>
-            </View>
-
-            <View style={postStyles.postBodyContainer}>
-                <Text>{item.post}</Text>
-                <Image 
-                    source={require('../../../assets/img/postimg.png')}
-                    style={postStyles.postImg}
-                />
-            </View>
-
-            <View style={postStyles.postFooterContainer}>
-                <TouchableOpacity style={postStyles.postAction}>
-                    <FontAwesome5 style={{ marginRight: 5 }} name="caret-up" size={17} color={Colors.black} />
-                    <Text>Up</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={postStyles.postAction}>
-                    <FontAwesome style={{ marginRight: 5 }} name="commenting" size={17} color={Colors.primary} />
-                    <Text>Comment</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={postStyles.postAction}>
-                    <FontAwesome style={{ marginRight: 5 }} name="share" size={17} color={Colors.secondary} />
-                    <Text>Share</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={postStyles.postAction}>
-                    <FontAwesome style={{ marginRight: 5 }} name="paper-plane" size={17} color={Colors.secondary} />
-                    <Text>Send</Text>
-                </TouchableOpacity>
-            </View>
-        </View>
-    )
 
     const renderHeader = () => (
         <View style={createPostySTyles.createPostContainer}>
@@ -95,6 +50,10 @@ const HomeScreen = ({navigation}) => {
         </View>
     )
 
+    useEffect(() => {
+        getPosts()
+    }, [])
+
     return (
         <SafeAreaView flex>
             <SearchHeader
@@ -105,12 +64,14 @@ const HomeScreen = ({navigation}) => {
                     </TouchableOpacity>
                 }
             /> 
-            <Container style={{ paddingHorizontal: 10 }}>
+            <Container style={{ paddingHorizontal: 0 }}>
                 <FlatList 
-                    data={SampleData.postList}
-                    renderItem={item => renderPost(item)}
+                    data={posts}
+                    renderItem={item => <PostList data={item} handleDotPress={handlePresentModalPress} />}
                     renderHeader={renderHeader()}
-                    noDataMessage='No Posts'
+                    onEndReached={() => morePosts()}
+                    onEndReachedThreshold={0.3}
+                    isLoading={loading}
                 />
             </Container>
 
@@ -185,47 +146,7 @@ const styles = StyleSheet.create({
     }
 })
 
-const postStyles = StyleSheet.create({
-    postContainer:{
-        backgroundColor: Colors.white,
-        borderWidth: 1,
-        borderColor: Colors.light,
-        borderRadius: 15,
-        padding: 10,
-        elevation: 2,
-        marginVertical: 5
-    },
-    postHeaderContainer:{
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between'
-    },
-    postAuthorContainer:{
-        flexDirection: 'row',
-        alignItems: 'center'
-    },
-    authorImg:{
-        height: 35,
-        width: 35,
-        marginRight: 10
-    },
-    postBodyContainer:{
 
-    },
-    postImg:{
-        width: '100%',
-        marginVertical: 7
-    },
-    postFooterContainer:{
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
-    postAction:{
-        flexDirection: 'row',
-        paddingHorizontal: 7,
-    },
-})
 
 const createPostySTyles = StyleSheet.create({
     createPostContainer:{
@@ -233,7 +154,8 @@ const createPostySTyles = StyleSheet.create({
         padding: 10,
         borderWidth: 1,
         borderColor: Colors.light,
-        borderRadius: 15
+        borderRadius: 15,
+        marginHorizontal: 10
     },
     postActionContainer:{
         flexDirection: 'row',

@@ -13,37 +13,35 @@ export const FlatList = ({
     noDataMessage = 'No Data',
     renderHeader,
     nestedScrollEnabled = false,
+    onEndReached = () => {},
+    onEndReachedThreshold = .5,
     extraData
 }) => {
   return (
     <View style={{ flex: 1, ...styles }}	>
-        {
-            isLoading 
-                ? <View 
-                    style={{ 
-                        position: 'absolute', 
-                        top: 0, 
-                        bottom: 0, 
-                        right: 0, 
-                        left: 0, 
-                        justifyContent: 'center', 
-                        alignItems: 'center' 
-                    }}> 
-                        <ActivityIndicator/>
-                    </View> 
-                : null 
-        }
+ 
         {
             data.length > 0 || isLoading == true 
             ? (
                 <FList
                     data={data}
-                    keyExtractor={item => item.id}
+                    keyExtractor={(item, index) => index}
                     numColumns={numColumns}
                     showsVerticalScrollIndicator={false}
                     renderItem={({item, index}) => renderItem(item, index)}
                     ListHeaderComponent={renderHeader}
+                    ListFooterComponent={
+                        isLoading 
+                            ? <View>
+                                    <ActivityIndicator/>
+                                </View> 
+                            : null 
+                    }
                     nestedScrollEnabled={nestedScrollEnabled}
+                    onEndReached={onEndReached}
+                    onEndReachedThreshold={onEndReachedThreshold}
+                    initialNumToRender={10}
+                    removeClippedSubviews={true}
                     extraData
                 />
             )
