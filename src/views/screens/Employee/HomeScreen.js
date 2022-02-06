@@ -1,9 +1,9 @@
 import React, { useCallback, useRef, useEffect } from 'react'
-import { StyleSheet, View, TouchableOpacity, Image } from 'react-native'
+import { StyleSheet, View, TouchableOpacity } from 'react-native'
 import usePost from '../../../api/hooks/usePost'
 import { SafeAreaView, Container, Text, FlatList, BottomSheetModal } from '../../components/FiplyComponents'
 import SearchHeader from '../../components/headers/SearchHeader'
-import { FontAwesome5, FontAwesome, MaterialCommunityIcons  } from '@expo/vector-icons'
+import { FontAwesome5, FontAwesome  } from '@expo/vector-icons'
 import Colors from '../../../utils/Colors'
 import SampleData from '../../../utils/SampleData'
 import PostList from '../../components/lists/PostList'
@@ -67,7 +67,13 @@ const HomeScreen = ({navigation}) => {
             <Container style={{ paddingHorizontal: 0 }}>
                 <FlatList 
                     data={posts}
-                    renderItem={item => <PostList data={item} handleDotPress={handlePresentModalPress} />}
+                    renderItem={item => (
+                        <PostList
+                            data={item} 
+                            handleDotPress={handlePresentModalPress} 
+                            handleAvatarPress={(id) => navigation.navigate('ProfileScreen', {userId: id})}
+                        />)
+                    }
                     renderHeader={renderHeader()}
                     onEndReached={() => morePosts()}
                     onEndReachedThreshold={0.3}

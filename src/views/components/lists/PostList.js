@@ -4,18 +4,19 @@ import React, { memo } from 'react';
 import { FontAwesome5, FontAwesome, MaterialCommunityIcons  } from '@expo/vector-icons'
 import Colors from '../../../utils/Colors';
 
-const PostList = ({data, handleDotPress = () => {}}) => {
+const PostList = ({data, handleDotPress = () => {}, handleAvatarPress = () => {}}) => {
   return (
         <View style={postStyles.postContainer}>
             <View style={postStyles.postHeaderContainer}>
                 <View style={postStyles.postAuthorContainer} >
-                    <View style={postStyles.authorImgContainer}>
+                    <TouchableOpacity activeOpacity={.7} style={postStyles.authorImgContainer} onPress={() => handleAvatarPress(data.user_id)}>
                         <Image 
                             source={{ uri: data.avatar }} 
                             style={postStyles.authorImg}    
-                            resizeMode='contain'
+                            resizeMode='cover'
+                            resizeMethod='resize'
                         />
-                    </View>
+                    </TouchableOpacity>
 
                     <View style={{ flexDirection: 'row', justifyContent: 'space-evenly'}}>
                         <Text weight="medium" >{data.posted_by}</Text>

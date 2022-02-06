@@ -11,9 +11,9 @@ const useProfile = () => {
     const [contactInfo, setContactInfo] = useState({})    
     
 
-    const getUserInfo = async() => {
+    const getUserInfo = async(id = 'me') => {
         setLoading(true)
-        await api({token: user.token}).get('/users')
+        await api({token: user.token}).get(`/${id}`)
             .then(res => {
               let profileData = res.data.data
               let userData = {
@@ -23,7 +23,8 @@ const useProfile = () => {
                 description : profileData.description,
                 avatar      : profileData.avatar,
               }
-              setUser({...user, ...userData});
+              
+              if(id == 'me') setUser({...user, ...userData})
 
               setProfile({
                   fullname: profileData.fullname,

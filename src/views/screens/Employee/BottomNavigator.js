@@ -33,6 +33,8 @@ const BottomNavigator = ({navigation}) => {
 
     const handleSignoutPress = () => logout()
 
+    const noScreen = () => null
+
     return (
         <View style={{ flex: 1 }}>
 
@@ -68,8 +70,8 @@ const BottomNavigator = ({navigation}) => {
                 </Tab.Screen>
 
                 <Tab.Screen
-                    name={'ProfileScreen'}
-                    component={ProfileScreen}
+                    name={'NoScreen'}
+                    component={noScreen}
                     options={{ 
                         tabBarIcon: ({color}) => (
                             <View style={styles.profileIconStyle}>
@@ -87,6 +89,7 @@ const BottomNavigator = ({navigation}) => {
                     })}
                 >
                 </Tab.Screen>
+                
                 <Tab.Screen
                     name={'NotificationScreen'}
                     component={NotificationScreen}
@@ -121,7 +124,7 @@ const BottomNavigator = ({navigation}) => {
                             <View style={{ flex: 1 }}>
                                 <Text weight='medium' size={18} adjustsFontSizeToFit numberOfLines={1}>{user.fullname}</Text>
                                 <TouchableOpacity activeOpacity={.7} onPress={() => { 
-                                            navigation.navigate('ProfileScreen')
+                                            navigation.navigate('ProfileScreen', {userId: 'me'})
                                             handleClosePress()
                                         }}>
                                     <Text color={Colors.secondary}>See your profile</Text>

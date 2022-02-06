@@ -11,7 +11,8 @@ const ProfileHeader = ({data, onEditPress = () => {}}) => {
                 <Image
                     source={{uri: data.avatar}}
                     style={styles.img}
-                    resizeMode='contain'
+                    resizeMode='cover'
+                    resizeMethod='resize'
                 />
             </View>
             <TouchableOpacity onPress={onEditPress} style={styles.editIcon}>

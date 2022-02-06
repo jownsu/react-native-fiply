@@ -7,9 +7,9 @@ const useEducationalBackground = () => {
   const [loading, setLoading] = useState(false)
   const [educationalBackgrounds, setEducationalBackgrounds] = useState([])
 
-  const getEducationalBackgrounds = async() => {
+  const getEducationalBackgrounds = async(id = 'me') => {
     setLoading(true)
-    await api({token: user.token}).get('/users/educationalBackgrounds')
+    await api({token: user.token}).get(`/${id}/educationalBackgrounds`)
             .then(res => setEducationalBackgrounds(res.data.data))
             .catch(err => console.log(err))
             .finally(() => setLoading(false))

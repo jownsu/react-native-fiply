@@ -1,15 +1,14 @@
 import React, { useState, useEffect, useCallback, useRef }  from 'react'
-import { StyleSheet, View, TouchableOpacity, ScrollView, Image, RefreshControl, FlatList } from 'react-native'
-import { SafeAreaView, Text, Container, FlatList as FFlatList, BottomSheetModal } from '../../components/FiplyComponents'
+import { StyleSheet, View, TouchableOpacity, RefreshControl, FlatList } from 'react-native'
+import { Text, FlatList as FFlatList, BottomSheetModal } from '../../components/FiplyComponents'
 import Colors from '../../../utils/Colors'
 import { LinearGradient } from 'expo-linear-gradient'
-import { FontAwesome5, MaterialCommunityIcons, FontAwesome } from '@expo/vector-icons';
+import { FontAwesome5, FontAwesome } from '@expo/vector-icons';
 import ProfileHeader from '../../components/profile/ProfileHeader'
 import CardInfo from '../../components/profile/CardInfo'
 import TitleFilter from '../../components/headers/TitleFilter'
 import TopNavigation from '../../components/headers/TopNavigation'
 import PostFilterDialog from '../../components/dialog/PostFilterDialog'
-import SampleData from '../../../utils/SampleData'
 
 import useProfile from '../../../api/hooks/user/useProfile'
 import useExperience from '../../../api/hooks/user/useExperience'
@@ -17,14 +16,15 @@ import useEducationalBackground from '../../../api/hooks/user/useEducationalBack
 import usePost from '../../../api/hooks/usePost'
 import PostList from '../../components/lists/PostList'
 
-const ProfileScreen = ({navigation}) => {
+const ProfileScreen = ({navigation, route}) => {
 
+    const { userId } = route.params
     const [showModal, setShowModal] = useState(false)
     const [navIndex, setNavIndex] = useState(0)
     const { getUserInfo, profile, basicInfo, contactInfo, loading: profileLoading } = useProfile()
     const { getExperiences, experiences, loading : experienceLoading } = useExperience()
     const { getEducationalBackgrounds, educationalBackgrounds, loading: ebLoading } = useEducationalBackground()
-    const { posts, getPosts, nextPath, morePosts, loading: postLoading } = usePost()
+    const { posts, getPosts, morePosts, loading: postLoading } = usePost()
 
     const bottomSheetModalRef = useRef(null);
     const handlePresentModalPress = useCallback(() => {
@@ -32,7 +32,7 @@ const ProfileScreen = ({navigation}) => {
       }, []);
 
     useEffect(() => {
-        getUserInfo()
+        getUserInfo(userId)
     }, [])
     
     const renderList = (id) => {
@@ -163,7 +163,7 @@ const ProfileScreen = ({navigation}) => {
                                 setNavIndex(i)
                                 switch (i) {
                                     case 1:
-                                        getPosts('/users/posts')
+                                        getPosts('/posts', userId)
                                     case 2:
                                         getExperiences()                                
                                         break;

@@ -7,9 +7,9 @@ const useExperience = () => {
   const [loading, setLoading] = useState(false)
   const [experiences, setExperiences] = useState([])
 
-  const getExperiences = async() => {
+  const getExperiences = async(id = 'me') => {
     setLoading(true)
-    await api({token: user.token}).get('/users/experiences')
+    await api({token: user.token}).get(`/${id}/experiences`)
             .then(res => setExperiences(res.data.data))
             .catch(err => console.log(err))
             .finally(() => setLoading(false))

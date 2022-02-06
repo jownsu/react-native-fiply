@@ -8,6 +8,7 @@ import CreatePostScreen from '../views/screens/CreatePostScreen'
 import CreateQuestionnaireScreen from '../views/screens/CreateQuestionnaireScreen'
 import MyInterviewScreen from '../views/screens/MyInterviewScreen'
 import EditProfileScreen from '../views/screens/EditProfileScreen'
+import ProfileScreen from '../views/screens/Employee/ProfileScreen'
 
 const Stack = createStackNavigator();
 
@@ -22,6 +23,7 @@ const AppStack = () => {
             <Stack.Screen options={{ headerShown: false }} name={'MyInterviewScreen'} component={MyInterviewScreen}></Stack.Screen>
             <Stack.Screen options={{ headerShown: false }} name={'CreateQuestionnaireScreen'} component={CreateQuestionnaireScreen}></Stack.Screen>
             <Stack.Screen options={{ headerShown: false }} name={'EditProfileScreen'} component={EditProfileScreen}></Stack.Screen>
+            <Stack.Screen options={{ headerShown: false }} name={'ProfileScreen'} component={ProfileScreen}></Stack.Screen>
         </Stack.Navigator>
     )
 }
