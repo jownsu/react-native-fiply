@@ -4,7 +4,12 @@ import React, { memo } from 'react';
 import { FontAwesome5, FontAwesome, MaterialCommunityIcons  } from '@expo/vector-icons'
 import Colors from '../../../utils/Colors';
 
-const PostList = ({data, handleDotPress = () => {}, handleAvatarPress = () => {}}) => {
+const PostList = ({
+        data, 
+        handleDotPress = () => {}, 
+        handleAvatarPress = () => {}, 
+        onCommentPress = () => {}
+    }) => {
   return (
         <View style={postStyles.postContainer}>
             <View style={postStyles.postHeaderContainer}>
@@ -50,7 +55,7 @@ const PostList = ({data, handleDotPress = () => {}, handleAvatarPress = () => {}
                     <FontAwesome5 style={{ marginRight: 5 }} name="caret-up" size={21} color={Colors.black} />
                     <Text>Up</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={postStyles.postAction}>
+                <TouchableOpacity style={postStyles.postAction} onPress={() => onCommentPress(data.id)}>
                     <FontAwesome style={{ marginRight: 5 }} name="commenting" size={17} color={Colors.primary} />
                     <Text>Comment</Text>
                 </TouchableOpacity>

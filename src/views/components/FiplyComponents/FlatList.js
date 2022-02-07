@@ -18,7 +18,10 @@ export const FlatList = ({
     onEndReachedThreshold = .5,
     extraData,
     ListFooterComponent,
-    flatlistref = null
+    flatlistref = null,
+    maxToRenderPerBatch=10,
+    initialNumToRender=10,
+    windowSize=10,
 }) => {
   return (
     <View style={{ flex: 1, ...styles }}	>
@@ -29,7 +32,7 @@ export const FlatList = ({
                 <FList
                     ref={flatlistref}
                     data={data}
-                    keyExtractor={(item, index) => index}
+                    keyExtractor={(item) => item.id}
                     numColumns={numColumns}
                     showsVerticalScrollIndicator={false}
                     renderItem={({item, index}) => renderItem(item, index)}
@@ -45,14 +48,15 @@ export const FlatList = ({
                             }
                             {ListFooterComponent}
                         </View>
-
                     }
                     nestedScrollEnabled={nestedScrollEnabled}
                     onEndReached={onEndReached}
                     onEndReachedThreshold={onEndReachedThreshold}
-                    initialNumToRender={10}
+                    initialNumToRender={initialNumToRender}
+                    windowSize={windowSize}
                     removeClippedSubviews={true}
                     extraData
+                    maxToRenderPerBatch={maxToRenderPerBatch}
                 />
             )
             : (

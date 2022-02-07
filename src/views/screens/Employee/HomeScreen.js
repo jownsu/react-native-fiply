@@ -1,17 +1,20 @@
-import React, { useCallback, useRef, useEffect } from 'react'
+import React, { useCallback, useRef, useEffect, useState } from 'react'
 import { StyleSheet, View, TouchableOpacity } from 'react-native'
 import usePost from '../../../api/hooks/usePost'
+import useComment from '../../../api/hooks/useComment'
 import { SafeAreaView, Container, Text, FlatList, BottomSheetModal } from '../../components/FiplyComponents'
 import SearchHeader from '../../components/headers/SearchHeader'
 import { FontAwesome5, FontAwesome  } from '@expo/vector-icons'
 import Colors from '../../../utils/Colors'
-import SampleData from '../../../utils/SampleData'
 import PostList from '../../components/lists/PostList'
+import Comments from '../../components/modals/Comments'
 
 const HomeScreen = ({navigation}) => {
 
-    const { posts, getPosts, loading, morePosts } = usePost();
+    const { posts, getPosts, loading, morePosts } = usePost()
+    const { comments, getComments, resetComments, loading: commentLoading } = useComment()
 
+    const [showComment, setShowComment] = useState(false)
     const flatListRef = useRef(null)
 
     // bottom sheet reference
@@ -75,6 +78,10 @@ const HomeScreen = ({navigation}) => {
                             data={item} 
                             handleDotPress={handlePresentModalPress} 
                             handleAvatarPress={(id) => navigation.navigate('ProfileScreen', {userId: id})}
+                            onCommentPress={(id) => {
+                                getComments(id)
+                                setShowComment(true)
+                            }}
                         />)
                     }
                     renderHeader={renderHeader()}
@@ -107,6 +114,17 @@ const HomeScreen = ({navigation}) => {
                     }
                 />
             </Container>
+
+            <Comments 
+                data={comments}
+                visible={showComment}
+                onRequestClose={() => {
+                    setShowComment(false)
+                    resetComments()
+                }}
+                isLoading={commentLoading}
+                onSendPress={text => alert(text)}
+            />
 
             <BottomSheetModal 
                     bottomSheetModalRef={bottomSheetModalRef}

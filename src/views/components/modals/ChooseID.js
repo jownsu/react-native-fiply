@@ -4,7 +4,7 @@ import { Container, Text } from '../FiplyComponents'
 import Header from '../headers/Header'
 import RecommendedList from '../lists/RecommendedList'
 
-const ChooseID = ({visible, onBackPress}) => {
+const ChooseID = ({visible, onBackPress = () => {}}) => {
 
     const IdList = [
         {id: '1', name: 'UMID'},

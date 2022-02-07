@@ -9,11 +9,13 @@ import CardInfo from '../../components/profile/CardInfo'
 import TitleFilter from '../../components/headers/TitleFilter'
 import TopNavigation from '../../components/headers/TopNavigation'
 import PostFilterDialog from '../../components/dialog/PostFilterDialog'
+import Comments from '../../components/modals/Comments'
 
 import useProfile from '../../../api/hooks/user/useProfile'
 import useExperience from '../../../api/hooks/user/useExperience'
 import useEducationalBackground from '../../../api/hooks/user/useEducationalBackground'
 import usePost from '../../../api/hooks/usePost'
+import useComment from '../../../api/hooks/useComment'
 import PostList from '../../components/lists/PostList'
 
 const ProfileScreen = ({navigation, route}) => {
@@ -21,10 +23,12 @@ const ProfileScreen = ({navigation, route}) => {
     const { userId } = route.params
     const [showModal, setShowModal] = useState(false)
     const [navIndex, setNavIndex] = useState(0)
+    const [showComment, setShowComment] = useState(false)
     const { getUserInfo, profile, basicInfo, contactInfo, loading: profileLoading } = useProfile()
     const { getExperiences, experiences, loading : experienceLoading } = useExperience()
     const { getEducationalBackgrounds, educationalBackgrounds, loading: ebLoading } = useEducationalBackground()
     const { posts, getPosts, morePosts, loading: postLoading } = usePost()
+    const { comments, getComments, resetComments, loading: commentLoading } = useComment()
 
     const bottomSheetModalRef = useRef(null);
     const handlePresentModalPress = useCallback(() => {
@@ -67,7 +71,15 @@ const ProfileScreen = ({navigation, route}) => {
                         
                         <FFlatList
                             data={posts}
-                            renderItem={item => <PostList data={item} handleDotPress={handlePresentModalPress} />}
+                            renderItem={item => (
+                                <PostList 
+                                    data={item} 
+                                    handleDotPress={handlePresentModalPress} 
+                                    onCommentPress={(id) => {
+                                        getComments(id)
+                                        setShowComment(true)
+                                    }} 
+                                />)}
                             nestedScrollEnabled={true} 
                             onEndReached={() => morePosts()}
                             onEndReachedThreshold={0.2}
@@ -181,7 +193,16 @@ const ProfileScreen = ({navigation, route}) => {
                 }
             />
 
-                <BottomSheetModal 
+            <Comments 
+                data={comments}
+                visible={showComment}
+                onRequestClose={() => {
+                    setShowComment(false)
+                    resetComments()
+                }}
+                isLoading={commentLoading}
+            />
+            <BottomSheetModal 
                     bottomSheetModalRef={bottomSheetModalRef}
                     pointsSnap={[225]}
                 >
