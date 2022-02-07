@@ -2,6 +2,7 @@ import { StyleSheet, View, FlatList as FList, Image } from 'react-native'
 import React from 'react'
 import {ActivityIndicator} from '../FiplyComponents/ActivityIndicator'
 import {Text} from '../FiplyComponents/Text'
+import Colors from '../../../utils/Colors'
 
 
 export const FlatList = ({
@@ -15,7 +16,9 @@ export const FlatList = ({
     nestedScrollEnabled = false,
     onEndReached = () => {},
     onEndReachedThreshold = .5,
-    extraData
+    extraData,
+    ListFooterComponent,
+    flatlistref = null
 }) => {
   return (
     <View style={{ flex: 1, ...styles }}	>
@@ -24,6 +27,7 @@ export const FlatList = ({
             data.length > 0 || isLoading == true 
             ? (
                 <FList
+                    ref={flatlistref}
                     data={data}
                     keyExtractor={(item, index) => index}
                     numColumns={numColumns}
@@ -31,11 +35,17 @@ export const FlatList = ({
                     renderItem={({item, index}) => renderItem(item, index)}
                     ListHeaderComponent={renderHeader}
                     ListFooterComponent={
-                        isLoading 
+                        <View>
+                            {
+                            isLoading 
                             ? <View>
                                     <ActivityIndicator/>
                                 </View> 
                             : null 
+                            }
+                            {ListFooterComponent}
+                        </View>
+
                     }
                     nestedScrollEnabled={nestedScrollEnabled}
                     onEndReached={onEndReached}

@@ -12,6 +12,8 @@ const HomeScreen = ({navigation}) => {
 
     const { posts, getPosts, loading, morePosts } = usePost();
 
+    const flatListRef = useRef(null)
+
     // bottom sheet reference
     const bottomSheetModalRef = useRef(null);
 
@@ -65,7 +67,8 @@ const HomeScreen = ({navigation}) => {
                 }
             /> 
             <Container style={{ paddingHorizontal: 0 }}>
-                <FlatList 
+                <FlatList
+                    flatlistref={flatListRef} 
                     data={posts}
                     renderItem={item => (
                         <PostList
@@ -75,9 +78,33 @@ const HomeScreen = ({navigation}) => {
                         />)
                     }
                     renderHeader={renderHeader()}
-                    onEndReached={() => morePosts()}
+                    onEndReached={() => {
+                        if(posts.length < 30){
+                            morePosts()
+                        }
+                    }}
                     onEndReachedThreshold={0.3}
                     isLoading={loading}
+                    ListFooterComponent={
+                        (posts.length >= 30) 
+                            ? 
+                            <TouchableOpacity 
+                                onPress={() => {
+                                        morePosts(true)
+                                        flatListRef.current.scrollToOffset({animated: true, offset: 0})
+                                    }}>
+                                <Text 
+                                    weight='medium' 
+                                    color={Colors.secondary} 
+                                    center
+                                    style={{ marginTop: 10, marginBottom: 20 }}
+                                >
+                                  Load More
+                              </Text>            
+                            </TouchableOpacity>
+
+                            : null 
+                    }
                 />
             </Container>
 

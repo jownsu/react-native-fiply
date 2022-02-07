@@ -19,12 +19,14 @@ const usePost = () => {
             .finally(() => setLoading(false))
     }
 
-    const morePosts = async() => {
+    const morePosts = async(reset = false) => {
         if(nextPath){
             setLoading(true)
             await api({token: user.token}).get(nextPath)
                 .then(res => {
-                    setPosts([...posts, ...res.data.data])
+                    reset 
+                        ? setPosts(res.data.data)
+                        : setPosts([...posts, ...res.data.data])
                     setNextPath(res.data.links.next)
                 })
                 .catch(err => console.log(err))
