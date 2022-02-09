@@ -32,10 +32,46 @@ const usePost = () => {
                 .catch(err => console.log(err))
                 .finally(() => setLoading(false))
         }
-
     }
 
-    return {posts, getPosts, morePosts, loading};
+    const createPost = async(content = '', image = null) => {
+        setLoading(true)
+        await api({token: user.token}).post('/posts', {content, image})
+            .then(res => setPosts([res.data.data, ...posts]))
+            .catch(err => console.log(err))
+            .finally(() => setLoading(false))
+    }
+
+    const updatePost = async(id, data) => {
+        setLoading(true)
+        await api({token: user.token}).post(`/posts/${id}`, {...data, _method: 'PUT'})
+            .then(res => {
+                setPosts(posts.map(item => {
+                    if(item.id == res.data.data.id){
+                        return {...item, ...res.data.data}
+                    }
+                    return item
+                }))
+            })
+            .catch(err => console.log(err))
+            .finally(() => setLoading(false))
+    }
+
+    const deletePost = async(id) => {
+        setLoading(true)
+        await api({token: user.token}).delete(`/posts/${id}`)
+            .then(res => {
+                console.log(res.data.data)
+                setPosts(posts.filter(item => item.id != id))
+            })
+            .catch(err => console.log(err))
+            .finally(() => setLoading(false))
+    }
+
+    
+
+
+    return {posts, getPosts, morePosts, createPost, updatePost, deletePost, loading};
 };
 
 export default usePost;

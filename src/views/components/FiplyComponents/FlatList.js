@@ -21,7 +21,6 @@ export const FlatList = ({
     flatlistref = null,
     maxToRenderPerBatch=10,
     initialNumToRender=10,
-    windowSize=10,
 }) => {
   return (
     <View style={{ flex: 1, ...styles }}	>
@@ -53,9 +52,7 @@ export const FlatList = ({
                     onEndReached={onEndReached}
                     onEndReachedThreshold={onEndReachedThreshold}
                     initialNumToRender={initialNumToRender}
-                    windowSize={windowSize}
-                    removeClippedSubviews={true}
-                    extraData
+                    extraData={extraData}
                     maxToRenderPerBatch={maxToRenderPerBatch}
                 />
             )

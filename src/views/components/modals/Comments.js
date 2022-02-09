@@ -21,8 +21,13 @@ const Comments = ({
     const renderItem = (item) => {
         return (
             <View style={styles.listContainer}>
-                <Avatar.Image size={40} source={{ uri: item.avatar }} />
+                <Avatar.Image 
+                    size={40} 
+                    source={{ uri: item.avatar }} 
+                    backgroundColor={Colors.light}    
+                />
                 <View style={styles.commentContainer}>
+                    <Text weight='medium' numberOfLines={1} adjustsFontSizeToFit>{item.commented_by}</Text>
                     <Text>{item.content}</Text>
                 </View>
             </View>
@@ -58,7 +63,10 @@ const Comments = ({
                     ? <TxtInput.Icon 
                             name='send' 
                             color={Colors.primary}
-                            onPress={() => onSendPress(txtComment)}
+                            onPress={() => {
+                                onSendPress(txtComment)
+                                setTxtComment('')
+                            }}
                         /> 
                     : null }
                 roundness={15}
@@ -84,7 +92,8 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.lighter,
         borderWidth: 1,
         borderColor: Colors.light,
-        padding: 10,
+        paddingHorizontal: 10,
+        paddingVertical: 5,
         flexGrow: 1,
         flex: 1,
         marginLeft: 10,

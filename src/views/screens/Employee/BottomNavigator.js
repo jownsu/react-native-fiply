@@ -1,6 +1,7 @@
 import React, { useRef, useCallback, useContext } from 'react'
 import { StyleSheet, View, TouchableOpacity, Image } from 'react-native'
 import { Text } from '../../components/FiplyComponents'
+import { Avatar } from 'react-native-paper'
 import { AuthContext } from '../../../providers/AuthProvider'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { FontAwesome5, MaterialIcons } from '@expo/vector-icons'
@@ -11,7 +12,6 @@ import { BottomSheetModal } from '../../components/FiplyComponents'
 
 import HomeScreen from './HomeScreen'
 import CommunityScreen from './CommunityScreen'
-import ProfileScreen from './ProfileScreen'
 import NotificationScreen from './NotificationScreen'
 import JobsScreen from './JobsScreen'
 
@@ -119,14 +119,16 @@ const BottomNavigator = ({navigation}) => {
                     <View style={styles.btmHeaderContainer}>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }} >
                             <View style={styles.imgContainer}>
-                                <Image style={styles.img} source={{ uri: user.avatar }} resizeMode='contain'/>
+                                <Avatar.Image size={50} source={{ uri: user.avatar }} backgroundColor={Colors.light}/>
                             </View>
                             <View style={{ flex: 1 }}>
                                 <Text weight='medium' size={18} adjustsFontSizeToFit numberOfLines={1}>{user.fullname}</Text>
-                                <TouchableOpacity activeOpacity={.7} onPress={() => { 
-                                            navigation.navigate('ProfileScreen', {userId: 'me'})
-                                            handleClosePress()
-                                        }}>
+                                <TouchableOpacity 
+                                    activeOpacity={.7}
+                                    onPress={() => { 
+                                        navigation.navigate('ProfileScreen', {userId: 'me'})
+                                        handleClosePress()
+                                    }}>
                                     <Text color={Colors.secondary}>See your profile</Text>
                                 </TouchableOpacity>
                             </View>

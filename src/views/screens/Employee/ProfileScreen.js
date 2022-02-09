@@ -10,6 +10,8 @@ import TitleFilter from '../../components/headers/TitleFilter'
 import TopNavigation from '../../components/headers/TopNavigation'
 import PostFilterDialog from '../../components/dialog/PostFilterDialog'
 import Comments from '../../components/modals/Comments'
+import {default as EditPost} from '../../components/modals/CreatePost'
+import {default as DeleteConfirmation} from '../../components/dialog/Confirmation'
 
 import useProfile from '../../../api/hooks/user/useProfile'
 import useExperience from '../../../api/hooks/user/useExperience'
@@ -24,16 +26,24 @@ const ProfileScreen = ({navigation, route}) => {
     const [showModal, setShowModal] = useState(false)
     const [navIndex, setNavIndex] = useState(0)
     const [showComment, setShowComment] = useState(false)
+    const [showCreatePost, setShowCreatePost] = useState(false);
+    const [selectedPost, setSelectedPost] = useState({content: ''})
+    const [showConfirmation, setShowConfirmation] = useState(false)
+
     const { getUserInfo, profile, basicInfo, contactInfo, loading: profileLoading } = useProfile()
     const { getExperiences, experiences, loading : experienceLoading } = useExperience()
     const { getEducationalBackgrounds, educationalBackgrounds, loading: ebLoading } = useEducationalBackground()
-    const { posts, getPosts, morePosts, loading: postLoading } = usePost()
+    const { posts, getPosts, morePosts, updatePost, deletePost, loading: postLoading } = usePost()
     const { comments, getComments, resetComments, loading: commentLoading } = useComment()
+
 
     const bottomSheetModalRef = useRef(null);
     const handlePresentModalPress = useCallback(() => {
         bottomSheetModalRef.current?.present();
-      }, []);
+    }, []);
+
+    const handleClosePress = () => bottomSheetModalRef.current.close()
+
 
     useEffect(() => {
         getUserInfo(userId)
@@ -74,7 +84,10 @@ const ProfileScreen = ({navigation, route}) => {
                             renderItem={item => (
                                 <PostList 
                                     data={item} 
-                                    handleDotPress={handlePresentModalPress} 
+                                    handleDotPress={(postItem) => {
+                                        setSelectedPost(postItem)
+                                        handlePresentModalPress()
+                                    }} 
                                     onCommentPress={(id) => {
                                         getComments(id)
                                         setShowComment(true)
@@ -193,6 +206,9 @@ const ProfileScreen = ({navigation, route}) => {
                 }
             />
 
+            
+            {/* MODALS */}
+
             <Comments 
                 data={comments}
                 visible={showComment}
@@ -202,31 +218,66 @@ const ProfileScreen = ({navigation, route}) => {
                 }}
                 isLoading={commentLoading}
             />
+
+            <EditPost
+                visible={showCreatePost}
+                edit
+                onEditPress={(text) => {
+                    updatePost(selectedPost.id, {content: text})
+                    setShowCreatePost(false)
+                }}
+                data={selectedPost}
+                onRequestClose={() => {
+                    setShowCreatePost(false)
+                    setSelectedPost({})
+                }}
+            />
+
+            <DeleteConfirmation
+                visible={showConfirmation}
+                dialogText='Are you sure to delete this post? It cannot be undone.'
+                onDismiss={() => setShowConfirmation(false)}
+                onOkPress={() => {
+                    deletePost(selectedPost.id)
+                    setShowConfirmation(false)
+                }}
+            />
             <BottomSheetModal 
                     bottomSheetModalRef={bottomSheetModalRef}
                     pointsSnap={[225]}
                 >
                     <View style={styles.btmSheetContainer}>
-                        <TouchableOpacity style={styles.btmActionContainer}>
-                            <FontAwesome name="bookmark" size={28} color={Colors.black} style={styles.btmActionBtn}/>
-                            <Text weight='medium' color={Colors.black}>Bookmark</Text>
+                        <TouchableOpacity 
+                            style={styles.btmActionContainer} 
+                            onPress={() => {
+                                setShowCreatePost(true)
+                                handleClosePress()
+                            }
+                        }>
+                            <FontAwesome5 name="edit" size={23} color={Colors.black} style={styles.btmActionBtn}/>
+                            <Text weight='medium' color={Colors.black}>Edit Post</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity 
+                            style={styles.btmActionContainer}
+                            onPress={() => {
+                                setShowConfirmation(true)
+                                handleClosePress()
+                            }}    
+                        >
+                            <FontAwesome name="trash-o" size={29} color={Colors.black} style={styles.btmActionBtn}/>
+                            <Text weight='medium' color={Colors.black}>Delete Post</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.btmActionContainer}>
-                            <FontAwesome name="share-alt" size={28} color={Colors.black} style={styles.btmActionBtn}/>
-                            <Text weight='medium' color={Colors.black}>Share Via</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.btmActionContainer}>
-                            <FontAwesome5 name="font-awesome-flag" size={28} color={Colors.black} style={styles.btmActionBtn}/>
+                            <FontAwesome5 name="font-awesome-flag" size={23} color={Colors.black} style={styles.btmActionBtn}/>
                             <Text weight='medium' color={Colors.black}>Report this post</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.btmActionContainer}>
-                            <FontAwesome name="tasks" size={28} color={Colors.black} style={styles.btmActionBtn}/>
+                            <FontAwesome name="tasks" size={23} color={Colors.black} style={styles.btmActionBtn}/>
                             <Text weight='medium' color={Colors.black}>Improve my feed</Text>
                         </TouchableOpacity>
                     </View>
             </BottomSheetModal>
         </View>
-        
     )
 }
 

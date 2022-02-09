@@ -8,21 +8,25 @@ import { FontAwesome5, FontAwesome  } from '@expo/vector-icons'
 import Colors from '../../../utils/Colors'
 import PostList from '../../components/lists/PostList'
 import Comments from '../../components/modals/Comments'
+import CreatePost from '../../components/modals/CreatePost'
 
 const HomeScreen = ({navigation}) => {
 
-    const { posts, getPosts, loading, morePosts } = usePost()
-    const { comments, getComments, resetComments, loading: commentLoading } = useComment()
+    const { posts, getPosts, loading, morePosts, createPost } = usePost()
+    const { comments, getComments, resetComments, createComment, loading: commentLoading } = useComment()
 
     const [showComment, setShowComment] = useState(false)
+    const [showCreatePost, setShowCreatePost] = useState(false);
     const flatListRef = useRef(null)
 
     // bottom sheet reference
     const bottomSheetModalRef = useRef(null);
 
     const handlePresentModalPress = useCallback(() => {
-    bottomSheetModalRef.current?.present();
-  }, []);
+        bottomSheetModalRef.current?.present();
+    }, []);
+
+    const handleClosePress = () => bottomSheetRef.current.close()
 
 //   const handleSheetChanges = useCallback((index) => {
 //     console.log('handleSheetChanges', index);
@@ -32,7 +36,7 @@ const HomeScreen = ({navigation}) => {
 
     const renderHeader = () => (
         <View style={createPostySTyles.createPostContainer}>
-            <TouchableOpacity activeOpacity={.5} style={createPostySTyles.textInputContainer} onPress={() => navigation.push('CreatePostScreen')}>
+            <TouchableOpacity activeOpacity={.5} style={createPostySTyles.textInputContainer} onPress={() => setShowCreatePost(true)}>
                 <Text>Create a post</Text>
             </TouchableOpacity>
 
@@ -82,8 +86,10 @@ const HomeScreen = ({navigation}) => {
                                 getComments(id)
                                 setShowComment(true)
                             }}
-                        />)
+                        />
+                    )
                     }
+                    extraData={loading}
                     renderHeader={renderHeader()}
                     onEndReached={() => {
                         if(posts.length < 30){
@@ -95,21 +101,20 @@ const HomeScreen = ({navigation}) => {
                     ListFooterComponent={
                         (posts.length >= 30) 
                             ? 
-                            <TouchableOpacity 
-                                onPress={() => {
-                                        morePosts(true)
-                                        flatListRef.current.scrollToOffset({animated: true, offset: 0})
-                                    }}>
-                                <Text 
-                                    weight='medium' 
-                                    color={Colors.secondary} 
-                                    center
-                                    style={{ marginTop: 10, marginBottom: 20 }}
-                                >
-                                  Load More
-                              </Text>            
-                            </TouchableOpacity>
-
+                                <TouchableOpacity 
+                                    onPress={() => {
+                                            morePosts(true)
+                                            flatListRef.current.scrollToOffset({animated: true, offset: 0})
+                                        }}>
+                                    <Text 
+                                        weight='medium' 
+                                        color={Colors.secondary} 
+                                        center
+                                        style={{ marginTop: 10, marginBottom: 20 }}
+                                    >
+                                    Load More
+                                </Text>            
+                                </TouchableOpacity>
                             : null 
                     }
                 />
@@ -123,7 +128,16 @@ const HomeScreen = ({navigation}) => {
                     resetComments()
                 }}
                 isLoading={commentLoading}
-                onSendPress={text => alert(text)}
+                onSendPress={text => createComment(text)}
+            />
+
+            <CreatePost
+                visible={showCreatePost}
+                onPostPress={text => {
+                    createPost(text)
+                    setShowCreatePost(false)
+                }}
+                onRequestClose={() => setShowCreatePost(false)}
             />
 
             <BottomSheetModal 

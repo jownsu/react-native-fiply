@@ -1,9 +1,10 @@
 import { StyleSheet, View, Image, TouchableOpacity } from 'react-native'
 import { Text } from '../FiplyComponents'
 import React, { memo } from 'react';
+import { Avatar } from 'react-native-paper'
 import { FontAwesome5, FontAwesome, MaterialCommunityIcons  } from '@expo/vector-icons'
 import Colors from '../../../utils/Colors';
-
+import FastImage from 'react-native-fast-image';
 const PostList = ({
         data, 
         handleDotPress = () => {}, 
@@ -15,24 +16,22 @@ const PostList = ({
             <View style={postStyles.postHeaderContainer}>
                 <View style={postStyles.postAuthorContainer} >
                     <TouchableOpacity activeOpacity={.7} style={postStyles.authorImgContainer} onPress={() => handleAvatarPress(data.user_id)}>
-                        <Image 
-                            source={{ uri: data.avatar }} 
-                            style={postStyles.authorImg}    
-                            resizeMode='cover'
-                            resizeMethod='resize'
+                        <Avatar.Image 
+                            size={42}
+                            source={{ uri: data.avatar }}
+                            backgroundColor={Colors.light}
                         />
                     </TouchableOpacity>
 
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-evenly'}}>
-                        <Text weight="medium" >{data.posted_by}</Text>
-                        <Text>{'\u30FB'}</Text>
+                    <View style={{ flex: 1}}>
+                        <Text weight="medium">{data.posted_by}</Text>
                         <Text>{data.date}</Text>
                     </View>
-                </View>
-
-                <TouchableOpacity onPress={handleDotPress}>
+                    
+                <TouchableOpacity onPress={() => handleDotPress(data)}>
                     <MaterialCommunityIcons name="dots-horizontal" size={24} color={Colors.black} />
                 </TouchableOpacity>
+                </View>
             </View>
 
             <View style={postStyles.postBodyContainer}>
@@ -45,7 +44,6 @@ const PostList = ({
                                 style={postStyles.postImg} 
                             />
                         : null
-                    
                 }
 
             </View>
@@ -87,31 +85,22 @@ const postStyles = StyleSheet.create({
     postHeaderContainer:{
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
     },
     postAuthorContainer:{
         flexDirection: 'row',
         alignItems: 'center'
     },
     authorImgContainer:{
-        borderWidth: 1,
-        borderColor: Colors.grey,
-        justifyContent: 'center',
-        alignContent: 'center',
         marginRight: 10,
-        borderRadius: 100,
-        overflow: 'hidden'
-    },
-    authorImg:{
-        height: 40,
-        width: 40,
     },
     postBodyContainer:{
         marginVertical: 10
     },
     postImg:{
-        width: '100%',
-        marginVertical: 7
+        marginVertical: 7,
+        borderWidth: 1,
+        height: 250
     },
     postFooterContainer:{
         flexDirection: 'row',
@@ -119,7 +108,7 @@ const postStyles = StyleSheet.create({
         justifyContent: 'space-evenly',
         borderTopWidth: 1,
         borderColor: Colors.light,
-        paddingVertical: 5
+        paddingVertical: 7
     },
     postAction:{
         flexDirection: 'row',

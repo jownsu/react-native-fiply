@@ -1,5 +1,6 @@
 import React from 'react'
 import { StyleSheet, View, Image, TouchableOpacity } from 'react-native'
+import { Avatar } from 'react-native-paper'
 import { Text } from '../FiplyComponents'
 import Colors from '../../../utils/Colors'
 import { FontAwesome } from '@expo/vector-icons'
@@ -8,11 +9,10 @@ const ProfileHeader = ({data, onEditPress = () => {}}) => {
     return (
         <View style={ styles.container}>
             <View style={styles.imgContainer}>
-                <Image
-                    source={{uri: data.avatar}}
-                    style={styles.img}
-                    resizeMode='cover'
-                    resizeMethod='resize'
+                <Avatar.Image 
+                    size={110}
+                    source={{ uri: data.avatar }}
+                    backgroundColor={Colors.light}
                 />
             </View>
             <TouchableOpacity onPress={onEditPress} style={styles.editIcon}>
@@ -53,10 +53,6 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top: -50,
         alignSelf: 'center',
-    },
-    img:{
-        height: 100,
-        width: 100
     },
     editIcon:{
         position: 'absolute',
