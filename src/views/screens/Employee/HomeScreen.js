@@ -133,8 +133,8 @@ const HomeScreen = ({navigation}) => {
 
             <CreatePost
                 visible={showCreatePost}
-                onPostPress={text => {
-                    createPost(text)
+                onPostPress={postData => {
+                    createPost(postData)
                     setShowCreatePost(false)
                 }}
                 onRequestClose={() => setShowCreatePost(false)}

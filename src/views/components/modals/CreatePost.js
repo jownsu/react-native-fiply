@@ -1,11 +1,12 @@
-import { StyleSheet, View, TextInput, TouchableOpacity, Modal } from 'react-native'
+import { StyleSheet, View, TextInput, TouchableOpacity, Modal, Image } from 'react-native'
 import React, { useState, useContext, useEffect } from 'react'
 import { Text, Container, Dropdown } from '../FiplyComponents'
 import Header from '../headers/Header'
 import Colors from '../../../utils/Colors'
 import { FontAwesome5 } from '@expo/vector-icons'
-import { Avatar } from 'react-native-paper'
+import { Avatar, ProgressBar } from 'react-native-paper'
 import { AuthContext } from '../../../providers/AuthProvider'
+import usePickImage from '../../../utils/usePIckImage'
 
 const CreatePost = ({
         visible, 
@@ -19,6 +20,23 @@ const CreatePost = ({
   const [postStatus, setPostStatus] = useState('Public')
   const [postText, setPostText] = useState('')
   const { user } = useContext(AuthContext)
+  //require('../../../assets/img/test.jpg')
+  const { pickImage, pickUri, setPickUri } = usePickImage()
+
+  const handleCreatePostPress = () => {
+    onPostPress({content: postText, image: pickUri})
+    resetStates()
+  }
+
+  const handleEditPostPress = () => {
+    onEditPress({content: postText, image: pickUri})
+    resetStates()
+  }
+
+  const resetStates = () => {
+    setPostText('')
+    setPickUri('')
+  }
 
   useEffect(() => {
     setPostText(data.content)
@@ -38,7 +56,7 @@ const CreatePost = ({
                 ? 
                   <TouchableOpacity
                     activeOpacity={.7}
-                    onPress={() => onEditPress(postText)}
+                    onPress={() => handleEditPostPress()}
                     disabled={!postText}
                   >
                     <Text weight='medium' color={postText ? Colors.secondary : Colors.black}>EDIT</Text>
@@ -46,7 +64,7 @@ const CreatePost = ({
                 :  
                   <TouchableOpacity
                     activeOpacity={.7}
-                    onPress={() => onPostPress(postText)}
+                    onPress={() => handleCreatePostPress()}
                     disabled={!postText}
                   >
                     <Text weight='medium' color={postText ? Colors.secondary : Colors.black}>POST</Text>
@@ -88,8 +106,21 @@ const CreatePost = ({
                       placeholder='What do you want to discuss?'
                     />
               </View>
+
+              {
+                pickUri 
+                  ? <View style={styles.uploadImgContainer}>
+                      {/* <ProgressBar indeterminate color={Colors.primary} visible={isUploading} /> */}
+                      <Image 
+                        source={{ uri: pickUri }}
+                        style={styles.uploadImg}
+                      />
+                    </View>
+                  : null
+              }
+
               <View style={styles.footerContainer}>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => pickImage()}>
                   <FontAwesome5 name="image" size={24} color={Colors.secondary} />
                 </TouchableOpacity>
                 <TouchableOpacity>
@@ -152,5 +183,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-evenly'
+  },
+  uploadImgContainer:{
+    flex: 1
+  },
+  uploadImg:{
+    height: '100%',
+    width: '100%'
   }
 });

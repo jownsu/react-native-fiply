@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react'
 import { AuthContext } from '../../providers/AuthProvider'
-import api from '../api';
+import api from '../api'
+import mime from 'mime'
 
 const usePost = () => {
     const { user } = useContext(AuthContext)
@@ -34,17 +35,46 @@ const usePost = () => {
         }
     }
 
-    const createPost = async(content = '', image = null) => {
+    const createPost = async(postData) => {
+        //postData = content, image
         setLoading(true)
-        await api({token: user.token}).post('/posts', {content, image})
+        let fd = new FormData()
+
+        if(postData.image){
+            const imageUri = "file:///" + postData.image.split("file:/").join("")
+            fd.append('image', {
+                uri: imageUri,
+                type: mime.getType(imageUri),
+                name: imageUri.split("/").pop()
+            })
+        }
+
+        fd.append('content', postData.content)
+
+
+        await api({token: user.token}).post('/posts', fd)
             .then(res => setPosts([res.data.data, ...posts]))
             .catch(err => console.log(err))
             .finally(() => setLoading(false))
     }
 
-    const updatePost = async(id, data) => {
+    const updatePost = async(id, postData) => {
         setLoading(true)
-        await api({token: user.token}).post(`/posts/${id}`, {...data, _method: 'PUT'})
+        const fd = new FormData()
+
+        if(postData.image){
+            const imageUri = "file:///" + postData.image.split("file:/").join("")
+            fd.append('image', {
+                uri: imageUri,
+                type: mime.getType(imageUri),
+                name: imageUri.split("/").pop()
+            })
+        }
+
+        fd.append('content', postData.content)
+        fd.append('_method', 'PUT')
+        
+        await api({token: user.token}).post(`/posts/${id}`, fd)
             .then(res => {
                 setPosts(posts.map(item => {
                     if(item.id == res.data.data.id){

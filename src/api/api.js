@@ -5,13 +5,14 @@ import config from "./config"
 const api = ({token = null} = {}) => {
 
     const api = axios.create({
-        baseURL: config.api
+        baseURL: config.api,
     })
 
     if(token){
         api.defaults.headers.common['Authorization'] = `Bearer ${token}`
     }
 
+    
     api.interceptors.response.use(response => response, error => {
 
         if(error.response.status == 401){

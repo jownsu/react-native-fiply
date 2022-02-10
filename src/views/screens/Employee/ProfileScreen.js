@@ -34,7 +34,7 @@ const ProfileScreen = ({navigation, route}) => {
     const { getExperiences, experiences, loading : experienceLoading } = useExperience()
     const { getEducationalBackgrounds, educationalBackgrounds, loading: ebLoading } = useEducationalBackground()
     const { posts, getPosts, morePosts, updatePost, deletePost, loading: postLoading } = usePost()
-    const { comments, getComments, resetComments, loading: commentLoading } = useComment()
+    const { comments, getComments, resetComments, createComment, loading: commentLoading } = useComment()
 
 
     const bottomSheetModalRef = useRef(null);
@@ -217,13 +217,14 @@ const ProfileScreen = ({navigation, route}) => {
                     resetComments()
                 }}
                 isLoading={commentLoading}
+                onSendPress={text => createComment(text)}
             />
 
             <EditPost
                 visible={showCreatePost}
                 edit
-                onEditPress={(text) => {
-                    updatePost(selectedPost.id, {content: text})
+                onEditPress={(postData) => {
+                    updatePost(selectedPost.id, postData)
                     setShowCreatePost(false)
                 }}
                 data={selectedPost}
