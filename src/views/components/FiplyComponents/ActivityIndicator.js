@@ -3,10 +3,10 @@ import React from 'react'
 import { ActivityIndicator as AI } from 'react-native-paper'
 import Colors from '../../../utils/Colors'
 
-export const ActivityIndicator = () => {
+export const ActivityIndicator = ({visible = false}) => {
   return (
       <AI
-          animating={true}
+          animating={visible}
           size={32}
           color={Colors.secondary}
           style={styles.loadingStyle}

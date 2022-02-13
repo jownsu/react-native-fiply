@@ -4,8 +4,7 @@ import React, { memo } from 'react';
 import { Avatar } from 'react-native-paper'
 import { FontAwesome5, FontAwesome, MaterialCommunityIcons  } from '@expo/vector-icons'
 import Colors from '../../../utils/Colors';
-import FastImage from 'react-native-fast-image';
-const PostList = ({
+const PostItem = memo(({
         data, 
         handleDotPress = () => {}, 
         handleAvatarPress = () => {}, 
@@ -34,43 +33,39 @@ const PostList = ({
                 </View>
             </View>
 
-            <View style={postStyles.postBodyContainer}>
-                <Text>{data.content}</Text>
-
-                {
-                    data.image 
-                        ?   <Image 
-                                source={{ uri: data.image }}
-                                style={postStyles.postImg} 
-                            />
-                        : null
-                }
-
-            </View>
+            <Text style={postStyles.content}>{data.content}</Text>
+            {
+                data.image 
+                    ?   <Image 
+                            source={{ uri: data.image }}
+                            style={postStyles.postImg} 
+                            resizeMethod='resize'
+                        />
+                    : null
+            }
 
             <View style={postStyles.postFooterContainer}>
                 <TouchableOpacity style={postStyles.postAction}>
-                    <FontAwesome5 style={{ marginRight: 5 }} name="caret-up" size={21} color={Colors.black} />
+                    <FontAwesome5 style={postStyles.icon} name="caret-up" size={21} color={Colors.black} />
                     <Text>Up</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={postStyles.postAction} onPress={() => onCommentPress(data.id)}>
-                    <FontAwesome style={{ marginRight: 5 }} name="commenting" size={17} color={Colors.primary} />
+                    <FontAwesome style={postStyles.icon} name="commenting" size={17} color={Colors.primary} />
                     <Text>Comment</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={postStyles.postAction}>
-                    <FontAwesome style={{ marginRight: 5 }} name="share" size={17} color={Colors.secondary} />
+                    <FontAwesome style={postStyles.icon} name="share" size={17} color={Colors.secondary} />
                     <Text>Share</Text>
                 </TouchableOpacity>
-                {/* <TouchableOpacity style={postStyles.postAction}>
-                    <FontAwesome style={{ marginRight: 5 }} name="paper-plane" size={17} color={Colors.secondary} />
-                    <Text>Send</Text>
-                </TouchableOpacity> */}
             </View>
         </View>
   );
-};
+}, (prevProps, nextProps) => {
+    if (prevProps.id == nextProps.id) return true;
+    return false;
+  });
 
-export default memo(PostList);
+export default PostItem;
 
 const postStyles = StyleSheet.create({
     postContainer:{
@@ -99,8 +94,7 @@ const postStyles = StyleSheet.create({
     },
     postImg:{
         marginVertical: 7,
-        borderWidth: 1,
-        height: 250
+        height: 250,
     },
     postFooterContainer:{
         flexDirection: 'row',
@@ -115,4 +109,10 @@ const postStyles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center'
     },
+    icon:{
+        marginRight: 5
+    },
+    content:{
+        marginVertical: 10
+    }
 })

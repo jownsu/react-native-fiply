@@ -33,7 +33,6 @@ export const FlatList = ({
                     data={data}
                     keyExtractor={(item) => item.id}
                     numColumns={numColumns}
-                    showsVerticalScrollIndicator={false}
                     renderItem={({item, index}) => renderItem(item, index)}
                     ListHeaderComponent={renderHeader}
                     ListFooterComponent={
@@ -41,7 +40,7 @@ export const FlatList = ({
                             {
                             isLoading 
                             ? <View>
-                                    <ActivityIndicator/>
+                                    <ActivityIndicator visible={true}/>
                                 </View> 
                             : null 
                             }
@@ -51,8 +50,9 @@ export const FlatList = ({
                     nestedScrollEnabled={nestedScrollEnabled}
                     onEndReached={onEndReached}
                     onEndReachedThreshold={onEndReachedThreshold}
-                    initialNumToRender={initialNumToRender}
                     extraData={extraData}
+                    showsVerticalScrollIndicator={false}
+                    initialNumToRender={initialNumToRender}
                     maxToRenderPerBatch={maxToRenderPerBatch}
                 />
             )

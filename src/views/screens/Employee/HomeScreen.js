@@ -1,12 +1,13 @@
-import React, { useCallback, useRef, useEffect, useState } from 'react'
-import { StyleSheet, View, TouchableOpacity } from 'react-native'
+import React, { useCallback, useRef, useEffect, useState, memo, useMemo } from 'react'
+import { StyleSheet, View, TouchableOpacity, FlatList } from 'react-native'
 import usePost from '../../../api/hooks/usePost'
 import useComment from '../../../api/hooks/useComment'
-import { SafeAreaView, Container, Text, FlatList, BottomSheetModal } from '../../components/FiplyComponents'
+import { SafeAreaView, Container, Text, BottomSheetModal, ActivityIndicator } from '../../components/FiplyComponents'
+import NoData from '../../components/NoData'
 import SearchHeader from '../../components/headers/SearchHeader'
 import { FontAwesome5, FontAwesome  } from '@expo/vector-icons'
 import Colors from '../../../utils/Colors'
-import PostList from '../../components/lists/PostList'
+import PostItem from '../../components/lists/PostItem'
 import Comments from '../../components/modals/Comments'
 import CreatePost from '../../components/modals/CreatePost'
 
@@ -34,7 +35,7 @@ const HomeScreen = ({navigation}) => {
 
 
 
-    const renderHeader = () => (
+    const ListHeaderComponent = memo(() => (
         <View style={createPostySTyles.createPostContainer}>
             <TouchableOpacity activeOpacity={.5} style={createPostySTyles.textInputContainer} onPress={() => setShowCreatePost(true)}>
                 <Text>Create a post</Text>
@@ -57,7 +58,49 @@ const HomeScreen = ({navigation}) => {
                 </TouchableOpacity>
             </View>
         </View>
-    )
+    ))
+
+    const ListFooterComponent = memo(() => {
+        return(
+            (posts.length >= 30) 
+                ? 
+                    <TouchableOpacity 
+                        onPress={() => {
+                                morePosts(true)
+                                flatListRef.current.scrollToOffset({animated: true, offset: 0})
+                            }}>
+                        <Text 
+                            weight='medium' 
+                            color={Colors.secondary} 
+                            center
+                            style={{ marginTop: 10, marginBottom: 20 }}
+                        >
+                        Load More
+                    </Text>            
+                    </TouchableOpacity>
+                : <ActivityIndicator visible={false} />
+        )
+    })
+
+    const renderItem = ({item, index}) => {
+        return (
+            <PostItem
+                data={item} 
+                handleDotPress={handlePresentModalPress} 
+                handleAvatarPress={(id) => navigation.navigate('ProfileScreen', {userId: id})}
+                onCommentPress={(id) => {
+                    getComments(id)
+                    setShowComment(true)
+                }}
+            />
+        )
+    }
+
+    const onEndReached = () => {
+        if(posts.length < 30 && !loading){
+            morePosts()
+        }
+    }
 
     useEffect(() => {
         getPosts()
@@ -74,50 +117,25 @@ const HomeScreen = ({navigation}) => {
                 }
             /> 
             <Container style={{ paddingHorizontal: 0 }}>
-                <FlatList
-                    flatlistref={flatListRef} 
-                    data={posts}
-                    renderItem={item => (
-                        <PostList
-                            data={item} 
-                            handleDotPress={handlePresentModalPress} 
-                            handleAvatarPress={(id) => navigation.navigate('ProfileScreen', {userId: id})}
-                            onCommentPress={(id) => {
-                                getComments(id)
-                                setShowComment(true)
-                            }}
+
+
+            {
+                posts.length != 0
+                    ?   <FlatList
+                            style={{ flex: 0 }}
+                            ref={flatListRef} 
+                            data={posts}
+                            renderItem={renderItem}
+                            ListHeaderComponent={ListHeaderComponent}
+                            ListFooterComponent={ListFooterComponent}
+                            ListEmptyComponent={<NoData />}
+                            onEndReached={onEndReached}
+                            onEndReachedThreshold={0}
                         />
-                    )
-                    }
-                    extraData={loading}
-                    renderHeader={renderHeader()}
-                    onEndReached={() => {
-                        if(posts.length < 30){
-                            morePosts()
-                        }
-                    }}
-                    onEndReachedThreshold={0.3}
-                    isLoading={loading}
-                    ListFooterComponent={
-                        (posts.length >= 30) 
-                            ? 
-                                <TouchableOpacity 
-                                    onPress={() => {
-                                            morePosts(true)
-                                            flatListRef.current.scrollToOffset({animated: true, offset: 0})
-                                        }}>
-                                    <Text 
-                                        weight='medium' 
-                                        color={Colors.secondary} 
-                                        center
-                                        style={{ marginTop: 10, marginBottom: 20 }}
-                                    >
-                                    Load More
-                                </Text>            
-                                </TouchableOpacity>
-                            : null 
-                    }
-                />
+                    : <ActivityIndicator visible={true}/>
+            }
+
+
             </Container>
 
             <Comments 

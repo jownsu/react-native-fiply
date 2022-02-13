@@ -1,12 +1,12 @@
 import React from 'react'
 import { StyleSheet, View, TouchableWithoutFeedback, Keyboard } from 'react-native'
 
-export const Container = ({ children, style, center, onPress }) => {
+export const Container = ({ children, style, center, padding = 0 }) => {
 
     const centerStyle =  center ? {justifyContent: 'center'} : {}
 
     return (
-        <View style={{ ...styles.container, ...centerStyle ,...style }} >
+        <View style={{ ...styles.container, ...centerStyle ,...style, paddingHorizontal: padding }} >
             {children}
         </View>
     )
@@ -14,7 +14,6 @@ export const Container = ({ children, style, center, onPress }) => {
 
 const styles = StyleSheet.create({
     container:{
-        paddingHorizontal: 20,
         flex: 1,
     }
 })

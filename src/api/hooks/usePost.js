@@ -13,11 +13,13 @@ const usePost = () => {
         setLoading(true)
         await api({token: user.token}).get(`/${userId}${path}`)
             .then(res => {
-                setPosts(res.data.data)
+                let data = res.data.data
+                setPosts(data)
                 setNextPath(res.data.links.next)
             })
             .catch(err => console.log(err))
             .finally(() => setLoading(false))
+
     }
 
     const morePosts = async(reset = false) => {
@@ -27,7 +29,7 @@ const usePost = () => {
                 .then(res => {
                     reset 
                         ? setPosts(res.data.data)
-                        : setPosts([...posts, ...res.data.data])
+                        : setPosts(prevPosts => [...prevPosts, ...res.data.data])
                     setNextPath(res.data.links.next)
                 })
                 .catch(err => console.log(err))
@@ -101,7 +103,7 @@ const usePost = () => {
     
 
 
-    return {posts, getPosts, morePosts, createPost, updatePost, deletePost, loading};
+    return {posts, getPosts, morePosts, createPost, updatePost, deletePost, loading, setLoading};
 };
 
 export default usePost;

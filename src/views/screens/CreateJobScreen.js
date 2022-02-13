@@ -65,13 +65,6 @@ const CreateJobScreen = ({navigation}) => {
     },
   ]
 
-  const [showDropDown, setShowDropDown] = useState({
-      jobTitle: false, 
-      jobType: false, 
-      location: false, 
-      company: false
-    })
-
   const formSchema = yup.object({
     jobTitle: yup.string().trim().required('Job Title is required'),
     jobType: yup.string().trim().required('Job Type is required'),

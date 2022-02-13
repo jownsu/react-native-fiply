@@ -1,10 +1,11 @@
-import { StyleSheet, View, Modal } from 'react-native'
+import { StyleSheet, View, Modal, FlatList } from 'react-native'
 import { useState } from 'react'
 import { Avatar } from 'react-native-paper'
-import { Container, Text, FlatList, TextInput } from '../FiplyComponents'
+import { Container, Text, TextInput } from '../FiplyComponents'
 import { TextInput as TxtInput } from 'react-native-paper'
 import { FontAwesome5  } from '@expo/vector-icons'
 import Colors from '../../../utils/Colors'
+import NoData from '../NoData'
 
 import React from 'react'
 
@@ -40,16 +41,15 @@ const Comments = ({
         animationType='slide'
         onRequestClose={onRequestClose}
     >
-        <Container>
+        <Container padding={10}>
             <View style={styles.headerContainer}>
                 <FontAwesome5 style={{ marginRight: 5 }} name="caret-up" size={24} color={Colors.secondary} />
                 <Text weight='medium' >1.7k</Text>
             </View>
             <FlatList 
                 data={data}
-                renderItem={item => renderItem(item)}
-                isLoading={isLoading}
-                noDataMessage={'No Comments'}
+                renderItem={({item}) => renderItem(item)}
+                ListEmptyComponent={<NoData />}
             />
 
             <TextInput

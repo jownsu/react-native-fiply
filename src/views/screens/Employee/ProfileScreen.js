@@ -1,15 +1,17 @@
-import React, { useState, useEffect, useCallback, useRef }  from 'react'
+import React, { useState, useEffect, useCallback, useRef, memo }  from 'react'
 import { StyleSheet, View, TouchableOpacity, RefreshControl, FlatList } from 'react-native'
-import { Text, FlatList as FFlatList, BottomSheetModal } from '../../components/FiplyComponents'
+import { Text, BottomSheetModal, Container, ActivityIndicator, FlatList as FFlatList } from '../../components/FiplyComponents'
 import Colors from '../../../utils/Colors'
 import { LinearGradient } from 'expo-linear-gradient'
 import { FontAwesome5, FontAwesome } from '@expo/vector-icons';
+
 import ProfileHeader from '../../components/profile/ProfileHeader'
 import CardInfo from '../../components/profile/CardInfo'
 import TitleFilter from '../../components/headers/TitleFilter'
 import TopNavigation from '../../components/headers/TopNavigation'
 import PostFilterDialog from '../../components/dialog/PostFilterDialog'
 import Comments from '../../components/modals/Comments'
+import NoData from '../../components/NoData'
 import {default as EditPost} from '../../components/modals/CreatePost'
 import {default as DeleteConfirmation} from '../../components/dialog/Confirmation'
 
@@ -18,7 +20,7 @@ import useExperience from '../../../api/hooks/user/useExperience'
 import useEducationalBackground from '../../../api/hooks/user/useEducationalBackground'
 import usePost from '../../../api/hooks/usePost'
 import useComment from '../../../api/hooks/useComment'
-import PostList from '../../components/lists/PostList'
+import PostItem from '../../components/lists/PostItem'
 
 const ProfileScreen = ({navigation, route}) => {
 
@@ -49,118 +51,177 @@ const ProfileScreen = ({navigation, route}) => {
         getUserInfo(userId)
     }, [])
     
-    const renderList = (id) => {
-        switch (id) {
-            case 0:
-                return (
-                    <View>
-                        <CardInfo
-                            title={'Basic Information'}
-                            headers={['Gender', 'Age', 'Birthday', 'Language', 'Status']}
-                            infos={basicInfo}
+    const renderItem = ({item}) => {
+        return (
+            <PostItem 
+                data={item} 
+                handleDotPress={(postItem) => {
+                    setSelectedPost(postItem)
+                    handlePresentModalPress()
+                }} 
+                onCommentPress={(id) => {
+                    getComments(id)
+                    setShowComment(true)
+                }} 
+            />
+        )
+    }
+
+    const ListFooterComponent = memo(() => {
+        return(
+            (posts.length >= 30) 
+                ? 
+                    <TouchableOpacity 
+                        onPress={() => {
+                                morePosts(true)
+                                flatListRef.current.scrollToOffset({animated: true, offset: 0})
+                            }}>
+                        <Text 
+                            weight='medium' 
+                            color={Colors.secondary} 
+                            center
+                            style={{ marginTop: 10, marginBottom: 20 }}
+                        >
+                        Load More
+                    </Text>            
+                    </TouchableOpacity>
+                : <ActivityIndicator visible={postLoading}/>
+        )
+    })
+
+    const About = () => {
+        return (
+            <Container padding={10}>
+                <CardInfo
+                    title={'Basic Information'}
+                    headers={['Gender', 'Age', 'Birthday', 'Language', 'Status']}
+                    infos={basicInfo}
+                />
+                <CardInfo
+                    title={'Contact Information'}
+                    headers={['Mobile', 'Telephone', 'Email', 'Website']}
+                    infos={contactInfo}
+                />
+            </Container>
+        )
+    }
+
+    const Background = () => {
+        return(
+            <Container padding={10}>
+                <FFlatList
+                    data={experiences}
+                    renderItem={(item, index) => (
+                        <CardInfo 
+                            key={index}
+                            title='Work Experience'
+                            headers={['Company', 'Location', 'Title', 'Employment Type', 'Date Started', 'Date Ended']}
+                            infos={{
+                                company         : item.company,
+                                location        : item.location,
+                                title           : item.job_title,
+                                employment_type : item.employment_type,
+                                starting_date   : item.starting_date,
+                                completion_date : item.completion_date,
+                            }}
                         />
-                        <CardInfo
-                            title={'Contact Information'}
-                            headers={['Mobile', 'Telephone', 'Email', 'Website']}
-                            infos={contactInfo}
-                        />
-                        {/* <CardInfo
-                            title={'Job Locations'}
-                            headers={['Job Title/s', 'Job Location']}
-                            infos={SampleData.profileJobPreference}
-                        /> */}
-                    </View>
-                )
-            case 1: 
-                return (
-                    <View style={{ flex: 1 }}>
-                        <TitleFilter 
-                            title={'Posts'}
-                            onFilterPress={() => setShowModal(true)}
-                        />
-                        
-                        <FFlatList
+                    )}
+                    isLoading={experienceLoading}
+                />
+            </Container>
+        )
+    }
+
+    const Activity = () => {
+        return (
+            <View style={{ flex: 1 }}>
+                <TitleFilter 
+                    title={'Posts'}
+                    onFilterPress={() => setShowModal(true)}
+                />
+            {
+                posts.length != 0
+                    ?   <FlatList
                             data={posts}
-                            renderItem={item => (
-                                <PostList 
-                                    data={item} 
-                                    handleDotPress={(postItem) => {
-                                        setSelectedPost(postItem)
-                                        handlePresentModalPress()
-                                    }} 
-                                    onCommentPress={(id) => {
-                                        getComments(id)
-                                        setShowComment(true)
-                                    }} 
-                                />)}
+                            renderItem={renderItem}
                             nestedScrollEnabled={true} 
                             onEndReached={() => morePosts()}
-                            onEndReachedThreshold={0.2}
-                            isLoading={postLoading}
+                            onEndReachedThreshold={0}
+                            ListEmptyComponent={<NoData />}
+                            ListFooterComponent={ListFooterComponent}
+                            progressViewOffset={10}
                         />
+                    :   <ActivityIndicator visible={true}/>
+            
+            }
 
-                        <PostFilterDialog 
-                            visible={showModal}
-                            onDismiss={() => setShowModal(false)}
+                    <PostFilterDialog 
+                        visible={showModal}
+                        onDismiss={() => setShowModal(false)}
+                    />
+               
+            </View>
+        )
+    }
+
+    const Education = () => {
+        return (
+            <Container padding={10}>
+                <FFlatList
+                    data={educationalBackgrounds}
+                    renderItem={(item, index) => (
+                        <CardInfo 
+                            key={index}
+                            title='Education'
+                            headers={['School', 'Degree', 'Field of Study', 'Starting Date', 'Completion Date']}
+                            infos={{ 
+                                school: item.school,
+                                degree: item.degree,
+                                fieldOfStudy: item.field_of_study,
+                                startingDate: item.starting_date,
+                                completionDate: item.completion_date,
+                            }}
                         />
-                    </View>
-                )
+                    )}
+                    noDataMessage='No Education to show'
+                    isLoading={ebLoading}
+
+                />
+            </Container>
+        )
+    }
+    
+    const renderInfo = (id) => {
+        switch (id) {
+            case 0:
+                return <About />
+            case 1: 
+                return <Activity />
             case 2:
-                return (
-                    <View>
-                        <FFlatList
-                            data={experiences}
-                            renderItem={(item, index) => (
-                                <CardInfo 
-                                    key={index}
-                                    title='Work Experience'
-                                    headers={['Company', 'Location', 'Title', 'Employment Type', 'Date Started', 'Date Ended']}
-                                    infos={{
-                                        company         : item.company,
-                                        location        : item.location,
-                                        title           : item.job_title,
-                                        employment_type : item.employment_type,
-                                        starting_date   : item.starting_date,
-                                        completion_date : item.completion_date,
-                                    }}
-                                />
-                            )}
-                            isLoading={experienceLoading}
-                        />
-                    </View>
-                )
+                return <Background />
             case 3:
-                return (
-                    <View>
-                        <FFlatList
-                            data={educationalBackgrounds}
-                            renderItem={(item, index) => (
-                                <CardInfo 
-                                    key={index}
-                                    title='Education'
-                                    headers={['School', 'Degree', 'Field of Study', 'Starting Date', 'Completion Date']}
-                                    infos={{ 
-                                        school: item.school,
-                                        degree: item.degree,
-                                        fieldOfStudy: item.field_of_study,
-                                        startingDate: item.starting_date,
-                                        completionDate: item.completion_date,
-                                    }}
-                                />
-                            )}
-                            noDataMessage='No Education to show'
-                            isLoading={ebLoading}
-
-                        />
-                    </View>
-                )
+                return <Education />
             default:
                 break;
         }
     }
 
+    const getData = (id) => {
+        switch (id) {
+            case 1:
+                getPosts('/posts', userId)
+            case 2:
+                getExperiences()                                
+                break;
+            case 3:
+                getEducationalBackgrounds()                                
+                break;
+        }
+    }
+
+
     return (
-        <View>
+        <Container>
             <FlatList
                 refreshControl={
                     <RefreshControl
@@ -168,42 +229,35 @@ const ProfileScreen = ({navigation, route}) => {
                         onRefresh={() => getUserInfo()}
                     />
                 }
-                ListHeaderComponent={
+                ListHeaderComponent={(
                     <View style={{ paddingTop: 30 }}>
-                        <LinearGradient
-                            colors={[Colors.primary, Colors.secondary]}
-                            end={{ x: 1, y: 0 }}
-                            style={styles.gradientView}
-                        />
-                        <View style={styles.cameraContainer}>
-                            <FontAwesome5 name="camera" size={18} color={Colors.black} />
-                        </View>
-                        <ProfileHeader 
-                            data={profile} 
-                            onEditPress={() => navigation.push('EditProfileScreen')}    
-                        />
-                        <TopNavigation
-                            navTitles={['About', 'Activity', 'Background', 'Education']}
-                            onBtnPress={i => {
-                                setNavIndex(i)
-                                switch (i) {
-                                    case 1:
-                                        getPosts('/posts', userId)
-                                    case 2:
-                                        getExperiences()                                
-                                        break;
-                                    case 3:
-                                        getEducationalBackgrounds()                                
-                                        break;
-                                }
-                            }}
-                            index={navIndex}
-                            style={{ marginHorizontal: 0, marginTop: 5, marginBottom: 5 }}
-                        />
-                        { renderList(navIndex) }
+                            <LinearGradient
+                                colors={[Colors.primary, Colors.secondary]}
+                                end={{ x: 1, y: 0 }}
+                                style={styles.gradientView}
+                            />
+                            <View style={styles.cameraContainer}>
+                                <FontAwesome5 name="camera" size={18} color={Colors.black} />
+                            </View>
+                            <Container padding={10}>
+                                <ProfileHeader 
+                                    data={profile} 
+                                    onEditPress={() => navigation.push('EditProfileScreen')}    
+                                />
+                                <TopNavigation
+                                    navTitles={['About', 'Activity', 'Background', 'Education']}
+                                    onBtnPress={i => {
+                                        setNavIndex(i)
+                                        getData(i)
+                                    }}
+                                    index={navIndex}
+                                    style={{ marginHorizontal: 0, marginTop: 5, marginBottom: 5 }}
+                                />
+                            </Container>
+            
+                        { renderInfo(navIndex) }
                     </View>
- 
-                }
+                )}
             />
 
             
@@ -243,6 +297,7 @@ const ProfileScreen = ({navigation, route}) => {
                     setShowConfirmation(false)
                 }}
             />
+
             <BottomSheetModal 
                     bottomSheetModalRef={bottomSheetModalRef}
                     pointsSnap={[225]}
@@ -253,8 +308,8 @@ const ProfileScreen = ({navigation, route}) => {
                             onPress={() => {
                                 setShowCreatePost(true)
                                 handleClosePress()
-                            }
-                        }>
+                                }}
+                        >
                             <FontAwesome5 name="edit" size={23} color={Colors.black} style={styles.btmActionBtn}/>
                             <Text weight='medium' color={Colors.black}>Edit Post</Text>
                         </TouchableOpacity>
@@ -278,7 +333,7 @@ const ProfileScreen = ({navigation, route}) => {
                         </TouchableOpacity>
                     </View>
             </BottomSheetModal>
-        </View>
+        </Container>
     )
 }
 
