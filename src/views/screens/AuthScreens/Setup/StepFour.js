@@ -15,7 +15,7 @@ const StepFour = ({navigation}) => {
                 <StepIndicator />
                 <StepIndicator active/>
             </View>
-            <Container>
+            <Container padding={20}>
                 <Text color={Colors.secondary} size={24} weight='medium' center style={{ marginVertical: 50 }}>Step 4</Text>
                 <View>
                     <Text weight='medium' size={15}>You are almost there...</Text>

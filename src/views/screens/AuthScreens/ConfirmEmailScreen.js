@@ -7,7 +7,7 @@ const ConfirmEmailScreen = ({navigation}) => {
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <WaveHeader waveimg={require('../../../assets/img/waves/3.png')} />
-            <Container center>
+            <Container center padding={20}>
 
                 <FiplyLogo/>
                 <View style={styles.confirmContainer}>

@@ -36,7 +36,7 @@ const ProfileScreen = ({navigation, route}) => {
     const { getExperiences, experiences, loading : experienceLoading } = useExperience()
     const { getEducationalBackgrounds, educationalBackgrounds, loading: ebLoading } = useEducationalBackground()
     const { posts, getPosts, morePosts, updatePost, deletePost, loading: postLoading } = usePost()
-    const { comments, getComments, resetComments, createComment, loading: commentLoading } = useComment()
+    const { comments, getComments, resetComments, createComment, commentDetails, loading: commentLoading } = useComment()
 
 
     const bottomSheetModalRef = useRef(null);
@@ -266,6 +266,7 @@ const ProfileScreen = ({navigation, route}) => {
             <Comments 
                 data={comments}
                 visible={showComment}
+                detail={commentDetails}
                 onRequestClose={() => {
                     setShowComment(false)
                     resetComments()

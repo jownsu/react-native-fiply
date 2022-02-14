@@ -59,7 +59,7 @@ const JobSetup = ({navigation}) => {
     return (
         <SafeAreaView>
             <WaveHeader waveimg={require('../../../../../assets/img/waves/4.png')} />
-            <Container center >
+            <Container center padding={20} >
                 <FiplyLogo />
                 <Text center size={17} style={{ marginVertical: 25 }}>What kind of job are you looking for?</Text>
 

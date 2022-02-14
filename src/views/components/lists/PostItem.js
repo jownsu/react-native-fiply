@@ -46,8 +46,8 @@ const PostItem = memo(({
 
             <View style={postStyles.postFooterContainer}>
                 <TouchableOpacity style={postStyles.postAction}>
-                    <FontAwesome5 style={postStyles.icon} name="caret-up" size={21} color={Colors.black} />
-                    <Text>Up</Text>
+                    <FontAwesome5 style={postStyles.icon} name="caret-up" size={21} color={ data.is_upVoted ? Colors.secondary : Colors.black} />
+                    <Text>{data.upVotes_count}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={postStyles.postAction} onPress={() => onCommentPress(data.id)}>
                     <FontAwesome style={postStyles.icon} name="commenting" size={17} color={Colors.primary} />
@@ -65,7 +65,7 @@ const PostItem = memo(({
     return false;
   });
 
-export default PostItem;
+export default memo(PostItem);
 
 const postStyles = StyleSheet.create({
     postContainer:{

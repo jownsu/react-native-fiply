@@ -16,7 +16,7 @@ const StepTwo = ({navigation}) => {
                 <StepIndicator />
                 <StepIndicator active/>
             </View>
-            <Container center>
+            <Container center padding={20}>
                 <Text color={Colors.secondary} size={24} weight='medium' center>Step 2</Text>
 
                 <View style={{ marginVertical: 30 }}>

@@ -1,16 +1,16 @@
 import { StyleSheet, View, Modal, FlatList } from 'react-native'
-import { useState } from 'react'
+import React, { useState, memo, useMemo } from 'react'
 import { Avatar } from 'react-native-paper'
-import { Container, Text, TextInput } from '../FiplyComponents'
+import { Container, Text, TextInput, ActivityIndicator } from '../FiplyComponents'
 import { TextInput as TxtInput } from 'react-native-paper'
 import { FontAwesome5  } from '@expo/vector-icons'
 import Colors from '../../../utils/Colors'
 import NoData from '../NoData'
 
-import React from 'react'
 
 const Comments = ({
         data = [], 
+        detail = {},
         visible = false, 
         onRequestClose = () => {},
         onSendPress = () => {},
@@ -35,6 +35,20 @@ const Comments = ({
         )
     }
 
+    const ListEmptyComponent = useMemo(() => {
+        return (
+            <NoData noDataMessage='No Comment'/>
+        )
+    }, [])
+
+    const ListFooterComponent = useMemo(() => {
+        return (
+            isLoading 
+                ? <ActivityIndicator visible={true}/>
+                : null
+        )
+    }, [isLoading])
+
   return (
     <Modal
         visible={visible}
@@ -44,12 +58,15 @@ const Comments = ({
         <Container padding={10}>
             <View style={styles.headerContainer}>
                 <FontAwesome5 style={{ marginRight: 5 }} name="caret-up" size={24} color={Colors.secondary} />
-                <Text weight='medium' >1.7k</Text>
+                <Text weight='medium' >{detail.upVotes_count}</Text>
             </View>
+
             <FlatList 
+                style={{ flex: 0 }}
                 data={data}
                 renderItem={({item}) => renderItem(item)}
-                ListEmptyComponent={<NoData />}
+                ListEmptyComponent={ListEmptyComponent}
+                ListFooterComponent={ListFooterComponent}
             />
 
             <TextInput
@@ -98,5 +115,5 @@ const styles = StyleSheet.create({
         flex: 1,
         marginLeft: 10,
         borderRadius: 7
-    }
+    },
 });

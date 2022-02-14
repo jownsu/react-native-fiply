@@ -6,7 +6,7 @@ import Colors from '../../../../utils/Colors'
 const SemiVerified = ({navigation}) => {
     return (
         <SafeAreaView>
-            <Container center>
+            <Container center padding={20}>
                 <FiplyLogo />
                 <View style={{ marginVertical: 25 }}>
                     <Text weight='medium' size={18} center>Congratulations!</Text>

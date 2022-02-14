@@ -123,7 +123,7 @@ const StepOne = ({navigation}) => {
             <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 35 }}>
                 <StepIndicator active/>
             </View>
-            <Container center>
+            <Container center padding={20}>
                 <Text color={Colors.secondary} weight='medium' size={24} center style={{ marginBottom: 20 }}>Step 1</Text>
                     <View style={{ display: hideStudentForm ? 'flex' : 'none'}}>
                         <Formik

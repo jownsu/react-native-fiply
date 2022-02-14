@@ -26,7 +26,7 @@ const SignupScreen = ({navigation}) => {
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <WaveHeader waveimg={require('../../../../assets/img/waves/2.png')} />
-            <Container center >
+            <Container center padding={20} >
                 <FiplyLogo style={{ marginBottom: 25 }}/>
 
                 <Formik

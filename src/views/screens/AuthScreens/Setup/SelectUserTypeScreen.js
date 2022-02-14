@@ -41,7 +41,7 @@ const SelectUserTypeScreen = ({navigation}) => {
     return (
         <SafeAreaView>
             <WaveHeader waveimg={require('../../../../assets/img/waves/4.png')} />
-            <Container center>
+            <Container center padding={20}>
                 <FiplyLogo />
                 <Text style={{ marginVertical: 35 }} size={18} center>Select user type</Text>
                 <View style={styles.userContainer}>

@@ -14,7 +14,7 @@ import CreatePost from '../../components/modals/CreatePost'
 const HomeScreen = ({navigation}) => {
 
     const { posts, getPosts, loading, morePosts, createPost } = usePost()
-    const { comments, getComments, resetComments, createComment, loading: commentLoading } = useComment()
+    const { comments, getComments, resetComments, createComment, commentDetails ,loading: commentLoading } = useComment()
 
     const [showComment, setShowComment] = useState(false)
     const [showCreatePost, setShowCreatePost] = useState(false);
@@ -35,32 +35,35 @@ const HomeScreen = ({navigation}) => {
 
 
 
-    const ListHeaderComponent = memo(() => (
-        <View style={createPostySTyles.createPostContainer}>
-            <TouchableOpacity activeOpacity={.5} style={createPostySTyles.textInputContainer} onPress={() => setShowCreatePost(true)}>
-                <Text>Create a post</Text>
-            </TouchableOpacity>
+    const ListHeaderComponent = useMemo(() => {
 
-            <View style={createPostySTyles.postActionContainer}>
-                <TouchableOpacity style={createPostySTyles.actionBtn} onPress={() => navigation.navigate('CreateJobScreen')}>
-                    <FontAwesome name="briefcase" size={24} color={Colors.secondary}/>
-                    <Text weight='medium' style={styles.actionText}>HIRE NOW</Text>
+        return (
+            <View style={createPostySTyles.createPostContainer}>
+                <TouchableOpacity activeOpacity={.5} style={createPostySTyles.textInputContainer} onPress={() => setShowCreatePost(true)}>
+                    <Text>Create a post</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={createPostySTyles.actionBtn} onPress={() => navigation.navigate('CreateQuestionnaireScreen')}>
-                    <FontAwesome5 name="calendar-week" size={24} color={Colors.primary} />
-                    <Text weight='medium' style={createPostySTyles.actionText}>SET EVENT</Text>
-                </TouchableOpacity>
+                <View style={createPostySTyles.postActionContainer}>
+                    <TouchableOpacity style={createPostySTyles.actionBtn} onPress={() => navigation.navigate('CreateJobScreen')}>
+                        <FontAwesome name="briefcase" size={24} color={Colors.secondary}/>
+                        <Text weight='medium' style={styles.actionText}>HIRE NOW</Text>
+                    </TouchableOpacity>
 
-                <TouchableOpacity style={createPostySTyles.actionBtn}>
-                    <FontAwesome5 name="poll" size={24} color={Colors.grey} />
-                    <Text weight='medium' style={createPostySTyles.actionText}>POLL</Text>
-                </TouchableOpacity>
+                    <TouchableOpacity style={createPostySTyles.actionBtn} onPress={() => navigation.navigate('CreateQuestionnaireScreen')}>
+                        <FontAwesome5 name="calendar-week" size={24} color={Colors.primary} />
+                        <Text weight='medium' style={createPostySTyles.actionText}>SET EVENT</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={createPostySTyles.actionBtn}>
+                        <FontAwesome5 name="poll" size={24} color={Colors.grey} />
+                        <Text weight='medium' style={createPostySTyles.actionText}>POLL</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
-        </View>
-    ))
+        )
+    }, [])
 
-    const ListFooterComponent = memo(() => {
+    const ListFooterComponent = useMemo(() => {
         return(
             (posts.length >= 30) 
                 ? 
@@ -78,11 +81,15 @@ const HomeScreen = ({navigation}) => {
                         Load More
                     </Text>            
                     </TouchableOpacity>
-                : <ActivityIndicator visible={false} />
+                : <ActivityIndicator visible={true} />
         )
-    })
+    }, [loading])
 
-    const renderItem = ({item, index}) => {
+    const ListEmptyComponent = () => {
+        return <NoData />
+    }
+    
+    const renderItem = ({item}) => {
         return (
             <PostItem
                 data={item} 
@@ -128,7 +135,7 @@ const HomeScreen = ({navigation}) => {
                             renderItem={renderItem}
                             ListHeaderComponent={ListHeaderComponent}
                             ListFooterComponent={ListFooterComponent}
-                            ListEmptyComponent={<NoData />}
+                            ListEmptyComponent={ListEmptyComponent}
                             onEndReached={onEndReached}
                             onEndReachedThreshold={0}
                         />
@@ -140,6 +147,7 @@ const HomeScreen = ({navigation}) => {
 
             <Comments 
                 data={comments}
+                detail={commentDetails}
                 visible={showComment}
                 onRequestClose={() => {
                     setShowComment(false)

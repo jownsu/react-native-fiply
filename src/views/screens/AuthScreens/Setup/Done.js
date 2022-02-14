@@ -5,7 +5,7 @@ import { SafeAreaView, Container, FiplyLogo, Text, Button } from '../../../compo
 const Done = ({navigation}) => {
     return (
         <SafeAreaView>
-            <Container center>
+            <Container center padding={20}>
                 <FiplyLogo style={{ marginVertical: 50 }} />
                 <Text center size={18} weight='medium'>Great!</Text>
                 <Text center >Once a Fiply representative has evaluated and validated your application to Fully Verify, Fiply will notify you.</Text>

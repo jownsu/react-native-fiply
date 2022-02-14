@@ -25,7 +25,7 @@ const SignInScreen = ({navigation}) => {
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <WaveHeader waveimg={require('../../../assets/img/waves/1.png')} />
-            <Container center>
+            <Container center padding={20}>
                 <View style={styles.imgContainer} >
                     <Image source={require('../../../assets/img/signinillus.png')} style={styles.img} />
                 </View>

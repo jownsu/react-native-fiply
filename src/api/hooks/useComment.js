@@ -5,6 +5,7 @@ import api from '../api';
 const useComment = () => {
     const { user } = useContext(AuthContext)
     const [comments, setComments] = useState([])
+    const [commentDetails, setCommentDetails] = useState({})
     const [postId, setPostId] = useState(0)
 
     const [loading, setLoading] = useState(false)
@@ -13,7 +14,10 @@ const useComment = () => {
         setLoading(true)
         setPostId(postId)
         await api({token: user.token}).get(`/posts/${postId}/comments`)
-            .then(res => setComments(res.data.data))
+            .then(res => {
+                setComments(res.data.data)
+                setCommentDetails(res.data.details)
+            })
             .catch(err => console.log(err))
             .finally(() => setLoading(false))
     }
@@ -31,7 +35,7 @@ const useComment = () => {
         setPostId(0)
     }
 
-    return { comments, getComments, resetComments, createComment ,loading };
+    return { comments, getComments, resetComments, createComment , commentDetails, loading };
 };
 
 export default useComment;
