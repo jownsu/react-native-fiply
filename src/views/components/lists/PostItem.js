@@ -8,7 +8,8 @@ const PostItem = memo(({
         data, 
         handleDotPress = () => {}, 
         handleAvatarPress = () => {}, 
-        onCommentPress = () => {}
+        onCommentPress = () => {},
+        onUpVotePress = () => {}
     }) => {
   return (
         <View style={postStyles.postContainer}>
@@ -45,7 +46,7 @@ const PostItem = memo(({
             }
 
             <View style={postStyles.postFooterContainer}>
-                <TouchableOpacity style={postStyles.postAction}>
+                <TouchableOpacity style={postStyles.postAction} onPress={() => onUpVotePress(data.id)}>
                     <FontAwesome5 style={postStyles.icon} name="caret-up" size={21} color={ data.is_upVoted ? Colors.secondary : Colors.black} />
                     <Text>{data.upVotes_count}</Text>
                 </TouchableOpacity>
@@ -61,7 +62,10 @@ const PostItem = memo(({
         </View>
   );
 }, (prevProps, nextProps) => {
+    if (prevProps.data.is_upVoted != nextProps.data.is_upVoted) return false;
+    if (prevProps.data.upVotes_count != nextProps.data.upVotes_count) return false;
     if (prevProps.id == nextProps.id) return true;
+
     return false;
   });
 

@@ -32,10 +32,32 @@ const ProfileScreen = ({navigation, route}) => {
     const [selectedPost, setSelectedPost] = useState({content: ''})
     const [showConfirmation, setShowConfirmation] = useState(false)
 
-    const { getUserInfo, profile, basicInfo, contactInfo, loading: profileLoading } = useProfile()
-    const { getExperiences, experiences, loading : experienceLoading } = useExperience()
-    const { getEducationalBackgrounds, educationalBackgrounds, loading: ebLoading } = useEducationalBackground()
-    const { posts, getPosts, morePosts, updatePost, deletePost, loading: postLoading } = usePost()
+    const { 
+        getUserInfo, 
+        profile, 
+        basicInfo, 
+        contactInfo, 
+        loading: profileLoading 
+    } = useProfile()
+    const { 
+        getExperiences, 
+        experiences, 
+        loading : experienceLoading 
+    } = useExperience()
+    const { 
+        getEducationalBackgrounds, 
+        educationalBackgrounds, 
+        loading: ebLoading 
+    } = useEducationalBackground()
+    const { 
+        posts, 
+        getPosts, 
+        morePosts, 
+        updatePost, 
+        deletePost, 
+        toggleUpVote,
+        loading: postLoading 
+    } = usePost()
     const { comments, getComments, resetComments, createComment, commentDetails, loading: commentLoading } = useComment()
 
 
@@ -63,6 +85,7 @@ const ProfileScreen = ({navigation, route}) => {
                     getComments(id)
                     setShowComment(true)
                 }} 
+                onUpVotePress={(id) => toggleUpVote(id)}
             />
         )
     }

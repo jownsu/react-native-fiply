@@ -100,10 +100,41 @@ const usePost = () => {
             .finally(() => setLoading(false))
     }
 
-    
+    //UPVOTES
+
+    const toggleUpVote = async(id) => {
+        setLoading(true)
+        await api({token: user.token}).post(`/posts/${id}/upVotes`)
+            .then(res => {
+                setPosts(prevPost => prevPost.map(item => {
+                    if(item.id == id){
+                        return {
+                            ...item,
+                            is_upVoted: res.data.data, 
+                            upVotes_count: res.data.data 
+                                            ? item.upVotes_count + 1 
+                                            : item.upVotes_count - 1
+                        }
+                    }
+                    return item
+                }))
+            })
+            .catch(err => console.log(err))
+            .finally(() => setLoading(false))
+    }
 
 
-    return {posts, getPosts, morePosts, createPost, updatePost, deletePost, loading, setLoading};
+    return { 
+        posts, 
+        getPosts, 
+        morePosts, 
+        createPost, 
+        updatePost, 
+        deletePost, 
+        loading, 
+        setLoading,
+        toggleUpVote
+    };
 };
 
 export default usePost;

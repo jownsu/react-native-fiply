@@ -13,8 +13,22 @@ import CreatePost from '../../components/modals/CreatePost'
 
 const HomeScreen = ({navigation}) => {
 
-    const { posts, getPosts, loading, morePosts, createPost } = usePost()
-    const { comments, getComments, resetComments, createComment, commentDetails ,loading: commentLoading } = useComment()
+    const { 
+        posts, 
+        getPosts, 
+        loading, 
+        morePosts, 
+        createPost,
+        toggleUpVote 
+    } = usePost()
+    const { 
+        comments, 
+        getComments, 
+        resetComments, 
+        createComment, 
+        commentDetails, 
+        loading: commentLoading 
+    } = useComment()
 
     const [showComment, setShowComment] = useState(false)
     const [showCreatePost, setShowCreatePost] = useState(false);
@@ -92,13 +106,14 @@ const HomeScreen = ({navigation}) => {
     const renderItem = ({item}) => {
         return (
             <PostItem
-                data={item} 
+                data={item}
                 handleDotPress={handlePresentModalPress} 
                 handleAvatarPress={(id) => navigation.navigate('ProfileScreen', {userId: id})}
                 onCommentPress={(id) => {
                     getComments(id)
                     setShowComment(true)
                 }}
+                onUpVotePress={(id) => toggleUpVote(id)}
             />
         )
     }
