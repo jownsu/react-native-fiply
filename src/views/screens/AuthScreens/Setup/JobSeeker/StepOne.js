@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet, View, TouchableOpacity } from 'react-native'
 import { SafeAreaView, Text, TextInput, Button, SecondaryButton, Container, Dropdown } from '../../../../components/FiplyComponents'
 import Colors from '../../../../../utils/Colors'
 import { Formik } from 'formik'
 import * as yup from 'yup'
 import StepIndicator from '../../../../components/StepIndicator'
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 const StepOne = ({navigation}) => {
 
@@ -21,7 +22,7 @@ const StepOne = ({navigation}) => {
         school: yup.string().trim().required('School is required'),
         degree: yup.string().trim().required('Degree is required'),
         fieldOfStudy: yup.string().trim().required('Field of study is required'),
-        year: yup.string().trim().required('Year is required')
+        date: yup.string().trim().required('Date is required')
     })
 
     const jobList = [
@@ -118,6 +119,16 @@ const StepOne = ({navigation}) => {
         {id: '5', name: 'Broadcast Media'},
     ]
 
+
+    const [date, setDate] = useState(new Date());
+    const [showDatePicker, setShowDatePicker] = useState(false)
+    const onChange = (event, selectedDate, callback) => {
+        setShowDatePicker(Platform.OS === 'ios');
+        if(selectedDate){
+            let stringDate = selectedDate.toLocaleDateString();
+            callback(stringDate)
+        }
+      };
     return (
         <SafeAreaView>
             <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 35 }}>
@@ -213,7 +224,7 @@ const StepOne = ({navigation}) => {
                                 school: '', 
                                 degree: '', 
                                 fieldOfStudy: '', 
-                                year: ''
+                                date: ''
                             }}
                             validationSchema={studentSchema}
                             onSubmit={(values) =>  navigation.navigate('StepTwo')}
@@ -255,17 +266,35 @@ const StepOne = ({navigation}) => {
                                     error={(touched.fieldOfStudy && errors.fieldOfStudy) ? true : false}
                                     errorMsg={(touched.fieldOfStudy && errors.fieldOfStudy) ? errors.fieldOfStudy : ''}
                                 />
+                                <TouchableOpacity
+                                    activeOpacity={0.6}
+                                    onPress={() => setShowDatePicker(true)}
+                                >
+                                    <TextInput
+                                        label="Date"
+                                        value={values.date}
+                                        onChangeText={handleChange('date')}
+                                        onBlur={ handleBlur('date')}
+                                        error={(touched.date && errors.date) ? true : false}
+                                        style={{ marginTop: 5 }}
+                                        errorMsg={(touched.date && errors.date) ? errors.date : ''}
+                                        nonEditable
+                                    />
+                                </TouchableOpacity>
 
-                                <TextInput
-                                    label="Year"
-                                    value={values.year}
-                                    onChangeText={handleChange('year')}
-                                    onBlur={ handleBlur('year')}
-                                    error={(touched.year && errors.year) ? true : false}
-                                    style={{ marginTop: 5 }}
-                                    errorMsg={(touched.year && errors.year) ? errors.year : ''}
-                                />
-
+                                {
+                                    showDatePicker 
+                                        ? 
+                                            <DateTimePicker
+                                                testID="dateTimePicker"
+                                                value={date}
+                                                display="default"
+                                                onChange={(e, val) => onChange(e, val, (strVal) => {
+                                                    setFieldValue('date', strVal)
+                                                })}
+                                            />
+                                        : null
+                                }
                                 <SecondaryButton
                                     title="I'm not a student"
                                     onPress={() => setHideStudentForm(true)}
@@ -279,7 +308,7 @@ const StepOne = ({navigation}) => {
                                             values.school && 
                                             values.degree && 
                                             values.fieldOfStudy && 
-                                            values.year
+                                            values.date
                                         ) ? false : true
                                     }
                                 />

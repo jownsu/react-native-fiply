@@ -74,7 +74,6 @@ export const Dropdown = ({
                                 )
                                 : null
                             }
-
                     />
             </TouchableOpacity>
 
