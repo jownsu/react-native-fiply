@@ -11,7 +11,7 @@ import PostItem from '../../components/lists/PostItem'
 import Comments from '../../components/modals/Comments'
 import CreatePost from '../../components/modals/CreatePost'
 
-const HomeScreen = ({navigation}) => {
+const HomeScreen = ({navigation}, offset) => {
 
     const { 
         posts, 
@@ -124,6 +124,23 @@ const HomeScreen = ({navigation}) => {
         }
     }
 
+    const onScroll = (e) => {
+        const currentOffset = e.nativeEvent.contentOffset.y;
+        const dif = currentOffset - (offset || 0);  
+    
+        if (dif < 0) {
+            navigation.setOptions({
+                tabBarStyle: {display: 'flex'}
+            })
+        } else {
+            navigation.setOptions({
+                tabBarStyle: {display: 'none'}
+            })
+        }
+        // console.log('dif=',dif);
+        offset = currentOffset;
+    }
+
     useEffect(() => {
         getPosts()
     }, [])
@@ -131,7 +148,16 @@ const HomeScreen = ({navigation}) => {
     return (
         <SafeAreaView flex>
             <SearchHeader
-                leftIcon={ () => <FontAwesome5 name="th-large" size={24} color={Colors.grey} />}
+                // leftIcon={ () => <FontAwesome5 name="th-large" size={24} color={Colors.grey} />}
+                leftIcon={ () => <FontAwesome5 
+                    name="th-large" 
+                    size={24} 
+                    color={Colors.grey}
+                    onPress={() => {navigation.setOptions({
+                        tabBarStyle: {display: 'none'}
+                    })}}
+                    
+                 />}
                 rightIcon={ () => 
                     <TouchableOpacity onPress={() => navigation.navigate('MessageStack')} activeOpacity={.5}>
                         <FontAwesome name="paper-plane" size={24} color={Colors.secondary} />
@@ -144,6 +170,7 @@ const HomeScreen = ({navigation}) => {
             {
                 posts.length != 0
                     ?   <FlatList
+                            onScroll={(e) => onScroll(e)}
                             style={{ flex: 0 }}
                             ref={flatListRef} 
                             data={posts}
