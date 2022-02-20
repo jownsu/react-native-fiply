@@ -55,7 +55,6 @@
                         options={{ 
                             tabBarIcon: ({color}) => <FontAwesome5 name="home" size={24} color={color} />, 
                             title: 'Home',
-                            tabBarStyle: { }
                         }}
                     >
                     </Tab.Screen>
@@ -119,9 +118,12 @@
                     <View style={styles.bottomSheetContainer}>
                         <View style={styles.btmHeaderContainer}>
                             <View style={{ flexDirection: 'row', alignItems: 'center' }} >
-                                <View style={styles.imgContainer}>
-                                    <Avatar.Image size={50} source={{ uri: user.avatar }} backgroundColor={Colors.light}/>
-                                </View>
+                                    <Avatar.Image 
+                                        size={50} 
+                                        source={{ uri: user.avatar }} 
+                                        backgroundColor={Colors.light}
+                                        style={styles.imgContainer}    
+                                    />
                                 <View style={{ flex: 1 }}>
                                     <Text weight='medium' size={18} adjustsFontSizeToFit numberOfLines={1}>{user.fullname}</Text>
                                     <TouchableOpacity 
@@ -168,7 +170,6 @@
         tabBarStyle:{
             borderTopWidth: 1,
             elevation: 0,
-            height: 55,
         },
         profileIconStyle:{
             borderWidth: 1,
@@ -184,7 +185,7 @@
         bottomSheetContainer:{
             paddingHorizontal: 20,
             flex: 1,
-            justifyContent: 'space-between'
+            justifyContent: 'space-between',
         },
         btmHeaderContainer:{
             flexDirection: 'row',
@@ -193,10 +194,7 @@
         },
         imgContainer:{
             borderWidth: 1,
-            height: 50,
-            width: 50,
             overflow: 'hidden',
-            borderRadius: 100,
             marginRight: 10
         },
         img:{
