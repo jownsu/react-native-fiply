@@ -8,14 +8,12 @@ import CreateQuestionnaireScreen from '../views/screens/CreateQuestionnaireScree
 import MyInterviewScreen from '../views/screens/MyInterviewScreen'
 import EditProfileScreen from '../views/screens/EditProfileScreen'
 import ProfileScreen from '../views/screens/Employee/ProfileScreen'
-import StepOne from '../views/screens/AuthScreens/Setup/JobSeeker/StepOne'
 
 const Stack = createStackNavigator();
 
 const AppStack = () => {
     return (
         <Stack.Navigator>
-            <Stack.Screen options={{ headerShown: false }} name={'StepOne'} component={StepOne}></Stack.Screen>
             <Stack.Screen options={{ headerShown: false }} name={'BottomNavigator'} component={BottomNavigator}></Stack.Screen>
             <Stack.Screen options={{ headerShown: false }} name={'InitialInterviewScreen'} component={InitialInterviewScreen}></Stack.Screen>
             <Stack.Screen options={{ headerShown: false }} name={'MessageStack'} component={MessageStack}></Stack.Screen>
