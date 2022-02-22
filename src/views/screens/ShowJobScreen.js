@@ -122,7 +122,7 @@ const ShowJobScreen = ({ navigation, route }) => {
                             >
                                 Job Responsibilites
                             </Text>
-                            <Text>{jobs.description}</Text>
+                            <Text>{jobs.job_responsibilities}</Text>
                         </View>
 
                         <View style={styles.qualificationsContainer}>
@@ -133,7 +133,7 @@ const ShowJobScreen = ({ navigation, route }) => {
                             >
                                 Qualifications
                             </Text>
-                            <Text>{jobs.description}</Text>
+                            <Text>{jobs.qualifications}</Text>
                         </View>
                     </Container>
                 )}
