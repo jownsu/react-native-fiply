@@ -5,30 +5,29 @@ import { Text } from './Text'
 import Colors from '../../../utils/Colors'
 
 export const TextInput = ({
-        label, 
-        value, 
-        onChangeText, 
-        autoCapitalize = 'none', 
-        onBlur, 
-        error, 
-        secureTextEntry=false, 
-        style, 
-        containerStyle,
-        right, 
-        errorMsg = '', 
-        onFocus, 
-        onEndEditting,
-        onSubmitEditing,
-        nonEditable,
-        active,
-        roundness = 5,
-        multiline = false,
-        mode = 'outlined',
-        dense = false,
-        autoFocus = false,
-        disabled
-    
-    }) => {
+    label,
+    value,
+    onChangeText,
+    autoCapitalize = 'none',
+    onBlur,
+    error,
+    secureTextEntry = false,
+    style,
+    containerStyle,
+    right,
+    errorMsg = '',
+    onFocus,
+    onEndEditting,
+    onSubmitEditing,
+    nonEditable,
+    active,
+    roundness = 5,
+    multiline = false,
+    mode = 'outlined',
+    dense = false,
+    autoFocus = false,
+    disabled,
+}) => {
     return (
         <View style={{ ...containerStyle }}>
             <XTextInput
@@ -38,13 +37,18 @@ export const TextInput = ({
                 autoCapitalize={autoCapitalize}
                 autoCorrect={false}
                 mode={mode}
-                outlineColor={ active ? Colors.primary : Colors.light}
+                outlineColor={active ? Colors.primary : Colors.light}
                 activeOutlineColor={Colors.primary}
                 activeUnderlineColor={Colors.primary}
-                onBlur={ onBlur }
-                theme={{ 
-                    colors: { text: Colors.black, placeholder: active ? Colors.primary : Colors.grey}, 
-                    fonts: {regular: { fontFamily: 'EncodeSansExpaded-Light'}}, 
+                onBlur={onBlur}
+                theme={{
+                    colors: {
+                        text: Colors.black,
+                        placeholder: active ? Colors.primary : Colors.grey,
+                    },
+                    fonts: {
+                        regular: { fontFamily: 'EncodeSansExpaded-Light' },
+                    },
                     roundness: roundness,
                 }}
                 error={error}
@@ -57,21 +61,19 @@ export const TextInput = ({
                 editable={nonEditable ? false : true}
                 multiline={multiline}
                 render={(innerProps) => (
-                    <NativeTextInput 
+                    <NativeTextInput
                         {...innerProps}
-                        style={[innerProps.style, {textAlignVertical: 'center'}]}
+                        style={[
+                            innerProps.style,
+                            { textAlignVertical: 'center' },
+                        ]}
                     />
                 )}
                 onSubmitEditing={onSubmitEditing}
                 autoFocus={autoFocus}
                 disabled={disabled}
             />
-            {
-            errorMsg 
-                ? <Text color={Colors.red}>{errorMsg}</Text>
-                : null
-            }
-            
+            {errorMsg ? <Text color={Colors.red}>{errorMsg}</Text> : null}
         </View>
     )
 }

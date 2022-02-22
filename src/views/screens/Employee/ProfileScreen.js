@@ -1,9 +1,21 @@
-import React, { useState, useEffect, useCallback, useRef, memo }  from 'react'
-import { StyleSheet, View, TouchableOpacity, RefreshControl, FlatList } from 'react-native'
-import { Text, BottomSheetModal, Container, ActivityIndicator, FlatList as FFlatList } from '../../components/FiplyComponents'
+import React, { useState, useEffect, useCallback, useRef, memo } from 'react'
+import {
+    StyleSheet,
+    View,
+    TouchableOpacity,
+    RefreshControl,
+    FlatList,
+} from 'react-native'
+import {
+    Text,
+    BottomSheetModal,
+    Container,
+    ActivityIndicator,
+    FlatList as FFlatList,
+} from '../../components/FiplyComponents'
 import Colors from '../../../utils/Colors'
 import { LinearGradient } from 'expo-linear-gradient'
-import { FontAwesome5, FontAwesome } from '@expo/vector-icons';
+import { FontAwesome5, FontAwesome } from '@expo/vector-icons'
 
 import ProfileHeader from '../../components/profile/ProfileHeader'
 import CardInfo from '../../components/profile/CardInfo'
@@ -12,8 +24,8 @@ import TopNavigation from '../../components/headers/TopNavigation'
 import PostFilterDialog from '../../components/dialog/PostFilterDialog'
 import Comments from '../../components/modals/Comments'
 import NoData from '../../components/NoData'
-import {default as EditPost} from '../../components/modals/CreatePost'
-import {default as DeleteConfirmation} from '../../components/dialog/Confirmation'
+import { default as EditPost } from '../../components/modals/CreatePost'
+import { default as DeleteConfirmation } from '../../components/dialog/Confirmation'
 
 import useProfile from '../../../api/hooks/user/useProfile'
 import useExperience from '../../../api/hooks/user/useExperience'
@@ -22,93 +34,100 @@ import usePost from '../../../api/hooks/usePost'
 import useComment from '../../../api/hooks/useComment'
 import PostItem from '../../components/lists/PostItem'
 
-const ProfileScreen = ({navigation, route}) => {
-
+const ProfileScreen = ({ navigation, route }) => {
     const { userId } = route.params
     const [showModal, setShowModal] = useState(false)
     const [navIndex, setNavIndex] = useState(0)
     const [showComment, setShowComment] = useState(false)
-    const [showCreatePost, setShowCreatePost] = useState(false);
-    const [selectedPost, setSelectedPost] = useState({content: ''})
+    const [showCreatePost, setShowCreatePost] = useState(false)
+    const [selectedPost, setSelectedPost] = useState({ content: '' })
     const [showConfirmation, setShowConfirmation] = useState(false)
 
-    const { 
-        getUserInfo, 
-        profile, 
-        basicInfo, 
-        contactInfo, 
-        loading: profileLoading 
+    const {
+        getUserInfo,
+        profile,
+        basicInfo,
+        contactInfo,
+        loading: profileLoading,
     } = useProfile()
-    const { 
-        getExperiences, 
-        experiences, 
-        loading : experienceLoading 
+    const {
+        getExperiences,
+        experiences,
+        loading: experienceLoading,
     } = useExperience()
-    const { 
-        getEducationalBackgrounds, 
-        educationalBackgrounds, 
-        loading: ebLoading 
+    const {
+        getEducationalBackgrounds,
+        educationalBackgrounds,
+        loading: ebLoading,
     } = useEducationalBackground()
-    const { 
-        posts, 
-        getPosts, 
-        morePosts, 
-        updatePost, 
-        deletePost, 
+    const {
+        posts,
+        getPosts,
+        morePosts,
+        updatePost,
+        deletePost,
         toggleUpVote,
-        loading: postLoading 
+        loading: postLoading,
     } = usePost()
-    const { comments, getComments, resetComments, createComment, commentDetails, loading: commentLoading } = useComment()
+    const {
+        comments,
+        getComments,
+        resetComments,
+        createComment,
+        commentDetails,
+        loading: commentLoading,
+    } = useComment()
 
-
-    const bottomSheetModalRef = useRef(null);
+    const bottomSheetModalRef = useRef(null)
     const handlePresentModalPress = useCallback(() => {
-        bottomSheetModalRef.current?.present();
-    }, []);
+        bottomSheetModalRef.current?.present()
+    }, [])
 
     const handleClosePress = () => bottomSheetModalRef.current.close()
-
 
     useEffect(() => {
         getUserInfo(userId)
     }, [])
-    
-    const renderItem = ({item}) => {
+
+    const renderItem = ({ item }) => {
         return (
-            <PostItem 
-                data={item} 
+            <PostItem
+                data={item}
                 handleDotPress={(postItem) => {
                     setSelectedPost(postItem)
                     handlePresentModalPress()
-                }} 
+                }}
                 onCommentPress={(id) => {
                     getComments(id)
                     setShowComment(true)
-                }} 
+                }}
                 onUpVotePress={(id) => toggleUpVote(id)}
             />
         )
     }
 
     const ListFooterComponent = memo(() => {
-        return(
-            (posts.length >= 30) 
-                ? 
-                    <TouchableOpacity 
-                        onPress={() => {
-                                morePosts(true)
-                                flatListRef.current.scrollToOffset({animated: true, offset: 0})
-                            }}>
-                        <Text 
-                            weight='medium' 
-                            color={Colors.secondary} 
-                            center
-                            style={{ marginTop: 10, marginBottom: 20 }}
-                        >
-                        Load More
-                    </Text>            
-                    </TouchableOpacity>
-                : <ActivityIndicator visible={postLoading}/>
+        return posts.length >= 30 ? (
+            <TouchableOpacity
+                onPress={() => {
+                    morePosts(true)
+                    flatListRef.current.scrollToOffset({
+                        animated: true,
+                        offset: 0,
+                    })
+                }}
+            >
+                <Text
+                    weight="medium"
+                    color={Colors.secondary}
+                    center
+                    style={{ marginTop: 10, marginBottom: 20 }}
+                >
+                    Load More
+                </Text>
+            </TouchableOpacity>
+        ) : (
+            <ActivityIndicator visible={postLoading} />
         )
     })
 
@@ -117,7 +136,13 @@ const ProfileScreen = ({navigation, route}) => {
             <Container padding={10}>
                 <CardInfo
                     title={'Basic Information'}
-                    headers={['Gender', 'Age', 'Birthday', 'Language', 'Status']}
+                    headers={[
+                        'Gender',
+                        'Age',
+                        'Birthday',
+                        'Language',
+                        'Status',
+                    ]}
                     infos={basicInfo}
                 />
                 <CardInfo
@@ -130,22 +155,29 @@ const ProfileScreen = ({navigation, route}) => {
     }
 
     const Background = () => {
-        return(
+        return (
             <Container padding={10}>
                 <FFlatList
                     data={experiences}
                     renderItem={(item, index) => (
-                        <CardInfo 
+                        <CardInfo
                             key={index}
-                            title='Work Experience'
-                            headers={['Company', 'Location', 'Title', 'Employment Type', 'Date Started', 'Date Ended']}
+                            title="Work Experience"
+                            headers={[
+                                'Company',
+                                'Location',
+                                'Title',
+                                'Employment Type',
+                                'Date Started',
+                                'Date Ended',
+                            ]}
                             infos={{
-                                company         : item.company,
-                                location        : item.location,
-                                title           : item.job_title,
-                                employment_type : item.employment_type,
-                                starting_date   : item.starting_date,
-                                completion_date : item.completion_date,
+                                company: item.company,
+                                location: item.location,
+                                title: item.job_title,
+                                employment_type: item.employment_type,
+                                starting_date: item.starting_date,
+                                completion_date: item.completion_date,
                             }}
                         />
                     )}
@@ -158,31 +190,29 @@ const ProfileScreen = ({navigation, route}) => {
     const Activity = () => {
         return (
             <View style={{ flex: 1 }}>
-                <TitleFilter 
+                <TitleFilter
                     title={'Posts'}
                     onFilterPress={() => setShowModal(true)}
                 />
-            {
-                posts.length != 0
-                    ?   <FlatList
-                            data={posts}
-                            renderItem={renderItem}
-                            nestedScrollEnabled={true} 
-                            onEndReached={() => morePosts()}
-                            onEndReachedThreshold={0}
-                            ListEmptyComponent={<NoData />}
-                            ListFooterComponent={ListFooterComponent}
-                            progressViewOffset={10}
-                        />
-                    :   <ActivityIndicator visible={true}/>
-            
-            }
-
-                    <PostFilterDialog 
-                        visible={showModal}
-                        onDismiss={() => setShowModal(false)}
+                {posts.length != 0 ? (
+                    <FlatList
+                        data={posts}
+                        renderItem={renderItem}
+                        nestedScrollEnabled={true}
+                        onEndReached={() => morePosts()}
+                        onEndReachedThreshold={0}
+                        ListEmptyComponent={<NoData />}
+                        ListFooterComponent={ListFooterComponent}
+                        progressViewOffset={10}
                     />
-               
+                ) : (
+                    <ActivityIndicator visible={true} />
+                )}
+
+                <PostFilterDialog
+                    visible={showModal}
+                    onDismiss={() => setShowModal(false)}
+                />
             </View>
         )
     }
@@ -193,11 +223,17 @@ const ProfileScreen = ({navigation, route}) => {
                 <FFlatList
                     data={educationalBackgrounds}
                     renderItem={(item, index) => (
-                        <CardInfo 
+                        <CardInfo
                             key={index}
-                            title='Education'
-                            headers={['School', 'Degree', 'Field of Study', 'Starting Date', 'Completion Date']}
-                            infos={{ 
+                            title="Education"
+                            headers={[
+                                'School',
+                                'Degree',
+                                'Field of Study',
+                                'Starting Date',
+                                'Completion Date',
+                            ]}
+                            infos={{
                                 school: item.school,
                                 degree: item.degree,
                                 fieldOfStudy: item.field_of_study,
@@ -206,26 +242,25 @@ const ProfileScreen = ({navigation, route}) => {
                             }}
                         />
                     )}
-                    noDataMessage='No Education to show'
+                    noDataMessage="No Education to show"
                     isLoading={ebLoading}
-
                 />
             </Container>
         )
     }
-    
+
     const renderInfo = (id) => {
         switch (id) {
             case 0:
                 return <About />
-            case 1: 
+            case 1:
                 return <Activity />
             case 2:
                 return <Background />
             case 3:
                 return <Education />
             default:
-                break;
+                break
         }
     }
 
@@ -234,14 +269,13 @@ const ProfileScreen = ({navigation, route}) => {
             case 1:
                 getPosts('/posts', userId)
             case 2:
-                getExperiences()                                
-                break;
+                getExperiences()
+                break
             case 3:
-                getEducationalBackgrounds()                                
-                break;
+                getEducationalBackgrounds()
+                break
         }
     }
-
 
     return (
         <Container>
@@ -252,41 +286,55 @@ const ProfileScreen = ({navigation, route}) => {
                         onRefresh={() => getUserInfo()}
                     />
                 }
-                ListHeaderComponent={(
+                ListHeaderComponent={
                     <View style={{ paddingTop: 30 }}>
-                            <LinearGradient
-                                colors={[Colors.primary, Colors.secondary]}
-                                end={{ x: 1, y: 0 }}
-                                style={styles.gradientView}
+                        <LinearGradient
+                            colors={[Colors.primary, Colors.secondary]}
+                            end={{ x: 1, y: 0 }}
+                            style={styles.gradientView}
+                        />
+                        <View style={styles.cameraContainer}>
+                            <FontAwesome5
+                                name="camera"
+                                size={18}
+                                color={Colors.black}
                             />
-                            <View style={styles.cameraContainer}>
-                                <FontAwesome5 name="camera" size={18} color={Colors.black} />
-                            </View>
-                            <Container padding={10}>
-                                <ProfileHeader 
-                                    data={profile} 
-                                    onEditPress={() => navigation.push('EditProfileScreen')}    
-                                />
-                                <TopNavigation
-                                    navTitles={['About', 'Activity', 'Background', 'Education']}
-                                    onBtnPress={i => {
-                                        setNavIndex(i)
-                                        getData(i)
-                                    }}
-                                    index={navIndex}
-                                    style={{ marginHorizontal: 0, marginTop: 5, marginBottom: 5 }}
-                                />
-                            </Container>
-            
-                        { renderInfo(navIndex) }
+                        </View>
+                        <Container padding={10}>
+                            <ProfileHeader
+                                data={profile}
+                                onEditPress={() =>
+                                    navigation.push('EditProfileScreen')
+                                }
+                            />
+                            <TopNavigation
+                                navTitles={[
+                                    'About',
+                                    'Activity',
+                                    'Background',
+                                    'Education',
+                                ]}
+                                onBtnPress={(i) => {
+                                    setNavIndex(i)
+                                    getData(i)
+                                }}
+                                index={navIndex}
+                                style={{
+                                    marginHorizontal: 0,
+                                    marginTop: 5,
+                                    marginBottom: 5,
+                                }}
+                            />
+                        </Container>
+
+                        {renderInfo(navIndex)}
                     </View>
-                )}
+                }
             />
 
-            
             {/* MODALS */}
 
-            <Comments 
+            <Comments
                 data={comments}
                 visible={showComment}
                 detail={commentDetails}
@@ -295,7 +343,7 @@ const ProfileScreen = ({navigation, route}) => {
                     resetComments()
                 }}
                 isLoading={commentLoading}
-                onSendPress={text => createComment(text)}
+                onSendPress={(text) => createComment(text)}
             />
 
             <EditPost
@@ -314,7 +362,7 @@ const ProfileScreen = ({navigation, route}) => {
 
             <DeleteConfirmation
                 visible={showConfirmation}
-                dialogText='Are you sure to delete this post? It cannot be undone.'
+                dialogText="Are you sure to delete this post? It cannot be undone."
                 onDismiss={() => setShowConfirmation(false)}
                 onOkPress={() => {
                     deletePost(selectedPost.id)
@@ -322,40 +370,68 @@ const ProfileScreen = ({navigation, route}) => {
                 }}
             />
 
-            <BottomSheetModal 
-                    bottomSheetModalRef={bottomSheetModalRef}
-                    pointsSnap={[225]}
-                >
-                    <View style={styles.btmSheetContainer}>
-                        <TouchableOpacity 
-                            style={styles.btmActionContainer} 
-                            onPress={() => {
-                                setShowCreatePost(true)
-                                handleClosePress()
-                                }}
-                        >
-                            <FontAwesome5 name="edit" size={23} color={Colors.black} style={styles.btmActionBtn}/>
-                            <Text weight='medium' color={Colors.black}>Edit Post</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity 
-                            style={styles.btmActionContainer}
-                            onPress={() => {
-                                setShowConfirmation(true)
-                                handleClosePress()
-                            }}    
-                        >
-                            <FontAwesome name="trash-o" size={29} color={Colors.black} style={styles.btmActionBtn}/>
-                            <Text weight='medium' color={Colors.black}>Delete Post</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.btmActionContainer}>
-                            <FontAwesome5 name="font-awesome-flag" size={23} color={Colors.black} style={styles.btmActionBtn}/>
-                            <Text weight='medium' color={Colors.black}>Report this post</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.btmActionContainer}>
-                            <FontAwesome name="tasks" size={23} color={Colors.black} style={styles.btmActionBtn}/>
-                            <Text weight='medium' color={Colors.black}>Improve my feed</Text>
-                        </TouchableOpacity>
-                    </View>
+            <BottomSheetModal
+                bottomSheetModalRef={bottomSheetModalRef}
+                pointsSnap={[225]}
+            >
+                <View style={styles.btmSheetContainer}>
+                    <TouchableOpacity
+                        style={styles.btmActionContainer}
+                        onPress={() => {
+                            setShowCreatePost(true)
+                            handleClosePress()
+                        }}
+                    >
+                        <FontAwesome5
+                            name="edit"
+                            size={23}
+                            color={Colors.black}
+                            style={styles.btmActionBtn}
+                        />
+                        <Text weight="medium" color={Colors.black}>
+                            Edit Post
+                        </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={styles.btmActionContainer}
+                        onPress={() => {
+                            setShowConfirmation(true)
+                            handleClosePress()
+                        }}
+                    >
+                        <FontAwesome
+                            name="trash-o"
+                            size={29}
+                            color={Colors.black}
+                            style={styles.btmActionBtn}
+                        />
+                        <Text weight="medium" color={Colors.black}>
+                            Delete Post
+                        </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.btmActionContainer}>
+                        <FontAwesome5
+                            name="font-awesome-flag"
+                            size={23}
+                            color={Colors.black}
+                            style={styles.btmActionBtn}
+                        />
+                        <Text weight="medium" color={Colors.black}>
+                            Report this post
+                        </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.btmActionContainer}>
+                        <FontAwesome
+                            name="tasks"
+                            size={23}
+                            color={Colors.black}
+                            style={styles.btmActionBtn}
+                        />
+                        <Text weight="medium" color={Colors.black}>
+                            Improve my feed
+                        </Text>
+                    </TouchableOpacity>
+                </View>
             </BottomSheetModal>
         </Container>
     )
@@ -367,9 +443,9 @@ const styles = StyleSheet.create({
     gradientView: {
         position: 'absolute',
         height: 125,
-        width: '100%'
-      },
-      cameraContainer:{
+        width: '100%',
+    },
+    cameraContainer: {
         backgroundColor: Colors.light,
         borderRadius: 50,
         right: 0,
@@ -379,18 +455,18 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         alignSelf: 'flex-end',
         marginHorizontal: 10,
-        marginBottom: 25
+        marginBottom: 25,
     },
-      btmSheetContainer:{
+    btmSheetContainer: {
         paddingVertical: 10,
         paddingHorizontal: 20,
     },
-    btmActionContainer:{
+    btmActionContainer: {
         flexDirection: 'row',
         paddingVertical: 5,
-        alignItems : 'center',
+        alignItems: 'center',
     },
-    btmActionBtn:{
-        width: 40
-    }
+    btmActionBtn: {
+        width: 40,
+    },
 })

@@ -6,16 +6,26 @@ import Colors from '../../../utils/Colors'
 import { AuthContext } from '../../../providers/AuthProvider'
 import { TextInput as TxtInput } from 'react-native-paper'
 
-import {Text, TextInput, WaveHeader, Container, Button, SafeAreaView} from '../../components/FiplyComponents'
+import {
+    Text,
+    TextInput,
+    WaveHeader,
+    Container,
+    Button,
+    SafeAreaView,
+} from '../../components/FiplyComponents'
 
-const SignInScreen = ({navigation}) => {
-
-    const { login, loading } = useContext(AuthContext);
-    const [hidePassword, setHidePassword] = useState(true);
+const SignInScreen = ({ navigation }) => {
+    const { login, loading } = useContext(AuthContext)
+    const [hidePassword, setHidePassword] = useState(true)
 
     const signInSchema = yup.object({
-        email: yup.string().trim().email('Invalid Email').required('Email is required'),
-        password: yup.string().trim().required('Password is required')
+        email: yup
+            .string()
+            .trim()
+            .email('Invalid Email')
+            .required('Email is required'),
+        password: yup.string().trim().required('Password is required'),
     })
 
     const handleOnSubmit = (values) => {
@@ -26,63 +36,104 @@ const SignInScreen = ({navigation}) => {
         <SafeAreaView style={{ flex: 1 }}>
             <WaveHeader waveimg={require('../../../assets/img/waves/1.png')} />
             <Container center padding={20}>
-                <View style={styles.imgContainer} >
-                    <Image source={require('../../../assets/img/signinillus.png')} style={styles.img} />
+                <View style={styles.imgContainer}>
+                    <Image
+                        source={require('../../../assets/img/signinillus.png')}
+                        style={styles.img}
+                    />
                 </View>
                 <Formik
                     initialValues={{ email: '', password: '' }}
-                    onSubmit={ (values) => handleOnSubmit(values) }
+                    onSubmit={(values) => handleOnSubmit(values)}
                     validationSchema={signInSchema}
                 >
-                    {({handleChange, handleBlur, handleSubmit, values, errors, touched}) => (
+                    {({
+                        handleChange,
+                        handleBlur,
+                        handleSubmit,
+                        values,
+                        errors,
+                        touched,
+                    }) => (
                         <View style={styles.formContainer}>
                             <TextInput
                                 label="Email"
                                 value={values.email}
                                 onChangeText={handleChange('email')}
-                                onBlur={ handleBlur('email')}
-                                error={(touched.email && errors.email) ? true : false}
-                                errorMsg={(touched.email && errors.email) ? errors.email : ''}
+                                onBlur={handleBlur('email')}
+                                error={
+                                    touched.email && errors.email ? true : false
+                                }
+                                errorMsg={
+                                    touched.email && errors.email
+                                        ? errors.email
+                                        : ''
+                                }
                                 style={{ marginTop: 10 }}
                             />
                             <TextInput
                                 label="Password"
                                 value={values.password}
                                 onChangeText={handleChange('password')}
-                                onBlur={ handleBlur('password')}
-                                error={(touched.password && errors.password) ? true : false}
+                                onBlur={handleBlur('password')}
+                                error={
+                                    touched.password && errors.password
+                                        ? true
+                                        : false
+                                }
                                 secureTextEntry={true}
-                                errorMsg={(touched.password && errors.password) ? errors.password : ''}
+                                errorMsg={
+                                    touched.password && errors.password
+                                        ? errors.password
+                                        : ''
+                                }
                                 style={{ marginTop: 10 }}
                                 secureTextEntry={hidePassword}
-                                right={<TxtInput.Icon name="eye" color={Colors.light} onPress={() => setHidePassword(!hidePassword)}/>}
+                                right={
+                                    <TxtInput.Icon
+                                        name="eye"
+                                        color={Colors.light}
+                                        onPress={() =>
+                                            setHidePassword(!hidePassword)
+                                        }
+                                    />
+                                }
                             />
 
                             <TouchableOpacity style={styles.forgotpass}>
-                                <Text weight='medium'>Forgot Password</Text>
+                                <Text weight="medium">Forgot Password</Text>
                             </TouchableOpacity>
 
-                            <Button 
+                            <Button
                                 title="Sign In"
                                 onPress={() => handleSubmit()}
                                 loading={loading}
                             />
-
                         </View>
                     )}
                 </Formik>
 
-                <Text color={Colors.light} center>- - - Sign in with - - -</Text>
+                <Text color={Colors.light} center>
+                    - - - Sign in with - - -
+                </Text>
 
-                <View style={ styles.googleContainer }>
-                    <Image source={require('../../../assets/img/google.png')} style={styles.google} />
+                <View style={styles.googleContainer}>
+                    <Image
+                        source={require('../../../assets/img/google.png')}
+                        style={styles.google}
+                    />
                 </View>
 
-                
                 <View style={styles.signupContainer}>
-                    <Text weight='semi-bold' color={Colors.light}>Don't have an account yet? </Text>
-                    <TouchableOpacity onPress={() => navigation.navigate('SignupStack')}>
-                        <Text weight='bold' color={Colors.primary}>Sign Up</Text>
+                    <Text weight="semi-bold" color={Colors.light}>
+                        Don't have an account yet?{' '}
+                    </Text>
+                    <TouchableOpacity
+                        onPress={() => navigation.navigate('SignupStack')}
+                    >
+                        <Text weight="bold" color={Colors.primary}>
+                            Sign Up
+                        </Text>
                     </TouchableOpacity>
                 </View>
             </Container>
@@ -93,31 +144,29 @@ const SignInScreen = ({navigation}) => {
 export default SignInScreen
 
 const styles = StyleSheet.create({
-    imgContainer:{
-        alignItems: 'center'
+    imgContainer: {
+        alignItems: 'center',
     },
-    img:{
-
+    img: {},
+    formContainer: {
+        marginVertical: 20,
     },
-    formContainer:{
-        marginVertical: 20
-    },
-    forgotpass:{
+    forgotpass: {
         flexDirection: 'row',
         justifyContent: 'flex-end',
-        marginBottom: 30
+        marginBottom: 30,
     },
-    googleContainer:{
+    googleContainer: {
         alignItems: 'center',
-        marginVertical: 10
+        marginVertical: 10,
     },
-    google:{
+    google: {
         height: 30,
         width: 30,
     },
-    signupContainer:{
+    signupContainer: {
         flexDirection: 'row',
         justifyContent: 'center',
-        bottom: 0
-    }
+        bottom: 0,
+    },
 })

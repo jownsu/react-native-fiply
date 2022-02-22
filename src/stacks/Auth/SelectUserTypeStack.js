@@ -9,11 +9,22 @@ const Stack = createStackNavigator()
 const SelectUserTypeStack = () => {
     return (
         <Stack.Navigator>
-            <Stack.Screen options={{ headerShown: false }} name={'SelectUserTypeScreen'} component={SelectUserTypeScreen} ></Stack.Screen>
-            <Stack.Screen options={{ headerShown: false }} name={'JobSeekerSetupStack'} component={JobSeekerSetupStack} ></Stack.Screen>
-            <Stack.Screen options={{ headerShown: false }} name={'EmployerStack'} component={EmployerStack} ></Stack.Screen>
+            <Stack.Screen
+                options={{ headerShown: false }}
+                name={'SelectUserTypeScreen'}
+                component={SelectUserTypeScreen}
+            ></Stack.Screen>
+            <Stack.Screen
+                options={{ headerShown: false }}
+                name={'JobSeekerSetupStack'}
+                component={JobSeekerSetupStack}
+            ></Stack.Screen>
+            <Stack.Screen
+                options={{ headerShown: false }}
+                name={'EmployerStack'}
+                component={EmployerStack}
+            ></Stack.Screen>
         </Stack.Navigator>
-
     )
 }
 

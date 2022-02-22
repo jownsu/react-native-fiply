@@ -8,106 +8,103 @@ import Paragraph from './questionnaire/Paragraph'
 import MultipleCheckbox from './questionnaire/MultipleCheckbox'
 import MultipleRadioButton from './questionnaire/MultipleRadioButton'
 
-const CreateQuestionnaire = ({onSubmit = () => {}}) => {
+const CreateQuestionnaire = ({ onSubmit = () => {} }) => {
     const questionTypeList = [
         {
             id: '1',
-            name: 'Paragraph'
+            name: 'Paragraph',
         },
         {
             id: '2',
-            name: 'Multiple Choice'
+            name: 'Multiple Choice',
         },
         {
             id: '3',
-            name: 'Radio Button'
+            name: 'Radio Button',
         },
     ]
-    
-    const [error, setError] = useState({question: false, option: false})
+
+    const [error, setError] = useState({ question: false, option: false })
     const [questionType, setQuestionType] = useState('Paragraph')
     const [question, setQuestion] = useState('')
     const [options, setOptions] = useState([])
     const [currentOption, setCurrentOption] = useState('')
     const [questionList, setQuestionList] = useState([])
 
-
     const handleAdd = () => {
-        if(isError()) return
+        if (isError()) return
 
         setQuestionList([...questionList, { question, questionType, options }])
         resetForm()
     }
 
-    const handleRemove =  (index) => {
-        setQuestionList(questionList.filter((item, i) => (i + 1) != index ))
+    const handleRemove = (index) => {
+        setQuestionList(questionList.filter((item, i) => i + 1 != index))
     }
 
     const isError = () => {
         let err = false
-        if(question == ''){
-            setError({...error, question: true})
+        if (question == '') {
+            setError({ ...error, question: true })
             err = true
-        } 
+        }
 
-        if(options.length <= 0 && questionType != 'Paragraph'){
-            setError({...error, option: true})
+        if (options.length <= 0 && questionType != 'Paragraph') {
+            setError({ ...error, option: true })
             err = true
         }
 
         return err
-        
     }
 
     const handleAddOption = () => {
-        if(currentOption == '') return
+        if (currentOption == '') return
 
         setOptions([...options, currentOption])
         setCurrentOption('')
-        setError({...error, option: false})
+        setError({ ...error, option: false })
     }
 
     const handleRemomveOption = (item) => {
-        setOptions(options.filter(i => i != item))
+        setOptions(options.filter((i) => i != item))
     }
 
     const resetForm = () => {
         setQuestion('')
         setQuestionType('Paragraph')
         setOptions([])
-        setError({question: false, option: false})
+        setError({ question: false, option: false })
     }
 
     const renderRadioButtonOptions = () => {
-        return ( 
+        return (
             <View>
                 <View style={styles.selectedOptionsContainer}>
                     {options.map((item, index) => (
-                            <Chip 
-                                key={index}
-                                onClose={() => handleRemomveOption(item)}
-                                style={{ margin: 2 }}
-                            >
-                                {item}
-                            </Chip>
-                        ))
-                    }
+                        <Chip
+                            key={index}
+                            onClose={() => handleRemomveOption(item)}
+                            style={{ margin: 2 }}
+                        >
+                            {item}
+                        </Chip>
+                    ))}
                 </View>
                 <View style={styles.multipleChoiceOptionContainer}>
-                    <RadioButton 
-                        status='checked'
-                    />
-                    <TextInput 
-                        mode='flat'
-                        label='Options' 
-                        style={{ height: 50, width: 150}}
+                    <RadioButton status="checked" />
+                    <TextInput
+                        mode="flat"
+                        label="Options"
+                        style={{ height: 50, width: 150 }}
                         value={currentOption}
                         error={error.option}
-                        errorMsg={error.option ? 'Add atleast one option' : null}
+                        errorMsg={
+                            error.option ? 'Add atleast one option' : null
+                        }
                         onChangeText={setCurrentOption}
                     />
                 </View>
-                <View style={{ flexDirection: 'row' }}>  
+                <View style={{ flexDirection: 'row' }}>
                     <TouchableOpacity onPress={() => handleAddOption()}>
                         <Text color={Colors.secondary}>Add Other Option</Text>
                     </TouchableOpacity>
@@ -117,37 +114,35 @@ const CreateQuestionnaire = ({onSubmit = () => {}}) => {
     }
 
     const renderMultipleChoiceOptions = () => {
-        return ( 
+        return (
             <View>
                 <View style={styles.selectedOptionsContainer}>
                     {options.map((item, index) => (
-                            <Chip 
-                                key={index}
-                                onClose={() => handleRemomveOption(item)}
-                                style={{ margin: 2 }}
-                            >
-                                {item}
-                            </Chip>
-                        ))
-                    }
+                        <Chip
+                            key={index}
+                            onClose={() => handleRemomveOption(item)}
+                            style={{ margin: 2 }}
+                        >
+                            {item}
+                        </Chip>
+                    ))}
                 </View>
 
                 <View style={styles.multipleChoiceOptionContainer}>
-
-                    <Checkbox 
-                        status='checked'
-                    />
-                    <TextInput 
-                        mode='flat'
-                        label='Options' 
-                        style={{ height: 50, width: 150}}
+                    <Checkbox status="checked" />
+                    <TextInput
+                        mode="flat"
+                        label="Options"
+                        style={{ height: 50, width: 150 }}
                         onChangeText={setCurrentOption}
                         value={currentOption}
                         error={error.option}
-                        errorMsg={error.option ? 'Add atleast one option' : null}
+                        errorMsg={
+                            error.option ? 'Add atleast one option' : null
+                        }
                     />
                 </View>
-                <View style={{ flexDirection: 'row' }}>  
+                <View style={{ flexDirection: 'row' }}>
                     <TouchableOpacity onPress={() => handleAddOption()}>
                         <Text color={Colors.secondary}>Add Option</Text>
                     </TouchableOpacity>
@@ -161,11 +156,10 @@ const CreateQuestionnaire = ({onSubmit = () => {}}) => {
             <View style={styles.paragraphOptionContainer}>
                 <Text>Long answer text</Text>
             </View>
-        ) 
+        )
     }
 
     const renderQuestionType = (type) => {
-
         switch (type) {
             case 'Paragraph':
                 return renderParagraphOption()
@@ -174,53 +168,60 @@ const CreateQuestionnaire = ({onSubmit = () => {}}) => {
             case 'Radio Button':
                 return renderRadioButtonOptions()
             default:
-                break;
+                break
         }
     }
 
     const renderQuestionList = (item, index) => {
-
         switch (item.questionType) {
             case 'Paragraph':
-                return <Paragraph 
-                            item={item} 
-                            index={index} 
-                            disabled 
-                            onCloseButton={() => handleRemove(index)} 
-                            showCloseButton 
-                        />
+                return (
+                    <Paragraph
+                        item={item}
+                        index={index}
+                        disabled
+                        onCloseButton={() => handleRemove(index)}
+                        showCloseButton
+                    />
+                )
             case 'Multiple Choice':
-                return <MultipleCheckbox 
-                            item={item} 
-                            index={index} 
-                            disabled 
-                            onCloseButton={() => handleRemove(index)} 
-                            showCloseButton  
-                        />
+                return (
+                    <MultipleCheckbox
+                        item={item}
+                        index={index}
+                        disabled
+                        onCloseButton={() => handleRemove(index)}
+                        showCloseButton
+                    />
+                )
             case 'Radio Button':
-                return <MultipleRadioButton 
-                            item={item} 
-                            index={index} 
-                            disabled 
-                            onCloseButton={() => handleRemove(index)} 
-                            showCloseButton 
-                        />
+                return (
+                    <MultipleRadioButton
+                        item={item}
+                        index={index}
+                        disabled
+                        onCloseButton={() => handleRemove(index)}
+                        showCloseButton
+                    />
+                )
             default:
-                return <Paragraph 
-                            item={item} 
-                            index={index} 
-                            disabled 
-                            onCloseButton={() => handleRemove(index)} 
-                            showCloseButton 
-                        />
+                return (
+                    <Paragraph
+                        item={item}
+                        index={index}
+                        disabled
+                        onCloseButton={() => handleRemove(index)}
+                        showCloseButton
+                    />
+                )
         }
     }
 
-  return (
-            <View style={{ flex: 1 }}>
-                <View style={styles.questionContainer}>
-                <TextInput 
-                    label='Question'
+    return (
+        <View style={{ flex: 1 }}>
+            <View style={styles.questionContainer}>
+                <TextInput
+                    label="Question"
                     roundness={10}
                     style={{ height: 35, fontSize: 14, marginBottom: 5 }}
                     value={question}
@@ -228,18 +229,18 @@ const CreateQuestionnaire = ({onSubmit = () => {}}) => {
                     dense
                     error={error.question}
                     onBlur={() => {
-                        if(question == ''){
-                            setError({...error, question: true})
-                        }else{
-                            setError({...error, question: false})
+                        if (question == '') {
+                            setError({ ...error, question: true })
+                        } else {
+                            setError({ ...error, question: false })
                         }
                     }}
                     errorMsg={error.question ? 'Question is required' : null}
                 />
-                <Dropdown 
+                <Dropdown
                     data={questionTypeList}
                     value={questionType}
-                    onSubmit={text => setQuestionType(text)}
+                    onSubmit={(text) => setQuestionType(text)}
                     noTextInput
                     dropdownIcon
                     textInputStyle={{ height: 30, width: 150, fontSize: 12 }}
@@ -247,67 +248,70 @@ const CreateQuestionnaire = ({onSubmit = () => {}}) => {
                     iconSize={18}
                     style={{ marginBottom: 15 }}
                 />
-                { renderQuestionType(questionType) }
-                <TouchableOpacity activeOpacity={.7} style={styles.addBtn} onPress={() => handleAdd()}>
-                    <MaterialIcons name="add-circle-outline" size={28} color={Colors.primary} />
+                {renderQuestionType(questionType)}
+                <TouchableOpacity
+                    activeOpacity={0.7}
+                    style={styles.addBtn}
+                    onPress={() => handleAdd()}
+                >
+                    <MaterialIcons
+                        name="add-circle-outline"
+                        size={28}
+                        color={Colors.primary}
+                    />
                 </TouchableOpacity>
             </View>
-                <FlatList
-                    data={questionList}
-                    keyExtractor={(item, index) => index.toString()}
-                    extraData={questionList}
-                    renderItem={({item, index}) => (
-                            <View>
-                                {renderQuestionList(item, index + 1)}
-                            </View>
-                        )}
-                    ListFooterComponent={() => (
-                            <Button 
-                                title='Submit' 
-                                style={{ marginVertical: 10 }} 
-                                onPress={() => onSubmit(questionList)} 
-                                disabled={questionList.length <= 0 ? true : false}
-                            />
-                    )}
-                />
+            <FlatList
+                data={questionList}
+                keyExtractor={(item, index) => index.toString()}
+                extraData={questionList}
+                renderItem={({ item, index }) => (
+                    <View>{renderQuestionList(item, index + 1)}</View>
+                )}
+                ListFooterComponent={() => (
+                    <Button
+                        title="Submit"
+                        style={{ marginVertical: 10 }}
+                        onPress={() => onSubmit(questionList)}
+                        disabled={questionList.length <= 0 ? true : false}
+                    />
+                )}
+            />
+        </View>
+    )
+}
 
-
-    </View>
-  );
-};
-
-export default CreateQuestionnaire;
+export default CreateQuestionnaire
 
 const styles = StyleSheet.create({
-    questionContainer:{
+    questionContainer: {
         backgroundColor: Colors.white,
         borderWidth: 1,
         borderColor: Colors.light,
         padding: 15,
         borderRadius: 10,
-        marginVertical: 10
+        marginVertical: 10,
     },
-    addBtn:{
+    addBtn: {
         height: 35,
         width: 35,
         justifyContent: 'center',
         alignItems: 'center',
-        alignSelf: 'flex-end'
+        alignSelf: 'flex-end',
     },
-    multipleChoiceOptionContainer:{
+    multipleChoiceOptionContainer: {
         flexDirection: 'row',
         alignItems: 'center',
         marginVertical: 5,
     },
-    paragraphOptionContainer:{
-        padding: 10, 
-        borderBottomWidth: 1, 
-        borderColor: Colors.light, 
-        marginVertical: 10
+    paragraphOptionContainer: {
+        padding: 10,
+        borderBottomWidth: 1,
+        borderColor: Colors.light,
+        marginVertical: 10,
     },
-    selectedOptionsContainer:{
+    selectedOptionsContainer: {
         flexDirection: 'row',
-        flexWrap: 'wrap'
-    }
-
-});
+        flexWrap: 'wrap',
+    },
+})

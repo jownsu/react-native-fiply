@@ -6,22 +6,22 @@ import Colors from '../../utils/Colors'
 import CreateQuestionnaire from '../components/CreateQuestionnaire'
 
 const CreateQuestionnaireScreen = ({ navigation }) => {
-  return (
-    <SafeAreaView flex statusBarColor={Colors.white} >
-        <Header
-            title='Create a questionnaire'
-            style={{ backgroundColor: Colors.white }}
-            onBackPress={() => navigation.pop()}
-        />
-        <Container>
-            <CreateQuestionnaire 
-                onSubmit={questions => console.log(questions)}
+    return (
+        <SafeAreaView flex statusBarColor={Colors.white}>
+            <Header
+                title="Create a questionnaire"
+                style={{ backgroundColor: Colors.white }}
+                onBackPress={() => navigation.pop()}
             />
-        </Container>
-    </SafeAreaView>
-    );
-};
+            <Container>
+                <CreateQuestionnaire
+                    onSubmit={(questions) => console.log(questions)}
+                />
+            </Container>
+        </SafeAreaView>
+    )
+}
 
-export default CreateQuestionnaireScreen;
+export default CreateQuestionnaireScreen
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({})

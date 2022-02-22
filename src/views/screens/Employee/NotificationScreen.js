@@ -1,6 +1,11 @@
 import React from 'react'
 import { StyleSheet, View, TouchableOpacity, Image } from 'react-native'
-import { SafeAreaView, Text, Container, FlatList } from '../../components/FiplyComponents'
+import {
+    SafeAreaView,
+    Text,
+    Container,
+    FlatList,
+} from '../../components/FiplyComponents'
 import SearchHeader from '../../components/headers/SearchHeader'
 import { FontAwesome, Entypo } from '@expo/vector-icons'
 import Colors from '../../../utils/Colors'
@@ -8,56 +13,61 @@ import TitleFilter from '../../components/headers/TitleFilter'
 import SampleData from '../../../utils/SampleData'
 
 const NotificationScreen = ({ navigation }) => {
-
     const renderNotificationList = (item) => (
-
         <View style={styles.cardContainer}>
-            <Image 
+            <Image
                 source={item.image}
                 style={styles.img}
-                resizeMode='contain'
+                resizeMode="contain"
             />
             <View style={styles.cardInfoContainer}>
-                <Text weight='semi-bold'>{item.name}</Text>
+                <Text weight="semi-bold">{item.name}</Text>
                 <Text>{item.description}</Text>
             </View>
-                
+
             <View style={styles.rightContainer}>
-                <Entypo name="dots-three-horizontal" size={24} color={Colors.black} />
-                <Text size={10} color={Colors.grey}>{item.time}</Text>
+                <Entypo
+                    name="dots-three-horizontal"
+                    size={24}
+                    color={Colors.black}
+                />
+                <Text size={10} color={Colors.grey}>
+                    {item.time}
+                </Text>
             </View>
         </View>
-        
     )
-
 
     return (
         <SafeAreaView flex>
             <SearchHeader
-                rightIcon={ () => 
-                <TouchableOpacity onPress={() => navigation.navigate('MessageStack')} activeOpacity={.5}>
-                    <FontAwesome name="paper-plane" size={24} color={Colors.secondary} />
-                </TouchableOpacity>
-                }
-            /> 
+                rightIcon={() => (
+                    <TouchableOpacity
+                        onPress={() => navigation.navigate('MessageStack')}
+                        activeOpacity={0.5}
+                    >
+                        <FontAwesome
+                            name="paper-plane"
+                            size={24}
+                            color={Colors.secondary}
+                        />
+                    </TouchableOpacity>
+                )}
+            />
 
             <Container style={{ paddingHorizontal: 0 }}>
-                <TitleFilter 
-                    title='NOTIFICATION'
+                <TitleFilter
+                    title="NOTIFICATION"
                     titleColor={Colors.primary}
                     hideLine
                 />
 
-                <FlatList 
+                <FlatList
                     data={SampleData.notificationList}
-                    renderItem={item => renderNotificationList(item)}
-                    noDataMessage='No Notification'
+                    renderItem={(item) => renderNotificationList(item)}
+                    noDataMessage="No Notification"
                 />
-
-
             </Container>
-
-
         </SafeAreaView>
     )
 }
@@ -65,15 +75,15 @@ const NotificationScreen = ({ navigation }) => {
 export default NotificationScreen
 
 const styles = StyleSheet.create({
-    img:{
+    img: {
         height: 50,
         width: 50,
         borderRadius: 100,
         alignSelf: 'center',
         backgroundColor: Colors.white,
-        marginRight: 10
+        marginRight: 10,
     },
-    cardContainer:{
+    cardContainer: {
         backgroundColor: Colors.white,
         flexDirection: 'row',
         borderBottomWidth: 1,
@@ -83,12 +93,12 @@ const styles = StyleSheet.create({
         elevation: 3,
         marginVertical: 2,
     },
-    cardInfoContainer:{
+    cardInfoContainer: {
         justifyContent: 'center',
         flex: 1,
     },
-    rightContainer:{
+    rightContainer: {
         justifyContent: 'space-between',
-        alignItems: 'flex-end'
+        alignItems: 'flex-end',
     },
 })

@@ -1,24 +1,26 @@
 import React from 'react'
 import { StyleSheet, Text, View, Image } from 'react-native'
 
-export const WaveHeader = ({waveimg, height}) => {
-
-    let heightStyle = height ? {height: height} : {};
+export const WaveHeader = ({ waveimg, height }) => {
+    let heightStyle = height ? { height: height } : {}
 
     return (
         <View style={styles.container}>
-            <Image source={waveimg} style={{ ...styles.waveimg , ...heightStyle}}/>
+            <Image
+                source={waveimg}
+                style={{ ...styles.waveimg, ...heightStyle }}
+            />
         </View>
     )
 }
 
 const styles = StyleSheet.create({
-    container:{
+    container: {
         position: 'absolute',
         top: 0,
         width: '100%',
     },
-    waveimg:{
+    waveimg: {
         width: '100%',
-    }
+    },
 })

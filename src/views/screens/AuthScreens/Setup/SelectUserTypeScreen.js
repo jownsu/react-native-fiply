@@ -3,11 +3,21 @@ import { StyleSheet, View, TouchableOpacity } from 'react-native'
 import Colors from '../../../../utils/Colors'
 import { FontAwesome5 } from '@expo/vector-icons'
 import { AuthContext } from '../../../../providers/AuthProvider'
-import {Text, FiplyLogo, WaveHeader, Container, Button, SafeAreaView, SecondaryButton} from '../../../components/FiplyComponents'
+import {
+    Text,
+    FiplyLogo,
+    WaveHeader,
+    Container,
+    Button,
+    SafeAreaView,
+    SecondaryButton,
+} from '../../../components/FiplyComponents'
 
-
-const SelectUserTypeScreen = ({navigation}) => {
-    const [userType, setUserType] = useState({jobseeker: false, employer: false})
+const SelectUserTypeScreen = ({ navigation }) => {
+    const [userType, setUserType] = useState({
+        jobseeker: false,
+        employer: false,
+    })
     const [btnDisabled, setBtnDisabled] = useState(true)
     const { setLogged_in } = useContext(AuthContext)
 
@@ -15,16 +25,15 @@ const SelectUserTypeScreen = ({navigation}) => {
         setBtnDisabled(false)
         switch (usertype) {
             case 'jobseeker':
-                return setUserType({jobseeker: true, employer: false})
+                return setUserType({ jobseeker: true, employer: false })
             case 'employer':
-                return setUserType({jobseeker: false, employer: true})
+                return setUserType({ jobseeker: false, employer: true })
             default:
-                return setUserType({jobseeker: true, employer: false})
+                return setUserType({ jobseeker: true, employer: false })
         }
     }
 
     const handleButtonPress = () => {
-
         switch (true) {
             case userType.jobseeker:
                 navigation.navigate('JobSeekerSetupStack')
@@ -35,28 +44,82 @@ const SelectUserTypeScreen = ({navigation}) => {
             default:
                 navigation.navigate('JobSeekerSetupStack')
         }
-
     }
 
     return (
         <SafeAreaView>
-            <WaveHeader waveimg={require('../../../../assets/img/waves/4.png')} />
+            <WaveHeader
+                waveimg={require('../../../../assets/img/waves/4.png')}
+            />
             <Container center padding={20}>
                 <FiplyLogo />
-                <Text style={{ marginVertical: 35 }} size={18} center>Select user type</Text>
+                <Text style={{ marginVertical: 35 }} size={18} center>
+                    Select user type
+                </Text>
                 <View style={styles.userContainer}>
-                    <TouchableOpacity style={styles.userCard} activeOpacity={.7} onPress={() => handleCardPress('jobseeker')}>
-                        <FontAwesome5 name="user-alt" size={35} color={(userType.jobseeker == true) ? Colors.primary : Colors.black} style={{ marginBottom: 10 }}/>
-                        <Text  color={(userType.jobseeker == true) ? Colors.primary : Colors.black}>Job Seeker</Text>
+                    <TouchableOpacity
+                        style={styles.userCard}
+                        activeOpacity={0.7}
+                        onPress={() => handleCardPress('jobseeker')}
+                    >
+                        <FontAwesome5
+                            name="user-alt"
+                            size={35}
+                            color={
+                                userType.jobseeker == true
+                                    ? Colors.primary
+                                    : Colors.black
+                            }
+                            style={{ marginBottom: 10 }}
+                        />
+                        <Text
+                            color={
+                                userType.jobseeker == true
+                                    ? Colors.primary
+                                    : Colors.black
+                            }
+                        >
+                            Job Seeker
+                        </Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.userCard} activeOpacity={.7} onPress={() => handleCardPress('employer')}>
-                        <FontAwesome5 name="user-tie" size={35} color={(userType.employer == true) ? Colors.primary : Colors.black} style={{ marginBottom: 10 }}/>
-                        <Text color={(userType.employer == true) ? Colors.primary : Colors.black}>Employer</Text>
+                    <TouchableOpacity
+                        style={styles.userCard}
+                        activeOpacity={0.7}
+                        onPress={() => handleCardPress('employer')}
+                    >
+                        <FontAwesome5
+                            name="user-tie"
+                            size={35}
+                            color={
+                                userType.employer == true
+                                    ? Colors.primary
+                                    : Colors.black
+                            }
+                            style={{ marginBottom: 10 }}
+                        />
+                        <Text
+                            color={
+                                userType.employer == true
+                                    ? Colors.primary
+                                    : Colors.black
+                            }
+                        >
+                            Employer
+                        </Text>
                     </TouchableOpacity>
                 </View>
 
-                <Button title='Continue' style={{ marginTop: 100, marginBottom: 20 }} disabled={btnDisabled} onPress={() => handleButtonPress()} />
-                <SecondaryButton title='Later' style={{ borderWidth: 2 }} onPress={() => setLogged_in('true')}/>
+                <Button
+                    title="Continue"
+                    style={{ marginTop: 100, marginBottom: 20 }}
+                    disabled={btnDisabled}
+                    onPress={() => handleButtonPress()}
+                />
+                <SecondaryButton
+                    title="Later"
+                    style={{ borderWidth: 2 }}
+                    onPress={() => setLogged_in('true')}
+                />
             </Container>
         </SafeAreaView>
     )
@@ -65,11 +128,11 @@ const SelectUserTypeScreen = ({navigation}) => {
 export default SelectUserTypeScreen
 
 const styles = StyleSheet.create({
-    userContainer:{
+    userContainer: {
         flexDirection: 'row',
-        justifyContent: 'center'
+        justifyContent: 'center',
     },
-    userCard:{
+    userCard: {
         alignItems: 'center',
         borderWidth: 2,
         borderRadius: 10,
@@ -78,5 +141,4 @@ const styles = StyleSheet.create({
         paddingVertical: 20,
         marginHorizontal: 15,
     },
-
 })

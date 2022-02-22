@@ -6,53 +6,51 @@ import Colors from '../../../utils/Colors'
 import { TextInput as TxtInput } from 'react-native-paper'
 
 export const InputDropdown = ({
-        label, 
-        value, 
-        onChangeText, 
-        onBlur, 
-        onFocus, 
-        error, 
-        style, 
-        errorMsg = '', 
-        data, 
-        visibleDropdown, 
-        onListPress,
-        nonEditable,
-        onInputPress,
-        dropdownIcon,
-        textInputStyle,
-        iconStyle,
-        iconSize = 32,
-        dropdownTextContainerStyle,
-        dropdownTextStyle
-     }) => {
-
+    label,
+    value,
+    onChangeText,
+    onBlur,
+    onFocus,
+    error,
+    style,
+    errorMsg = '',
+    data,
+    visibleDropdown,
+    onListPress,
+    nonEditable,
+    onInputPress,
+    dropdownIcon,
+    textInputStyle,
+    iconStyle,
+    iconSize = 32,
+    dropdownTextContainerStyle,
+    dropdownTextStyle,
+}) => {
     const [filteredData, setFilteredData] = useState([])
 
-
-
-    const onSearch  = (txt) =>{
-
-        if(txt){
+    const onSearch = (txt) => {
+        if (txt) {
             let searchText = txt.toLowerCase()
 
-            let test = data.filter(item => {
-                if(item.name.toLowerCase().match(searchText)){
+            let test = data.filter((item) => {
+                if (item.name.toLowerCase().match(searchText)) {
                     return item
                 }
             })
             setFilteredData(test.slice(0, 5))
         }
-        
     }
 
     return (
-        <View style={{ ...styles.container, ...style }} >
-            <TouchableOpacity onPress={() => onInputPress ? onInputPress() : null} activeOpacity={1}>
+        <View style={{ ...styles.container, ...style }}>
+            <TouchableOpacity
+                onPress={() => (onInputPress ? onInputPress() : null)}
+                activeOpacity={1}
+            >
                 <TextInput
                     label={label}
                     value={value}
-                    onChangeText={text => {
+                    onChangeText={(text) => {
                         onChangeText(text)
                         onSearch(text)
                     }}
@@ -60,38 +58,62 @@ export const InputDropdown = ({
                     onFocus={onFocus}
                     error={error}
                     errorMsg={errorMsg}
-                    right={dropdownIcon ? <TxtInput.Icon name="chevron-down" color={visibleDropdown ? Colors.primary : Colors.light} size={iconSize} style={{ ...iconStyle }} onPress={() => onInputPress ? onInputPress() : null} /> : null}
+                    right={
+                        dropdownIcon ? (
+                            <TxtInput.Icon
+                                name="chevron-down"
+                                color={
+                                    visibleDropdown
+                                        ? Colors.primary
+                                        : Colors.light
+                                }
+                                size={iconSize}
+                                style={{ ...iconStyle }}
+                                onPress={() =>
+                                    onInputPress ? onInputPress() : null
+                                }
+                            />
+                        ) : null
+                    }
                     nonEditable={nonEditable ? true : false}
                     active={visibleDropdown}
                     style={{ ...textInputStyle }}
                 />
             </TouchableOpacity>
 
-                {
-                    visibleDropdown
-                        ? 
-                            <View style={styles.dropdownContainer}>
-                                <FlatList
-                                    data={ nonEditable ? data : filteredData}
-                                    keyExtractor={item => item.id}
-                                    renderItem={({item}) => {
-                                        return (
-                                            <TouchableOpacity style={{ ...styles.dropdownTextContainer, ...dropdownTextContainerStyle }} onPress={ onListPress ? () => onListPress(item.name) : null}>
-                                                <Text style={{ ...dropdownTextStyle }}>{item.name}</Text>
-                                            </TouchableOpacity>
-                                        )
+            {visibleDropdown ? (
+                <View style={styles.dropdownContainer}>
+                    <FlatList
+                        data={nonEditable ? data : filteredData}
+                        keyExtractor={(item) => item.id}
+                        renderItem={({ item }) => {
+                            return (
+                                <TouchableOpacity
+                                    style={{
+                                        ...styles.dropdownTextContainer,
+                                        ...dropdownTextContainerStyle,
                                     }}
-                                />
-                            </View>
-                        : null
-                }
+                                    onPress={
+                                        onListPress
+                                            ? () => onListPress(item.name)
+                                            : null
+                                    }
+                                >
+                                    <Text style={{ ...dropdownTextStyle }}>
+                                        {item.name}
+                                    </Text>
+                                </TouchableOpacity>
+                            )
+                        }}
+                    />
+                </View>
+            ) : null}
         </View>
     )
 }
 
 const styles = StyleSheet.create({
-    container:{
-    },
+    container: {},
     dropdownContainer: {
         backgroundColor: Colors.white,
         elevation: 7,
@@ -100,17 +122,11 @@ const styles = StyleSheet.create({
         width: '100%',
         zIndex: 100,
     },
-    dropdownTextContainer:{
+    dropdownTextContainer: {
         padding: 15,
         borderBottomWidth: 1,
         borderColor: Colors.light,
-        zIndex: 100000
+        zIndex: 100000,
     },
-    dropdownText:{
-    },
+    dropdownText: {},
 })
-
-
-
-
-

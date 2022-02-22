@@ -1,12 +1,11 @@
 import { StyleSheet, View, FlatList as FList, Image } from 'react-native'
 import React from 'react'
-import {ActivityIndicator} from '../FiplyComponents/ActivityIndicator'
-import {Text} from '../FiplyComponents/Text'
+import { ActivityIndicator } from '../FiplyComponents/ActivityIndicator'
+import { Text } from '../FiplyComponents/Text'
 import Colors from '../../../utils/Colors'
 
-
 export const FlatList = ({
-    data, 
+    data,
     isLoading = false,
     renderItem = () => {},
     numColumns = 1,
@@ -15,35 +14,30 @@ export const FlatList = ({
     renderHeader,
     nestedScrollEnabled = false,
     onEndReached = () => {},
-    onEndReachedThreshold = .5,
+    onEndReachedThreshold = 0.5,
     extraData,
     ListFooterComponent,
     flatlistref = null,
-    maxToRenderPerBatch=10,
-    initialNumToRender=10,
+    maxToRenderPerBatch = 10,
+    initialNumToRender = 10,
 }) => {
-  return (
-    <View style={{ flex: 1, ...styles }}	>
- 
-        {
-            data.length > 0 || isLoading == true 
-            ? (
+    return (
+        <View style={{ flex: 1, ...styles }}>
+            {data.length > 0 || isLoading == true ? (
                 <FList
                     ref={flatlistref}
                     data={data}
                     keyExtractor={(item) => item.id}
                     numColumns={numColumns}
-                    renderItem={({item, index}) => renderItem(item, index)}
+                    renderItem={({ item, index }) => renderItem(item, index)}
                     ListHeaderComponent={renderHeader}
                     ListFooterComponent={
                         <View>
-                            {
-                            isLoading 
-                            ? <View>
-                                    <ActivityIndicator visible={true}/>
-                                </View> 
-                            : null 
-                            }
+                            {isLoading ? (
+                                <View>
+                                    <ActivityIndicator visible={true} />
+                                </View>
+                            ) : null}
                             {ListFooterComponent}
                         </View>
                     }
@@ -55,43 +49,38 @@ export const FlatList = ({
                     initialNumToRender={initialNumToRender}
                     maxToRenderPerBatch={maxToRenderPerBatch}
                 />
-            )
-            : (
+            ) : (
                 <View style={noDataStyles.container}>
-                    <Text weight='medium' size={18} center>{noDataMessage}</Text>
+                    <Text weight="medium" size={18} center>
+                        {noDataMessage}
+                    </Text>
                     <View style={noDataStyles.imgContainer}>
-                        <Image 
-                            source={ require('../../../assets/img/nomessage.png') }
+                        <Image
+                            source={require('../../../assets/img/nomessage.png')}
                             style={noDataStyles.img}
                         />
                     </View>
                 </View>
-            )
-
-        }
-
-    </View>
-  );
-};
-
+            )}
+        </View>
+    )
+}
 
 const noDataStyles = StyleSheet.create({
-    container:{
+    container: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
         marginHorizontal: 20,
     },
-    imgContainer:{
+    imgContainer: {
         width: 300,
-        height: 300
+        height: 300,
     },
-    img:{
+    img: {
         height: '100%',
         width: '100%',
-        resizeMode: 'contain'
+        resizeMode: 'contain',
     },
-    loadingIcon:{
-        
-    }
-});
+    loadingIcon: {},
+})

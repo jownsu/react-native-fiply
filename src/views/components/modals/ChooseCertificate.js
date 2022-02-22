@@ -4,34 +4,34 @@ import { Container, Text } from '../FiplyComponents'
 import Header from '../headers/Header'
 import RecommendedList from '../lists/RecommendedList'
 
-const ChooseCertificate = ({visible, onBackPress}) => {
-
+const ChooseCertificate = ({ visible, onBackPress }) => {
     const CertificateList = [
-        {id: '1', name: 'Business Permit'},
-        {id: '2', name: "Barangay Clearance"},
-        {id: '3', name: 'DTI Business Registration Certificate'},
-        {id: '4', name: 'SEC Registration Certificate'},
-        {id: '5', name: 'Bureau of Internal Revenue TIN'},
-    ];
+        { id: '1', name: 'Business Permit' },
+        { id: '2', name: 'Barangay Clearance' },
+        { id: '3', name: 'DTI Business Registration Certificate' },
+        { id: '4', name: 'SEC Registration Certificate' },
+        { id: '5', name: 'Bureau of Internal Revenue TIN' },
+    ]
 
     return (
         <Modal
             visible={visible}
-            animationType='fade'
+            animationType="fade"
             onRequestClose={() => onBackPress()}
         >
-            <Header 
-                title='Choose category'
-                onBackPress={() => onBackPress()}
-            />
-            <Container center >
-                <Text weight='medium' size={16} center>Recommended Certificates</Text>
-                <RecommendedList 
-                    onIdPress={(name) => alert(name) }
+            <Header title="Choose category" onBackPress={() => onBackPress()} />
+            <Container center>
+                <Text weight="medium" size={16} center>
+                    Recommended Certificates
+                </Text>
+                <RecommendedList
+                    onIdPress={(name) => alert(name)}
                     style={{ marginVertical: 50 }}
                     data={CertificateList}
                 />
-                <Text center>Make sure your certificate is valid and is not expired</Text>
+                <Text center>
+                    Make sure your certificate is valid and is not expired
+                </Text>
             </Container>
         </Modal>
     )

@@ -1,7 +1,7 @@
 const domain = 'http://192.168.1.10:80'
 
 const config = {
-  api: domain + '/api',
+    api: domain + '/api',
 }
 
 export default config
