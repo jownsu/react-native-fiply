@@ -20,7 +20,9 @@ const TopNavigation = ({
                         style={{ ...styles.navBtn, ...btnStyles }}
                         onPress={() => {
                             setNavIndex(ind)
-                            onBtnPress(ind)
+                            if (ind != navIndex) {
+                                onBtnPress(ind)
+                            }
                         }}
                     >
                         <Text

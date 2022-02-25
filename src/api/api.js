@@ -1,6 +1,7 @@
 import axios from 'axios'
 import * as SecureStore from 'expo-secure-store'
 import config from './config'
+import { NativeModules } from 'react-native'
 
 const api = ({ token = null } = {}) => {
     const api = axios.create({
@@ -16,6 +17,7 @@ const api = ({ token = null } = {}) => {
         (error) => {
             if (error.response?.status == 401) {
                 SecureStore.deleteItemAsync('user')
+                NativeModules.DevSettings.reload()
                 return Promise.reject({ status: 401, errors: ['Unauthorized'] })
             }
 

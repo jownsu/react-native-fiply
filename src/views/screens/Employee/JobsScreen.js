@@ -1,47 +1,92 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react'
 import { StyleSheet, TouchableOpacity, View, FlatList } from 'react-native'
-import {
-    SafeAreaView,
-    Container,
-    Text,
-    ActivityIndicator,
-} from '../../components/FiplyComponents'
-import SearchHeader from '../../components/headers/SearchHeader'
-import Colors from '../../../utils/Colors'
 import { FontAwesome } from '@expo/vector-icons'
-import NoData from '../../components/NoData'
+import Colors from '../../../utils/Colors'
 
+import { SafeAreaView, Container, Text, ActivityIndicator } from '../../components/FiplyComponents'
+import NoData from '../../components/NoData'
+import SearchHeader from '../../components/headers/SearchHeader'
 import TitleFilter from '../../components/headers/TitleFilter'
 import TopNavigation from '../../components/headers/TopNavigation'
-import useJob from '../../../api/hooks/useJob'
+import useJob from '../../../api/hooks/job/useJobs'
 import JobItem from '../../components/lists/JobItem'
 
 const JobsScreen = ({ navigation }, offset) => {
-    const [navIndex, setNavIndex] = useState(0)
-    const { jobs, getJobs, moreJobs, loading } = useJob()
+    const {
+        jobs,
+        getJobs,
+        moreJobs,
+        getSavedJobs,
+        getAppliedJobs,
+        toggleSaveJob,
+        toggleApplyJob,
+        loading,
+    } = useJob()
     const flatListRef = useRef(null)
+
+    const [dataType, setDataType] = useState('discover')
 
     useEffect(() => {
         getJobs()
     }, [])
 
-    const renderItem = ({ item }) => {
-        return <JobItem data={item} onCardPress={handleCardPress} />
+    const scrollToTop = () => {
+        flatListRef.current.scrollToOffset({
+            animated: true,
+            offset: 0,
+        })
     }
 
-    const handleCardPress = (id) => {
-        navigation.push('ShowJobScreen', { id })
+    const renderItem = ({ item }) => (
+        <JobItem
+            data={item}
+            onCardPress={handleCardPress}
+            onSavePress={handleSavePress}
+            onApplyPress={handleApplyPress}
+            onRemovePress={handleRemovePress}
+            showRemove={dataType !== 'discover'}
+        />
+    )
+
+    const handleSavePress = (id) => toggleSaveJob(id)
+
+    const handleApplyPress = (id) => toggleApplyJob(id)
+
+    const handleRemovePress = (id) => {
+        switch (dataType) {
+            case 'saved':
+                return toggleSaveJob(id, true)
+            case 'applied':
+                return toggleApplyJob(id, true)
+        }
+    }
+
+    const handleCardPress = (id) => navigation.push('ShowJobScreen', { id })
+
+    const handleTopNavigationPress = (id) => {
+        switch (id) {
+            case 0:
+                getJobs()
+                setDataType('discover')
+                break
+            case 1:
+                getSavedJobs()
+                setDataType('saved')
+                break
+            case 2:
+                getAppliedJobs()
+                setDataType('applied')
+                break
+        }
+        scrollToTop()
     }
 
     const ListFooterComponent = useMemo(() => {
-        return jobs.length >= 30 ? (
+        return jobs.length >= 30 && !loading ? (
             <TouchableOpacity
                 onPress={() => {
                     moreJobs(true)
-                    flatListRef.current.scrollToOffset({
-                        animated: true,
-                        offset: 0,
-                    })
+                    scrollToTop()
                 }}
             >
                 <Text
@@ -58,9 +103,7 @@ const JobsScreen = ({ navigation }, offset) => {
         )
     }, [loading])
 
-    const ListEmptyComponent = () => {
-        return <NoData />
-    }
+    const ListEmptyComponent = () => <NoData />
 
     const onEndReached = () => {
         if (jobs.length < 30 && !loading) {
@@ -97,25 +140,17 @@ const JobsScreen = ({ navigation }, offset) => {
                         onPress={() => navigation.navigate('MessageStack')}
                         activeOpacity={0.5}
                     >
-                        <FontAwesome
-                            name="paper-plane"
-                            size={24}
-                            color={Colors.secondary}
-                        />
+                        <FontAwesome name="paper-plane" size={24} color={Colors.secondary} />
                     </TouchableOpacity>
                 )}
             />
 
             <Container style={{ paddingHorizontal: 0 }}>
-                <TitleFilter
-                    title="JOBS"
-                    titleColor={Colors.primary}
-                    hideLine
-                />
+                <TitleFilter title="JOBS" titleColor={Colors.primary} hideLine />
 
                 <TopNavigation
                     navTitles={['Discover', 'Saved', 'Applied', 'Pending']}
-                    onBtnPress={(i) => setNavIndex(i)}
+                    onBtnPress={handleTopNavigationPress}
                 />
 
                 {jobs.length != 0 ? (
@@ -133,8 +168,6 @@ const JobsScreen = ({ navigation }, offset) => {
                 ) : (
                     <ActivityIndicator visible={true} />
                 )}
-
-                {/* {renderList(navIndex)} */}
             </Container>
         </SafeAreaView>
     )

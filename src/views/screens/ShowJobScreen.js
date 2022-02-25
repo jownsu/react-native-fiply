@@ -1,14 +1,9 @@
 import { StyleSheet, View, ScrollView, TouchableOpacity } from 'react-native'
-import {
-    SafeAreaView,
-    Container,
-    Text,
-    ActivityIndicator,
-} from '../components/FiplyComponents'
+import { SafeAreaView, Container, Text, ActivityIndicator } from '../components/FiplyComponents'
 import { Avatar } from 'react-native-paper'
 import Header from '../components/headers/Header'
 import React, { useState, useEffect } from 'react'
-import useJob from '../../api/hooks/useJob'
+import useJob from '../../api/hooks/job/useJobs'
 import Colors from '../../utils/Colors'
 import { Ionicons, FontAwesome, FontAwesome5 } from '@expo/vector-icons'
 
@@ -41,12 +36,7 @@ const ShowJobScreen = ({ navigation, route }) => {
                 ) : (
                     <Container padding={10}>
                         <View style={styles.jobTitleContainer}>
-                            <Text
-                                weight="semi-bold"
-                                size={22}
-                                adjustsFontSizeToFit
-                                numberOfLines={1}
-                            >
+                            <Text weight="semi-bold" size={22} adjustsFontSizeToFit numberOfLines={1}>
                                 {jobs.title}
                             </Text>
                             <Text>Posted {jobs.posted_at}</Text>
@@ -115,22 +105,14 @@ const ShowJobScreen = ({ navigation, route }) => {
                         </View>
 
                         <View style={styles.responsibilitiesContainer}>
-                            <Text
-                                size={21}
-                                weight="medium"
-                                style={{ marginBottom: 5 }}
-                            >
+                            <Text size={21} weight="medium" style={{ marginBottom: 5 }}>
                                 Job Responsibilites
                             </Text>
                             <Text>{jobs.job_responsibilities}</Text>
                         </View>
 
                         <View style={styles.qualificationsContainer}>
-                            <Text
-                                size={21}
-                                weight="medium"
-                                style={{ marginBottom: 5 }}
-                            >
+                            <Text size={21} weight="medium" style={{ marginBottom: 5 }}>
                                 Qualifications
                             </Text>
                             <Text>{jobs.qualifications}</Text>
@@ -144,16 +126,24 @@ const ShowJobScreen = ({ navigation, route }) => {
                     <FontAwesome
                         name="bookmark-o"
                         size={24}
-                        color={Colors.primary}
+                        color={jobs.is_saved ? Colors.black : Colors.primary}
                         style={{ marginRight: 10 }}
                     />
-                    <Text weight="medium" size={16} color={Colors.primary}>
-                        Save
+                    <Text weight="medium" size={16} color={jobs.is_saved ? Colors.black : Colors.primary}>
+                        {jobs.is_saved ? 'Saved' : 'Save'}
                     </Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.applyBtn} activeOpacity={0.7}>
+                <TouchableOpacity
+                    style={[
+                        styles.applyBtn,
+                        {
+                            backgroundColor: jobs.is_applied ? Colors.black : Colors.primary,
+                        },
+                    ]}
+                    activeOpacity={0.7}
+                >
                     <Text weight="medium" size={16} color={Colors.white}>
-                        Apply
+                        {jobs.is_applied ? 'Applied' : 'Apply'}
                     </Text>
                 </TouchableOpacity>
             </View>
@@ -215,7 +205,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     applyBtn: {
-        backgroundColor: Colors.primary,
         justifyContent: 'center',
         alignItems: 'center',
         flex: 2,

@@ -6,7 +6,14 @@ import { FontAwesome, Ionicons } from '@expo/vector-icons'
 import Colors from '../../../utils/Colors'
 
 const JobItem = memo(
-    ({ data, onCardPress = () => {} }) => {
+    ({
+        data,
+        onCardPress = () => {},
+        onSavePress = () => {},
+        onApplyPress = () => {},
+        onRemovePress = () => {},
+        showRemove = false,
+    }) => {
         return (
             <TouchableOpacity
                 style={jobListTyle.cardContainer}
@@ -14,11 +21,7 @@ const JobItem = memo(
                 onPress={() => onCardPress(data.id)}
             >
                 <View style={jobListTyle.cardHeaderContainer}>
-                    <Text
-                        weight="semi-bold"
-                        color={Colors.primary}
-                        style={jobListTyle.txtTitle}
-                    >
+                    <Text weight="semi-bold" color={Colors.primary} style={jobListTyle.txtTitle}>
                         {data.title}
                     </Text>
                     <Text style={{ marginHorizontal: 10 }}>{'\u25CF'}</Text>
@@ -28,11 +31,7 @@ const JobItem = memo(
                 <View style={jobListTyle.cardBodyContainer}>
                     <View style={jobListTyle.bodyHeadContainer}>
                         <View style={jobListTyle.imgContainer}>
-                            <Avatar.Image
-                                size={75}
-                                source={{ uri: data.image }}
-                                backgroundColor={Colors.light}
-                            />
+                            <Avatar.Image size={75} source={{ uri: data.image }} backgroundColor={Colors.light} />
                         </View>
 
                         <Text
@@ -50,55 +49,74 @@ const JobItem = memo(
                     {/* {!isPending ? renderJobListFooter(item) : renderPendingFooter(item)} */}
 
                     <View style={jobListTyle.bodyFootContainer}>
-                        <Ionicons
-                            name="location-sharp"
-                            size={24}
-                            color={Colors.primary}
-                            style={{ marginRight: 10 }}
-                        />
+                        <Ionicons name="location-sharp" size={24} color={Colors.primary} style={{ marginRight: 10 }} />
                         <Text size={11}>{data.location}</Text>
                     </View>
 
                     <View style={jobListTyle.cardFooterContainer}>
-                        <TouchableOpacity
-                            activeOpacity={0.7}
-                            style={{
-                                ...jobListTyle.footerBtn,
-                                borderRightWidth: 0.5,
-                            }}
-                        >
-                            <FontAwesome
-                                name="bookmark-o"
-                                size={24}
-                                color={Colors.primary}
-                                style={{ marginRight: 15 }}
-                            />
-                            <Text weight="medium" color={Colors.primary}>
-                                SAVE
-                            </Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            activeOpacity={0.7}
-                            style={{
-                                ...jobListTyle.footerBtn,
-                                borderLeftWidth: 0.5,
-                            }}
-                        >
-                            <Text
-                                weight="medium"
-                                color={
-                                    data.isApply ? Colors.black : Colors.primary
-                                }
-                            >
-                                APPLY
-                            </Text>
-                        </TouchableOpacity>
+                        {showRemove ? (
+                            <>
+                                <TouchableOpacity
+                                    activeOpacity={0.7}
+                                    style={{
+                                        ...jobListTyle.footerBtn,
+                                        borderRightWidth: 0.5,
+                                    }}
+                                    onPress={() => onRemovePress(data.id)}
+                                >
+                                    <FontAwesome
+                                        name="trash-o"
+                                        size={24}
+                                        color={Colors.red}
+                                        style={{ marginRight: 15 }}
+                                    />
+                                    <Text weight="medium" color={Colors.red}>
+                                        REMOVE
+                                    </Text>
+                                </TouchableOpacity>
+                            </>
+                        ) : (
+                            <>
+                                <TouchableOpacity
+                                    activeOpacity={0.7}
+                                    style={{
+                                        ...jobListTyle.footerBtn,
+                                        borderRightWidth: 0.5,
+                                    }}
+                                    onPress={() => onSavePress(data.id)}
+                                >
+                                    <FontAwesome
+                                        name="bookmark-o"
+                                        size={24}
+                                        color={data.is_saved ? Colors.black : Colors.primary}
+                                        style={{ marginRight: 15 }}
+                                    />
+                                    <Text weight="medium" color={data.is_saved ? Colors.black : Colors.primary}>
+                                        {data.is_saved ? 'SAVED' : 'SAVE'}
+                                    </Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    activeOpacity={0.7}
+                                    style={{
+                                        ...jobListTyle.footerBtn,
+                                        borderLeftWidth: 0.5,
+                                    }}
+                                    onPress={() => onApplyPress(data.id)}
+                                >
+                                    <Text weight="medium" color={data.is_applied ? Colors.black : Colors.primary}>
+                                        {data.is_applied ? 'APPLIED' : 'APPLY'}
+                                    </Text>
+                                </TouchableOpacity>
+                            </>
+                        )}
                     </View>
                 </View>
             </TouchableOpacity>
         )
     },
     (prevProps, nextProps) => {
+        if (prevProps.data.is_saved != nextProps.data.is_saved) return false
+        if (prevProps.data.is_applied != nextProps.data.is_applied) return false
         if (prevProps.id == nextProps.id) return true
         return false
     }
