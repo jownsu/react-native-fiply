@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react'
-import { AuthContext } from '../../providers/AuthProvider'
+import AuthContext from '../context/auth/AuthContext'
 import api from '../api'
 import mime from 'mime'
 
@@ -30,10 +30,7 @@ const usePost = () => {
                 .then((res) => {
                     reset
                         ? setPosts(res.data.data)
-                        : setPosts((prevPosts) => [
-                              ...prevPosts,
-                              ...res.data.data,
-                          ])
+                        : setPosts((prevPosts) => [...prevPosts, ...res.data.data])
                     setNextPath(res.data.links.next)
                 })
                 .catch((err) => console.log(err))
@@ -47,8 +44,7 @@ const usePost = () => {
         let fd = new FormData()
 
         if (postData.image) {
-            const imageUri =
-                'file:///' + postData.image.split('file:/').join('')
+            const imageUri = 'file:///' + postData.image.split('file:/').join('')
             fd.append('image', {
                 uri: imageUri,
                 type: mime.getType(imageUri),
@@ -70,8 +66,7 @@ const usePost = () => {
         const fd = new FormData()
 
         if (postData.image) {
-            const imageUri =
-                'file:///' + postData.image.split('file:/').join('')
+            const imageUri = 'file:///' + postData.image.split('file:/').join('')
             fd.append('image', {
                 uri: imageUri,
                 type: mime.getType(imageUri),

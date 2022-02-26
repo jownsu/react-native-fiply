@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react'
 import { StyleSheet, View, TouchableOpacity } from 'react-native'
-import { AuthContext } from '../../../../providers/AuthProvider'
+import AuthContext from '../../../../api/context/auth/AuthContext'
 import { Formik } from 'formik'
 import * as yup from 'yup'
 import Colors from '../../../../utils/Colors'
@@ -22,25 +22,16 @@ const SignupScreen = ({ navigation }) => {
     const { signup, loading } = useContext(AuthContext)
 
     const signupSchema = yup.object({
-        email: yup
-            .string()
-            .trim()
-            .email('Invalid email')
-            .required('Email is required'),
+        email: yup.string().trim().email('Invalid email').required('Email is required'),
         password: yup.string().trim().required('Password is required'),
-        password_confirmation: yup
-            .string()
-            .trim()
-            .required('Confirm password is required'),
+        password_confirmation: yup.string().trim().required('Confirm password is required'),
         firstname: yup.string().trim().required('Firstname is required'),
         lastname: yup.string().trim().required('Lastname is required'),
     })
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
-            <WaveHeader
-                waveimg={require('../../../../assets/img/waves/2.png')}
-            />
+            <WaveHeader waveimg={require('../../../../assets/img/waves/2.png')} />
             <Container center padding={20}>
                 <FiplyLogo style={{ marginBottom: 25 }} />
 
@@ -53,20 +44,11 @@ const SignupScreen = ({ navigation }) => {
                         lastname: '',
                     }}
                     onSubmit={(values) => {
-                        signup(values, () =>
-                            navigation.navigate('SelectUserTypeStack')
-                        )
+                        signup(values, () => navigation.navigate('SelectUserTypeStack'))
                     }}
                     validationSchema={signupSchema}
                 >
-                    {({
-                        handleChange,
-                        handleSubmit,
-                        handleBlur,
-                        values,
-                        errors,
-                        touched,
-                    }) => (
+                    {({ handleChange, handleSubmit, handleBlur, values, errors, touched }) => (
                         <View style={styles.formContainer}>
                             {hideSecondForm ? (
                                 <View>
@@ -75,27 +57,15 @@ const SignupScreen = ({ navigation }) => {
                                         value={values.email}
                                         onChangeText={handleChange('email')}
                                         onBlur={handleBlur('email')}
-                                        error={
-                                            touched.email && errors.email
-                                                ? true
-                                                : false
-                                        }
-                                        errorMsg={
-                                            touched.email && errors.email
-                                                ? errors.email
-                                                : ''
-                                        }
+                                        error={touched.email && errors.email ? true : false}
+                                        errorMsg={touched.email && errors.email ? errors.email : ''}
                                     />
                                     <TextInput
                                         label={'Password'}
                                         value={values.password}
                                         onChangeText={handleChange('password')}
                                         onBlur={handleBlur('password')}
-                                        error={
-                                            touched.password && errors.password
-                                                ? true
-                                                : false
-                                        }
+                                        error={touched.password && errors.password ? true : false}
                                         errorMsg={
                                             touched.password && errors.password
                                                 ? errors.password
@@ -106,23 +76,15 @@ const SignupScreen = ({ navigation }) => {
                                             <TxtInput.Icon
                                                 name="eye"
                                                 color={Colors.light}
-                                                onPress={() =>
-                                                    setHidePassword(
-                                                        !hidePassword
-                                                    )
-                                                }
+                                                onPress={() => setHidePassword(!hidePassword)}
                                             />
                                         }
                                     />
                                     <TextInput
                                         label={'Confirm Password'}
                                         value={values.password_confirmation}
-                                        onChangeText={handleChange(
-                                            'password_confirmation'
-                                        )}
-                                        onBlur={handleBlur(
-                                            'password_confirmation'
-                                        )}
+                                        onChangeText={handleChange('password_confirmation')}
+                                        onBlur={handleBlur('password_confirmation')}
                                         error={
                                             touched.password_confirmation &&
                                             errors.password_confirmation
@@ -144,23 +106,10 @@ const SignupScreen = ({ navigation }) => {
                                             marginTop: 35,
                                         }}
                                     >
-                                        By clicking Agree and Join, you agree to
-                                        the Fiply
-                                        <Text color={Colors.primary}>
-                                            {' '}
-                                            User Agreement
-                                        </Text>
-                                        ,
-                                        <Text color={Colors.primary}>
-                                            {' '}
-                                            Privacy Policy
-                                        </Text>
-                                        , and
-                                        <Text color={Colors.primary}>
-                                            {' '}
-                                            Cookie Policy
-                                        </Text>
-                                        .
+                                        By clicking Agree and Join, you agree to the Fiply
+                                        <Text color={Colors.primary}> User Agreement</Text>,
+                                        <Text color={Colors.primary}> Privacy Policy</Text>, and
+                                        <Text color={Colors.primary}> Cookie Policy</Text>.
                                     </Text>
 
                                     <Button
@@ -182,19 +131,13 @@ const SignupScreen = ({ navigation }) => {
                                         <TextInput
                                             label={'Firstname'}
                                             value={values.firstname}
-                                            onChangeText={handleChange(
-                                                'firstname'
-                                            )}
+                                            onChangeText={handleChange('firstname')}
                                             onBlur={handleBlur('firstname')}
                                             error={
-                                                touched.firstname &&
-                                                errors.firstname
-                                                    ? true
-                                                    : false
+                                                touched.firstname && errors.firstname ? true : false
                                             }
                                             errorMsg={
-                                                touched.firstname &&
-                                                errors.firstname
+                                                touched.firstname && errors.firstname
                                                     ? errors.firstname
                                                     : ''
                                             }
@@ -203,19 +146,13 @@ const SignupScreen = ({ navigation }) => {
                                         <TextInput
                                             label={'Lastname'}
                                             value={values.lastname}
-                                            onChangeText={handleChange(
-                                                'lastname'
-                                            )}
+                                            onChangeText={handleChange('lastname')}
                                             onBlur={handleBlur('lastname')}
                                             error={
-                                                touched.lastname &&
-                                                errors.lastname
-                                                    ? true
-                                                    : false
+                                                touched.lastname && errors.lastname ? true : false
                                             }
                                             errorMsg={
-                                                touched.lastname &&
-                                                errors.lastname
+                                                touched.lastname && errors.lastname
                                                     ? errors.lastname
                                                     : ''
                                             }
@@ -240,9 +177,7 @@ const SignupScreen = ({ navigation }) => {
 
                                         <TouchableOpacity
                                             style={{ marginTop: 20 }}
-                                            onPress={() =>
-                                                setHideSecondForm(true)
-                                            }
+                                            onPress={() => setHideSecondForm(true)}
                                         >
                                             <Text center>Back</Text>
                                         </TouchableOpacity>

@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react'
-import { AuthContext } from '../../providers/AuthProvider'
+import AuthContext from '../context/auth/AuthContext'
 import api from '../api'
 
 const useJob = () => {
@@ -28,9 +28,7 @@ const useJob = () => {
                 .get(nextPath)
                 .then((res) => {
                     let data = res.data.data
-                    reset
-                        ? setJobs(data)
-                        : setJobs((prevJobs) => [...prevJobs, ...data])
+                    reset ? setJobs(data) : setJobs((prevJobs) => [...prevJobs, ...data])
                     setNextPath(res.data.links.next)
                 })
                 .catch((err) => console.log(err))

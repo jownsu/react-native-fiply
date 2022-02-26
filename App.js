@@ -3,7 +3,7 @@ import Routes from './src/Routes'
 import AppLoading from 'expo-app-loading'
 import { useFonts } from 'expo-font'
 import { Provider as PaperProvider } from 'react-native-paper'
-import { AuthProvider } from './src/providers/AuthProvider'
+import { AuthProvider } from './src/api/context/auth/AuthContext'
 
 const App = () => {
     let [fontsLoaded] = useFonts({

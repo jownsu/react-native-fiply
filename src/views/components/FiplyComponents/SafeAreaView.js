@@ -6,15 +6,11 @@ import Colors from '../../../utils/Colors'
 
 const height = Dimensions.get('window').height
 
-export const SafeAreaView = ({
-    children,
-    flex,
-    statusBarColor = 'rgba(0, 0, 0, 0)',
-}) => {
+export const SafeAreaView = ({ children, flex, statusBarColor = 'rgba(0, 0, 0, 0)', style }) => {
     const flexStyle = flex ? { flex: 1 } : {}
 
     return (
-        <SAView style={{ height: height, ...flexStyle }}>
+        <SAView style={{ height: height, ...flexStyle, ...style }}>
             <StatusBar backgroundColor={statusBarColor} />
 
             {children}

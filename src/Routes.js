@@ -1,9 +1,9 @@
 import React, { useContext, useEffect } from 'react'
 import { NavigationContainer } from '@react-navigation/native'
-import AppStack from './stacks/AppStack'
-import AuthStack from './stacks/Auth/AuthStack'
+import AppStack from './views/stacks/AppStack'
+import AuthStack from './views/stacks/AuthStack'
 import * as SecureStore from 'expo-secure-store'
-import { AuthContext } from './providers/AuthProvider'
+import AuthContext from './api/context/auth/AuthContext'
 
 const Routes = () => {
     const { user, setUser, logged_in, setLogged_in } = useContext(AuthContext)

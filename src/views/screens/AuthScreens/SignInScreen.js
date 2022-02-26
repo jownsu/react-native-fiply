@@ -3,7 +3,7 @@ import { StyleSheet, View, Image, TouchableOpacity } from 'react-native'
 import { Formik } from 'formik'
 import * as yup from 'yup'
 import Colors from '../../../utils/Colors'
-import { AuthContext } from '../../../providers/AuthProvider'
+import AuthContext from '../../../api/context/auth/AuthContext'
 import { TextInput as TxtInput } from 'react-native-paper'
 
 import {
@@ -20,11 +20,7 @@ const SignInScreen = ({ navigation }) => {
     const [hidePassword, setHidePassword] = useState(true)
 
     const signInSchema = yup.object({
-        email: yup
-            .string()
-            .trim()
-            .email('Invalid Email')
-            .required('Email is required'),
+        email: yup.string().trim().email('Invalid Email').required('Email is required'),
         password: yup.string().trim().required('Password is required'),
     })
 
@@ -47,28 +43,15 @@ const SignInScreen = ({ navigation }) => {
                     onSubmit={(values) => handleOnSubmit(values)}
                     validationSchema={signInSchema}
                 >
-                    {({
-                        handleChange,
-                        handleBlur,
-                        handleSubmit,
-                        values,
-                        errors,
-                        touched,
-                    }) => (
+                    {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
                         <View style={styles.formContainer}>
                             <TextInput
                                 label="Email"
                                 value={values.email}
                                 onChangeText={handleChange('email')}
                                 onBlur={handleBlur('email')}
-                                error={
-                                    touched.email && errors.email ? true : false
-                                }
-                                errorMsg={
-                                    touched.email && errors.email
-                                        ? errors.email
-                                        : ''
-                                }
+                                error={touched.email && errors.email ? true : false}
+                                errorMsg={touched.email && errors.email ? errors.email : ''}
                                 style={{ marginTop: 10 }}
                             />
                             <TextInput
@@ -76,16 +59,10 @@ const SignInScreen = ({ navigation }) => {
                                 value={values.password}
                                 onChangeText={handleChange('password')}
                                 onBlur={handleBlur('password')}
-                                error={
-                                    touched.password && errors.password
-                                        ? true
-                                        : false
-                                }
+                                error={touched.password && errors.password ? true : false}
                                 secureTextEntry={true}
                                 errorMsg={
-                                    touched.password && errors.password
-                                        ? errors.password
-                                        : ''
+                                    touched.password && errors.password ? errors.password : ''
                                 }
                                 style={{ marginTop: 10 }}
                                 secureTextEntry={hidePassword}
@@ -93,9 +70,7 @@ const SignInScreen = ({ navigation }) => {
                                     <TxtInput.Icon
                                         name="eye"
                                         color={Colors.light}
-                                        onPress={() =>
-                                            setHidePassword(!hidePassword)
-                                        }
+                                        onPress={() => setHidePassword(!hidePassword)}
                                     />
                                 }
                             />
@@ -128,9 +103,7 @@ const SignInScreen = ({ navigation }) => {
                     <Text weight="semi-bold" color={Colors.light}>
                         Don't have an account yet?{' '}
                     </Text>
-                    <TouchableOpacity
-                        onPress={() => navigation.navigate('SignupStack')}
-                    >
+                    <TouchableOpacity onPress={() => navigation.navigate('SignupStack')}>
                         <Text weight="bold" color={Colors.primary}>
                             Sign Up
                         </Text>

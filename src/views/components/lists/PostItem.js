@@ -2,17 +2,13 @@ import { StyleSheet, View, Image, TouchableOpacity } from 'react-native'
 import { Text } from '../FiplyComponents'
 import React, { memo } from 'react'
 import { Avatar } from 'react-native-paper'
-import {
-    FontAwesome5,
-    FontAwesome,
-    MaterialCommunityIcons,
-} from '@expo/vector-icons'
+import { FontAwesome5, FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons'
 import Colors from '../../../utils/Colors'
 const PostItem = memo(
     ({
         data,
-        handleDotPress = () => {},
-        handleAvatarPress = () => {},
+        onDotPress = () => {},
+        onAvatarPress = () => {},
         onCommentPress = () => {},
         onUpVotePress = () => {},
     }) => {
@@ -23,7 +19,7 @@ const PostItem = memo(
                         <TouchableOpacity
                             activeOpacity={0.7}
                             style={postStyles.authorImgContainer}
-                            onPress={() => handleAvatarPress(data.user_id)}
+                            onPress={() => onAvatarPress(data.user_id)}
                         >
                             <Avatar.Image
                                 size={42}
@@ -37,7 +33,7 @@ const PostItem = memo(
                             <Text>{data.date}</Text>
                         </View>
 
-                        <TouchableOpacity onPress={() => handleDotPress(data)}>
+                        <TouchableOpacity onPress={() => onDotPress(data)}>
                             <MaterialCommunityIcons
                                 name="dots-horizontal"
                                 size={24}
@@ -65,11 +61,7 @@ const PostItem = memo(
                             style={postStyles.icon}
                             name="caret-up"
                             size={21}
-                            color={
-                                data.is_upVoted
-                                    ? Colors.secondary
-                                    : Colors.black
-                            }
+                            color={data.is_upVoted ? Colors.secondary : Colors.black}
                         />
                         <Text>{data.upVotes_count}</Text>
                     </TouchableOpacity>
@@ -100,8 +92,7 @@ const PostItem = memo(
     },
     (prevProps, nextProps) => {
         if (prevProps.data.is_upVoted != nextProps.data.is_upVoted) return false
-        if (prevProps.data.upVotes_count != nextProps.data.upVotes_count)
-            return false
+        if (prevProps.data.upVotes_count != nextProps.data.upVotes_count) return false
         if (prevProps.id == nextProps.id) return true
 
         return false

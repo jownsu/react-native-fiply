@@ -1,18 +1,11 @@
-import {
-    StyleSheet,
-    View,
-    TextInput,
-    TouchableOpacity,
-    Modal,
-    Image,
-} from 'react-native'
+import { StyleSheet, View, TextInput, TouchableOpacity, Modal, Image } from 'react-native'
 import React, { useState, useContext, useEffect } from 'react'
 import { Text, Container, Dropdown } from '../FiplyComponents'
 import Header from '../headers/Header'
 import Colors from '../../../utils/Colors'
 import { FontAwesome5 } from '@expo/vector-icons'
 import { Avatar, ProgressBar } from 'react-native-paper'
-import { AuthContext } from '../../../providers/AuthProvider'
+import AuthContext from '../../../api/context/auth/AuthContext'
 import usePickImage from '../../../utils/usePIckImage'
 
 const CreatePost = ({
@@ -49,11 +42,7 @@ const CreatePost = ({
     }, [data])
 
     return (
-        <Modal
-            visible={visible}
-            animationType="slide"
-            onRequestClose={onRequestClose}
-        >
+        <Modal visible={visible} animationType="slide" onRequestClose={onRequestClose}>
             <Header
                 title={data && edit ? 'Edit Post' : 'Create Post'}
                 style={{ backgroundColor: Colors.white }}
@@ -66,9 +55,7 @@ const CreatePost = ({
                         >
                             <Text
                                 weight="medium"
-                                color={
-                                    postText ? Colors.secondary : Colors.black
-                                }
+                                color={postText ? Colors.secondary : Colors.black}
                             >
                                 EDIT
                             </Text>
@@ -81,9 +68,7 @@ const CreatePost = ({
                         >
                             <Text
                                 weight="medium"
-                                color={
-                                    postText ? Colors.secondary : Colors.black
-                                }
+                                color={postText ? Colors.secondary : Colors.black}
                             >
                                 POST
                             </Text>
@@ -102,12 +87,7 @@ const CreatePost = ({
                             style={styles.img}
                         />
                         <View style={styles.headerDetails}>
-                            <Text
-                                weight="medium"
-                                size={16}
-                                adjustsFontSizeToFit
-                                numberOfLines={1}
-                            >
+                            <Text weight="medium" size={16} adjustsFontSizeToFit numberOfLines={1}>
                                 {user.fullname}
                             </Text>
                             <Dropdown
@@ -144,48 +124,25 @@ const CreatePost = ({
                     {pickUri ? (
                         <View style={styles.uploadImgContainer}>
                             {/* <ProgressBar indeterminate color={Colors.primary} visible={isUploading} /> */}
-                            <Image
-                                source={{ uri: pickUri }}
-                                style={styles.uploadImg}
-                            />
+                            <Image source={{ uri: pickUri }} style={styles.uploadImg} />
                         </View>
                     ) : null}
 
                     <View style={styles.footerContainer}>
                         <TouchableOpacity onPress={() => pickImage()}>
-                            <FontAwesome5
-                                name="image"
-                                size={24}
-                                color={Colors.secondary}
-                            />
+                            <FontAwesome5 name="image" size={24} color={Colors.secondary} />
                         </TouchableOpacity>
                         <TouchableOpacity>
-                            <FontAwesome5
-                                name="video"
-                                size={24}
-                                color={Colors.primary}
-                            />
+                            <FontAwesome5 name="video" size={24} color={Colors.primary} />
                         </TouchableOpacity>
                         <TouchableOpacity>
-                            <FontAwesome5
-                                name="hashtag"
-                                size={24}
-                                color={Colors.black}
-                            />
+                            <FontAwesome5 name="hashtag" size={24} color={Colors.black} />
                         </TouchableOpacity>
                         <TouchableOpacity>
-                            <FontAwesome5
-                                name="link"
-                                size={24}
-                                color={Colors.secondary}
-                            />
+                            <FontAwesome5 name="link" size={24} color={Colors.secondary} />
                         </TouchableOpacity>
                         <TouchableOpacity>
-                            <FontAwesome5
-                                name="paperclip"
-                                size={24}
-                                color={Colors.grey}
-                            />
+                            <FontAwesome5 name="paperclip" size={24} color={Colors.grey} />
                         </TouchableOpacity>
                     </View>
                 </View>

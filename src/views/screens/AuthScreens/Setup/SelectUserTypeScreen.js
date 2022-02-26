@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react'
 import { StyleSheet, View, TouchableOpacity } from 'react-native'
 import Colors from '../../../../utils/Colors'
 import { FontAwesome5 } from '@expo/vector-icons'
-import { AuthContext } from '../../../../providers/AuthProvider'
+import AuthContext from '../../../../api/context/auth/AuthContext'
 import {
     Text,
     FiplyLogo,
@@ -48,9 +48,7 @@ const SelectUserTypeScreen = ({ navigation }) => {
 
     return (
         <SafeAreaView>
-            <WaveHeader
-                waveimg={require('../../../../assets/img/waves/4.png')}
-            />
+            <WaveHeader waveimg={require('../../../../assets/img/waves/4.png')} />
             <Container center padding={20}>
                 <FiplyLogo />
                 <Text style={{ marginVertical: 35 }} size={18} center>
@@ -65,20 +63,10 @@ const SelectUserTypeScreen = ({ navigation }) => {
                         <FontAwesome5
                             name="user-alt"
                             size={35}
-                            color={
-                                userType.jobseeker == true
-                                    ? Colors.primary
-                                    : Colors.black
-                            }
+                            color={userType.jobseeker == true ? Colors.primary : Colors.black}
                             style={{ marginBottom: 10 }}
                         />
-                        <Text
-                            color={
-                                userType.jobseeker == true
-                                    ? Colors.primary
-                                    : Colors.black
-                            }
-                        >
+                        <Text color={userType.jobseeker == true ? Colors.primary : Colors.black}>
                             Job Seeker
                         </Text>
                     </TouchableOpacity>
@@ -90,20 +78,10 @@ const SelectUserTypeScreen = ({ navigation }) => {
                         <FontAwesome5
                             name="user-tie"
                             size={35}
-                            color={
-                                userType.employer == true
-                                    ? Colors.primary
-                                    : Colors.black
-                            }
+                            color={userType.employer == true ? Colors.primary : Colors.black}
                             style={{ marginBottom: 10 }}
                         />
-                        <Text
-                            color={
-                                userType.employer == true
-                                    ? Colors.primary
-                                    : Colors.black
-                            }
-                        >
+                        <Text color={userType.employer == true ? Colors.primary : Colors.black}>
                             Employer
                         </Text>
                     </TouchableOpacity>
