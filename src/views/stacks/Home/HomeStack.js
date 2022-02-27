@@ -10,20 +10,18 @@ const Stack = createStackNavigator()
 const HomeStack = () => {
     return (
         <PostProvider>
-            <CommentProvider>
-                <Stack.Navigator>
-                    <Stack.Screen
-                        options={{ headerShown: false }}
-                        name={'HomeSreen'}
-                        component={HomeSreen}
-                    ></Stack.Screen>
-                    <Stack.Screen
-                        options={{ headerShown: false }}
-                        name={'CommentScreen'}
-                        component={CommentScreen}
-                    ></Stack.Screen>
-                </Stack.Navigator>
-            </CommentProvider>
+            <Stack.Navigator>
+                <Stack.Screen
+                    options={{ headerShown: false }}
+                    name={'HomeSreen'}
+                    component={HomeSreen}
+                ></Stack.Screen>
+                <Stack.Screen
+                    options={{ headerShown: false }}
+                    name={'CommentScreen'}
+                    component={CommentScreen}
+                ></Stack.Screen>
+            </Stack.Navigator>
         </PostProvider>
     )
 }

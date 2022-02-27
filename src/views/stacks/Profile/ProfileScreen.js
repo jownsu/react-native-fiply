@@ -1,11 +1,13 @@
-import React, { useState, useEffect, useCallback, useRef, memo } from 'react'
+import React, { useState, useEffect, useCallback, useContext, useRef, memo, useMemo } from 'react'
 import { StyleSheet, View, TouchableOpacity, RefreshControl, FlatList } from 'react-native'
+import ProfileContext from '../../../api/context/profile/ProfileContext'
+import PostContext from '../../../api/context/posts/PostContext'
+import CommentContext from '../../../api/context/comments/CommentContext'
 import {
     Text,
     BottomSheetModal,
     Container,
     ActivityIndicator,
-    FlatList as FFlatList,
 } from '../../components/FiplyComponents'
 import Colors from '../../../utils/Colors'
 import { LinearGradient } from 'expo-linear-gradient'
@@ -16,51 +18,37 @@ import CardInfo from '../../components/profile/CardInfo'
 import TitleFilter from '../../components/headers/TitleFilter'
 import TopNavigation from '../../components/headers/TopNavigation'
 import PostFilterDialog from '../../components/dialog/PostFilterDialog'
-import Comments from '../../components/modals/Comments'
 import NoData from '../../components/NoData'
 import { default as EditPost } from '../../components/modals/CreatePost'
 import { default as DeleteConfirmation } from '../../components/dialog/Confirmation'
-
-import useProfile from '../../../api/hooks/user/useProfile'
-import useExperience from '../../../api/hooks/user/useExperience'
-import useEducationalBackground from '../../../api/hooks/user/useEducationalBackground'
-import usePost from '../../../api/hooks/usePost'
-import useComment from '../../../api/hooks/useComment'
 import PostItem from '../../components/lists/PostItem'
 
 const ProfileScreen = ({ navigation, route }) => {
     const { userId } = route.params
-    const [showModal, setShowModal] = useState(false)
-    const [navIndex, setNavIndex] = useState(0)
-    const [showComment, setShowComment] = useState(false)
-    const [showCreatePost, setShowCreatePost] = useState(false)
-    const [selectedPost, setSelectedPost] = useState({ content: '' })
-    const [showConfirmation, setShowConfirmation] = useState(false)
 
-    const { getUserInfo, profile, basicInfo, contactInfo, loading: profileLoading } = useProfile()
-    const { getExperiences, experiences, loading: experienceLoading } = useExperience()
     const {
+        userInfo,
+        getUserInfo,
+        getExperiences,
         getEducationalBackgrounds,
+        experiences,
         educationalBackgrounds,
-        loading: ebLoading,
-    } = useEducationalBackground()
+        loading,
+    } = useContext(ProfileContext)
     const {
         posts,
         getPosts,
-        morePosts,
-        updatePost,
-        deletePost,
-        toggleUpVote,
         loading: postLoading,
-    } = usePost()
-    const {
-        comments,
-        getComments,
-        resetComments,
-        createComment,
-        commentDetails,
-        loading: commentLoading,
-    } = useComment()
+        morePosts,
+        toggleUpVote,
+    } = useContext(PostContext)
+    const { getComments, loading: commentLoading } = useContext(CommentContext)
+
+    const [showModal, setShowModal] = useState(false)
+    const [navIndex, setNavIndex] = useState(0)
+    const [showCreatePost, setShowCreatePost] = useState(false)
+    const [selectedPost, setSelectedPost] = useState({ content: '' })
+    const [showConfirmation, setShowConfirmation] = useState(false)
 
     const bottomSheetModalRef = useRef(null)
     const handlePresentModalPress = useCallback(() => {
@@ -73,34 +61,78 @@ const ProfileScreen = ({ navigation, route }) => {
         getUserInfo(userId)
     }, [])
 
-    const renderItem = ({ item }) => {
+    const renderPostItem = ({ item }) => {
         return (
             <PostItem
                 data={item}
-                onDotPress={(postItem) => {
-                    setSelectedPost(postItem)
-                    handlePresentModalPress()
-                }}
-                onCommentPress={(id) => {
-                    getComments(id)
-                    setShowComment(true)
-                }}
-                onUpVotePress={(id) => toggleUpVote(id)}
+                onDotPress={handleDotPress}
+                onCommentPress={handleCommentPress}
+                onUpVotePress={handleUpVotePress}
             />
         )
     }
 
-    const ListFooterComponent = memo(() => {
+    const renderBackgroundItem = ({ item, index }) => (
+        <CardInfo
+            key={index}
+            title="Work Experience"
+            headers={[
+                'Company',
+                'Location',
+                'Title',
+                'Employment Type',
+                'Date Started',
+                'Date Ended',
+            ]}
+            infos={{
+                company: item.company,
+                location: item.location,
+                title: item.job_title,
+                employment_type: item.employment_type,
+                starting_date: item.starting_date,
+                completion_date: item.completion_date,
+            }}
+        />
+    )
+
+    const renderEducationItem = ({ item, index }) => (
+        <CardInfo
+            key={index}
+            title="Education"
+            headers={['School', 'Degree', 'Field of Study', 'Starting Date', 'Completion Date']}
+            infos={{
+                school: item.school,
+                degree: item.degree,
+                fieldOfStudy: item.field_of_study,
+                startingDate: item.starting_date,
+                completionDate: item.completion_date,
+            }}
+        />
+    )
+
+    const handleDotPress = (postItem) => {
+        setSelectedPost(postItem)
+        handlePresentModalPress()
+    }
+
+    const handleCommentPress = (id) => {
+        getComments(id)
+        navigation.push('CommentScreen')
+    }
+
+    const handleUpVotePress = (id) => toggleUpVote(id)
+
+    const handleMorePostPress = () => {
+        morePosts(true)
+        flatListRef.current.scrollToOffset({
+            animated: true,
+            offset: 0,
+        })
+    }
+
+    const ListFooterComponent = useMemo(() => {
         return posts.length >= 30 ? (
-            <TouchableOpacity
-                onPress={() => {
-                    morePosts(true)
-                    flatListRef.current.scrollToOffset({
-                        animated: true,
-                        offset: 0,
-                    })
-                }}
-            >
+            <TouchableOpacity onPress={handleMorePostPress}>
                 <Text
                     weight="medium"
                     color={Colors.secondary}
@@ -113,7 +145,7 @@ const ProfileScreen = ({ navigation, route }) => {
         ) : (
             <ActivityIndicator visible={postLoading} />
         )
-    })
+    }, [postLoading])
 
     const About = () => {
         return (
@@ -121,12 +153,23 @@ const ProfileScreen = ({ navigation, route }) => {
                 <CardInfo
                     title={'Basic Information'}
                     headers={['Gender', 'Age', 'Birthday', 'Language', 'Status']}
-                    infos={basicInfo}
+                    infos={{
+                        gender: userInfo.gender,
+                        age: userInfo.age,
+                        birthday: userInfo.birthday,
+                        language: userInfo.language,
+                        status: userInfo.status,
+                    }}
                 />
                 <CardInfo
                     title={'Contact Information'}
                     headers={['Mobile', 'Telephone', 'Email', 'Website']}
-                    infos={contactInfo}
+                    infos={{
+                        mobile: userInfo.mobile_no,
+                        telephone: userInfo.telephone_no,
+                        email: userInfo.email,
+                        website: userInfo.website,
+                    }}
                 />
             </Container>
         )
@@ -135,31 +178,10 @@ const ProfileScreen = ({ navigation, route }) => {
     const Background = () => {
         return (
             <Container padding={10}>
-                <FFlatList
+                <FlatList
                     data={experiences}
-                    renderItem={(item, index) => (
-                        <CardInfo
-                            key={index}
-                            title="Work Experience"
-                            headers={[
-                                'Company',
-                                'Location',
-                                'Title',
-                                'Employment Type',
-                                'Date Started',
-                                'Date Ended',
-                            ]}
-                            infos={{
-                                company: item.company,
-                                location: item.location,
-                                title: item.job_title,
-                                employment_type: item.employment_type,
-                                starting_date: item.starting_date,
-                                completion_date: item.completion_date,
-                            }}
-                        />
-                    )}
-                    isLoading={experienceLoading}
+                    renderItem={renderBackgroundItem}
+                    ListEmptyComponent={<NoData />}
                 />
             </Container>
         )
@@ -172,9 +194,9 @@ const ProfileScreen = ({ navigation, route }) => {
                 {posts.length != 0 ? (
                     <FlatList
                         data={posts}
-                        renderItem={renderItem}
+                        renderItem={renderPostItem}
                         nestedScrollEnabled={true}
-                        onEndReached={() => morePosts()}
+                        onEndReached={morePosts}
                         onEndReachedThreshold={0}
                         ListEmptyComponent={<NoData />}
                         ListFooterComponent={ListFooterComponent}
@@ -192,30 +214,10 @@ const ProfileScreen = ({ navigation, route }) => {
     const Education = () => {
         return (
             <Container padding={10}>
-                <FFlatList
+                <FlatList
                     data={educationalBackgrounds}
-                    renderItem={(item, index) => (
-                        <CardInfo
-                            key={index}
-                            title="Education"
-                            headers={[
-                                'School',
-                                'Degree',
-                                'Field of Study',
-                                'Starting Date',
-                                'Completion Date',
-                            ]}
-                            infos={{
-                                school: item.school,
-                                degree: item.degree,
-                                fieldOfStudy: item.field_of_study,
-                                startingDate: item.starting_date,
-                                completionDate: item.completion_date,
-                            }}
-                        />
-                    )}
-                    noDataMessage="No Education to show"
-                    isLoading={ebLoading}
+                    renderItem={renderEducationItem}
+                    ListEmptyComponent={<NoData />}
                 />
             </Container>
         )
@@ -253,7 +255,7 @@ const ProfileScreen = ({ navigation, route }) => {
         <Container>
             <FlatList
                 refreshControl={
-                    <RefreshControl refreshing={profileLoading} onRefresh={() => getUserInfo()} />
+                    <RefreshControl refreshing={loading} onRefresh={() => getUserInfo()} />
                 }
                 ListHeaderComponent={
                     <View style={{ paddingTop: 30 }}>
@@ -267,7 +269,14 @@ const ProfileScreen = ({ navigation, route }) => {
                         </View>
                         <Container padding={10}>
                             <ProfileHeader
-                                data={profile}
+                                data={{
+                                    fullname: userInfo.fullname,
+                                    email: userInfo.email,
+                                    location: userInfo.location,
+                                    status: userInfo.status ?? 'Not Verified',
+                                    description: userInfo.description,
+                                    avatar: userInfo.avatar,
+                                }}
                                 onEditPress={() => navigation.push('EditProfileScreen')}
                             />
                             <TopNavigation
@@ -291,18 +300,6 @@ const ProfileScreen = ({ navigation, route }) => {
             />
 
             {/* MODALS */}
-
-            <Comments
-                data={comments}
-                visible={showComment}
-                detail={commentDetails}
-                onRequestClose={() => {
-                    setShowComment(false)
-                    resetComments()
-                }}
-                isLoading={commentLoading}
-                onSendPress={(text) => createComment(text)}
-            />
 
             <EditPost
                 visible={showCreatePost}

@@ -30,6 +30,13 @@ const BottomNavigator = ({ navigation }) => {
 
     const handleSignoutPress = () => logout()
 
+    const handleGoToProfile = () => {
+        navigation.navigate('ProfileStack', {
+            userId: 'me',
+        })
+        handleClosePress()
+    }
+
     const noScreen = () => null
 
     return (
@@ -141,15 +148,7 @@ const BottomNavigator = ({ navigation }) => {
                                 >
                                     {user.fullname}
                                 </Text>
-                                <TouchableOpacity
-                                    activeOpacity={0.7}
-                                    onPress={() => {
-                                        navigation.navigate('ProfileScreen', {
-                                            userId: 'me',
-                                        })
-                                        handleClosePress()
-                                    }}
-                                >
+                                <TouchableOpacity activeOpacity={0.7} onPress={handleGoToProfile}>
                                     <Text color={Colors.secondary}>See your profile</Text>
                                 </TouchableOpacity>
                             </View>
@@ -175,10 +174,7 @@ const BottomNavigator = ({ navigation }) => {
                             <Text weight="medium">Settings</Text>
                         </TouchableOpacity>
 
-                        <TouchableOpacity
-                            style={styles.footerBtn}
-                            onPress={() => handleSignoutPress()}
-                        >
+                        <TouchableOpacity style={styles.footerBtn} onPress={handleSignoutPress}>
                             <FontAwesome5
                                 name="sign-out-alt"
                                 size={24}

@@ -11,12 +11,18 @@ const ShowJobScreen = ({ navigation }) => {
     const { job, loading } = useContext(JobContext)
 
     const handleBackPress = () => {
-        navigation.getParent().setOptions({ tabBarStyle: { display: 'flex' } })
+        navigation.getParent().setOptions({
+            tabBarStyle: {
+                display: 'flex',
+                borderTopWidth: 1,
+                elevation: 0,
+            },
+        })
         navigation.pop()
     }
 
     return (
-        <SafeAreaView flex statusBarColor={Colors.primaredry} style={{}}>
+        <SafeAreaView flex statusBarColor={Colors.primary} style={{}}>
             <Header
                 title="Job Details"
                 centerTitle

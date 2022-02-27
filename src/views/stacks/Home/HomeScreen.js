@@ -3,7 +3,6 @@ import React, { useCallback, useRef, useEffect, useState, memo, useMemo, useCont
 import { StyleSheet, View, TouchableOpacity, FlatList } from 'react-native'
 import PostContext from '../../../api/context/posts/PostContext'
 import CommentContext from '../../../api/context/comments/CommentContext'
-import useComment from '../../../api/hooks/useComment'
 import {
     SafeAreaView,
     Container,
@@ -105,7 +104,7 @@ const HomeScreen = ({ navigation }, offset) => {
                 </Text>
             </TouchableOpacity>
         ) : (
-            <ActivityIndicator visible={true} />
+            <ActivityIndicator visible={loading} />
         )
     }, [loading])
 
@@ -125,7 +124,7 @@ const HomeScreen = ({ navigation }, offset) => {
         )
     }
 
-    const handleAvatarPress = (id) => navigation.navigate('ProfileScreen', { userId: id })
+    const handleAvatarPress = (id) => navigation.navigate('ProfileStack', { userId: id })
 
     const handleCommentPress = (id) => {
         navigation.getParent().setOptions({

@@ -3,6 +3,7 @@ import AuthContext from '../auth/AuthContext'
 import api from '../../api'
 import mime from 'mime'
 import PostReducer from './PostReducer'
+import { CommentProvider } from '../comments/CommentContext'
 
 const PostContext = createContext()
 
@@ -88,20 +89,18 @@ export const PostProvider = ({ children }) => {
             .delete(`/posts/${id}`)
             .then((res) => dispatch({ type: 'DELETE_POST', payload: id }))
             .catch((err) => console.log(err))
-            .finally(() => setLoading(false))
     }
 
     //UPVOTES
 
     const toggleUpVote = async (id) => {
-        setLoading(true)
+        setLoading()
         await api({ token: user.token })
             .post(`/posts/${id}/upVotes`)
             .then((res) =>
                 dispatch({ type: 'TOGGLE_UPVOTE', payload: { id, data: res.data.data } })
             )
             .catch((err) => console.log(err))
-            .finally(() => setLoading(false))
     }
 
     const setLoading = () => dispatch({ type: 'SET_LOADING' })
@@ -118,7 +117,7 @@ export const PostProvider = ({ children }) => {
                 toggleUpVote,
             }}
         >
-            {children}
+            <CommentProvider>{children}</CommentProvider>
         </PostContext.Provider>
     )
 }

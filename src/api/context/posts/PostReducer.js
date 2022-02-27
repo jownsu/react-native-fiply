@@ -37,6 +37,7 @@ const PostReducer = (state, action) => {
             return {
                 ...state,
                 posts: state.posts.filter((item) => item.id != action.payload),
+                loading: false,
             }
 
         case 'TOGGLE_UPVOTE':
@@ -54,6 +55,7 @@ const PostReducer = (state, action) => {
                     }
                     return item
                 }),
+                loading: false,
             }
 
         case 'SET_LOADING':
