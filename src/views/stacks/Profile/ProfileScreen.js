@@ -41,6 +41,7 @@ const ProfileScreen = ({ navigation, route }) => {
         loading: postLoading,
         morePosts,
         toggleUpVote,
+        deletePost,
     } = useContext(PostContext)
     const { getComments, loading: commentLoading } = useContext(CommentContext)
 

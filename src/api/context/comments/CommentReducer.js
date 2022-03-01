@@ -22,6 +22,13 @@ const CommentReducer = (state, action) => {
                 loading: false,
             }
 
+        case 'DELETE_COMMENT':
+            return {
+                ...state,
+                comments: state.comments.filter((item) => item.id != action.payload),
+                loading: false,
+            }
+
         case 'RESET_COMMENT':
             return {
                 comments: [],

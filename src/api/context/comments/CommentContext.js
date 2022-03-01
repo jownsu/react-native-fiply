@@ -35,6 +35,14 @@ export const CommentProvider = ({ children }) => {
             .catch((err) => console.log(err))
     }
 
+    const deleteComment = async (id) => {
+        setLoading()
+        await api({ token: user.token })
+            .delete(`/comments/${id}`)
+            .then((res) => dispatch({ type: 'DELETE_COMMENT', payload: id }))
+            .catch((err) => console.log(err))
+    }
+
     const setLoading = () => dispatch({ type: 'SET_LOADING' })
 
     const resetComments = () => dispatch({ type: 'RESET_COMMENT' })
@@ -46,6 +54,7 @@ export const CommentProvider = ({ children }) => {
                 getComments,
                 resetComments,
                 createComment,
+                deleteComment,
             }}
         >
             {children}

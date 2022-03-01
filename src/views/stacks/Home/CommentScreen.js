@@ -1,6 +1,7 @@
 import { StyleSheet, View, Modal, FlatList } from 'react-native'
 import React, { useState, memo, useMemo, useContext } from 'react'
 import CommentContext from '../../../api/context/comments/CommentContext'
+import AuthContext from '../../../api/context/auth/AuthContext'
 import { Avatar } from 'react-native-paper'
 import {
     Container,
@@ -9,19 +10,28 @@ import {
     ActivityIndicator,
     SafeAreaView,
 } from '../../components/FiplyComponents'
+import Confirmation from '../../components/dialog/Confirmation'
 import { TextInput as TxtInput } from 'react-native-paper'
-import { FontAwesome5 } from '@expo/vector-icons'
+import { FontAwesome5, AntDesign } from '@expo/vector-icons'
 import Colors from '../../../utils/Colors'
 import NoData from '../../components/NoData'
 
 const CommentScreen = () => {
     const [txtComment, setTxtComment] = useState('')
+    const [showConfirmation, setShowConfirmation] = useState(false)
+    const [selectedComment, setSelectedComment] = useState(0)
 
-    const { comments, loading, details, createComment } = useContext(CommentContext)
+    const { comments, loading, details, createComment, deleteComment } = useContext(CommentContext)
+    const { user } = useContext(AuthContext)
 
     const handleSend = () => {
         createComment(txtComment)
         setTxtComment('')
+    }
+
+    const handleDelete = () => {
+        deleteComment(selectedComment)
+        setShowConfirmation(false)
     }
 
     const renderItem = (item) => {
@@ -37,6 +47,18 @@ const CommentScreen = () => {
                         {item.commented_by}
                     </Text>
                     <Text>{item.content}</Text>
+                    {user.id == item.user_id && (
+                        <AntDesign
+                            name="close"
+                            size={18}
+                            color={Colors.red}
+                            style={styles.closeBtn}
+                            onPress={() => {
+                                setSelectedComment(item.id)
+                                setShowConfirmation(true)
+                            }}
+                        />
+                    )}
                 </View>
             </View>
         )
@@ -51,7 +73,7 @@ const CommentScreen = () => {
     }, [loading])
 
     return (
-        <SafeAreaView>
+        <SafeAreaView flex>
             <Container padding={10}>
                 <View style={styles.headerContainer}>
                     <FontAwesome5
@@ -90,6 +112,13 @@ const CommentScreen = () => {
                     roundness={15}
                 />
             </Container>
+
+            <Confirmation
+                visible={showConfirmation}
+                dialogText="Are you sure to delete this comment? It cannot be undone."
+                onDismiss={() => setShowConfirmation(false)}
+                onOkPress={handleDelete}
+            />
         </SafeAreaView>
     )
 }
@@ -117,4 +146,5 @@ const styles = StyleSheet.create({
         marginLeft: 10,
         borderRadius: 7,
     },
+    closeBtn: { position: 'absolute', right: 0, padding: 10 },
 })
