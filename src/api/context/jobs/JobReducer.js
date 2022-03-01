@@ -41,6 +41,8 @@ const JobReducer = (state, action) => {
                     }
                     return item
                 }),
+                job: { ...state.job, is_saved: action.payload.data },
+                loading: false,
             }
 
         case 'TOGGLE_APPLIED_JOB':
@@ -55,6 +57,8 @@ const JobReducer = (state, action) => {
                     }
                     return item
                 }),
+                job: { ...state.job, is_applied: action.payload.data },
+                loading: false,
             }
 
         case 'REMOVE_SAVED_APPLIED_JOB':

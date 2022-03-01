@@ -6,9 +6,10 @@ import React, { useContext } from 'react'
 import JobContext from '../../../api/context/jobs/JobContext'
 import Colors from '../../../utils/Colors'
 import { Ionicons, FontAwesome, FontAwesome5 } from '@expo/vector-icons'
+import { ProgressBar } from 'react-native-paper'
 
 const ShowJobScreen = ({ navigation }) => {
-    const { job, loading } = useContext(JobContext)
+    const { job, loading, toggleSaveJob, toggleApplyJob } = useContext(JobContext)
 
     const handleBackPress = () => {
         navigation.getParent().setOptions({
@@ -21,6 +22,10 @@ const ShowJobScreen = ({ navigation }) => {
         navigation.pop()
     }
 
+    const handleSavePress = () => toggleSaveJob(job.id)
+
+    const handleApplyPress = () => toggleApplyJob(job.id)
+
     return (
         <SafeAreaView flex statusBarColor={Colors.primary} style={{}}>
             <Header
@@ -28,112 +33,107 @@ const ShowJobScreen = ({ navigation }) => {
                 centerTitle
                 style={{
                     backgroundColor: Colors.primary,
-                    borderBottomWidth: 5,
-                    borderColor: Colors.secondary,
                 }}
                 textColor={Colors.white}
                 iconColor={Colors.white}
                 onBackPress={handleBackPress}
             />
 
+            <ProgressBar indeterminate color={Colors.secondary} visible={loading} />
+
             <ScrollView>
-                {loading ? (
-                    <ActivityIndicator visible={true} />
-                ) : (
-                    <Container padding={10}>
-                        <View style={styles.jobTitleContainer}>
+                <Container padding={10}>
+                    <View style={styles.jobTitleContainer}>
+                        <Text weight="semi-bold" size={22} adjustsFontSizeToFit numberOfLines={1}>
+                            {job.title}
+                        </Text>
+                        <Text>Posted {job.posted_at}</Text>
+                    </View>
+
+                    <View style={styles.employerInfoContainer}>
+                        <Avatar.Image
+                            source={{ uri: job.image }}
+                            size={75}
+                            backgroundColor={Colors.light}
+                            style={styles.companyImgContainer}
+                        />
+                        <View style={styles.employerInfo}>
                             <Text
-                                weight="semi-bold"
-                                size={22}
+                                weight="medium"
+                                size={16}
+                                style={{ marginBottom: 10 }}
                                 adjustsFontSizeToFit
                                 numberOfLines={1}
                             >
-                                {job.title}
+                                {job.company}
                             </Text>
-                            <Text>Posted {job.posted_at}</Text>
+                            <>
+                                <Text size={12}>Posted By: </Text>
+                                <View style={styles.postedByContainer}>
+                                    <Avatar.Image
+                                        source={{ uri: job.avatar }}
+                                        size={25}
+                                        backgroundColor={Colors.light}
+                                        marginRight={10}
+                                    />
+                                    <Text>{job.fullname}</Text>
+                                </View>
+                            </>
                         </View>
+                    </View>
 
-                        <View style={styles.employerInfoContainer}>
-                            <Avatar.Image
-                                source={{ uri: job.image }}
-                                size={75}
-                                backgroundColor={Colors.light}
-                                style={styles.companyImgContainer}
+                    <View style={styles.teaserInfoContainer}>
+                        <View style={styles.teaserInfo}>
+                            <Ionicons
+                                name="location-sharp"
+                                size={18}
+                                color={Colors.secondary}
+                                style={{ marginRight: 7 }}
                             />
-                            <View style={styles.employerInfo}>
-                                <Text
-                                    weight="medium"
-                                    size={16}
-                                    style={{ marginBottom: 10 }}
-                                    adjustsFontSizeToFit
-                                    numberOfLines={1}
-                                >
-                                    {job.company}
-                                </Text>
-                                <>
-                                    <Text size={12}>Posted By: </Text>
-                                    <View style={styles.postedByContainer}>
-                                        <Avatar.Image
-                                            source={{ uri: job.avatar }}
-                                            size={25}
-                                            backgroundColor={Colors.light}
-                                            marginRight={10}
-                                        />
-                                        <Text>{job.fullname}</Text>
-                                    </View>
-                                </>
-                            </View>
+                            <Text>{job.location}</Text>
                         </View>
+                        <View style={styles.teaserInfo}>
+                            <FontAwesome5
+                                name="clock"
+                                size={18}
+                                color={Colors.secondary}
+                                style={{ marginRight: 7 }}
+                            />
+                            <Text>{job.employment_type}</Text>
+                        </View>
+                        <View style={styles.teaserInfo}>
+                            <FontAwesome
+                                name="tags"
+                                size={18}
+                                color={Colors.secondary}
+                                style={{ marginRight: 7 }}
+                            />
+                            <Text>{job.position_level}</Text>
+                        </View>
+                    </View>
 
-                        <View style={styles.teaserInfoContainer}>
-                            <View style={styles.teaserInfo}>
-                                <Ionicons
-                                    name="location-sharp"
-                                    size={18}
-                                    color={Colors.secondary}
-                                    style={{ marginRight: 7 }}
-                                />
-                                <Text>{job.location}</Text>
-                            </View>
-                            <View style={styles.teaserInfo}>
-                                <FontAwesome5
-                                    name="clock"
-                                    size={18}
-                                    color={Colors.secondary}
-                                    style={{ marginRight: 7 }}
-                                />
-                                <Text>{job.employment_type}</Text>
-                            </View>
-                            <View style={styles.teaserInfo}>
-                                <FontAwesome
-                                    name="tags"
-                                    size={18}
-                                    color={Colors.secondary}
-                                    style={{ marginRight: 7 }}
-                                />
-                                <Text>{job.position_level}</Text>
-                            </View>
-                        </View>
+                    <View style={styles.responsibilitiesContainer}>
+                        <Text size={21} weight="medium" style={{ marginBottom: 5 }}>
+                            Job Responsibilites
+                        </Text>
+                        <Text>{job.job_responsibilities}</Text>
+                    </View>
 
-                        <View style={styles.responsibilitiesContainer}>
-                            <Text size={21} weight="medium" style={{ marginBottom: 5 }}>
-                                Job Responsibilites
-                            </Text>
-                            <Text>{job.job_responsibilities}</Text>
-                        </View>
-
-                        <View style={styles.qualificationsContainer}>
-                            <Text size={21} weight="medium" style={{ marginBottom: 5 }}>
-                                Qualifications
-                            </Text>
-                            <Text>{job.qualifications}</Text>
-                        </View>
-                    </Container>
-                )}
+                    <View style={styles.qualificationsContainer}>
+                        <Text size={21} weight="medium" style={{ marginBottom: 5 }}>
+                            Qualifications
+                        </Text>
+                        <Text>{job.qualifications}</Text>
+                    </View>
+                </Container>
             </ScrollView>
 
             <View style={styles.footerContainer}>
-                <TouchableOpacity style={styles.saveBtn} activeOpacity={0.7}>
+                <TouchableOpacity
+                    style={styles.saveBtn}
+                    activeOpacity={0.7}
+                    onPress={handleSavePress}
+                >
                     <FontAwesome
                         name="bookmark-o"
                         size={24}
@@ -156,6 +156,7 @@ const ShowJobScreen = ({ navigation }) => {
                         },
                     ]}
                     activeOpacity={0.7}
+                    onPress={handleApplyPress}
                 >
                     <Text weight="medium" size={16} color={Colors.white}>
                         {job.is_applied ? 'Applied' : 'Apply'}
