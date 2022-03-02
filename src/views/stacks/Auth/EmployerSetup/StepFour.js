@@ -1,11 +1,6 @@
 import React from 'react'
 import { View } from 'react-native'
-import {
-    SafeAreaView,
-    Container,
-    Text,
-    Button,
-} from '../../../components/FiplyComponents'
+import { SafeAreaView, Container, Text, Button } from '../../../components/FiplyComponents'
 import Colors from '../../../../utils/Colors'
 import StepIndicator from '../../../components/StepIndicator'
 import { FontAwesome5 } from '@expo/vector-icons'
@@ -39,9 +34,7 @@ const StepFour = ({ navigation }) => {
                     <Text weight="medium" size={15}>
                         You are almost there...
                     </Text>
-                    <Text>
-                        Finally, please take a selfie to verify that it is you.
-                    </Text>
+                    <Text>Finally, please take a selfie to verify that it is you.</Text>
                 </View>
 
                 <Text weight="medium" style={{ marginVertical: 10 }}>
@@ -49,20 +42,19 @@ const StepFour = ({ navigation }) => {
                 </Text>
 
                 <Text style={{ marginBottom: 10 }}>
-                    {'\u25CF'} Make sure you're in a well-lit area so the camera
-                    can accurately scan your face.
+                    {'\u25CF'} Make sure you're in a well-lit area so the camera can accurately scan
+                    your face.
                 </Text>
                 <Text style={{ marginBottom: 10 }}>
-                    {'\u25CF'} Make sure you're not photographing in direct
-                    sunlight to avoid overexposure.
+                    {'\u25CF'} Make sure you're not photographing in direct sunlight to avoid
+                    overexposure.
                 </Text>
                 <Text style={{ marginBottom: 10 }}>
-                    {'\u25CF'} Make sure you're fully facing the camera and your
-                    head is within the on-screen circle.
+                    {'\u25CF'} Make sure you're fully facing the camera and your head is within the
+                    on-screen circle.
                 </Text>
                 <Text style={{ marginBottom: 10 }}>
-                    {'\u25CF'} Before snapping your selfie, take off any masks
-                    or sunglasses.
+                    {'\u25CF'} Before snapping your selfie, take off any masks or sunglasses.
                 </Text>
 
                 <Button
@@ -79,11 +71,7 @@ const StepFour = ({ navigation }) => {
                     }}
                 >
                     <Text>Learn more about verification levels </Text>
-                    <FontAwesome5
-                        name="chevron-right"
-                        size={16}
-                        color={Colors.primary}
-                    />
+                    <FontAwesome5 name="chevron-right" size={16} color={Colors.primary} />
                 </View>
             </Container>
         </SafeAreaView>

@@ -1,17 +1,17 @@
 import React from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
-import ApplicantSetup from '../../../views/screens/AuthScreens/Setup/Employer/ApplicantSetup'
-import StepOne from '../../../views/screens/AuthScreens/Setup/Employer/StepOne'
-import StepTwo from '../../../views/screens/AuthScreens/Setup/Employer/StepTwo'
-import StepThree from '../../../views/screens/AuthScreens/Setup/Employer/StepThree'
-import StepFour from '../../../views/screens/AuthScreens/Setup/StepFour'
-import BasicUser from '../../../views/screens/AuthScreens/Setup/BasicUser'
-import SemiVerified from '../../../views/screens/AuthScreens/Setup/SemiVerified'
-import Done from '../../../views/screens/AuthScreens/Setup/Done'
+import ApplicantSetup from './EmployerSetup/ApplicantSetup'
+import StepOne from './EmployerSetup/StepOne'
+import StepTwo from './EmployerSetup/StepTwo'
+import StepThree from './EmployerSetup/StepThree'
+import StepFour from './EmployerSetup/StepFour'
+import BasicUser from './EmployerSetup/BasicUser'
+import SemiVerified from './EmployerSetup/SemiVerified'
+import Done from './EmployerSetup/Done'
 
 const Stack = createStackNavigator()
 
-const EmployerStack = () => {
+const EmployerSetupStack = () => {
     return (
         <Stack.Navigator>
             <Stack.Screen
@@ -58,4 +58,4 @@ const EmployerStack = () => {
     )
 }
 
-export default EmployerStack
+export default EmployerSetupStack

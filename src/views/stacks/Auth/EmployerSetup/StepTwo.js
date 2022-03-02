@@ -1,17 +1,12 @@
 import React, { useState } from 'react'
 import { StyleSheet, View, TouchableOpacity } from 'react-native'
-import ChooseID from '../../../../components/modals/ChooseID'
-import {
-    SafeAreaView,
-    Container,
-    Text,
-    Button,
-} from '../../../../components/FiplyComponents'
-import Colors from '../../../../../utils/Colors'
-import StepIndicator from '../../../../components/StepIndicator'
+import ChooseCertificate from '../../../components/modals/ChooseCertificate'
+import { SafeAreaView, Container, Text, Button } from '../../../components/FiplyComponents'
+import Colors from '../../../../utils/Colors'
+import StepIndicator from '../../../components/StepIndicator'
 import { FontAwesome5 } from '@expo/vector-icons'
 
-const StepThree = ({ navigation }) => {
+const StepTwo = ({ navigation }) => {
     const [showModal, setShowModal] = useState(false)
 
     return (
@@ -24,12 +19,11 @@ const StepThree = ({ navigation }) => {
                 }}
             >
                 <StepIndicator />
-                <StepIndicator />
                 <StepIndicator active />
             </View>
             <Container center padding={20}>
                 <Text color={Colors.secondary} size={24} weight="medium" center>
-                    Step 3
+                    Step 2
                 </Text>
 
                 <View style={{ marginVertical: 30 }}>
@@ -37,24 +31,20 @@ const StepThree = ({ navigation }) => {
                         You are almost there...
                     </Text>
                     <Text>
-                        Take a photo of your Company ID and any valid ID
+                        Take a photo of recommended certificates or upload attachment file to
+                        semi-verify your account.
                     </Text>
                 </View>
 
-                <View
-                    style={{ flexDirection: 'row', justifyContent: 'center' }}
-                >
-                    <TouchableOpacity style={styles.optionBtn}>
+                <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+                    <TouchableOpacity style={styles.optionBtn} onPress={() => setShowModal(true)}>
                         <Text color={Colors.primary} center weight="medium">
-                            Company ID
+                            Take certificate photo
                         </Text>
                     </TouchableOpacity>
-                    <TouchableOpacity
-                        style={styles.optionBtn}
-                        onPress={() => setShowModal(true)}
-                    >
+                    <TouchableOpacity style={styles.optionBtn} onPress={() => setShowModal(true)}>
                         <Text color={Colors.primary} center weight="medium">
-                            Valid ID
+                            Upload attachment file
                         </Text>
                     </TouchableOpacity>
                 </View>
@@ -62,7 +52,7 @@ const StepThree = ({ navigation }) => {
                 <Button
                     title="Proceed"
                     style={{ marginTop: 75, marginBottom: 35 }}
-                    onPress={() => navigation.navigate('StepFour')}
+                    onPress={() => navigation.navigate('SemiVerified')}
                 />
 
                 <View
@@ -73,23 +63,16 @@ const StepThree = ({ navigation }) => {
                     }}
                 >
                     <Text>Learn more about verification levels </Text>
-                    <FontAwesome5
-                        name="chevron-right"
-                        size={16}
-                        color={Colors.primary}
-                    />
+                    <FontAwesome5 name="chevron-right" size={16} color={Colors.primary} />
                 </View>
             </Container>
 
-            <ChooseID
-                visible={showModal}
-                onBackPress={() => setShowModal(false)}
-            />
+            <ChooseCertificate visible={showModal} onBackPress={() => setShowModal(false)} />
         </SafeAreaView>
     )
 }
 
-export default StepThree
+export default StepTwo
 
 const styles = StyleSheet.create({
     optionBtn: {

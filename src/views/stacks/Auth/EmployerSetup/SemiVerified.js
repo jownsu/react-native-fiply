@@ -1,5 +1,6 @@
-import React from 'react'
-import { StyleSheet, View } from 'react-native'
+import React, { useContext } from 'react'
+import { StyleSheet, View, BackHandler } from 'react-native'
+import AuthContext from '../../../../api/context/auth/AuthContext'
 import {
     Container,
     SafeAreaView,
@@ -11,6 +12,19 @@ import {
 import Colors from '../../../../utils/Colors'
 
 const SemiVerified = ({ navigation }) => {
+    const { setLogged_in } = useContext(AuthContext)
+
+    function handleBackButtonClick() {
+        setLogged_in('true')
+        return true
+    }
+
+    useEffect(() => {
+        BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick)
+        return () => {
+            BackHandler.removeEventListener('hardwareBackPress', handleBackButtonClick)
+        }
+    }, [])
     return (
         <SafeAreaView>
             <Container center padding={20}>
@@ -33,7 +47,7 @@ const SemiVerified = ({ navigation }) => {
                 <SecondaryButton
                     title="Later"
                     style={{ marginTop: 20 }}
-                    onPress={() => alert('pressed')}
+                    onPress={handleBackButtonClick}
                 />
             </Container>
         </SafeAreaView>

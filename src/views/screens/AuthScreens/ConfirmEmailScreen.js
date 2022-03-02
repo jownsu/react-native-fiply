@@ -23,9 +23,7 @@ const ConfirmEmailScreen = ({ navigation }) => {
                     <Button
                         title={'Confirm'}
                         style={{ marginVertical: 20 }}
-                        onPress={() =>
-                            navigation.navigate('SelectUserTypeStack')
-                        }
+                        onPress={() => navigation.navigate('SelectUserTypeStack')}
                     />
                 </View>
             </Container>

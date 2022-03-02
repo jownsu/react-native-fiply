@@ -1,8 +1,8 @@
 import React, { useState, useContext } from 'react'
 import { StyleSheet, View, TouchableOpacity } from 'react-native'
-import Colors from '../../../../utils/Colors'
+import Colors from '../../../utils/Colors'
 import { FontAwesome5 } from '@expo/vector-icons'
-import AuthContext from '../../../../api/context/auth/AuthContext'
+import AuthContext from '../../../api/context/auth/AuthContext'
 import {
     Text,
     FiplyLogo,
@@ -11,7 +11,7 @@ import {
     Button,
     SafeAreaView,
     SecondaryButton,
-} from '../../../components/FiplyComponents'
+} from '../../components/FiplyComponents'
 
 const SelectUserTypeScreen = ({ navigation }) => {
     const [userType, setUserType] = useState({
@@ -48,7 +48,7 @@ const SelectUserTypeScreen = ({ navigation }) => {
 
     return (
         <SafeAreaView>
-            <WaveHeader waveimg={require('../../../../assets/img/waves/4.png')} />
+            <WaveHeader waveimg={require('../../../assets/img/waves/4.png')} />
             <Container center padding={20}>
                 <FiplyLogo />
                 <Text style={{ marginVertical: 35 }} size={18} center>

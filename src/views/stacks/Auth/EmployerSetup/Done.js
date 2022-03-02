@@ -1,5 +1,6 @@
-import React from 'react'
-import { StyleSheet, View } from 'react-native'
+import React, { useContext } from 'react'
+import { StyleSheet, View, BackHandler } from 'react-native'
+import AuthContext from '../../../../api/context/auth/AuthContext'
 import {
     SafeAreaView,
     Container,
@@ -9,6 +10,19 @@ import {
 } from '../../../components/FiplyComponents'
 
 const Done = ({ navigation }) => {
+    const { setLogged_in } = useContext(AuthContext)
+
+    function handleBackButtonClick() {
+        setLogged_in('true')
+        return true
+    }
+
+    useEffect(() => {
+        BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick)
+        return () => {
+            BackHandler.removeEventListener('hardwareBackPress', handleBackButtonClick)
+        }
+    }, [])
     return (
         <SafeAreaView>
             <Container center padding={20}>
@@ -17,8 +31,8 @@ const Done = ({ navigation }) => {
                     Great!
                 </Text>
                 <Text center>
-                    Once a Fiply representative has evaluated and validated your
-                    application to Fully Verify, Fiply will notify you.
+                    Once a Fiply representative has evaluated and validated your application to
+                    Fully Verify, Fiply will notify you.
                 </Text>
                 <Text center style={{ marginVertical: 20 }}>
                     Thank you for taking part in Fiply's security protocol.
@@ -26,9 +40,9 @@ const Done = ({ navigation }) => {
                 <Text center>Have an awesome day!</Text>
 
                 <Button
-                    title={'Done'}
+                    title={'EDone'}
                     style={{ marginVertical: 50 }}
-                    onPress={() => alert('done')}
+                    onPress={handleBackButtonClick}
                 />
             </Container>
         </SafeAreaView>

@@ -7,19 +7,16 @@ import {
     Button,
     Dropdown,
     Container,
-} from '../../../../components/FiplyComponents'
-import Colors from '../../../../../utils/Colors'
+} from '../../../components/FiplyComponents'
+import Colors from '../../../../utils/Colors'
 import { Formik } from 'formik'
 import * as yup from 'yup'
-import StepIndicator from '../../../../components/StepIndicator'
+import StepIndicator from '../../../components/StepIndicator'
 
 const StepOne = ({ navigation }) => {
     const companySchema = yup.object({
         company: yup.string().trim().required('Company is required'),
-        companyRegNum: yup
-            .string()
-            .trim()
-            .required('Company Registration Number is required'),
+        companyRegNum: yup.string().trim().required('Company Registration Number is required'),
         position: yup.string().trim().required('Position is required'),
         location: yup.string().trim().required('Location is required'),
     })
@@ -85,31 +82,17 @@ const StepOne = ({ navigation }) => {
                                 value={values.company}
                                 onChangeText={handleChange('company')}
                                 onBlur={handleBlur('company')}
-                                error={
-                                    touched.company && errors.company
-                                        ? true
-                                        : false
-                                }
-                                errorMsg={
-                                    touched.company && errors.company
-                                        ? errors.company
-                                        : ''
-                                }
+                                error={touched.company && errors.company ? true : false}
+                                errorMsg={touched.company && errors.company ? errors.company : ''}
                             />
                             <TextInput
                                 label="Company Registration Number"
                                 value={values.companyRegNum}
                                 onChangeText={handleChange('companyRegNum')}
                                 onBlur={handleBlur('companyRegNum')}
-                                error={
-                                    touched.companyRegNum &&
-                                    errors.companyRegNum
-                                        ? true
-                                        : false
-                                }
+                                error={touched.companyRegNum && errors.companyRegNum ? true : false}
                                 errorMsg={
-                                    touched.companyRegNum &&
-                                    errors.companyRegNum
+                                    touched.companyRegNum && errors.companyRegNum
                                         ? errors.companyRegNum
                                         : ''
                                 }
@@ -119,15 +102,9 @@ const StepOne = ({ navigation }) => {
                                 value={values.position}
                                 onChangeText={handleChange('position')}
                                 onBlur={handleBlur('position')}
-                                error={
-                                    touched.position && errors.position
-                                        ? true
-                                        : false
-                                }
+                                error={touched.position && errors.position ? true : false}
                                 errorMsg={
-                                    touched.position && errors.position
-                                        ? errors.position
-                                        : ''
+                                    touched.position && errors.position ? errors.position : ''
                                 }
                             />
                             <Dropdown
@@ -135,21 +112,11 @@ const StepOne = ({ navigation }) => {
                                 value={values.location}
                                 data={locationList}
                                 style={{ marginBottom: 5 }}
-                                onChangeTextDelay={() =>
-                                    console.log('API CALLED')
-                                }
-                                onSubmit={(text) =>
-                                    setFieldValue('location', text)
-                                }
-                                error={
-                                    touched.location && errors.location
-                                        ? true
-                                        : false
-                                }
+                                onChangeTextDelay={() => console.log('API CALLED')}
+                                onSubmit={(text) => setFieldValue('location', text)}
+                                error={touched.location && errors.location ? true : false}
                                 errorMsg={
-                                    touched.location && errors.location
-                                        ? errors.location
-                                        : ''
+                                    touched.location && errors.location ? errors.location : ''
                                 }
                             />
                             <Button

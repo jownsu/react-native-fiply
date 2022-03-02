@@ -29,7 +29,7 @@ const SignInScreen = ({ navigation }) => {
     }
 
     return (
-        <SafeAreaView style={{ flex: 1 }}>
+        <SafeAreaView flex>
             <WaveHeader waveimg={require('../../../assets/img/waves/1.png')} />
             <Container center padding={20}>
                 <View style={styles.imgContainer}>
@@ -103,7 +103,7 @@ const SignInScreen = ({ navigation }) => {
                     <Text weight="semi-bold" color={Colors.light}>
                         Don't have an account yet?{' '}
                     </Text>
-                    <TouchableOpacity onPress={() => navigation.navigate('SignupStack')}>
+                    <TouchableOpacity onPress={() => navigation.navigate('SignUpScreen')}>
                         <Text weight="bold" color={Colors.primary}>
                             Sign Up
                         </Text>

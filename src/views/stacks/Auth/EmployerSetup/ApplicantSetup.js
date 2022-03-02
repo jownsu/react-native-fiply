@@ -8,7 +8,7 @@ import {
     WaveHeader,
     Button,
     Dropdown,
-} from '../../../../components/FiplyComponents'
+} from '../../../components/FiplyComponents'
 import { Formik } from 'formik'
 import * as yup from 'yup'
 
@@ -69,22 +69,14 @@ const ApplicantSetup = ({ navigation }) => {
     ]
 
     const formSchema = yup.object({
-        levelOfExperience: yup
-            .string()
-            .trim()
-            .required('Level of experience required'),
-        fieldOfExpertise: yup
-            .string()
-            .trim()
-            .required('Field of expertise required'),
+        levelOfExperience: yup.string().trim().required('Level of experience required'),
+        fieldOfExpertise: yup.string().trim().required('Field of expertise required'),
         location: yup.string().trim().required('Location is required'),
     })
 
     return (
         <SafeAreaView>
-            <WaveHeader
-                waveimg={require('../../../../../assets/img/waves/4.png')}
-            />
+            <WaveHeader waveimg={require('../../../../assets/img/waves/4.png')} />
             <Container center padding={20}>
                 <FiplyLogo />
                 <Text center size={17} style={{ marginVertical: 25 }}>
@@ -115,20 +107,16 @@ const ApplicantSetup = ({ navigation }) => {
                                 value={values.levelOfExperience}
                                 data={levelOfExperienceList}
                                 style={{ marginBottom: 5 }}
-                                onSubmit={(text) =>
-                                    setFieldValue('levelOfExperience', text)
-                                }
+                                onSubmit={(text) => setFieldValue('levelOfExperience', text)}
                                 noTextInput
                                 dropdownIcon
                                 error={
-                                    touched.levelOfExperience &&
-                                    errors.levelOfExperience
+                                    touched.levelOfExperience && errors.levelOfExperience
                                         ? true
                                         : false
                                 }
                                 errorMsg={
-                                    touched.levelOfExperience &&
-                                    errors.levelOfExperience
+                                    touched.levelOfExperience && errors.levelOfExperience
                                         ? errors.levelOfExperience
                                         : ''
                                 }
@@ -139,21 +127,15 @@ const ApplicantSetup = ({ navigation }) => {
                                 value={values.fieldOfExpertise}
                                 data={fieldOfExpertiseList}
                                 style={{ marginBottom: 5 }}
-                                onChangeTextDelay={() =>
-                                    console.log('API CALLED')
-                                }
-                                onSubmit={(text) =>
-                                    setFieldValue('fieldOfExpertise', text)
-                                }
+                                onChangeTextDelay={() => console.log('API CALLED')}
+                                onSubmit={(text) => setFieldValue('fieldOfExpertise', text)}
                                 error={
-                                    touched.fieldOfExpertise &&
-                                    errors.fieldOfExpertise
+                                    touched.fieldOfExpertise && errors.fieldOfExpertise
                                         ? true
                                         : false
                                 }
                                 errorMsg={
-                                    touched.fieldOfExpertise &&
-                                    errors.fieldOfExpertise
+                                    touched.fieldOfExpertise && errors.fieldOfExpertise
                                         ? errors.fieldOfExpertise
                                         : ''
                                 }
@@ -164,22 +146,12 @@ const ApplicantSetup = ({ navigation }) => {
                                 value={values.location}
                                 data={locationList}
                                 style={{ marginBottom: 5 }}
-                                onChangeTextDelay={() =>
-                                    console.log('API CALLED')
-                                }
-                                onSubmit={(text) =>
-                                    setFieldValue('location', text)
-                                }
+                                onChangeTextDelay={() => console.log('API CALLED')}
+                                onSubmit={(text) => setFieldValue('location', text)}
                                 dropdownIcon
-                                error={
-                                    touched.location && errors.location
-                                        ? true
-                                        : false
-                                }
+                                error={touched.location && errors.location ? true : false}
                                 errorMsg={
-                                    touched.location && errors.location
-                                        ? errors.location
-                                        : ''
+                                    touched.location && errors.location ? errors.location : ''
                                 }
                             />
 

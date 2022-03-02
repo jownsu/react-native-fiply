@@ -1,5 +1,6 @@
-import React from 'react'
-import { StyleSheet, View } from 'react-native'
+import React, { useEffect, useContext } from 'react'
+import AuthContext from '../../../../api/context/auth/AuthContext'
+import { StyleSheet, View, BackHandler } from 'react-native'
 import {
     Container,
     SafeAreaView,
@@ -11,6 +12,20 @@ import {
 import Colors from '../../../../utils/Colors'
 
 const BasicUser = ({ navigation }) => {
+    const { setLogged_in } = useContext(AuthContext)
+
+    function handleBackButtonClick() {
+        setLogged_in('true')
+        return true
+    }
+
+    useEffect(() => {
+        BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick)
+        return () => {
+            BackHandler.removeEventListener('hardwareBackPress', handleBackButtonClick)
+        }
+    }, [])
+
     return (
         <SafeAreaView>
             <Container center padding={20}>
@@ -19,9 +34,7 @@ const BasicUser = ({ navigation }) => {
                     <Text weight="medium" size={18} center>
                         Greetings
                     </Text>
-                    <Text center>
-                        You have now reached the level of a basic user
-                    </Text>
+                    <Text center>You have now reached the level of a basic user</Text>
                 </View>
 
                 <Text weight="medium" size={17} color={Colors.secondary} center>
@@ -35,7 +48,7 @@ const BasicUser = ({ navigation }) => {
                 <SecondaryButton
                     title="Later"
                     style={{ marginTop: 20 }}
-                    onPress={() => alert('pressed')}
+                    onPress={handleBackButtonClick}
                 />
             </Container>
         </SafeAreaView>

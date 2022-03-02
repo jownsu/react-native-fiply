@@ -8,11 +8,11 @@ import {
     SecondaryButton,
     Container,
     Dropdown,
-} from '../../../../components/FiplyComponents'
-import Colors from '../../../../../utils/Colors'
+} from '../../../components/FiplyComponents'
+import Colors from '../../../../utils/Colors'
 import { Formik } from 'formik'
 import * as yup from 'yup'
-import StepIndicator from '../../../../components/StepIndicator'
+import StepIndicator from '../../../components/StepIndicator'
 import DateTimePicker from '@react-native-community/datetimepicker'
 
 const StepOne = ({ navigation }) => {
@@ -20,24 +20,15 @@ const StepOne = ({ navigation }) => {
 
     const experienceSchema = yup.object({
         recentJob: yup.string().trim().required('Most recent job is required'),
-        employmentType: yup
-            .string()
-            .trim()
-            .required('Employment type is required'),
-        recentCompany: yup
-            .string()
-            .trim()
-            .required('Recent company is required'),
+        employmentType: yup.string().trim().required('Employment type is required'),
+        recentCompany: yup.string().trim().required('Recent company is required'),
         location: yup.string().trim().required('Location is required'),
     })
 
     const studentSchema = yup.object({
         school: yup.string().trim().required('School is required'),
         degree: yup.string().trim().required('Degree is required'),
-        fieldOfStudy: yup
-            .string()
-            .trim()
-            .required('Field of study is required'),
+        fieldOfStudy: yup.string().trim().required('Field of study is required'),
         date: yup.string().trim().required('Date is required'),
     })
 
@@ -189,18 +180,10 @@ const StepOne = ({ navigation }) => {
                                 <Dropdown
                                     label={'Most recent job'}
                                     value={values.recentJob}
-                                    onChangeTextDelay={() =>
-                                        console.log('API CALLED')
-                                    }
-                                    onSubmit={(text) =>
-                                        setFieldValue('recentJob', text)
-                                    }
+                                    onChangeTextDelay={() => console.log('API CALLED')}
+                                    onSubmit={(text) => setFieldValue('recentJob', text)}
                                     data={jobList}
-                                    error={
-                                        touched.recentJob && errors.recentJob
-                                            ? true
-                                            : false
-                                    }
+                                    error={touched.recentJob && errors.recentJob ? true : false}
                                     errorMsg={
                                         touched.recentJob && errors.recentJob
                                             ? errors.recentJob
@@ -213,21 +196,15 @@ const StepOne = ({ navigation }) => {
                                     label={'Employment Type'}
                                     value={values.employmentType}
                                     data={employmentTypeList}
-                                    onChangeTextDelay={() =>
-                                        console.log('API CALLED')
-                                    }
-                                    onSubmit={(text) =>
-                                        setFieldValue('employmentType', text)
-                                    }
+                                    onChangeTextDelay={() => console.log('API CALLED')}
+                                    onSubmit={(text) => setFieldValue('employmentType', text)}
                                     error={
-                                        touched.employmentType &&
-                                        errors.employmentType
+                                        touched.employmentType && errors.employmentType
                                             ? true
                                             : false
                                     }
                                     errorMsg={
-                                        touched.employmentType &&
-                                        errors.employmentType
+                                        touched.employmentType && errors.employmentType
                                             ? errors.employmentType
                                             : ''
                                     }
@@ -240,21 +217,13 @@ const StepOne = ({ navigation }) => {
                                     label={'Most recent company'}
                                     value={values.recentCompany}
                                     data={companyList}
-                                    onChangeTextDelay={() =>
-                                        console.log('API CALLED')
-                                    }
-                                    onSubmit={(text) =>
-                                        setFieldValue('recentCompany', text)
-                                    }
+                                    onChangeTextDelay={() => console.log('API CALLED')}
+                                    onSubmit={(text) => setFieldValue('recentCompany', text)}
                                     error={
-                                        touched.recentCompany &&
-                                        errors.recentCompany
-                                            ? true
-                                            : false
+                                        touched.recentCompany && errors.recentCompany ? true : false
                                     }
                                     errorMsg={
-                                        touched.recentCompany &&
-                                        errors.recentCompany
+                                        touched.recentCompany && errors.recentCompany
                                             ? errors.recentCompany
                                             : ''
                                     }
@@ -265,21 +234,11 @@ const StepOne = ({ navigation }) => {
                                     label={'Location'}
                                     value={values.location}
                                     data={locationList}
-                                    onChangeTextDelay={() =>
-                                        console.log('API CALLED')
-                                    }
-                                    onSubmit={(text) =>
-                                        setFieldValue('location', text)
-                                    }
-                                    error={
-                                        touched.location && errors.location
-                                            ? true
-                                            : false
-                                    }
+                                    onChangeTextDelay={() => console.log('API CALLED')}
+                                    onSubmit={(text) => setFieldValue('location', text)}
+                                    error={touched.location && errors.location ? true : false}
                                     errorMsg={
-                                        touched.location && errors.location
-                                            ? errors.location
-                                            : ''
+                                        touched.location && errors.location ? errors.location : ''
                                     }
                                 />
 
@@ -331,22 +290,10 @@ const StepOne = ({ navigation }) => {
                                     value={values.school}
                                     data={schoolList}
                                     style={{ marginBottom: 5 }}
-                                    onChangeTextDelay={() =>
-                                        console.log('API CALLED')
-                                    }
-                                    onSubmit={(text) =>
-                                        setFieldValue('school', text)
-                                    }
-                                    error={
-                                        touched.school && errors.school
-                                            ? true
-                                            : false
-                                    }
-                                    errorMsg={
-                                        touched.school && errors.school
-                                            ? errors.school
-                                            : ''
-                                    }
+                                    onChangeTextDelay={() => console.log('API CALLED')}
+                                    onSubmit={(text) => setFieldValue('school', text)}
+                                    error={touched.school && errors.school ? true : false}
+                                    errorMsg={touched.school && errors.school ? errors.school : ''}
                                 />
 
                                 <Dropdown
@@ -354,22 +301,10 @@ const StepOne = ({ navigation }) => {
                                     value={values.degree}
                                     data={degreeList}
                                     style={{ marginBottom: 5 }}
-                                    onChangeTextDelay={() =>
-                                        console.log('API CALLED')
-                                    }
-                                    onSubmit={(text) =>
-                                        setFieldValue('degree', text)
-                                    }
-                                    error={
-                                        touched.degree && errors.degree
-                                            ? true
-                                            : false
-                                    }
-                                    errorMsg={
-                                        touched.degree && errors.degree
-                                            ? errors.degree
-                                            : ''
-                                    }
+                                    onChangeTextDelay={() => console.log('API CALLED')}
+                                    onSubmit={(text) => setFieldValue('degree', text)}
+                                    error={touched.degree && errors.degree ? true : false}
+                                    errorMsg={touched.degree && errors.degree ? errors.degree : ''}
                                 />
 
                                 <Dropdown
@@ -377,21 +312,13 @@ const StepOne = ({ navigation }) => {
                                     value={values.fieldOfStudy}
                                     data={fieldOfStudyList}
                                     style={{ marginBottom: 5 }}
-                                    onChangeTextDelay={() =>
-                                        console.log('API CALLED')
-                                    }
-                                    onSubmit={(text) =>
-                                        setFieldValue('fieldOfStudy', text)
-                                    }
+                                    onChangeTextDelay={() => console.log('API CALLED')}
+                                    onSubmit={(text) => setFieldValue('fieldOfStudy', text)}
                                     error={
-                                        touched.fieldOfStudy &&
-                                        errors.fieldOfStudy
-                                            ? true
-                                            : false
+                                        touched.fieldOfStudy && errors.fieldOfStudy ? true : false
                                     }
                                     errorMsg={
-                                        touched.fieldOfStudy &&
-                                        errors.fieldOfStudy
+                                        touched.fieldOfStudy && errors.fieldOfStudy
                                             ? errors.fieldOfStudy
                                             : ''
                                     }
@@ -405,17 +332,9 @@ const StepOne = ({ navigation }) => {
                                         value={values.date}
                                         onChangeText={handleChange('date')}
                                         onBlur={handleBlur('date')}
-                                        error={
-                                            touched.date && errors.date
-                                                ? true
-                                                : false
-                                        }
+                                        error={touched.date && errors.date ? true : false}
                                         style={{ marginTop: 5 }}
-                                        errorMsg={
-                                            touched.date && errors.date
-                                                ? errors.date
-                                                : ''
-                                        }
+                                        errorMsg={touched.date && errors.date ? errors.date : ''}
                                         nonEditable
                                     />
                                 </TouchableOpacity>

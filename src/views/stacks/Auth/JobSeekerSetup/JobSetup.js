@@ -8,7 +8,7 @@ import {
     WaveHeader,
     Button,
     Dropdown,
-} from '../../../../components/FiplyComponents'
+} from '../../../components/FiplyComponents'
 import { Formik } from 'formik'
 import * as yup from 'yup'
 
@@ -59,17 +59,12 @@ const JobSetup = ({ navigation }) => {
     const formSchema = yup.object({
         jobTitle: yup.string().trim().required('Job title is required'),
         jobLocation: yup.string().trim().required('Job location is required'),
-        employmentType: yup
-            .string()
-            .trim()
-            .required('Employment type is required'),
+        employmentType: yup.string().trim().required('Employment type is required'),
     })
 
     return (
         <SafeAreaView>
-            <WaveHeader
-                waveimg={require('../../../../../assets/img/waves/4.png')}
-            />
+            <WaveHeader waveimg={require('../../../../assets/img/waves/4.png')} />
             <Container center padding={20}>
                 <FiplyLogo />
                 <Text center size={17} style={{ marginVertical: 25 }}>
@@ -83,7 +78,12 @@ const JobSetup = ({ navigation }) => {
                         employmentType: '',
                     }}
                     validationSchema={formSchema}
-                    onSubmit={(values) => navigation.navigate('BasicUser')}
+                    onSubmit={(values) => {
+                        navigation.reset({
+                            index: 0,
+                            routes: [{ name: 'BasicUser' }],
+                        })
+                    }}
                 >
                     {({
                         handleChange,
@@ -100,21 +100,11 @@ const JobSetup = ({ navigation }) => {
                                 value={values.jobTitle}
                                 data={jobTitleList}
                                 style={{ marginBottom: 5 }}
-                                onChangeTextDelay={() =>
-                                    console.log('API CALLED')
-                                }
-                                onSubmit={(text) =>
-                                    setFieldValue('jobTitle', text)
-                                }
-                                error={
-                                    touched.jobTitle && errors.jobTitle
-                                        ? true
-                                        : false
-                                }
+                                onChangeTextDelay={() => console.log('API CALLED')}
+                                onSubmit={(text) => setFieldValue('jobTitle', text)}
+                                error={touched.jobTitle && errors.jobTitle ? true : false}
                                 errorMsg={
-                                    touched.jobTitle && errors.jobTitle
-                                        ? errors.jobTitle
-                                        : ''
+                                    touched.jobTitle && errors.jobTitle ? errors.jobTitle : ''
                                 }
                             />
                             <Dropdown
@@ -122,17 +112,9 @@ const JobSetup = ({ navigation }) => {
                                 value={values.jobLocation}
                                 data={jobLocationList}
                                 style={{ marginBottom: 5 }}
-                                onChangeTextDelay={() =>
-                                    console.log('API CALLED')
-                                }
-                                onSubmit={(text) =>
-                                    setFieldValue('jobLocation', text)
-                                }
-                                error={
-                                    touched.jobLocation && errors.jobLocation
-                                        ? true
-                                        : false
-                                }
+                                onChangeTextDelay={() => console.log('API CALLED')}
+                                onSubmit={(text) => setFieldValue('jobLocation', text)}
+                                error={touched.jobLocation && errors.jobLocation ? true : false}
                                 errorMsg={
                                     touched.jobLocation && errors.jobLocation
                                         ? errors.jobLocation
@@ -144,20 +126,14 @@ const JobSetup = ({ navigation }) => {
                                 value={values.employmentType}
                                 data={employmentTypeList}
                                 style={{ marginBottom: 5 }}
-                                onSubmit={(text) =>
-                                    setFieldValue('employmentType', text)
-                                }
+                                onSubmit={(text) => setFieldValue('employmentType', text)}
                                 noTextInput
                                 dropdownIcon
                                 error={
-                                    touched.employmentType &&
-                                    errors.employmentType
-                                        ? true
-                                        : false
+                                    touched.employmentType && errors.employmentType ? true : false
                                 }
                                 errorMsg={
-                                    touched.employmentType &&
-                                    errors.employmentType
+                                    touched.employmentType && errors.employmentType
                                         ? errors.employmentType
                                         : ''
                                 }
@@ -167,9 +143,7 @@ const JobSetup = ({ navigation }) => {
                                 title="Done"
                                 style={{ marginVertical: 25 }}
                                 disabled={
-                                    values.jobTitle &&
-                                    values.jobLocation &&
-                                    values.employmentType
+                                    values.jobTitle && values.jobLocation && values.employmentType
                                         ? false
                                         : true
                                 }

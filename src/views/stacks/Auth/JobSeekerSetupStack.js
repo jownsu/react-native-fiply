@@ -1,13 +1,13 @@
 import React from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
-import JobSetup from '../../../views/screens/AuthScreens/Setup/JobSeeker/JobSetup'
-import StepOne from '../../../views/screens/AuthScreens/Setup/JobSeeker/StepOne'
-import StepTwo from '../../../views/screens/AuthScreens/Setup/JobSeeker/StepTwo'
-import StepThree from '../../../views/screens/AuthScreens/Setup/JobSeeker/StepThree'
-import StepFour from '../../../views/screens/AuthScreens/Setup/StepFour'
-import BasicUser from '../../../views/screens/AuthScreens/Setup/BasicUser'
-import SemiVerifed from '../../../views/screens/AuthScreens/Setup/SemiVerified'
-import Done from '../../../views/screens/AuthScreens/Setup/Done'
+import JobSetup from './JobSeekerSetup/JobSetup'
+import StepOne from './JobSeekerSetup/StepOne'
+import StepTwo from './JobSeekerSetup/StepTwo'
+import StepThree from './JobSeekerSetup/StepThree'
+import StepFour from './JobSeekerSetup/StepFour'
+import BasicUser from './JobSeekerSetup/BasicUser'
+import SemiVerifed from './JobSeekerSetup/SemiVerified'
+import Done from './JobSeekerSetup/Done'
 
 const Stack = createStackNavigator()
 

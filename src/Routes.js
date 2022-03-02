@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import AppStack from './views/stacks/AppStack'
-import AuthStack from './views/stacks/AuthStack'
+import AuthStack from './views/stacks/Auth/AuthStack'
 import * as SecureStore from 'expo-secure-store'
 import AuthContext from './api/context/auth/AuthContext'
 

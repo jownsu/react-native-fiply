@@ -1,9 +1,9 @@
 import React, { useState, useContext } from 'react'
 import { StyleSheet, View, TouchableOpacity } from 'react-native'
-import AuthContext from '../../../../api/context/auth/AuthContext'
+import AuthContext from '../../../api/context/auth/AuthContext'
 import { Formik } from 'formik'
 import * as yup from 'yup'
-import Colors from '../../../../utils/Colors'
+import Colors from '../../../utils/Colors'
 import { TextInput as TxtInput } from 'react-native-paper'
 
 import {
@@ -14,9 +14,9 @@ import {
     Button,
     TextInput,
     SafeAreaView,
-} from '../../../components/FiplyComponents'
+} from '../../components/FiplyComponents'
 
-const SignupScreen = ({ navigation }) => {
+const SignUpScreen = ({ navigation }) => {
     const [hideSecondForm, setHideSecondForm] = useState(true)
     const [hidePassword, setHidePassword] = useState(true)
     const { signup, loading } = useContext(AuthContext)
@@ -31,7 +31,7 @@ const SignupScreen = ({ navigation }) => {
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
-            <WaveHeader waveimg={require('../../../../assets/img/waves/2.png')} />
+            <WaveHeader waveimg={require('../../../assets/img/waves/2.png')} />
             <Container center padding={20}>
                 <FiplyLogo style={{ marginBottom: 25 }} />
 
@@ -44,7 +44,7 @@ const SignupScreen = ({ navigation }) => {
                         lastname: '',
                     }}
                     onSubmit={(values) => {
-                        signup(values, () => navigation.navigate('SelectUserTypeStack'))
+                        signup(values, () => navigation.navigate('SelectUserTypeScreen'))
                     }}
                     validationSchema={signupSchema}
                 >
@@ -192,6 +192,6 @@ const SignupScreen = ({ navigation }) => {
     )
 }
 
-export default SignupScreen
+export default SignUpScreen
 
 const styles = StyleSheet.create({})
