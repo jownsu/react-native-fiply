@@ -40,7 +40,7 @@ const Done = ({ navigation }) => {
                 <Text center>Have an awesome day!</Text>
 
                 <Button
-                    title={'EDone'}
+                    title={'Done'}
                     style={{ marginVertical: 50 }}
                     onPress={handleBackButtonClick}
                 />

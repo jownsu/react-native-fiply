@@ -5,6 +5,7 @@ import SignUpScreen from '../../screens/AuthScreens/SignUpScreen'
 import SelectUserTypeScreen from '../../screens/AuthScreens/SelectUserTypeScreen'
 import EmployerSetupStack from './EmployerSetupStack'
 import JobSeekerSetupStack from './JobSeekerSetupStack'
+import ConfirmEmailScreen from '../../screens/AuthScreens/ConfirmEmailScreen'
 
 const Stack = createStackNavigator()
 
@@ -20,6 +21,11 @@ const AuthStack = () => {
                 options={{ headerShown: false }}
                 name={'SignUpScreen'}
                 component={SignUpScreen}
+            ></Stack.Screen>
+            <Stack.Screen
+                options={{ headerShown: false }}
+                name={'ConfirmEmailScreen'}
+                component={ConfirmEmailScreen}
             ></Stack.Screen>
             <Stack.Screen
                 options={{ headerShown: false }}

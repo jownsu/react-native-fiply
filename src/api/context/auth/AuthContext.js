@@ -64,30 +64,42 @@ export const AuthProvider = ({ children }) => {
                 onSignedUp()
             })
             .catch((error) => {
+                alert(error.message)
+                setLoading(false)
+            })
+    }
+
+    const verify = async (signUpInfo, onVerifySent = () => {}) => {
+        setLoading(true)
+        await api()
+            .post('/verify', signUpInfo)
+            .then(() => onVerifySent())
+            .catch((error) => {
                 const errorList = []
                 let errors = error.errors
                 for (const key in errors) {
-                    errorList.push('\u25CF' + errors[key][0])
+                    errorList.push('\u25CF' + ' ' + errors[key][0])
                 }
                 alert(errorList.join('\n'))
                 console.log(error)
-                setLoading(false)
             })
+            .finally(() => setLoading(false))
     }
 
     return (
         <AuthContext.Provider
             value={{
                 user,
-                setUser,
-                logged_in,
-                setLogged_in,
                 error,
                 loading,
+                logged_in,
+                setUser,
+                setLogged_in,
                 setLoading,
                 login,
                 logout,
                 signup,
+                verify,
             }}
         >
             {children}

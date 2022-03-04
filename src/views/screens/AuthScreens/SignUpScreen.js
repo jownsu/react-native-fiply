@@ -19,12 +19,22 @@ import {
 const SignUpScreen = ({ navigation }) => {
     const [hideSecondForm, setHideSecondForm] = useState(true)
     const [hidePassword, setHidePassword] = useState(true)
-    const { signup, loading } = useContext(AuthContext)
+    const { verify, loading } = useContext(AuthContext)
 
     const signupSchema = yup.object({
         email: yup.string().trim().email('Invalid email').required('Email is required'),
-        password: yup.string().trim().required('Password is required'),
-        password_confirmation: yup.string().trim().required('Confirm password is required'),
+        password: yup
+            .string()
+            .trim()
+            .required('Password is required')
+            .min(8)
+            .oneOf([yup.ref('password_confirmation'), null], 'Passwords must match'),
+        password_confirmation: yup
+            .string()
+            .trim()
+            .min(8)
+            .required('Confirm password is required')
+            .oneOf([yup.ref('password'), null], 'Passwords must match'),
         firstname: yup.string().trim().required('Firstname is required'),
         lastname: yup.string().trim().required('Lastname is required'),
     })
@@ -44,7 +54,10 @@ const SignUpScreen = ({ navigation }) => {
                         lastname: '',
                     }}
                     onSubmit={(values) => {
-                        signup(values, () => navigation.navigate('SelectUserTypeScreen'))
+                        verify(values, () =>
+                            navigation.navigate('ConfirmEmailScreen', { signUpData: values })
+                        )
+                        //signup(values, () => navigation.navigate('SelectUserTypeScreen'))
                     }}
                     validationSchema={signupSchema}
                 >
@@ -119,7 +132,9 @@ const SignUpScreen = ({ navigation }) => {
                                             values.email &&
                                             !errors.email &&
                                             values.password &&
-                                            values.password_confirmation
+                                            !errors.password &&
+                                            values.password_confirmation &&
+                                            !errors.password_confirmation
                                                 ? false
                                                 : true
                                         }
@@ -133,6 +148,7 @@ const SignUpScreen = ({ navigation }) => {
                                             value={values.firstname}
                                             onChangeText={handleChange('firstname')}
                                             onBlur={handleBlur('firstname')}
+                                            autoCapitalize={'words'}
                                             error={
                                                 touched.firstname && errors.firstname ? true : false
                                             }
@@ -148,6 +164,7 @@ const SignUpScreen = ({ navigation }) => {
                                             value={values.lastname}
                                             onChangeText={handleChange('lastname')}
                                             onBlur={handleBlur('lastname')}
+                                            autoCapitalize={'words'}
                                             error={
                                                 touched.lastname && errors.lastname ? true : false
                                             }
