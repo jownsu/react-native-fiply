@@ -3,7 +3,7 @@ import { StyleSheet, View, TouchableOpacity, FlatList } from 'react-native'
 import Colors from '../../../utils/Colors'
 import { TextInput } from './TextInput'
 import { ActivityIndicator } from './ActivityIndicator'
-import { TextInput as TxtInput, Dialog, Portal } from 'react-native-paper'
+import { TextInput as TxtInput, Dialog, Portal, ProgressBar } from 'react-native-paper'
 import { Text } from './Text'
 
 export const Dropdown = ({
@@ -13,7 +13,6 @@ export const Dropdown = ({
     style,
     textInputStyle,
     value,
-    onChangeText = () => {},
     onSubmit = () => {},
     error,
     errorMsg,
@@ -23,6 +22,7 @@ export const Dropdown = ({
     noTextInput,
     isLoading = false,
     onChangeTextDelay = () => {},
+    onTextInputPress = () => {},
     delay = 500,
 }) => {
     const [filteredData, setFilteredData] = useState(data)
@@ -44,11 +44,24 @@ export const Dropdown = ({
         }
     }
 
+    const onChangeText = (text) => {
+        clearTimeout(timer)
+        const newTimer = setTimeout(() => {
+            onChangeTextDelay(text)
+        }, delay)
+        setTimer(newTimer)
+        // onSearch(text)
+        setTxtVal(text)
+    }
+
     return (
         <View style={{ ...style }}>
             <TouchableOpacity
                 activeOpacity={0.6}
-                onPress={() => setVisibleDialog(true)}
+                onPress={() => {
+                    onTextInputPress()
+                    setVisibleDialog(true)
+                }}
             >
                 <TextInput
                     label={label}
@@ -82,15 +95,7 @@ export const Dropdown = ({
                         <TextInput
                             label={label}
                             value={txtVal}
-                            onChangeText={(text) => {
-                                clearTimeout(timer)
-                                const newTimer = setTimeout(() => {
-                                    onChangeTextDelay(text)
-                                }, delay)
-                                setTimer(newTimer)
-                                onSearch(text)
-                                setTxtVal(text)
-                            }}
+                            onChangeText={onChangeText}
                             onSubmitEditing={() => {
                                 // onChangeText(text)
                                 onSubmit(txtVal)
@@ -103,10 +108,16 @@ export const Dropdown = ({
                         />
                     ) : null}
 
-                    {isLoading ? <ActivityIndicator /> : null}
-
+                    {isLoading && (
+                        <ProgressBar
+                            indeterminate
+                            visible={true}
+                            color={Colors.secondary}
+                            style={{ marginVertical: 10 }}
+                        />
+                    )}
                     <FlatList
-                        data={filteredData}
+                        data={data}
                         keyExtractor={(item) => item.id}
                         renderItem={({ item }) => {
                             return (

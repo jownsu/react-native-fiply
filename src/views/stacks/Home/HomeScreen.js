@@ -1,6 +1,6 @@
 import React, { useCallback, useRef, useEffect, useState, memo, useMemo, useContext } from 'react'
 
-import { StyleSheet, View, TouchableOpacity, FlatList } from 'react-native'
+import { StyleSheet, View, TouchableOpacity, FlatList, RefreshControl } from 'react-native'
 import PostContext from '../../../api/context/posts/PostContext'
 import CommentContext from '../../../api/context/comments/CommentContext'
 import {
@@ -195,6 +195,9 @@ const HomeScreen = ({ navigation }, offset) => {
             <Container style={{ paddingHorizontal: 0 }}>
                 {posts.length != 0 ? (
                     <FlatList
+                        refreshControl={
+                            <RefreshControl refreshing={loading} onRefresh={() => getPosts()} />
+                        }
                         onScroll={(e) => onScroll(e)}
                         style={{ flex: 0 }}
                         ref={flatListRef}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo, useContext } from 'react'
-import { StyleSheet, TouchableOpacity, View, FlatList } from 'react-native'
+import { StyleSheet, TouchableOpacity, View, FlatList, RefreshControl } from 'react-native'
 import JobContext from '../../../api/context/jobs/JobContext'
 import { FontAwesome } from '@expo/vector-icons'
 import Colors from '../../../utils/Colors'
@@ -94,6 +94,20 @@ const JobsScreen = ({ navigation }, offset) => {
         scrollToTop()
     }
 
+    const fetchJob = (type = 'discover') => {
+        switch (type) {
+            case 'discover':
+                getJobs()
+                break
+            case 'saved':
+                getSavedJobs()
+                break
+            case 'applied':
+                getAppliedJobs()
+                break
+        }
+    }
+
     const ListFooterComponent = useMemo(() => {
         return jobs.length >= 30 && !loading ? (
             <TouchableOpacity
@@ -168,6 +182,12 @@ const JobsScreen = ({ navigation }, offset) => {
 
                 {jobs.length != 0 ? (
                     <FlatList
+                        refreshControl={
+                            <RefreshControl
+                                refreshing={loading}
+                                onRefresh={() => fetchJob(dataType)}
+                            />
+                        }
                         onScroll={(e) => onScroll(e)}
                         style={{ flex: 0 }}
                         ref={flatListRef}

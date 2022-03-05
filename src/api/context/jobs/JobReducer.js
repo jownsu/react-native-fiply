@@ -65,6 +65,7 @@ const JobReducer = (state, action) => {
             return {
                 ...state,
                 jobs: state.jobs.filter((item) => item.id != action.payload.id),
+                loading: false,
             }
 
         default:
