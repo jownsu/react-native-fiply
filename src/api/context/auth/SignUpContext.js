@@ -1,52 +1,54 @@
-import React, { useState, createContext } from 'react'
-import api from '../../api'
-import * as SecureStore from 'expo-secure-store'
+import React, { useReducer, createContext } from 'react'
+import SignUpReducer from './SignUpReducer'
 
 const SignUpContext = createContext()
 
 export const SignUpProvider = ({ children }) => {
-    const [user, setUser] = useState({})
-    const [logged_in, setLogged_in] = useState('false')
-    const [error, setError] = useState(null)
-    const [loading, setLoading] = useState(false)
-
-    const signup = async (signUpInfo, onSignedUp = () => {}) => {
-        setLoading(true)
-        await api()
-            .post('/token/register', signUpInfo)
-            .then((response) => {
-                const userData = response.data.data
-                setUser(userData)
-                setError(null)
-                SecureStore.setItemAsync('user', JSON.stringify(userData))
-                setLoading(false)
-                onSignedUp()
-            })
-            .catch((error) => {
-                const errorList = []
-                let errors = error.data.errors
-                for (const key in errors) {
-                    errorList.push('\u25CF' + errors[key][0])
-                }
-                alert(errorList.join('\n'))
-                console.log(error)
-                setLoading(false)
-            })
+    const initialState = {
+        email: '',
+        password: '',
+        password_confirmation: '',
+        firstname: '',
+        lastname: '',
+        job_preference: {},
     }
+
+    const [state, dispatch] = useReducer(SignUpReducer, initialState)
+
+    const getAllSignUpData = () => {
+        return {
+            ...state,
+        }
+    }
+
+    const getBasicUserInfo = () => {
+        return {
+            email: state.email,
+            password: state.password,
+            password_confirmation: state.password_confirmation,
+            firstname: state.firstname,
+            lastname: state.lastname,
+            code: state.code,
+        }
+    }
+
+    const setBasicUserInfo = (data) => dispatch({ type: 'SET_BASIC_USER_INFO', payload: data })
+
+    const getJobPreference = () => {
+        return { job_preference: state.job_preference }
+    }
+
+    const setJobPreference = (data) => dispatch({ type: 'SET_JOB_PREFERENCE', payload: data })
 
     return (
         <SignUpContext.Provider
             value={{
-                user,
-                setUser,
-                logged_in,
-                setLogged_in,
-                error,
-                loading,
-                setLoading,
-                login,
-                logout,
-                signup,
+                ...state,
+                setBasicUserInfo,
+                setJobPreference,
+                getBasicUserInfo,
+                getJobPreference,
+                getAllSignUpData,
             }}
         >
             {children}
@@ -54,4 +56,4 @@ export const SignUpProvider = ({ children }) => {
     )
 }
 
-export default AuthContext
+export default SignUpContext

@@ -29,6 +29,7 @@ const api = ({ token = null } = {}) => {
             // console.log(error)
 
             //return Promise.reject({status: error.response?.status, errors: ['Server Error xD!']});
+            console.log(error)
             return Promise.reject(error.response.data)
         }
     )

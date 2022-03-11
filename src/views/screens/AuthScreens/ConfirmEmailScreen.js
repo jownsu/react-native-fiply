@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react'
 import { StyleSheet, View, TouchableOpacity } from 'react-native'
 import AuthContext from '../../../api/context/auth/AuthContext'
+import SignUpContext from '../../../api/context/auth/SignUpContext'
 
 import {
     Text,
@@ -11,10 +12,9 @@ import {
     SafeAreaView,
 } from '../../components/FiplyComponents'
 
-const ConfirmEmailScreen = ({ navigation, route }) => {
+const ConfirmEmailScreen = ({ navigation }) => {
     const { signup, loading } = useContext(AuthContext)
-
-    const { signUpData } = route.params
+    const { getAllSignUpData, email } = useContext(SignUpContext)
 
     const [code, setCode] = useState([])
 
@@ -33,12 +33,8 @@ const ConfirmEmailScreen = ({ navigation, route }) => {
     }
 
     const handleConfirm = () => {
-        signup({ ...signUpData, code: code.join('') }, () =>
-            navigation.reset({
-                index: 0,
-                routes: [{ name: 'SelectUserTypeScreen' }],
-            })
-        )
+        const SignUpdata = getAllSignUpData()
+        signup({ ...SignUpdata, code: code.join('') }, () => navigation.navigate('BasicUser'))
         setCode([])
     }
 
@@ -47,7 +43,8 @@ const ConfirmEmailScreen = ({ navigation, route }) => {
             <WaveHeader waveimg={require('../../../assets/img/waves/3.png')} />
             <Container center padding={20}>
                 <FiplyLogo style={{ marginBottom: 10 }} />
-                <Text center>Code was sent in {signUpData.email}</Text>
+                {/* <Text center>Code was sent in {signUpData.email}</Text> */}
+                <Text center>Code was sent in {email}</Text>
                 <View style={styles.textInputContainer}>
                     <View style={styles.textInputView}>
                         <Text style={styles.textInsideView}>{code[0]}</Text>
@@ -196,18 +193,7 @@ const ConfirmEmailScreen = ({ navigation, route }) => {
                     disabled={code.length != 6}
                     onPress={handleConfirm}
                     loading={loading}
-                    // onPress={() => navigation.navigate('SelectUserTypeStack')}
                 />
-                {/* <View style={styles.confirmContainer}>
-                    <Text center size={18}>
-                        Confirm your email
-                    </Text>
-                    <Button
-                        title={'Confirm'}
-                        style={{ marginVertical: 20 }}
-                        onPress={() => navigation.navigate('SelectUserTypeStack')}
-                    />
-                </View> */}
             </Container>
         </SafeAreaView>
     )

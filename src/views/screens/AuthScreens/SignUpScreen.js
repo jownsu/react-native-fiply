@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react'
 import { StyleSheet, View, TouchableOpacity } from 'react-native'
 import AuthContext from '../../../api/context/auth/AuthContext'
+import SignUpContext from '../../../api/context/auth/SignUpContext'
 import { Formik } from 'formik'
 import * as yup from 'yup'
 import Colors from '../../../utils/Colors'
@@ -19,7 +20,8 @@ import {
 const SignUpScreen = ({ navigation }) => {
     const [hideSecondForm, setHideSecondForm] = useState(true)
     const [hidePassword, setHidePassword] = useState(true)
-    const { verify, loading } = useContext(AuthContext)
+    const { loading } = useContext(AuthContext)
+    const { setBasicUserInfo } = useContext(SignUpContext)
 
     const signupSchema = yup.object({
         email: yup.string().trim().email('Invalid email').required('Email is required'),
@@ -54,10 +56,8 @@ const SignUpScreen = ({ navigation }) => {
                         lastname: '',
                     }}
                     onSubmit={(values) => {
-                        verify(values, () =>
-                            navigation.navigate('ConfirmEmailScreen', { signUpData: values })
-                        )
-                        //signup(values, () => navigation.navigate('SelectUserTypeScreen'))
+                        setBasicUserInfo(values)
+                        navigation.navigate('SelectUserTypeScreen')
                     }}
                     validationSchema={signupSchema}
                 >

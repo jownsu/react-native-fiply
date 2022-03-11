@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext } from 'react'
 import { StyleSheet, View } from 'react-native'
 import {
     SafeAreaView,
@@ -9,6 +9,8 @@ import {
     Button,
     Dropdown,
 } from '../../../components/FiplyComponents'
+import SignUpContext from '../../../../api/context/auth/SignUpContext'
+import AuthContext from '../../../../api/context/auth/AuthContext'
 import { Formik } from 'formik'
 import * as yup from 'yup'
 
@@ -56,10 +58,13 @@ const JobSetup = ({ navigation }) => {
         },
     ]
 
+    const { setJobPreference, getAllSignUpData } = useContext(SignUpContext)
+    const { verify, loading } = useContext(AuthContext)
+
     const formSchema = yup.object({
-        jobTitle: yup.string().trim().required('Job title is required'),
-        jobLocation: yup.string().trim().required('Job location is required'),
-        employmentType: yup.string().trim().required('Employment type is required'),
+        job_title: yup.string().trim().required('Job title is required'),
+        location: yup.string().trim().required('Location is required'),
+        employment_type: yup.string().trim().required('Employment type is required'),
     })
 
     return (
@@ -73,16 +78,15 @@ const JobSetup = ({ navigation }) => {
 
                 <Formik
                     initialValues={{
-                        jobTitle: '',
-                        jobLocation: '',
-                        employmentType: '',
+                        job_title: '',
+                        location: '',
+                        employment_type: '',
                     }}
                     validationSchema={formSchema}
                     onSubmit={(values) => {
-                        navigation.reset({
-                            index: 0,
-                            routes: [{ name: 'BasicUser' }],
-                        })
+                        setJobPreference(values)
+                        const signupData = getAllSignUpData()
+                        verify(signupData, () => navigation.navigate('ConfirmEmailScreen'))
                     }}
                 >
                     {({
@@ -97,44 +101,42 @@ const JobSetup = ({ navigation }) => {
                         <View>
                             <Dropdown
                                 label={'Job Title'}
-                                value={values.jobTitle}
+                                value={values.job_title}
                                 data={jobTitleList}
                                 style={{ marginBottom: 5 }}
                                 onChangeTextDelay={() => console.log('API CALLED')}
-                                onSubmit={(text) => setFieldValue('jobTitle', text)}
-                                error={touched.jobTitle && errors.jobTitle ? true : false}
+                                onSubmit={(text) => setFieldValue('job_title', text)}
+                                error={touched.job_title && errors.job_title ? true : false}
                                 errorMsg={
-                                    touched.jobTitle && errors.jobTitle ? errors.jobTitle : ''
+                                    touched.job_title && errors.job_title ? errors.job_title : ''
                                 }
                             />
                             <Dropdown
                                 label={'Location'}
-                                value={values.jobLocation}
+                                value={values.location}
                                 data={jobLocationList}
                                 style={{ marginBottom: 5 }}
                                 onChangeTextDelay={() => console.log('API CALLED')}
-                                onSubmit={(text) => setFieldValue('jobLocation', text)}
-                                error={touched.jobLocation && errors.jobLocation ? true : false}
+                                onSubmit={(text) => setFieldValue('location', text)}
+                                error={touched.location && errors.location ? true : false}
                                 errorMsg={
-                                    touched.jobLocation && errors.jobLocation
-                                        ? errors.jobLocation
-                                        : ''
+                                    touched.location && errors.location ? errors.location : ''
                                 }
                             />
                             <Dropdown
                                 label={'Employment Type'}
-                                value={values.employmentType}
+                                value={values.employment_type}
                                 data={employmentTypeList}
                                 style={{ marginBottom: 5 }}
-                                onSubmit={(text) => setFieldValue('employmentType', text)}
+                                onSubmit={(text) => setFieldValue('employment_type', text)}
                                 noTextInput
                                 dropdownIcon
                                 error={
-                                    touched.employmentType && errors.employmentType ? true : false
+                                    touched.employment_type && errors.employment_type ? true : false
                                 }
                                 errorMsg={
-                                    touched.employmentType && errors.employmentType
-                                        ? errors.employmentType
+                                    touched.employment_type && errors.employment_type
+                                        ? errors.employment_type
                                         : ''
                                 }
                             />
@@ -143,10 +145,11 @@ const JobSetup = ({ navigation }) => {
                                 title="Done"
                                 style={{ marginVertical: 25 }}
                                 disabled={
-                                    values.jobTitle && values.jobLocation && values.employmentType
+                                    values.job_title && values.location && values.employment_type
                                         ? false
                                         : true
                                 }
+                                loading={loading}
                                 onPress={handleSubmit}
                             />
                         </View>

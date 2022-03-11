@@ -60,7 +60,6 @@ const SignInScreen = ({ navigation }) => {
                                 onChangeText={handleChange('password')}
                                 onBlur={handleBlur('password')}
                                 error={touched.password && errors.password ? true : false}
-                                secureTextEntry={true}
                                 errorMsg={
                                     touched.password && errors.password ? errors.password : ''
                                 }
@@ -103,7 +102,7 @@ const SignInScreen = ({ navigation }) => {
                     <Text weight="semi-bold" color={Colors.light}>
                         Don't have an account yet?{' '}
                     </Text>
-                    <TouchableOpacity onPress={() => navigation.navigate('SignUpScreen')}>
+                    <TouchableOpacity onPress={() => navigation.navigate('SignUpStack')}>
                         <Text weight="bold" color={Colors.primary}>
                             Sign Up
                         </Text>
