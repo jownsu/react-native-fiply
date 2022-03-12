@@ -15,20 +15,18 @@ const ProfileHeader = ({ data, onEditPress = () => {} }) => {
                     backgroundColor={Colors.light}
                 />
             </View>
-            <TouchableOpacity onPress={onEditPress} style={styles.editIcon}>
-                <FontAwesome name="edit" size={24} color={Colors.black} />
-            </TouchableOpacity>
+
+            {data.is_me && (
+                <TouchableOpacity onPress={onEditPress} style={styles.editIcon}>
+                    <FontAwesome name="edit" size={24} color={Colors.black} />
+                </TouchableOpacity>
+            )}
 
             <View style={styles.bodyContainer}>
                 <Text weight="semi-bold" size={16} numberOfLines={1} center>
                     {data.fullname}
                 </Text>
-                <Text
-                    size={13}
-                    numberOfLines={1}
-                    center
-                    style={{ marginVertical: 2 }}
-                >
+                <Text size={13} numberOfLines={1} center style={{ marginVertical: 2 }}>
                     {data.email}
                 </Text>
                 {data.location ? (
@@ -39,10 +37,10 @@ const ProfileHeader = ({ data, onEditPress = () => {} }) => {
             </View>
 
             <View style={styles.footerContainer}>
-                <Text weight="medium" color={Colors.primary}>
+                <Text weight="medium" color={Colors.primary} style={{ marginBottom: 3 }}>
                     {data.status}
                 </Text>
-                {data.description ? <Text>{data.description}</Text> : null}
+                {data.preview && <Text>{data.preview}</Text>}
             </View>
         </View>
     )
@@ -55,6 +53,7 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.white,
         borderRadius: 20,
         paddingVertical: 15,
+        paddingHorizontal: 5,
         borderWidth: 1,
         borderColor: Colors.light,
     },
@@ -83,6 +82,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderTopWidth: 1,
         borderColor: Colors.light,
-        paddingTop: 10,
+        paddingTop: 7,
     },
 })

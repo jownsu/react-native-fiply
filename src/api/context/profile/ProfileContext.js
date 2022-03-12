@@ -28,7 +28,7 @@ export const ProfileProvider = ({ children }) => {
                         id: profileData.id,
                         fullname: profileData.fullname,
                         status: profileData.status,
-                        description: profileData.description,
+                        preview: profileData.preview,
                         avatar: profileData.avatar,
                     }
 

@@ -151,27 +151,33 @@ const ProfileScreen = ({ navigation, route }) => {
     const About = () => {
         return (
             <Container padding={10}>
-                <CardInfo
-                    title={'Basic Information'}
-                    headers={['Gender', 'Age', 'Birthday', 'Language', 'Status']}
-                    infos={{
-                        gender: userInfo.gender,
-                        age: userInfo.age,
-                        birthday: userInfo.birthday,
-                        language: userInfo.language,
-                        status: userInfo.status,
-                    }}
-                />
-                <CardInfo
-                    title={'Contact Information'}
-                    headers={['Mobile', 'Telephone', 'Email', 'Website']}
-                    infos={{
-                        mobile: userInfo.mobile_no,
-                        telephone: userInfo.telephone_no,
-                        email: userInfo.email,
-                        website: userInfo.website,
-                    }}
-                />
+                {!loading ? (
+                    <>
+                        <CardInfo
+                            title={'Basic Information'}
+                            headers={['Gender', 'Age', 'Birthday', 'Language', 'Status']}
+                            infos={{
+                                gender: userInfo.gender,
+                                age: userInfo.age,
+                                birthday: userInfo.birthday,
+                                language: userInfo.language,
+                                status: userInfo.status,
+                            }}
+                        />
+                        <CardInfo
+                            title={'Contact Information'}
+                            headers={['Mobile', 'Telephone', 'Email', 'Website']}
+                            infos={{
+                                mobile: userInfo.mobile_no,
+                                telephone: userInfo.telephone_no,
+                                email: userInfo.email,
+                                website: userInfo.website,
+                            }}
+                        />
+                    </>
+                ) : (
+                    <ActivityIndicator visible={true} />
+                )}
             </Container>
         )
     }
@@ -182,7 +188,7 @@ const ProfileScreen = ({ navigation, route }) => {
                 <FlatList
                     data={experiences}
                     renderItem={renderBackgroundItem}
-                    ListEmptyComponent={<NoData />}
+                    ListEmptyComponent={!loading && experiences.length == 0 && <NoData />}
                 />
             </Container>
         )
@@ -192,21 +198,16 @@ const ProfileScreen = ({ navigation, route }) => {
         return (
             <View style={{ flex: 1 }}>
                 <TitleFilter title={'Posts'} onFilterPress={() => setShowModal(true)} />
-                {posts.length != 0 ? (
-                    <FlatList
-                        data={posts}
-                        renderItem={renderPostItem}
-                        nestedScrollEnabled={true}
-                        onEndReached={morePosts}
-                        onEndReachedThreshold={0}
-                        ListEmptyComponent={<NoData />}
-                        ListFooterComponent={ListFooterComponent}
-                        progressViewOffset={10}
-                    />
-                ) : (
-                    <ActivityIndicator visible={true} />
-                )}
-
+                <FlatList
+                    data={posts}
+                    renderItem={renderPostItem}
+                    nestedScrollEnabled={true}
+                    onEndReached={morePosts}
+                    onEndReachedThreshold={0}
+                    ListEmptyComponent={!postLoading && posts.length == 0 && <NoData />}
+                    ListFooterComponent={ListFooterComponent}
+                    progressViewOffset={10}
+                />
                 <PostFilterDialog visible={showModal} onDismiss={() => setShowModal(false)} />
             </View>
         )
@@ -218,7 +219,9 @@ const ProfileScreen = ({ navigation, route }) => {
                 <FlatList
                     data={educationalBackgrounds}
                     renderItem={renderEducationItem}
-                    ListEmptyComponent={<NoData />}
+                    ListEmptyComponent={
+                        !loading && educationalBackgrounds.length == 0 && <NoData />
+                    }
                 />
             </Container>
         )
@@ -275,8 +278,9 @@ const ProfileScreen = ({ navigation, route }) => {
                                     email: userInfo.email,
                                     location: userInfo.location,
                                     status: userInfo.status ?? 'Not Verified',
-                                    description: userInfo.description,
+                                    preview: userInfo.preview,
                                     avatar: userInfo.avatar,
+                                    is_me: userInfo.is_me,
                                 }}
                                 onEditPress={() => navigation.push('EditProfileScreen')}
                             />

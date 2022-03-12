@@ -124,6 +124,7 @@ const BottomNavigator = ({ navigation }) => {
                     }}
                 ></Tab.Screen>
             </Tab.Navigator>
+
             <BottomSheetModal bottomSheetModalRef={bottomSheetModalRef} pointsSnap={[175]}>
                 <View style={styles.bottomSheetContainer}>
                     <View style={styles.btmHeaderContainer}>
@@ -148,10 +149,18 @@ const BottomNavigator = ({ navigation }) => {
                                 >
                                     {user.fullname}
                                 </Text>
+
                                 <TouchableOpacity activeOpacity={0.7} onPress={handleGoToProfile}>
                                     <Text color={Colors.secondary}>See your profile</Text>
                                 </TouchableOpacity>
                             </View>
+                            <Text
+                                color={Colors.secondary}
+                                weight="semi-bold"
+                                style={{ paddingHorizontal: 5 }}
+                            >
+                                Basic User
+                            </Text>
                         </View>
                         {/* <View>
                                 <Text color={Colors.secondary} weight='medium' size={16}>Basic User</Text>
@@ -161,7 +170,7 @@ const BottomNavigator = ({ navigation }) => {
                         <Text color={Colors.primary} center weight="medium">
                             {user.status}
                         </Text>
-                        {user.description ? <Text center>{user.description}</Text> : null}
+                        {user.preview && <Text center>{user.preview}</Text>}
                     </View>
                     <View style={styles.btmFooterContainer}>
                         <TouchableOpacity style={styles.footerBtn}>
@@ -229,7 +238,11 @@ const styles = StyleSheet.create({
         height: 50,
         width: 50,
     },
-    btmBodyContainer: {},
+    btmBodyContainer: {
+        borderTopWidth: 1,
+        borderTopColor: Colors.light,
+        paddingTop: 5,
+    },
     btmFooterContainer: {
         flexDirection: 'row',
         alignItems: 'center',

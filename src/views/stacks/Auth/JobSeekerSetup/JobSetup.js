@@ -9,54 +9,22 @@ import {
     Button,
     Dropdown,
 } from '../../../components/FiplyComponents'
+import useJobTitle from '../../../../api/hooks/useJobTitle'
+import useEmploymentType from '../../../../api/hooks/useEmploymentType'
+import useLocation from '../../../../api/hooks/useLocation'
 import SignUpContext from '../../../../api/context/auth/SignUpContext'
 import AuthContext from '../../../../api/context/auth/AuthContext'
 import { Formik } from 'formik'
 import * as yup from 'yup'
 
 const JobSetup = ({ navigation }) => {
-    const jobTitleList = [
-        {
-            id: 'Fullstack Developer',
-            name: 'Fullstack Developer',
-        },
-        {
-            id: 'Backend Developer',
-            name: 'Backend Developer',
-        },
-        {
-            id: 'Frontend Developer',
-            name: 'Frontend Developer',
-        },
-    ]
-    const jobLocationList = [
-        {
-            id: 'Cavite',
-            name: 'Cavite',
-        },
-        {
-            id: 'Quezon City',
-            name: 'Quezon City',
-        },
-        {
-            id: 'Caloocan City',
-            name: 'Caloocan City',
-        },
-    ]
-    const employmentTypeList = [
-        {
-            id: 'Full time',
-            name: 'Full time',
-        },
-        {
-            id: 'Part time',
-            name: 'Part time',
-        },
-        {
-            id: 'Work from home',
-            name: 'Work from home',
-        },
-    ]
+    const { jobTitles, loading: jobTitleLoading, getJobTitles } = useJobTitle()
+    const {
+        employmentTypes,
+        loading: employmentTypeLoading,
+        getEmploymentTypes,
+    } = useEmploymentType()
+    const { locations, loading: locationLoading, getLocations } = useLocation()
 
     const { setJobPreference, getAllSignUpData } = useContext(SignUpContext)
     const { verify, loading } = useContext(AuthContext)
@@ -102,9 +70,11 @@ const JobSetup = ({ navigation }) => {
                             <Dropdown
                                 label={'Job Title'}
                                 value={values.job_title}
-                                data={jobTitleList}
+                                data={jobTitles}
                                 style={{ marginBottom: 5 }}
-                                onChangeTextDelay={() => console.log('API CALLED')}
+                                onChangeTextDelay={(text) => getJobTitles(text)}
+                                onTextInputPress={() => getJobTitles()}
+                                isLoading={jobTitleLoading}
                                 onSubmit={(text) => setFieldValue('job_title', text)}
                                 error={touched.job_title && errors.job_title ? true : false}
                                 errorMsg={
@@ -114,9 +84,11 @@ const JobSetup = ({ navigation }) => {
                             <Dropdown
                                 label={'Location'}
                                 value={values.location}
-                                data={jobLocationList}
+                                data={locations}
                                 style={{ marginBottom: 5 }}
-                                onChangeTextDelay={() => console.log('API CALLED')}
+                                onChangeTextDelay={(text) => getLocations(text)}
+                                onTextInputPress={() => getLocations()}
+                                isLoading={locationLoading}
                                 onSubmit={(text) => setFieldValue('location', text)}
                                 error={touched.location && errors.location ? true : false}
                                 errorMsg={
@@ -126,9 +98,11 @@ const JobSetup = ({ navigation }) => {
                             <Dropdown
                                 label={'Employment Type'}
                                 value={values.employment_type}
-                                data={employmentTypeList}
+                                data={employmentTypes}
                                 style={{ marginBottom: 5 }}
                                 onSubmit={(text) => setFieldValue('employment_type', text)}
+                                onTextInputPress={() => getEmploymentTypes()}
+                                isLoading={employmentTypeLoading}
                                 noTextInput
                                 dropdownIcon
                                 error={
