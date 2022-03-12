@@ -6,7 +6,8 @@ import * as SecureStore from 'expo-secure-store'
 import AuthContext from './api/context/auth/AuthContext'
 
 const Routes = () => {
-    const { user, setUser, logged_in, setLogged_in } = useContext(AuthContext)
+    const { user, setUser, logged_in, setLogged_in, isFirstLaunched, setIsFirstLaunched } =
+        useContext(AuthContext)
 
     useEffect(() => {
         SecureStore.getItemAsync('user')
@@ -18,6 +19,17 @@ const Routes = () => {
                 }
             })
             .catch((error) => console.log(error))
+
+        SecureStore.getItemAsync('isFirstLaunch').then((res) => {
+            if (res == null) {
+                setIsFirstLaunched(true)
+                SecureStore.setItemAsync('isFirstLaunch', 'true')
+            } else {
+                setIsFirstLaunched(false)
+            }
+
+            //SecureStore.deleteItemAsync('isFirstLaunch')
+        })
         // SecureStore.getItemAsync('logged_in')
         //     .then(response => {
         //         let logged = JSON.parse(response)

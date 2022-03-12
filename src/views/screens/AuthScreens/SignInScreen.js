@@ -29,84 +29,87 @@ const SignInScreen = ({ navigation }) => {
     }
 
     return (
-        <SafeAreaView flex>
+        <SafeAreaView flex statusBarColor={'rgba(0, 0, 0, 0)'}>
             <WaveHeader waveimg={require('../../../assets/img/waves/1.png')} />
-            <Container center padding={20}>
+            <Container padding={20}>
                 <View style={styles.imgContainer}>
                     <Image
-                        source={require('../../../assets/img/signinillus.png')}
+                        source={require('../../../assets/img/login.png')}
                         style={styles.img}
+                        resizeMode="contain"
                     />
                 </View>
-                <Formik
-                    initialValues={{ email: '', password: '' }}
-                    onSubmit={(values) => handleOnSubmit(values)}
-                    validationSchema={signInSchema}
-                >
-                    {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
-                        <View style={styles.formContainer}>
-                            <TextInput
-                                label="Email"
-                                value={values.email}
-                                onChangeText={handleChange('email')}
-                                onBlur={handleBlur('email')}
-                                error={touched.email && errors.email ? true : false}
-                                errorMsg={touched.email && errors.email ? errors.email : ''}
-                                style={{ marginTop: 10 }}
-                            />
-                            <TextInput
-                                label="Password"
-                                value={values.password}
-                                onChangeText={handleChange('password')}
-                                onBlur={handleBlur('password')}
-                                error={touched.password && errors.password ? true : false}
-                                errorMsg={
-                                    touched.password && errors.password ? errors.password : ''
-                                }
-                                style={{ marginTop: 10 }}
-                                secureTextEntry={hidePassword}
-                                right={
-                                    <TxtInput.Icon
-                                        name="eye"
-                                        color={Colors.light}
-                                        onPress={() => setHidePassword(!hidePassword)}
-                                    />
-                                }
-                            />
+                <View style={styles.bodyContainer}>
+                    <Formik
+                        initialValues={{ email: '', password: '' }}
+                        onSubmit={(values) => handleOnSubmit(values)}
+                        validationSchema={signInSchema}
+                    >
+                        {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
+                            <View style={styles.formContainer}>
+                                <TextInput
+                                    label="Email"
+                                    value={values.email}
+                                    onChangeText={handleChange('email')}
+                                    onBlur={handleBlur('email')}
+                                    error={touched.email && errors.email ? true : false}
+                                    errorMsg={touched.email && errors.email ? errors.email : ''}
+                                    style={{ marginTop: 10 }}
+                                />
+                                <TextInput
+                                    label="Password"
+                                    value={values.password}
+                                    onChangeText={handleChange('password')}
+                                    onBlur={handleBlur('password')}
+                                    error={touched.password && errors.password ? true : false}
+                                    errorMsg={
+                                        touched.password && errors.password ? errors.password : ''
+                                    }
+                                    style={{ marginTop: 10 }}
+                                    secureTextEntry={hidePassword}
+                                    right={
+                                        <TxtInput.Icon
+                                            name="eye"
+                                            color={Colors.light}
+                                            onPress={() => setHidePassword(!hidePassword)}
+                                        />
+                                    }
+                                />
 
-                            <TouchableOpacity style={styles.forgotpass}>
-                                <Text weight="medium">Forgot Password</Text>
-                            </TouchableOpacity>
+                                <TouchableOpacity style={styles.forgotpass}>
+                                    <Text weight="medium">Forgot Password</Text>
+                                </TouchableOpacity>
 
-                            <Button
-                                title="Sign In"
-                                onPress={() => handleSubmit()}
-                                loading={loading}
-                            />
-                        </View>
-                    )}
-                </Formik>
+                                <Button
+                                    title="Sign In"
+                                    onPress={() => handleSubmit()}
+                                    loading={loading}
+                                />
+                            </View>
+                        )}
+                    </Formik>
 
-                <Text color={Colors.light} center>
-                    - - - Sign in with - - -
-                </Text>
-
-                <View style={styles.googleContainer}>
-                    <Image
-                        source={require('../../../assets/img/google.png')}
-                        style={styles.google}
-                    />
-                </View>
-
-                <View style={styles.signupContainer}>
-                    <Text weight="semi-bold" color={Colors.light}>
-                        Don't have an account yet?{' '}
+                    <Text color={Colors.grey} center>
+                        - - - Sign in with - - -
                     </Text>
-                    <TouchableOpacity onPress={() => navigation.navigate('SignUpStack')}>
-                        <Text weight="bold" color={Colors.primary}>
-                            Sign Up
+
+                    <View style={styles.googleContainer}>
+                        <Image
+                            source={require('../../../assets/img/google.png')}
+                            style={styles.google}
+                        />
+                    </View>
+
+                    <View style={styles.signupContainer}>
+                        <Text weight="semi-bold" color={Colors.grey}>
+                            Don't have an account yet?{' '}
                         </Text>
-                    </TouchableOpacity>
+                        <TouchableOpacity onPress={() => navigation.navigate('SignUpStack')}>
+                            <Text weight="bold" color={Colors.primary}>
+                                Sign Up
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
             </Container>
         </SafeAreaView>
@@ -118,8 +121,20 @@ export default SignInScreen
 const styles = StyleSheet.create({
     imgContainer: {
         alignItems: 'center',
+        justifyContent: 'center',
+        width: '100%',
+        flex: 1,
     },
-    img: {},
+    bodyContainer: {
+        justifyContent: 'space-evenly',
+        flex: 1.3,
+    },
+    img: {
+        height: '100%',
+        width: '90%',
+        maxWidth: 250,
+        flex: 1,
+    },
     formContainer: {
         marginVertical: 20,
     },

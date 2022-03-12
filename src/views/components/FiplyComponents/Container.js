@@ -1,10 +1,5 @@
 import React from 'react'
-import {
-    StyleSheet,
-    View,
-    TouchableWithoutFeedback,
-    Keyboard,
-} from 'react-native'
+import { StyleSheet, View, TouchableWithoutFeedback, Keyboard } from 'react-native'
 
 export const Container = ({ children, style, center, padding = 0 }) => {
     const centerStyle = center ? { justifyContent: 'center' } : {}

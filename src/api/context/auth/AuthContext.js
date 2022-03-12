@@ -9,6 +9,7 @@ export const AuthProvider = ({ children }) => {
     const [logged_in, setLogged_in] = useState('false')
     const [error, setError] = useState(null)
     const [loading, setLoading] = useState(false)
+    const [isFirstLaunched, setIsFirstLaunched] = useState(true)
 
     const login = async (email, password) => {
         setLoading(true)
@@ -100,6 +101,8 @@ export const AuthProvider = ({ children }) => {
                 logout,
                 signup,
                 verify,
+                isFirstLaunched,
+                setIsFirstLaunched,
             }}
         >
             {children}
