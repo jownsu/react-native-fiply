@@ -60,6 +60,7 @@ const ProfileScreen = ({ navigation, route }) => {
 
     useEffect(() => {
         getUserInfo(userId)
+        getPosts('/posts', userId)
     }, [])
 
     const renderPostItem = ({ item }) => {
@@ -230,9 +231,9 @@ const ProfileScreen = ({ navigation, route }) => {
     const renderInfo = (id) => {
         switch (id) {
             case 0:
-                return <About />
-            case 1:
                 return <Activity />
+            case 1:
+                return <About />
             case 2:
                 return <Background />
             case 3:
@@ -244,7 +245,7 @@ const ProfileScreen = ({ navigation, route }) => {
 
     const getData = (id) => {
         switch (id) {
-            case 1:
+            case 0:
                 getPosts('/posts', userId)
             case 2:
                 getExperiences()
@@ -262,60 +263,47 @@ const ProfileScreen = ({ navigation, route }) => {
                     <RefreshControl refreshing={loading} onRefresh={() => getUserInfo()} />
                 }
                 ListHeaderComponent={
-                    <View style={{ paddingTop: 30 }}>
-                        {/* <LinearGradient
-                            colors={[Colors.primary, Colors.secondary]}
-                            end={{ x: 1, y: 0 }}
-                            style={styles.gradientView}
-                        /> */}
-                        <View
-                            style={{
-                                position: 'absolute',
-                                height: 250,
-                                width: '100%',
+                    <View>
+                        <ProfileHeader
+                            data={{
+                                fullname: userInfo.fullname,
+                                email: userInfo.email,
+                                location: userInfo.location,
+                                status: userInfo.status ?? 'Not Verified',
+                                preview: userInfo.preview,
+                                avatar: userInfo.avatar,
+                                cover: userInfo.cover,
+                                is_me: userInfo.is_me,
                             }}
-                        >
-                            <Image
-                                source={{ uri: userInfo.cover }}
-                                style={{
-                                    position: 'absolute',
-                                    height: '100%',
-                                    width: '100%',
-                                }}
-                                resizeMode="cover"
-                            />
-                        </View>
-                        <View style={styles.cameraContainer}>
-                            <FontAwesome5 name="camera" size={18} color={Colors.black} />
-                        </View>
-                        <Container padding={10}>
-                            <ProfileHeader
-                                data={{
-                                    fullname: userInfo.fullname,
-                                    email: userInfo.email,
-                                    location: userInfo.location,
-                                    status: userInfo.status ?? 'Not Verified',
-                                    preview: userInfo.preview,
-                                    avatar: userInfo.avatar,
-                                    is_me: userInfo.is_me,
-                                }}
-                                onEditPress={() => navigation.push('EditProfileScreen')}
-                                // style={{ marginTop: 75 }}
-                            />
-                            <TopNavigation
-                                navTitles={['About', 'Activity', 'Background', 'Education']}
-                                onBtnPress={(i) => {
-                                    setNavIndex(i)
-                                    getData(i)
-                                }}
-                                index={navIndex}
-                                style={{
-                                    marginHorizontal: 0,
-                                    marginTop: 5,
-                                    marginBottom: 5,
-                                }}
-                            />
-                        </Container>
+                            onEditPress={() => navigation.push('EditProfileScreen')}
+                        />
+                        <TopNavigation
+                            navTitles={['Activity', 'About', 'Background', 'Education']}
+                            onBtnPress={(i) => {
+                                setNavIndex(i)
+                                getData(i)
+                            }}
+                            index={navIndex}
+                            style={{
+                                marginHorizontal: 10,
+                                borderRadius: 0,
+                                padding: 0,
+                                justifyContent: 'flex-start',
+                                marginHorizontal: 0,
+                                paddingVertical: 0,
+                                borderWidth: 0,
+                                borderColor: Colors.light,
+                                borderBottomWidth: 2,
+                            }}
+                            btnStyles={{
+                                paddingVertical: 5,
+                                paddingHorizontal: 10,
+                            }}
+                            activeBtnStyle={{
+                                borderBottomWidth: 2,
+                                borderColor: Colors.primary,
+                            }}
+                        />
 
                         {renderInfo(navIndex)}
                     </View>

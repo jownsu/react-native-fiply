@@ -8,6 +8,9 @@ const TopNavigation = ({
     onBtnPress = () => {},
     btnStyles = {},
     style = {},
+    textStyle = {},
+    activeBtnStyle = {},
+    inActiveBtnStyle = {},
 }) => {
     const [navIndex, setNavIndex] = useState(0)
 
@@ -17,7 +20,11 @@ const TopNavigation = ({
                 return (
                     <TouchableOpacity
                         key={ind}
-                        style={{ ...styles.navBtn, ...btnStyles }}
+                        style={[
+                            styles.navBtn,
+                            btnStyles,
+                            navIndex == ind ? { ...activeBtnStyle } : { ...inActiveBtnStyle },
+                        ]}
                         onPress={() => {
                             setNavIndex(ind)
                             if (ind != navIndex) {
@@ -27,9 +34,7 @@ const TopNavigation = ({
                     >
                         <Text
                             size={12}
-                            color={
-                                navIndex == ind ? Colors.primary : Colors.black
-                            }
+                            color={navIndex == ind ? Colors.primary : Colors.black}
                             weight={navIndex == ind ? 'bold' : 'light'}
                         >
                             {item}
