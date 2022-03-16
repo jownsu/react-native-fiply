@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useContext, useRef, memo, useMemo } from 'react'
-import { StyleSheet, View, TouchableOpacity, RefreshControl, FlatList } from 'react-native'
+import { StyleSheet, View, TouchableOpacity, RefreshControl, FlatList, Image } from 'react-native'
 import ProfileContext from '../../../api/context/profile/ProfileContext'
 import PostContext from '../../../api/context/posts/PostContext'
 import CommentContext from '../../../api/context/comments/CommentContext'
@@ -263,11 +263,28 @@ const ProfileScreen = ({ navigation, route }) => {
                 }
                 ListHeaderComponent={
                     <View style={{ paddingTop: 30 }}>
-                        <LinearGradient
+                        {/* <LinearGradient
                             colors={[Colors.primary, Colors.secondary]}
                             end={{ x: 1, y: 0 }}
                             style={styles.gradientView}
-                        />
+                        /> */}
+                        <View
+                            style={{
+                                position: 'absolute',
+                                height: 250,
+                                width: '100%',
+                            }}
+                        >
+                            <Image
+                                source={{ uri: userInfo.cover }}
+                                style={{
+                                    position: 'absolute',
+                                    height: '100%',
+                                    width: '100%',
+                                }}
+                                resizeMode="cover"
+                            />
+                        </View>
                         <View style={styles.cameraContainer}>
                             <FontAwesome5 name="camera" size={18} color={Colors.black} />
                         </View>
@@ -283,6 +300,7 @@ const ProfileScreen = ({ navigation, route }) => {
                                     is_me: userInfo.is_me,
                                 }}
                                 onEditPress={() => navigation.push('EditProfileScreen')}
+                                // style={{ marginTop: 75 }}
                             />
                             <TopNavigation
                                 navTitles={['About', 'Activity', 'Background', 'Education']}

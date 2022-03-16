@@ -5,9 +5,9 @@ import { Text } from '../FiplyComponents'
 import Colors from '../../../utils/Colors'
 import { FontAwesome } from '@expo/vector-icons'
 
-const ProfileHeader = ({ data, onEditPress = () => {} }) => {
+const ProfileHeader = ({ data, onEditPress = () => {}, style }) => {
     return (
-        <View style={styles.container}>
+        <View style={{ ...styles.container, ...style }}>
             <View style={styles.imgContainer}>
                 <Avatar.Image
                     size={110}
@@ -22,25 +22,45 @@ const ProfileHeader = ({ data, onEditPress = () => {} }) => {
                 </TouchableOpacity>
             )}
 
-            <View style={styles.bodyContainer}>
-                <Text weight="semi-bold" size={16} numberOfLines={1} center>
-                    {data.fullname}
-                </Text>
-                <Text size={13} numberOfLines={1} center style={{ marginVertical: 2 }}>
-                    {data.email}
-                </Text>
-                {data.location ? (
-                    <Text size={11} numberOfLines={1} center style={{}}>
-                        {data.location}
+            <View style={{ flex: 1 }}>
+                <View style={styles.bodyContainer}>
+                    <Text weight="semi-bold" size={16} numberOfLines={1} color={Colors.white}>
+                        {data.fullname}
                     </Text>
-                ) : null}
-            </View>
+                    <Text size={13} numberOfLines={1} color={Colors.white}>
+                        {data.email}
+                    </Text>
+                    {/* {data.location ? (
+                        <Text size={11} numberOfLines={1} color={Colors.white}>
+                            {data.location}
+                        </Text>
+                    ) : null} */}
+                </View>
 
-            <View style={styles.footerContainer}>
-                <Text weight="medium" color={Colors.primary} style={{ marginBottom: 3 }}>
-                    {data.status}
-                </Text>
-                {data.preview && <Text>{data.preview}</Text>}
+                <View style={styles.footerContainer}>
+                    {/* <Text weight="medium" color={Colors.primary}>
+                        {data.status}
+                    </Text> */}
+                    {data.preview && (
+                        <Text
+                            color={Colors.white}
+                            weight="semi-bold"
+                            style={{ marginVertical: 10 }}
+                        >
+                            {data.preview}
+                        </Text>
+                    )}
+                    <View
+                        style={{
+                            flexDirection: 'row',
+                        }}
+                    >
+                        <Text style={{ marginRight: 15 }} color={Colors.white}>
+                            1 Following
+                        </Text>
+                        <Text color={Colors.white}>99 Followers</Text>
+                    </View>
+                </View>
             </View>
         </View>
     )
@@ -50,38 +70,37 @@ export default ProfileHeader
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: Colors.white,
+        // backgroundColor: Colors.white,
+        // borderRadius: 20,
+        // paddingVertical: 15,
+        // paddingHorizontal: 5,
+        // borderWidth: 1,
+        // borderColor: Colors.light,
+        backgroundColor: 'rgba(0,0,0,.5)',
         borderRadius: 20,
+        padding: 10,
+        flexDirection: 'row',
+        alignItems: 'center',
         paddingVertical: 15,
-        paddingHorizontal: 5,
-        borderWidth: 1,
-        borderColor: Colors.light,
+        borderColor: 'lime',
     },
     imgContainer: {
         overflow: 'hidden',
         borderWidth: 1,
         borderColor: Colors.grey,
         backgroundColor: Colors.white,
-        elevation: 3,
         borderRadius: 100,
-        position: 'absolute',
-        top: -50,
-        alignSelf: 'center',
+        height: 110,
+        width: 110,
+        marginRight: 15,
     },
     editIcon: {
         position: 'absolute',
         top: 10,
         right: 10,
     },
-    bodyContainer: {
-        marginTop: 50,
-        marginBottom: 15,
-    },
+    bodyContainer: {},
     footerContainer: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderTopWidth: 1,
         borderColor: Colors.light,
-        paddingTop: 7,
     },
 })
