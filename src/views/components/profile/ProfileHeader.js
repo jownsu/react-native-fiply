@@ -1,9 +1,11 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { StyleSheet, View, Image, TouchableOpacity, ImageBackground } from 'react-native'
-import { Avatar } from 'react-native-paper'
+import { Avatar, Badge } from 'react-native-paper'
 import { Text } from '../FiplyComponents'
 import Colors from '../../../utils/Colors'
-import { FontAwesome, FontAwesome5 } from '@expo/vector-icons'
+import { FontAwesome, MaterialIcons } from '@expo/vector-icons'
+import usePickImage from '../../../utils/usePIckImage'
+import ProfileContext from '../../../api/context/profile/ProfileContext'
 
 {
     /* {data.is_me && (
@@ -13,23 +15,60 @@ import { FontAwesome, FontAwesome5 } from '@expo/vector-icons'
             )} */
 }
 
-const ProfileHeader = ({ data, onEditPress = () => {}, style }) => {
+const ProfileHeader = ({ data, onBackPress = () => {}, style }) => {
+    const { pickImage, pickUri, setPickUri } = usePickImage()
+    const { uploadAvatar, uploadCover } = useContext(ProfileContext)
+
     return (
         <ImageBackground
             source={{ uri: data.cover }}
             resizeMode="cover"
             style={styles.imgBgContainer}
         >
+            <TouchableOpacity
+                activeOpacity={0.8}
+                style={styles.backContainer}
+                onPress={onBackPress}
+            >
+                <MaterialIcons name="arrow-back" size={18} color={Colors.white} />
+            </TouchableOpacity>
+            {data.is_me && (
+                <TouchableOpacity
+                    activeOpacity={0.8}
+                    style={styles.cameraContainer}
+                    onPress={() => {
+                        pickImage(
+                            (uri) => {
+                                uploadCover(uri)
+                            },
+                            [3, 2]
+                        )
+                    }}
+                >
+                    <FontAwesome name="upload" size={12} color={Colors.black} />
+                </TouchableOpacity>
+            )}
+
             <View style={{ ...styles.container, ...style }}>
-                {/* <View style={styles.cameraContainer}>
-                    <FontAwesome5 name="camera" size={18} color={Colors.black} />
-                </View> */}
                 <View style={styles.imgContainer}>
                     <Avatar.Image
                         size={85}
                         source={{ uri: data.avatar }}
                         backgroundColor={Colors.light}
                     />
+                    {data.is_me && (
+                        <TouchableOpacity
+                            activeOpacity={0.8}
+                            style={styles.avatarUploadBtn}
+                            onPress={() =>
+                                pickImage((uri) => {
+                                    uploadAvatar(uri)
+                                })
+                            }
+                        >
+                            <FontAwesome name="upload" size={12} color={Colors.light} />
+                        </TouchableOpacity>
+                    )}
                 </View>
 
                 <View>
@@ -67,10 +106,10 @@ const ProfileHeader = ({ data, onEditPress = () => {}, style }) => {
                             }}
                         >
                             <Text size={12} style={{ marginRight: 15 }} color={Colors.white}>
-                                1 Following
+                                {data.follows_count} Following
                             </Text>
                             <Text size={12} color={Colors.white}>
-                                99 Followers
+                                {data.followers_count} Followers
                             </Text>
                         </View>
                     </View>
@@ -99,14 +138,18 @@ const styles = StyleSheet.create({
         borderColor: 'lime',
     },
     imgContainer: {
-        overflow: 'hidden',
-        borderWidth: 1,
-        borderColor: Colors.grey,
-        backgroundColor: Colors.white,
         borderRadius: 100,
         height: 85,
         width: 85,
         marginRight: 10,
+    },
+    avatarUploadBtn: {
+        position: 'absolute',
+        bottom: 0,
+        right: 0,
+        backgroundColor: Colors.black,
+        padding: 5,
+        borderRadius: 25,
     },
     editIcon: {
         position: 'absolute',
@@ -118,15 +161,22 @@ const styles = StyleSheet.create({
         borderColor: Colors.light,
     },
     cameraContainer: {
-        backgroundColor: Colors.light,
+        position: 'absolute',
+        top: 35,
+        right: 15,
+        backgroundColor: 'rgba(0, 0, 0, .3)',
         borderRadius: 50,
-        right: 0,
-        height: 35,
-        width: 35,
+        padding: 8,
         justifyContent: 'center',
         alignItems: 'center',
         alignSelf: 'flex-end',
-        marginHorizontal: 10,
-        marginBottom: 25,
+    },
+    backContainer: {
+        position: 'absolute',
+        top: 30,
+        left: 10,
+        padding: 5,
+        backgroundColor: 'rgba(0,0,0,.5)',
+        borderRadius: 50,
     },
 })

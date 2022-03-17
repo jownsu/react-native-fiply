@@ -21,6 +21,23 @@ const ProfileReducer = (state, action) => {
                 loading: false,
             }
 
+        case 'UPDATE_AVATAR':
+            return {
+                ...state,
+                userInfo: { ...state.userInfo, avatar: action.payload },
+                loading: false,
+            }
+
+        case 'UPDATE_COVER':
+            return {
+                ...state,
+                userInfo: {
+                    ...state.userInfo,
+                    cover: action.payload,
+                },
+                loading: false,
+            }
+
         case 'SET_LOADING':
             return {
                 ...state,

@@ -129,7 +129,7 @@ const CreatePost = ({
                     ) : null}
 
                     <View style={styles.footerContainer}>
-                        <TouchableOpacity onPress={() => pickImage()}>
+                        <TouchableOpacity onPress={() => pickImage([3, 2])}>
                             <FontAwesome5 name="image" size={24} color={Colors.secondary} />
                         </TouchableOpacity>
                         <TouchableOpacity>

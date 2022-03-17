@@ -273,9 +273,11 @@ const ProfileScreen = ({ navigation, route }) => {
                                 preview: userInfo.preview,
                                 avatar: userInfo.avatar,
                                 cover: userInfo.cover,
+                                follows_count: userInfo.follows_count,
+                                followers_count: userInfo.followers_count,
                                 is_me: userInfo.is_me,
                             }}
-                            onEditPress={() => navigation.push('EditProfileScreen')}
+                            onBackPress={() => navigation.pop()}
                         />
                         <TopNavigation
                             navTitles={['Activity', 'About', 'Background', 'Education']}
