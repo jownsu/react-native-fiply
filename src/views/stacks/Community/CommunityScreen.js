@@ -1,227 +1,278 @@
-import React, { useState } from 'react'
-import { StyleSheet, View, TouchableOpacity, Dimensions, Image } from 'react-native'
+import React, { useState, useContext, useEffect, useRef, useMemo } from 'react'
+import {
+    StyleSheet,
+    View,
+    TouchableOpacity,
+    Dimensions,
+    Image,
+    FlatList,
+    RefreshControl,
+} from 'react-native'
 import {
     SafeAreaView,
     Text,
     Container,
-    FlatList,
     SecondaryButton,
+    ActivityIndicator,
 } from '../../components/FiplyComponents'
+import NoData from '../../components/NoData'
 import SearchHeader from '../../components/headers/SearchHeader'
 import Colors from '../../../utils/Colors'
 import SampleData from '../../../utils/SampleData'
 import { FontAwesome, Entypo, FontAwesome5 } from '@expo/vector-icons'
 import TitleFilter from '../../components/headers/TitleFilter'
 import TopNavigation from '../../components/headers/TopNavigation'
+import CommunityContext from '../../../api/context/community/CommunityContext'
+
+import UserItem from '../../components/lists/UserItem'
 
 const { width } = Dimensions.get('screen')
 const cardWidth = width / 2 - 20
 
-const CommunityScreen = ({ navigation }) => {
+const CommunityScreen = ({ navigation }, offset) => {
     const [navIndex, setNavIndex] = useState(0)
     const [activeIndex, setActiveIndex] = useState(-1)
+    const { users, getUsers, moreUsers, getFollowedUsers, loading } = useContext(CommunityContext)
+    const [dataType, setDataType] = useState('discover')
 
-    const renderDiscoverList = (item) => {
-        return (
-            <View style={discoverListStyles.cardContainer}>
-                <Image source={item.image} style={discoverListStyles.img} />
-                <Text center size={16} weight="medium">
-                    {item.name}
-                </Text>
-                <Text center size={12}>
-                    {item.description}
-                </Text>
-                <SecondaryButton
-                    title={'ADD'}
-                    style={discoverListStyles.btn}
-                    onPress={() => onPressBtn(item)}
-                    labelStyle={discoverListStyles.btnLabelStyle}
-                />
-            </View>
-        )
+    const flatListRef = useRef(null)
+
+    useEffect(() => {
+        getUsers()
+    }, [])
+
+    const scrollToTop = () => {
+        flatListRef.current.scrollToOffset({
+            animated: true,
+            offset: 0,
+        })
     }
 
-    const renderFellowList = (item, index) => {
-        return (
-            <View style={fellowListStyles.cardContainer}>
-                <TouchableOpacity
-                    activeOpacity={1}
-                    onPress={() => setActiveIndex(-1)}
-                    style={activeIndex == index ? { ...fellowListStyles.blackBG } : {}}
-                />
-                <View style={{ paddingHorizontal: 5, paddingVertical: 20 }}>
-                    <View style={fellowListStyles.dotBtnContainer}>
-                        <TouchableOpacity onPress={() => setActiveIndex(index)}>
-                            <Entypo
-                                name="dots-three-vertical"
-                                size={21}
-                                color={Colors.black}
-                                style={fellowListStyles.dotBtn}
-                            />
-                        </TouchableOpacity>
-                        {activeIndex == index ? (
-                            <TouchableOpacity
-                                style={{ ...fellowListStyles.removeContainer }}
-                                activeOpacity={0.8}
-                                onPress={() =>
-                                    alert(`${item.name} has been removed from your fellow list`)
-                                }
-                            >
-                                <FontAwesome5 name="user-times" size={16} color={Colors.black} />
-                                <Text size={10} weight="medium">
-                                    Remove as Fellow
-                                </Text>
-                            </TouchableOpacity>
-                        ) : null}
-                    </View>
-                    <Image source={item.image} style={fellowListStyles.img} />
-                    <Text center size={16} weight="medium">
-                        {item.name}
-                    </Text>
-                    <Text center size={12}>
-                        {item.description}
-                    </Text>
-                    <SecondaryButton
-                        title={'VIEW'}
-                        style={fellowListStyles.btn}
-                        onPress={() => onPressBtn(item)}
-                    />
-                </View>
-            </View>
-        )
-    }
+    // const renderDiscoverList = (item) => {
+    //     return (
+    //         <View style={discoverListStyles.cardContainer}>
+    //             <Image source={item.image} style={discoverListStyles.img} />
+    //             <Text center size={16} weight="medium">
+    //                 {item.name}
+    //             </Text>
+    //             <Text center size={12}>
+    //                 {item.description}
+    //             </Text>
+    //             <SecondaryButton
+    //                 title={'ADD'}
+    //                 style={discoverListStyles.btn}
+    //                 onPress={() => onPressBtn(item)}
+    //                 labelStyle={discoverListStyles.btnLabelStyle}
+    //             />
+    //         </View>
+    //     )
+    // }
 
-    const renderForumList = (item) => {
-        return (
-            <View style={forumListStyle.cardContainer}>
-                <Image source={item.image} style={forumListStyle.img} resizeMode="contain" />
-                <View style={forumListStyle.cardInfoContainer}>
-                    <Text weight="semi-bold">{item.name}</Text>
-                    <Text>{item.description}</Text>
-                </View>
+    // const renderFellowList = (item, index) => {
+    //     return (
+    //         <View style={fellowListStyles.cardContainer}>
+    //             <TouchableOpacity
+    //                 activeOpacity={1}
+    //                 onPress={() => setActiveIndex(-1)}
+    //                 style={activeIndex == index ? { ...fellowListStyles.blackBG } : {}}
+    //             />
+    //             <View style={{ paddingHorizontal: 5, paddingVertical: 20 }}>
+    //                 <View style={fellowListStyles.dotBtnContainer}>
+    //                     <TouchableOpacity onPress={() => setActiveIndex(index)}>
+    //                         <Entypo
+    //                             name="dots-three-vertical"
+    //                             size={21}
+    //                             color={Colors.black}
+    //                             style={fellowListStyles.dotBtn}
+    //                         />
+    //                     </TouchableOpacity>
+    //                     {activeIndex == index ? (
+    //                         <TouchableOpacity
+    //                             style={{ ...fellowListStyles.removeContainer }}
+    //                             activeOpacity={0.8}
+    //                             onPress={() =>
+    //                                 alert(`${item.name} has been removed from your fellow list`)
+    //                             }
+    //                         >
+    //                             <FontAwesome5 name="user-times" size={16} color={Colors.black} />
+    //                             <Text size={10} weight="medium">
+    //                                 Remove as Fellow
+    //                             </Text>
+    //                         </TouchableOpacity>
+    //                     ) : null}
+    //                 </View>
+    //                 <Image source={item.image} style={fellowListStyles.img} />
+    //                 <Text center size={16} weight="medium">
+    //                     {item.name}
+    //                 </Text>
+    //                 <Text center size={12}>
+    //                     {item.description}
+    //                 </Text>
+    //                 <SecondaryButton
+    //                     title={'VIEW'}
+    //                     style={fellowListStyles.btn}
+    //                     onPress={() => onPressBtn(item)}
+    //                 />
+    //             </View>
+    //         </View>
+    //     )
+    // }
 
-                <View style={forumListStyle.btnContainer}>
-                    <TouchableOpacity style={forumListStyle.btn}>
-                        <Text color={Colors.primary} weight="medium" size={14}>
-                            JOIN
-                        </Text>
-                    </TouchableOpacity>
-                </View>
-            </View>
-        )
-    }
+    // const renderForumList = (item) => {
+    //     return (
+    //         <View style={forumListStyle.cardContainer}>
+    //             <Image source={item.image} style={forumListStyle.img} resizeMode="contain" />
+    //             <View style={forumListStyle.cardInfoContainer}>
+    //                 <Text weight="semi-bold">{item.name}</Text>
+    //                 <Text>{item.description}</Text>
+    //             </View>
 
-    const renderCompanyList = (item) => {
-        return (
-            <View style={companyListStyle.cardContainer}>
-                <Image source={item.image} style={companyListStyle.img} />
-                <Text center size={16} weight="medium">
-                    {item.name}
-                </Text>
-                <Text center size={12}>
-                    {item.description}
-                </Text>
-                <SecondaryButton
-                    title={'FOLLOW'}
-                    style={companyListStyle.btn}
-                    onPress={() => onPressBtn(item)}
-                />
-            </View>
-        )
-    }
+    //             <View style={forumListStyle.btnContainer}>
+    //                 <TouchableOpacity style={forumListStyle.btn}>
+    //                     <Text color={Colors.primary} weight="medium" size={14}>
+    //                         JOIN
+    //                     </Text>
+    //                 </TouchableOpacity>
+    //             </View>
+    //         </View>
+    //     )
+    // }
 
-    const renderRequestList = (item) => {
-        return (
-            <View style={requestListStyle.cardContainer}>
-                <Image source={item.image} style={requestListStyle.img} />
-                <View style={requestListStyle.cardInfoContainer}>
-                    <Text weight="semi-bold">{item.name}</Text>
-                    <TouchableOpacity>
-                        <Text color={Colors.primary} weight="medium">
-                            View Profile
-                        </Text>
-                    </TouchableOpacity>
-                </View>
+    // const renderCompanyList = (item) => {
+    //     return (
+    //         <View style={companyListStyle.cardContainer}>
+    //             <Image source={item.image} style={companyListStyle.img} />
+    //             <Text center size={16} weight="medium">
+    //                 {item.name}
+    //             </Text>
+    //             <Text center size={12}>
+    //                 {item.description}
+    //             </Text>
+    //             <SecondaryButton
+    //                 title={'FOLLOW'}
+    //                 style={companyListStyle.btn}
+    //                 onPress={() => onPressBtn(item)}
+    //             />
+    //         </View>
+    //     )
+    // }
 
-                <View style={requestListStyle.cardSideInfoContainer}>
-                    <Text>{item.date}</Text>
+    // const renderRequestList = (item) => {
+    //     return (
+    //         <View style={requestListStyle.cardContainer}>
+    //             <Image source={item.image} style={requestListStyle.img} />
+    //             <View style={requestListStyle.cardInfoContainer}>
+    //                 <Text weight="semi-bold">{item.name}</Text>
+    //                 <TouchableOpacity>
+    //                     <Text color={Colors.primary} weight="medium">
+    //                         View Profile
+    //                     </Text>
+    //                 </TouchableOpacity>
+    //             </View>
 
-                    <View style={requestListStyle.btnContainers}>
-                        <TouchableOpacity style={requestListStyle.btn}>
-                            <Text color={Colors.primary} weight="medium" size={11}>
-                                ACCEPT
-                            </Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={requestListStyle.btn}>
-                            <Text color={Colors.primary} weight="medium" size={11}>
-                                REMOVE
-                            </Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-            </View>
-        )
-    }
+    //             <View style={requestListStyle.cardSideInfoContainer}>
+    //                 <Text>{item.date}</Text>
 
-    const renderList = (id) => {
+    //                 <View style={requestListStyle.btnContainers}>
+    //                     <TouchableOpacity style={requestListStyle.btn}>
+    //                         <Text color={Colors.primary} weight="medium" size={11}>
+    //                             ACCEPT
+    //                         </Text>
+    //                     </TouchableOpacity>
+    //                     <TouchableOpacity style={requestListStyle.btn}>
+    //                         <Text color={Colors.primary} weight="medium" size={11}>
+    //                             REMOVE
+    //                         </Text>
+    //                     </TouchableOpacity>
+    //                 </View>
+    //             </View>
+    //         </View>
+    //     )
+    // }
+
+    const renderItem = ({ item }) => (
+        <UserItem
+            data={item}
+            onFollowPress={(id) => alert(`Followed ${id}`)}
+            onViewPress={(id) => alert(`Viewed ${id}`)}
+            showView={dataType != 'discover'}
+        />
+    )
+
+    const handleTopNavigationPress = (id) => {
         switch (id) {
             case 0:
-                return (
-                    <FlatList
-                        data={SampleData.discoverList}
-                        key={0}
-                        numColumns={2}
-                        renderItem={(item) => renderDiscoverList(item)}
-                        styles={{ alignItems: 'center' }}
-                    />
-                )
+                getUsers()
+                setDataType('discover')
+                break
             case 1:
-                return (
-                    <FlatList
-                        data={SampleData.fellowList}
-                        key={1}
-                        numColumns={2}
-                        renderItem={(item, index) => renderFellowList(item, index)}
-                        styles={{ alignItems: 'center' }}
-                    />
-                )
-            case 2:
-                return (
-                    <FlatList
-                        data={SampleData.forumList}
-                        key={2}
-                        renderItem={(item) => renderForumList(item)}
-                    />
-                )
-            case 3:
-                return (
-                    <FlatList
-                        data={SampleData.companyList}
-                        key={3}
-                        renderItem={(item) => renderCompanyList(item)}
-                        numColumns={2}
-                        styles={{ alignItems: 'center' }}
-                    />
-                )
-            case 4:
-                return (
-                    <FlatList
-                        data={SampleData.requestList}
-                        key={4}
-                        renderItem={(item) => renderRequestList(item)}
-                    />
-                )
-            default:
-                return (
-                    <FlatList
-                        data={SampleData.discoverList}
-                        key={0}
-                        numColumns={2}
-                        renderItem={(item) => renderDiscoverList(item)}
-                        styles={{ alignItems: 'center' }}
-                    />
-                )
+                getFollowedUsers()
+                setDataType('followed')
+                break
         }
+        scrollToTop()
+    }
+
+    const ListFooterComponent = useMemo(() => {
+        return users.length >= 30 && !loading ? (
+            <TouchableOpacity
+                onPress={() => {
+                    moreUsers(true)
+                    scrollToTop()
+                }}
+            >
+                <Text
+                    weight="medium"
+                    color={Colors.secondary}
+                    center
+                    style={{ marginTop: 10, marginBottom: 20 }}
+                >
+                    Load More
+                </Text>
+            </TouchableOpacity>
+        ) : (
+            <ActivityIndicator visible={loading} />
+        )
+    }, [loading])
+
+    const ListEmptyComponent = () => <NoData />
+
+    const fetchUser = (type = 'discover') => {
+        switch (type) {
+            case 'discover':
+                getUsers()
+                break
+            case 'followed':
+                getFollowedUsers()
+                break
+        }
+    }
+
+    const onEndReached = () => {
+        if (users.length < 30 && !loading) {
+            moreUsers()
+        }
+    }
+
+    const onScroll = (e) => {
+        const currentOffset = e.nativeEvent.contentOffset.y
+        const dif = currentOffset - (offset || 0)
+
+        if (dif < 0) {
+            navigation.getParent().setOptions({
+                tabBarStyle: {
+                    display: 'flex',
+                    borderTopWidth: 1,
+                    elevation: 0,
+                },
+            })
+        } else {
+            navigation.getParent().setOptions({
+                tabBarStyle: { display: 'none' },
+            })
+        }
+        // console.log('dif=',dif);
+        offset = currentOffset
     }
 
     return (
@@ -241,11 +292,32 @@ const CommunityScreen = ({ navigation }) => {
                 <TitleFilter title="COMMUNITY" titleColor={Colors.primary} hideLine />
 
                 <TopNavigation
-                    navTitles={['Discover', 'Fellows', 'Forums', 'Companies', 'Requests']}
-                    onBtnPress={(i) => setNavIndex(i)}
+                    navTitles={['Discover', 'Followed', 'Companies', 'Requests']}
+                    onBtnPress={handleTopNavigationPress}
                 />
 
-                {renderList(navIndex)}
+                {users.length != 0 ? (
+                    <FlatList
+                        refreshControl={
+                            <RefreshControl
+                                refreshing={loading}
+                                onRefresh={() => fetchUser(dataType)}
+                            />
+                        }
+                        onScroll={(e) => onScroll(e)}
+                        style={{ flex: 0 }}
+                        ref={flatListRef}
+                        data={users}
+                        renderItem={renderItem}
+                        onEndReached={onEndReached}
+                        onEndReachedThreshold={0}
+                        ListFooterComponent={ListFooterComponent}
+                        ListEmptyComponent={ListEmptyComponent}
+                        numColumns={2}
+                    />
+                ) : (
+                    <ActivityIndicator visible={true} />
+                )}
             </Container>
         </SafeAreaView>
     )

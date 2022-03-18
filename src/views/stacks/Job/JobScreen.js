@@ -126,7 +126,7 @@ const JobsScreen = ({ navigation }, offset) => {
                 </Text>
             </TouchableOpacity>
         ) : (
-            <ActivityIndicator visible={true} />
+            <ActivityIndicator visible={loading} />
         )
     }, [loading])
 
