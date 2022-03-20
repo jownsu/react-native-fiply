@@ -15,15 +15,14 @@ import SearchHeader from '../../components/headers/SearchHeader'
 import { FontAwesome5, FontAwesome } from '@expo/vector-icons'
 import Colors from '../../../utils/Colors'
 import PostItem from '../../components/lists/PostItem'
-import Comments from '../../components/modals/Comments'
 import CreatePost from '../../components/modals/CreatePost'
+import LoadMore from '../../components/lists/LoadMore'
 
 const HomeScreen = ({ navigation }, offset) => {
     const { posts, getPosts, loading, morePosts, createPost, toggleUpVote } =
         useContext(PostContext)
-    const { getComments, loading: commentLoading } = useContext(CommentContext)
+    const { getComments } = useContext(CommentContext)
 
-    const [showComment, setShowComment] = useState(false)
     const [showCreatePost, setShowCreatePost] = useState(false)
     const flatListRef = useRef(null)
 
@@ -83,30 +82,12 @@ const HomeScreen = ({ navigation }, offset) => {
         )
     }, [])
 
-    const ListFooterComponent = useMemo(() => {
-        return posts.length >= 30 ? (
-            <TouchableOpacity
-                onPress={() => {
-                    morePosts(true)
-                    flatListRef.current.scrollToOffset({
-                        animated: true,
-                        offset: 0,
-                    })
-                }}
-            >
-                <Text
-                    weight="medium"
-                    color={Colors.secondary}
-                    center
-                    style={{ marginTop: 10, marginBottom: 20 }}
-                >
-                    Load More
-                </Text>
-            </TouchableOpacity>
-        ) : (
-            <ActivityIndicator visible={loading} />
-        )
-    }, [loading])
+    const scrollToTop = () => {
+        flatListRef.current.scrollToOffset({
+            animated: true,
+            offset: 0,
+        })
+    }
 
     const ListEmptyComponent = () => {
         return <NoData />
@@ -204,7 +185,15 @@ const HomeScreen = ({ navigation }, offset) => {
                         data={posts}
                         renderItem={renderItem}
                         ListHeaderComponent={ListHeaderComponent}
-                        ListFooterComponent={ListFooterComponent}
+                        ListFooterComponent={
+                            <LoadMore
+                                onLoadMorePress={() => {
+                                    morePosts(true)
+                                    scrollToTop()
+                                }}
+                                isLoading={posts.length >= 30 && !loading}
+                            />
+                        }
                         ListEmptyComponent={ListEmptyComponent}
                         onEndReached={onEndReached}
                         onEndReachedThreshold={0}

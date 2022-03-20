@@ -16,7 +16,7 @@ import ProfileContext from '../../../api/context/profile/ProfileContext'
 }
 
 const ProfileHeader = ({ data, onBackPress = () => {}, style }) => {
-    const { pickImage, pickUri, setPickUri } = usePickImage()
+    const { pickImage } = usePickImage()
     const { uploadAvatar, uploadCover } = useContext(ProfileContext)
 
     return (
@@ -37,12 +37,9 @@ const ProfileHeader = ({ data, onBackPress = () => {}, style }) => {
                     activeOpacity={0.8}
                     style={styles.cameraContainer}
                     onPress={() => {
-                        pickImage(
-                            (uri) => {
-                                uploadCover(uri)
-                            },
-                            [3, 2]
-                        )
+                        pickImage([3, 2], (uri) => {
+                            uploadCover(uri)
+                        })
                     }}
                 >
                     <FontAwesome name="upload" size={12} color={Colors.black} />
@@ -61,7 +58,7 @@ const ProfileHeader = ({ data, onBackPress = () => {}, style }) => {
                             activeOpacity={0.8}
                             style={styles.avatarUploadBtn}
                             onPress={() =>
-                                pickImage((uri) => {
+                                pickImage([1, 1], (uri) => {
                                     uploadAvatar(uri)
                                 })
                             }

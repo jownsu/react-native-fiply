@@ -10,7 +10,6 @@ import {
     ActivityIndicator,
 } from '../../components/FiplyComponents'
 import Colors from '../../../utils/Colors'
-import { LinearGradient } from 'expo-linear-gradient'
 import { FontAwesome5, FontAwesome } from '@expo/vector-icons'
 
 import ProfileHeader from '../../components/profile/ProfileHeader'

@@ -5,7 +5,7 @@ const usePickImage = () => {
     const [pickUri, setPickUri] = useState('')
     const [loading, setLoading] = useState(false)
 
-    const pickImage = async (onUpload = () => {}, aspect = [1, 1]) => {
+    const pickImage = async (aspect = [1, 1], onUpload = () => {}) => {
         setLoading(true)
         await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,

@@ -1,5 +1,12 @@
 const JobReducer = (state, action) => {
     switch (action.type) {
+        case 'GET_JOB':
+            return {
+                ...state,
+                job: action.payload,
+                loading: false,
+            }
+
         case 'GET_JOBS':
             return {
                 ...state,
@@ -8,17 +15,42 @@ const JobReducer = (state, action) => {
                 loading: false,
             }
 
-        case 'GET_JOB':
-            return {
-                ...state,
-                job: action.payload,
-                loading: false,
-            }
-
         case 'MORE_JOBS':
             return {
                 ...state,
                 jobs: [...state.jobs, ...action.payload.data],
+                nextPath: action.payload.links.next,
+                loading: false,
+            }
+
+        case 'GET_SAVED_JOBS':
+            return {
+                ...state,
+                savedJobs: action.payload.data,
+                nextPath: action.payload.links.next,
+                loading: false,
+            }
+
+        case 'MORE_SAVED_JOBS':
+            return {
+                ...state,
+                savedJobs: [...state.savedJobs, ...action.payload.data],
+                nextPath: action.payload.links.next,
+                loading: false,
+            }
+
+        case 'GET_APPLIED_JOBS':
+            return {
+                ...state,
+                appliedJobs: action.payload.data,
+                nextPath: action.payload.links.next,
+                loading: false,
+            }
+
+        case 'MORE_APPLIED_JOBS':
+            return {
+                ...state,
+                appliedJobs: [...state.appliedJobs, ...action.payload.data],
                 nextPath: action.payload.links.next,
                 loading: false,
             }
@@ -61,10 +93,17 @@ const JobReducer = (state, action) => {
                 loading: false,
             }
 
-        case 'REMOVE_SAVED_APPLIED_JOB':
+        case 'REMOVE_SAVED_JOB':
             return {
                 ...state,
-                jobs: state.jobs.filter((item) => item.id != action.payload.id),
+                savedJobs: state.savedJobs.filter((item) => item.id != action.payload.id),
+                loading: false,
+            }
+
+        case 'REMOVE_APPLIED_JOB':
+            return {
+                ...state,
+                appliedJobs: state.appliedJobs.filter((item) => item.id != action.payload.id),
                 loading: false,
             }
 

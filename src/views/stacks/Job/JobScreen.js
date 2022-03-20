@@ -15,17 +15,24 @@ import SearchHeader from '../../../views/components/headers/SearchHeader'
 import TitleFilter from '../../../views/components/headers/TitleFilter'
 import TopNavigation from '../../../views/components/headers/TopNavigation'
 import JobItem from '../../../views/components/lists/JobItem'
+import LoadMore from '../../../views/components/lists/LoadMore'
 
 const JobsScreen = ({ navigation }, offset) => {
     const {
         jobs,
-        getJobs,
+        savedJobs,
+        appliedJobs,
         getJob,
+        getJobs,
         moreJobs,
         getSavedJobs,
+        moreSavedJobs,
         getAppliedJobs,
-        toggleSaveJob,
-        toggleApplyJob,
+        moreAppliedJobs,
+        toggleSavedJob,
+        toggleAppliedJob,
+        removeAppliedJob,
+        removeSavedJob,
         loading,
     } = useContext(JobContext)
 
@@ -55,16 +62,16 @@ const JobsScreen = ({ navigation }, offset) => {
         />
     )
 
-    const handleSavePress = (id) => toggleSaveJob(id)
+    const handleSavePress = (id) => toggleSavedJob(id)
 
-    const handleApplyPress = (id) => toggleApplyJob(id)
+    const handleApplyPress = (id) => toggleAppliedJob(id)
 
     const handleRemovePress = (id) => {
         switch (dataType) {
             case 'saved':
-                return toggleSaveJob(id, true)
+                return removeSavedJob(id)
             case 'applied':
-                return toggleApplyJob(id, true)
+                return removeAppliedJob(id)
         }
     }
 
@@ -79,64 +86,28 @@ const JobsScreen = ({ navigation }, offset) => {
     const handleTopNavigationPress = (id) => {
         switch (id) {
             case 0:
-                getJobs()
+                if (jobs.length == 0) {
+                    getJobs()
+                }
                 setDataType('discover')
                 break
             case 1:
-                getSavedJobs()
+                if (savedJobs.length == 0) {
+                    getSavedJobs()
+                }
                 setDataType('saved')
                 break
             case 2:
-                getAppliedJobs()
+                if (appliedJobs.length == 0) {
+                    getAppliedJobs()
+                }
                 setDataType('applied')
                 break
         }
         scrollToTop()
     }
 
-    const fetchJob = (type = 'discover') => {
-        switch (type) {
-            case 'discover':
-                getJobs()
-                break
-            case 'saved':
-                getSavedJobs()
-                break
-            case 'applied':
-                getAppliedJobs()
-                break
-        }
-    }
-
-    const ListFooterComponent = useMemo(() => {
-        return jobs.length >= 30 && !loading ? (
-            <TouchableOpacity
-                onPress={() => {
-                    moreJobs(true)
-                    scrollToTop()
-                }}
-            >
-                <Text
-                    weight="medium"
-                    color={Colors.secondary}
-                    center
-                    style={{ marginTop: 10, marginBottom: 20 }}
-                >
-                    Load More
-                </Text>
-            </TouchableOpacity>
-        ) : (
-            <ActivityIndicator visible={loading} />
-        )
-    }, [loading])
-
     const ListEmptyComponent = () => <NoData />
-
-    const onEndReached = () => {
-        if (jobs.length < 30 && !loading) {
-            moreJobs()
-        }
-    }
 
     const onScroll = (e) => {
         const currentOffset = e.nativeEvent.contentOffset.y
@@ -157,6 +128,109 @@ const JobsScreen = ({ navigation }, offset) => {
         }
         // console.log('dif=',dif);
         offset = currentOffset
+    }
+
+    const renderFlatList = () => {
+        switch (dataType) {
+            case 'discover':
+                return jobs.length != 0 ? (
+                    <FlatList
+                        refreshControl={
+                            <RefreshControl refreshing={loading} onRefresh={() => getJobs()} />
+                        }
+                        onScroll={(e) => onScroll(e)}
+                        style={{ flex: 0 }}
+                        ref={flatListRef}
+                        data={jobs}
+                        renderItem={renderItem}
+                        ListFooterComponent={
+                            <LoadMore
+                                onLoadMorePress={() => {
+                                    moreJobs(true)
+                                    scrollToTop()
+                                }}
+                                isLoading={jobs.length >= 30 && !loading}
+                            />
+                        }
+                        ListEmptyComponent={ListEmptyComponent}
+                        onEndReached={() => {
+                            if (jobs.length < 30 && !loading) {
+                                moreJobs()
+                            }
+                        }}
+                        onEndReachedThreshold={0}
+                    />
+                ) : (
+                    <ActivityIndicator visible={true} />
+                )
+
+            case 'saved':
+                return savedJobs.length != 0 ? (
+                    <FlatList
+                        refreshControl={
+                            <RefreshControl refreshing={loading} onRefresh={() => getSavedJobs()} />
+                        }
+                        onScroll={(e) => onScroll(e)}
+                        style={{ flex: 0 }}
+                        ref={flatListRef}
+                        data={savedJobs}
+                        renderItem={renderItem}
+                        ListFooterComponent={
+                            <LoadMore
+                                onLoadMorePress={() => {
+                                    moreSavedJobs(true)
+                                    scrollToTop()
+                                }}
+                                isLoading={moreSavedJobs.length >= 30 && !loading}
+                            />
+                        }
+                        ListEmptyComponent={ListEmptyComponent}
+                        onEndReached={() => {
+                            if (savedJobs.length < 30 && !loading) {
+                                moreSavedJobs()
+                            }
+                        }}
+                        onEndReachedThreshold={0}
+                    />
+                ) : (
+                    <ActivityIndicator visible={true} />
+                )
+
+            case 'applied':
+                return appliedJobs.length != 0 ? (
+                    <FlatList
+                        refreshControl={
+                            <RefreshControl refreshing={loading} onRefresh={() => getSavedJobs()} />
+                        }
+                        onScroll={(e) => onScroll(e)}
+                        style={{ flex: 0 }}
+                        ref={flatListRef}
+                        data={appliedJobs}
+                        renderItem={renderItem}
+                        ListFooterComponent={
+                            <LoadMore
+                                onLoadMorePress={() => {
+                                    moreAppliedJobs(true)
+                                    scrollToTop()
+                                }}
+                                isLoading={moreAppliedJobs.length >= 30 && !loading}
+                            />
+                        }
+                        ListEmptyComponent={ListEmptyComponent}
+                        onEndReached={() => {
+                            if (appliedJobs.length < 30 && !loading) {
+                                moreAppliedJobs()
+                            }
+                        }}
+                        onEndReachedThreshold={0}
+                    />
+                ) : (
+                    <ActivityIndicator visible={true} />
+                )
+
+            default:
+                return <Text>Wala pa</Text>
+        }
     }
 
     return (
@@ -180,50 +254,10 @@ const JobsScreen = ({ navigation }, offset) => {
                     onBtnPress={handleTopNavigationPress}
                 />
 
-                {jobs.length != 0 ? (
-                    <FlatList
-                        refreshControl={
-                            <RefreshControl
-                                refreshing={loading}
-                                onRefresh={() => fetchJob(dataType)}
-                            />
-                        }
-                        onScroll={(e) => onScroll(e)}
-                        style={{ flex: 0 }}
-                        ref={flatListRef}
-                        data={jobs}
-                        renderItem={renderItem}
-                        ListFooterComponent={ListFooterComponent}
-                        ListEmptyComponent={ListEmptyComponent}
-                        onEndReached={onEndReached}
-                        onEndReachedThreshold={0}
-                    />
-                ) : (
-                    <ActivityIndicator visible={true} />
-                )}
+                {renderFlatList(dataType)}
             </Container>
         </SafeAreaView>
     )
 }
 
 export default JobsScreen
-
-const styles = StyleSheet.create({
-    myInterviewContainer: {
-        backgroundColor: Colors.white,
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginBottom: 10,
-        flexDirection: 'row',
-        marginLeft: 10,
-        padding: 10,
-        borderRadius: 15,
-        borderWidth: 1,
-        borderColor: Colors.light,
-        width: 200,
-        elevation: 3,
-    },
-    interviewDetailsContainer: {
-        marginRight: 10,
-    },
-})

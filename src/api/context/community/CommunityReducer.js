@@ -17,7 +17,14 @@ const CommunityReducer = (state, action) => {
         case 'GET_FOLLOWED_USERS':
             return {
                 ...state,
-                users: action.payload.data,
+                followedUsers: action.payload.data,
+                nextPath: action.payload.links.next,
+                loading: false,
+            }
+        case 'MORE_FOLLOWED_USERS':
+            return {
+                ...state,
+                followedUsers: [...state.followedUsers, ...action.payload.data],
                 nextPath: action.payload.links.next,
                 loading: false,
             }

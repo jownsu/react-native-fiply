@@ -11,6 +11,7 @@ export const CommunityProvider = ({ children }) => {
 
     const initialState = {
         users: [],
+        followedUsers: [],
         nextPath: '',
         loading: false,
     }
@@ -46,6 +47,20 @@ export const CommunityProvider = ({ children }) => {
             .catch((err) => console.log(err))
     }
 
+    const moreFollowedUsers = async (reset = false) => {
+        if (state.nextPath) {
+            setLoading()
+            await api({ token: user.token })
+                .get(state.nextPath)
+                .then((res) => {
+                    reset
+                        ? dispatch({ type: 'GET_FOLLOWED_USERS', payload: res.data })
+                        : dispatch({ type: 'MORE_FOLLOWED_USERS', payload: res.data })
+                })
+                .catch((err) => console.log(err))
+        }
+    }
+
     const setLoading = () => dispatch({ type: 'SET_LOADING' })
 
     return (
@@ -55,6 +70,7 @@ export const CommunityProvider = ({ children }) => {
                 getUsers,
                 moreUsers,
                 getFollowedUsers,
+                moreFollowedUsers,
             }}
         >
             {children}
