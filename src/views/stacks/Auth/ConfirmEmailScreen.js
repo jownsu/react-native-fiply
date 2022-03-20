@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react'
-import { StyleSheet, View, TouchableOpacity } from 'react-native'
+import { StyleSheet, View, TouchableOpacity, Image } from 'react-native'
 import AuthContext from '../../../api/context/auth/AuthContext'
 import SignUpContext from '../../../api/context/auth/SignUpContext'
 
@@ -39,12 +39,20 @@ const ConfirmEmailScreen = ({ navigation }) => {
     }
 
     return (
-        <SafeAreaView style={{ flex: 1 }}>
+        <SafeAreaView flex>
             <WaveHeader waveimg={require('../../../assets/img/waves/3.png')} />
             <Container center padding={20}>
-                <FiplyLogo style={{ marginBottom: 10 }} />
+                {/* <FiplyLogo style={{ marginBottom: 10 }} /> */}
                 {/* <Text center>Code was sent in {signUpData.email}</Text> */}
-                <Text center>Code was sent in {email}</Text>
+                <Image
+                    source={require('../../../assets/img/mail.png')}
+                    style={styles.img}
+                    resizeMode="center"
+                />
+
+                <Text center>
+                    We sent a verification code on {email}. Please enter the verification below.
+                </Text>
                 <View style={styles.textInputContainer}>
                     <View style={styles.textInputView}>
                         <Text style={styles.textInsideView}>{code[0]}</Text>
@@ -202,22 +210,6 @@ const ConfirmEmailScreen = ({ navigation }) => {
 export default ConfirmEmailScreen
 
 const styles = StyleSheet.create({
-    confirmContainer: {
-        marginVertical: 150,
-    },
-    textTitle: {
-        textAlign: 'center',
-        fontSize: 20,
-    },
-    numContainer: {
-        flexDirection: 'row',
-        marginTop: 15,
-        alignItems: 'center',
-    },
-    textSend: {
-        color: 'blue',
-        fontSize: 16,
-    },
     buttonView: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -232,11 +224,10 @@ const styles = StyleSheet.create({
         borderRadius: 100,
         borderWidth: 1,
         borderColor: 'green',
-        margin: 10,
+        margin: 5,
     },
     textButton: {
         fontSize: 18,
-        color: 'green',
     },
     textInputView: {
         height: 45,
@@ -255,5 +246,12 @@ const styles = StyleSheet.create({
     },
     textInputContainer: {
         flexDirection: 'row',
+    },
+    img: {
+        height: 150,
+        width: 167,
+        alignSelf: 'center',
+        borderWidth: 1,
+        marginBottom: 10,
     },
 })

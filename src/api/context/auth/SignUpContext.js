@@ -10,6 +10,8 @@ export const SignUpProvider = ({ children }) => {
         password_confirmation: '',
         firstname: '',
         lastname: '',
+        birthdate: '',
+        language: '',
         job_preference: {},
     }
 
@@ -28,11 +30,15 @@ export const SignUpProvider = ({ children }) => {
             password_confirmation: state.password_confirmation,
             firstname: state.firstname,
             lastname: state.lastname,
+            birthdate: state.birthdate,
+            language: state.language,
             code: state.code,
         }
     }
 
-    const setBasicUserInfo = (data) => dispatch({ type: 'SET_BASIC_USER_INFO', payload: data })
+    const setUserInfo1 = (data) => dispatch({ type: 'SET_USER_INFO_1', payload: data })
+
+    const setUserInfo2 = (data) => dispatch({ type: 'SET_USER_INFO_2', payload: data })
 
     const getJobPreference = () => {
         return { job_preference: state.job_preference }
@@ -44,7 +50,8 @@ export const SignUpProvider = ({ children }) => {
         <SignUpContext.Provider
             value={{
                 ...state,
-                setBasicUserInfo,
+                setUserInfo1,
+                setUserInfo2,
                 setJobPreference,
                 getBasicUserInfo,
                 getJobPreference,

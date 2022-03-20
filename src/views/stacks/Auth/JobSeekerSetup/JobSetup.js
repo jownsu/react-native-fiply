@@ -9,6 +9,7 @@ import {
     Button,
     Dropdown,
 } from '../../../components/FiplyComponents'
+import Back from '../../../components/Back'
 import useJobTitle from '../../../../api/hooks/useJobTitle'
 import useEmploymentType from '../../../../api/hooks/useEmploymentType'
 import useLocation from '../../../../api/hooks/useLocation'
@@ -36,7 +37,7 @@ const JobSetup = ({ navigation }) => {
     })
 
     return (
-        <SafeAreaView>
+        <SafeAreaView flex>
             <WaveHeader waveimg={require('../../../../assets/img/waves/4.png')} />
             <Container center padding={20}>
                 <FiplyLogo />
@@ -130,6 +131,7 @@ const JobSetup = ({ navigation }) => {
                     )}
                 </Formik>
             </Container>
+            <Back onPress={() => navigation.pop()} />
         </SafeAreaView>
     )
 }

@@ -1,9 +1,10 @@
 import React from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
 import { SignUpProvider } from '../../../api/context/auth/SignUpContext'
-import SignUpScreen from '../../screens/AuthScreens/SignUpScreen'
-import ConfirmEmailScreen from '../../screens/AuthScreens/ConfirmEmailScreen'
-import SelectUserTypeScreen from '../../screens/AuthScreens/SelectUserTypeScreen'
+import SignUp1Screen from './SignUp1Screen'
+import SignUp2Screen from './SignUp2Screen'
+import SelectUserTypeScreen from './SelectUserTypeScreen'
+import ConfirmEmailScreen from './ConfirmEmailScreen'
 import EmployerSetupStack from './EmployerSetupStack'
 import JobSeekerSetupStack from './JobSeekerSetupStack'
 
@@ -15,8 +16,13 @@ const SignUpStack = () => {
             <Stack.Navigator>
                 <Stack.Screen
                     options={{ headerShown: false }}
-                    name={'SignUpScreen'}
-                    component={SignUpScreen}
+                    name={'SignUp1Screen'}
+                    component={SignUp1Screen}
+                ></Stack.Screen>
+                <Stack.Screen
+                    options={{ headerShown: false }}
+                    name={'SignUp2Screen'}
+                    component={SignUp2Screen}
                 ></Stack.Screen>
                 <Stack.Screen
                     options={{ headerShown: false }}
