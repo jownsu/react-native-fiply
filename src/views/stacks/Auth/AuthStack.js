@@ -18,7 +18,6 @@ const AuthStack = () => {
                     component={LandingScreen}
                 ></Stack.Screen>
             )}
-
             <Stack.Screen
                 options={{ headerShown: false }}
                 name={'SignInScreen'}

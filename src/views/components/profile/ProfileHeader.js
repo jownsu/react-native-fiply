@@ -42,7 +42,7 @@ const ProfileHeader = ({ data, onBackPress = () => {}, style }) => {
                         })
                     }}
                 >
-                    <FontAwesome name="upload" size={12} color={Colors.black} />
+                    <FontAwesome name="upload" size={12} color={Colors.white} />
                 </TouchableOpacity>
             )}
 

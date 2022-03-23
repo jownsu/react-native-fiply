@@ -1,6 +1,5 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { StyleSheet, View, BackHandler } from 'react-native'
-import AuthContext from '../../../../api/context/auth/AuthContext'
 import {
     Container,
     SafeAreaView,
@@ -9,10 +8,14 @@ import {
     Button,
     SecondaryButton,
 } from '../../../components/FiplyComponents'
+import AuthContext from '../../../../api/context/auth/AuthContext'
+import SignUpContext from '../../../../api/context/auth/SignUpContext'
 import Colors from '../../../../utils/Colors'
+import Skip from '../../../components/Skip'
 
 const SemiVerified = ({ navigation }) => {
     const { setLogged_in } = useContext(AuthContext)
+    const { firstname } = useContext(SignUpContext)
 
     function handleBackButtonClick() {
         setLogged_in('true')
@@ -25,30 +28,30 @@ const SemiVerified = ({ navigation }) => {
             BackHandler.removeEventListener('hardwareBackPress', handleBackButtonClick)
         }
     }, [])
+
     return (
-        <SafeAreaView>
+        <SafeAreaView flex>
             <Container center padding={20}>
                 <FiplyLogo />
                 <View style={{ marginVertical: 25 }}>
-                    <Text weight="medium" size={18} center>
-                        Congratulations!
+                    <Text weight="bold" size={21}>
+                        Congratulations {firstname ? firstname : 'User'},
                     </Text>
-                    <Text center>You have now been semi-verfied</Text>
+                    <Text weight="bold" size={21} style={{ marginVertical: 5 }}>
+                        your account has been
+                    </Text>
+                    <Text weight="bold" color={Colors.secondary} size={21}>
+                        Semi-verified.
+                    </Text>
                 </View>
+                <Text size={16}>Continue to Step 3 until Step 4 to fully verify your account</Text>
 
-                <Text weight="medium" size={17} color={Colors.secondary} center>
-                    Proceed to third step to fully verify
-                </Text>
                 <Button
-                    title="Proceed"
-                    style={{ marginTop: 30 }}
+                    title="Let's go!"
+                    style={{ marginTop: 30, marginHorizontal: '5%' }}
                     onPress={() => navigation.navigate('StepThree')}
                 />
-                <SecondaryButton
-                    title="Later"
-                    style={{ marginTop: 20 }}
-                    onPress={handleBackButtonClick}
-                />
+                <Skip onPress={handleBackButtonClick} />
             </Container>
         </SafeAreaView>
     )

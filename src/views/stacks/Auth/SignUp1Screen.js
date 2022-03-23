@@ -6,7 +6,7 @@ import { Formik } from 'formik'
 import * as yup from 'yup'
 import Colors from '../../../utils/Colors'
 import { TextInput as TxtInput } from 'react-native-paper'
-
+import { BarPasswordStrengthDisplay } from 'react-native-password-strength-meter'
 import {
     Text,
     FiplyLogo,
@@ -21,6 +21,10 @@ const SignUp1Screen = ({ navigation }) => {
     const [hidePassword, setHidePassword] = useState(true)
     const { loading } = useContext(AuthContext)
     const { setUserInfo1 } = useContext(SignUpContext)
+
+    const onChange = (password, score, { label, labelColor, activeBarColor }) => {
+        console.log(password, score, { label, labelColor, activeBarColor })
+    }
 
     const signupSchema = yup.object({
         email: yup.string().trim().email('Invalid email').required('Email is required'),
@@ -85,6 +89,51 @@ const SignUp1Screen = ({ navigation }) => {
                                         />
                                     }
                                 />
+                                {values.password ? (
+                                    <BarPasswordStrengthDisplay
+                                        password={values.password}
+                                        minLength={1}
+                                        scoreLimit={90}
+                                        width={250}
+                                        labelStyle={{
+                                            position: 'relative',
+                                            alignSelf: 'flex-end',
+                                        }}
+                                        levels={[
+                                            {
+                                                label: 'Weak',
+                                                labelColor: '#ff2900',
+                                                activeBarColor: '#ff2900',
+                                            },
+                                            {
+                                                label: 'Weak',
+                                                labelColor: '#ff3e00',
+                                                activeBarColor: '#ff3e00',
+                                            },
+                                            {
+                                                label: 'Average',
+                                                labelColor: '#f3d331',
+                                                activeBarColor: '#f3d331',
+                                            },
+                                            {
+                                                label: 'Average',
+                                                labelColor: '#f3d331',
+                                                activeBarColor: '#f3d331',
+                                            },
+                                            {
+                                                label: 'Strong',
+                                                labelColor: '#14eb6e',
+                                                activeBarColor: '#14eb6e',
+                                            },
+                                            {
+                                                label: 'Strong',
+                                                labelColor: '#14eb6e',
+                                                activeBarColor: '#14eb6e',
+                                            },
+                                        ]}
+                                    />
+                                ) : null}
+
                                 <TextInput
                                     label={'Confirm Password'}
                                     value={values.password_confirmation}

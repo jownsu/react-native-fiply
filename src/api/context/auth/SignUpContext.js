@@ -10,7 +10,7 @@ export const SignUpProvider = ({ children }) => {
         password_confirmation: '',
         firstname: '',
         lastname: '',
-        birthdate: '',
+        birthday: '',
         language: '',
         job_preference: {},
     }
@@ -30,7 +30,7 @@ export const SignUpProvider = ({ children }) => {
             password_confirmation: state.password_confirmation,
             firstname: state.firstname,
             lastname: state.lastname,
-            birthdate: state.birthdate,
+            birthday: state.birthday,
             language: state.language,
             code: state.code,
         }

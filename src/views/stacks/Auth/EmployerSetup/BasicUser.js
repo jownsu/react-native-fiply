@@ -1,19 +1,19 @@
-import React, { useContext } from 'react'
-import { StyleSheet, View, BackHandler } from 'react-native'
+import React, { useEffect, useContext } from 'react'
 import AuthContext from '../../../../api/context/auth/AuthContext'
+import SignUpContext from '../../../../api/context/auth/SignUpContext'
+import { StyleSheet, View, BackHandler } from 'react-native'
 import {
     Container,
     SafeAreaView,
     FiplyLogo,
     Text,
     Button,
-    SecondaryButton,
 } from '../../../components/FiplyComponents'
-import Colors from '../../../../utils/Colors'
+import Skip from '../../../components/Skip'
 
 const BasicUser = ({ navigation }) => {
     const { setLogged_in } = useContext(AuthContext)
-
+    const { firstname } = useContext(SignUpContext)
     function handleBackButtonClick() {
         setLogged_in('true')
         return true
@@ -27,29 +27,27 @@ const BasicUser = ({ navigation }) => {
     }, [])
 
     return (
-        <SafeAreaView>
+        <SafeAreaView flex>
             <Container center padding={20}>
                 <FiplyLogo />
-                <View style={{ marginVertical: 25 }}>
-                    <Text weight="medium" size={18} center>
-                        Greetings
+                <View style={{ marginVertical: 30 }}>
+                    <Text weight="bold" size={21}>
+                        Welcome {firstname ? firstname : 'User'},
                     </Text>
-                    <Text center>You have now reached the level of a basic user</Text>
-                </View>
+                    <Text weight="bold" size={21}>
+                        verify your account now!
+                    </Text>
 
-                <Text weight="medium" size={17} color={Colors.secondary} center>
-                    Proceed to First Step to Semi-Verify
-                </Text>
+                    <Text size={18} style={{ marginTop: 20 }}>
+                        To have a better experience with Fiply you have four quick steps to complete
+                    </Text>
+                </View>
                 <Button
-                    title="Proceed"
-                    style={{ marginTop: 30 }}
+                    title="I'm ready !"
+                    style={{ marginTop: 30, marginHorizontal: '5%' }}
                     onPress={() => navigation.navigate('StepOne')}
                 />
-                <SecondaryButton
-                    title="Later"
-                    style={{ marginTop: 20 }}
-                    onPress={handleBackButtonClick}
-                />
+                <Skip onPress={handleBackButtonClick} />
             </Container>
         </SafeAreaView>
     )

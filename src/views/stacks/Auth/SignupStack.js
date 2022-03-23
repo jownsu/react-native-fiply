@@ -7,6 +7,7 @@ import SelectUserTypeScreen from './SelectUserTypeScreen'
 import ConfirmEmailScreen from './ConfirmEmailScreen'
 import EmployerSetupStack from './EmployerSetupStack'
 import JobSeekerSetupStack from './JobSeekerSetupStack'
+import StepTwo from './JobSeekerSetup/StepTwo'
 
 const Stack = createStackNavigator()
 

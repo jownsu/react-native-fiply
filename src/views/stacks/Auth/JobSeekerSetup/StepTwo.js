@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, View, TouchableOpacity } from 'react-native'
+import { StyleSheet, View, TouchableOpacity, Image } from 'react-native'
 import { SafeAreaView, Container, Text, Button } from '../../../components/FiplyComponents'
 import Colors from '../../../../utils/Colors'
 import StepIndicator from '../../../components/StepIndicator'
@@ -24,23 +24,29 @@ const StepTwo = ({ navigation }) => {
                 </Text>
 
                 <View style={{ marginVertical: 30 }}>
-                    <Text weight="medium" size={15}>
-                        You are almost there...
+                    <Text weight="bold" size={26}>
+                        Almost there!
                     </Text>
-                    <Text>
-                        Take resume photo or upload attachment file to semi-verify your account.
-                    </Text>
+                    <Text size={16}>Upload your CV to make it much easier to get hired.</Text>
                 </View>
 
                 <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
                     <TouchableOpacity style={styles.optionBtn}>
-                        <Text color={Colors.primary} center weight="medium">
-                            Take resume photo
+                        <Image
+                            source={require('../../../../assets/img/addfile.png')}
+                            style={styles.imgAddFile}
+                        />
+                        <Text color={Colors.black} weight="medium" center>
+                            Upload File
                         </Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.optionBtn}>
-                        <Text color={Colors.primary} center weight="medium">
-                            Upload attachment file
+                        <Image
+                            source={require('../../../../assets/img/scan.png')}
+                            style={styles.imgScan}
+                        />
+                        <Text color={Colors.black} weight="medium" center>
+                            Scan Image
                         </Text>
                     </TouchableOpacity>
                 </View>
@@ -72,10 +78,21 @@ const styles = StyleSheet.create({
     optionBtn: {
         borderWidth: 2,
         borderColor: Colors.primary,
-        borderRadius: 5,
-        flex: 1,
+        borderStyle: 'dashed',
+        backgroundColor: Colors.primaryLight,
+        borderRadius: 15,
         marginHorizontal: 10,
-        height: 100,
-        justifyContent: 'flex-end',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: 120,
+        width: 150,
+    },
+    imgScan: {
+        width: 90,
+        height: 76,
+    },
+    imgAddFile: {
+        width: 85,
+        height: 76,
     },
 })

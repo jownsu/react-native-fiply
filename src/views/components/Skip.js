@@ -4,18 +4,18 @@ import { Text } from './FiplyComponents'
 import { FontAwesome } from '@expo/vector-icons'
 import Colors from '../../utils/Colors'
 
-const Back = ({ onPress = () => {}, style = {} }) => {
+const Skip = ({ onPress = () => {}, style = {} }) => {
     return (
         <TouchableOpacity style={[styles.btnContainer, style]} onPress={onPress}>
-            <FontAwesome name="long-arrow-left" size={21} color={Colors.black} />
             <Text weight="semi-bold" style={{ paddingHorizontal: 10 }}>
-                Back
+                Skip
             </Text>
+            <FontAwesome name="long-arrow-right" size={21} color={Colors.black} />
         </TouchableOpacity>
     )
 }
 
-export default Back
+export default Skip
 
 const styles = StyleSheet.create({
     btnContainer: {
