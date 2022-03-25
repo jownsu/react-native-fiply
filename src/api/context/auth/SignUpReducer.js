@@ -19,6 +19,16 @@ const SignUpReducer = (state, action) => {
                 ...state,
                 job_preference: { ...action.payload },
             }
+        case 'SET_EXPERIENCE':
+            return {
+                ...state,
+                experience: { ...action.payload },
+            }
+        case 'SET_EDUCATIONAL_BACKGROUND':
+            return {
+                ...state,
+                educational_background: { ...action.payload },
+            }
         default:
             return state
     }

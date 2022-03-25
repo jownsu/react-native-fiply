@@ -15,8 +15,9 @@ const usePickImage = () => {
         })
             .then((response) => {
                 if (!response.cancelled) {
-                    onUpload(response.uri)
-                    setPickUri(response.uri)
+                    const imageUri = 'file:///' + response.uri.split('file:/').join('')
+                    onUpload(imageUri)
+                    setPickUri(imageUri)
                 }
             })
             .catch((error) => console.log(error))

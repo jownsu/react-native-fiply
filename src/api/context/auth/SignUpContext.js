@@ -13,6 +13,9 @@ export const SignUpProvider = ({ children }) => {
         birthday: '',
         language: '',
         job_preference: {},
+        experience: {},
+        educational_background: {},
+        document: {},
     }
 
     const [state, dispatch] = useReducer(SignUpReducer, initialState)
@@ -46,6 +49,19 @@ export const SignUpProvider = ({ children }) => {
 
     const setJobPreference = (data) => dispatch({ type: 'SET_JOB_PREFERENCE', payload: data })
 
+    const setExperience = (data) => dispatch({ type: 'SET_EXPERIENCE', payload: data })
+
+    const getExperience = () => {
+        return state.experience
+    }
+
+    const setEducationalBackground = (data) =>
+        dispatch({ type: 'SET_EDUCATIONAL_BACKGROUND', payload: data })
+
+    const getEducationalBackground = () => {
+        return state.educational_background
+    }
+
     return (
         <SignUpContext.Provider
             value={{
@@ -56,6 +72,10 @@ export const SignUpProvider = ({ children }) => {
                 getBasicUserInfo,
                 getJobPreference,
                 getAllSignUpData,
+                setExperience,
+                getExperience,
+                setEducationalBackground,
+                getEducationalBackground,
             }}
         >
             {children}

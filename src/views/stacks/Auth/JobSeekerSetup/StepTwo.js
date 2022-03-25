@@ -1,11 +1,53 @@
-import React from 'react'
-import { StyleSheet, View, TouchableOpacity, Image } from 'react-native'
+import React, { useState, useContext } from 'react'
+import { StyleSheet, View, TouchableOpacity, Image, Alert } from 'react-native'
 import { SafeAreaView, Container, Text, Button } from '../../../components/FiplyComponents'
 import Colors from '../../../../utils/Colors'
 import StepIndicator from '../../../components/StepIndicator'
-import { FontAwesome5 } from '@expo/vector-icons'
+import { FontAwesome5, FontAwesome } from '@expo/vector-icons'
+import SignUpContext from '../../../../api/context/auth/SignUpContext'
+import useRegister from '../../../../api/hooks/auth/useRegister'
+
+import useCamera from '../../../../utils/useCamera'
+import useDocumentPicker from '../../../../utils/useDocumentPicker'
 
 const StepTwo = ({ navigation }) => {
+    const { createExperience, createEducationalBackground, uploadResume, loading } = useRegister()
+    const { experience, educational_background } = useContext(SignUpContext)
+    const { captureImage } = useCamera()
+    const { pickDocument } = useDocumentPicker()
+    const [resumeUri, setResumeUri] = useState('')
+    const [uploadedFile, setUploadedFile] = useState({})
+
+    const onUploadBtnPress = () => {
+        pickDocument((uri, response) => {
+            setUploadedFile(response)
+            setResumeUri(uri)
+        })
+    }
+
+    const onScanImagePress = () => {
+        captureImage((uri, response) => {
+            setUploadedFile(response)
+            setResumeUri(uri)
+        })
+    }
+
+    const onProceedPress = () => {
+        if (Object.keys(experience).length !== 0) {
+            createExperience(experience)
+        }
+
+        if (Object.keys(educational_background).length !== 0) {
+            createEducationalBackground(educational_background)
+        }
+
+        if (resumeUri !== '') {
+            uploadResume(resumeUri)
+        }
+
+        navigation.navigate('SemiVerified')
+    }
+
     return (
         <SafeAreaView>
             <View
@@ -31,7 +73,7 @@ const StepTwo = ({ navigation }) => {
                 </View>
 
                 <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-                    <TouchableOpacity style={styles.optionBtn}>
+                    <TouchableOpacity style={styles.optionBtn} onPress={onUploadBtnPress}>
                         <Image
                             source={require('../../../../assets/img/addfile.png')}
                             style={styles.imgAddFile}
@@ -40,7 +82,7 @@ const StepTwo = ({ navigation }) => {
                             Upload File
                         </Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.optionBtn}>
+                    <TouchableOpacity style={styles.optionBtn} onPress={onScanImagePress}>
                         <Image
                             source={require('../../../../assets/img/scan.png')}
                             style={styles.imgScan}
@@ -51,10 +93,31 @@ const StepTwo = ({ navigation }) => {
                     </TouchableOpacity>
                 </View>
 
+                {resumeUri !== '' && uploadedFile.type == 'image' && (
+                    <View style={styles.uploadContainer}>
+                        <Image source={{ uri: resumeUri }} style={styles.uploadedImg} />
+                    </View>
+                )}
+
+                {resumeUri !== '' && uploadedFile.name && (
+                    <View style={styles.uploadContainer}>
+                        <FontAwesome
+                            name="file-image-o"
+                            size={24}
+                            color={Colors.black}
+                            style={{ marginRight: 15 }}
+                        />
+                        <Text numberOfLines={1} adjustsFontSizeToFit>
+                            {uploadedFile.name}
+                        </Text>
+                    </View>
+                )}
+
                 <Button
                     title="Proceed"
                     style={{ marginTop: 75, marginBottom: 35 }}
-                    onPress={() => navigation.navigate('SemiVerified')}
+                    disabled={resumeUri === '' ? true : false}
+                    onPress={onProceedPress}
                 />
 
                 <View
@@ -94,5 +157,15 @@ const styles = StyleSheet.create({
     imgAddFile: {
         width: 85,
         height: 76,
+    },
+    uploadContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        padding: 20,
+    },
+    uploadedImg: {
+        borderRadius: 10,
+        height: 75,
+        width: 75,
     },
 })

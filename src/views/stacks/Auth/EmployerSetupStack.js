@@ -2,6 +2,7 @@ import React from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
 import ApplicantSetup from './EmployerSetup/ApplicantSetup'
 import StepOne from './EmployerSetup/StepOne'
+import StepOneStudent from './JobSeekerSetup/StepOneStudent'
 import StepTwo from './EmployerSetup/StepTwo'
 import StepThree from './EmployerSetup/StepThree'
 import StepFour from './EmployerSetup/StepFour'
@@ -28,6 +29,11 @@ const EmployerSetupStack = () => {
                 options={{ headerShown: false }}
                 name={'StepOne'}
                 component={StepOne}
+            ></Stack.Screen>
+            <Stack.Screen
+                options={{ headerShown: false }}
+                name={'StepOneStudent'}
+                component={StepOneStudent}
             ></Stack.Screen>
             <Stack.Screen
                 options={{ headerShown: false }}

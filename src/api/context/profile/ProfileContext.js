@@ -16,6 +16,17 @@ export const ProfileProvider = ({ children }) => {
         educationalBackgrounds: [],
         loading: false,
     }
+
+    const config = {
+        onUploadProgress: function (progressEvent) {
+            const { loaded, total } = progressEvent
+
+            let percent = Math.floor((loaded * 100) / total)
+
+            console.log(percent)
+        },
+    }
+
     const [state, dispatch] = useReducer(ProfileReducer, initialState)
 
     const getUserInfo = async (id = 'me') => {
@@ -60,22 +71,63 @@ export const ProfileProvider = ({ children }) => {
             .catch((err) => console.log(err))
     }
 
-    const uploadAvatar = async (img) => {
+    const createExperience = async (data, setDispatch = false) => {
+        setLoading()
+        await api({ token: user.token })
+            .post(`/experiences`, data)
+            .then((res) => {
+                setDispatch ?? dispatch({ type: 'SET_EXPERIENCE', payload: res.data.data })
+            })
+            .catch((err) => console.log(err))
+    }
+
+    const createEducationalBackground = async (data, setDispatch = false) => {
+        setLoading()
+        await api({ token: user.token })
+            .post(`/educationalBackgrounds`, data)
+            .then((res) => {
+                setDispatch ??
+                    dispatch({ type: 'SET_EDUCATIONAL_BACKGROUND', payload: res.data.data })
+            })
+            .catch((err) => console.log(err))
+    }
+
+    const uploadResume = async (doc, setDispatch = false) => {
         setLoading()
 
         let fd = new FormData()
 
-        const imageUri = 'file:///' + img.split('file:/').join('')
-        fd.append('avatar', {
-            uri: imageUri,
-            type: mime.getType(imageUri),
-            name: imageUri.split('/').pop(),
+        fd.append('resume', {
+            uri: doc,
+            type: mime.getType(doc),
+            name: doc.split('/').pop(),
         })
 
         fd.append('_method', 'PUT')
 
         await api({ token: user.token })
-            .post('/me/uploadAvatar', fd)
+            .post('/uploadResume', fd, config)
+            .then((res) => {
+                setDispatch ?? dispatch({ type: 'SET_RESUME', payload: res.data })
+            })
+            .catch((err) => console.log(err))
+    }
+
+    const uploadAvatar = async (img) => {
+        setLoading()
+
+        let fd = new FormData()
+
+        fd.append('avatar', {
+            uri: img,
+            type: mime.getType(img),
+            name: img.split('/').pop(),
+        })
+
+        fd.append('_method', 'PUT')
+
+        await api({ token: user.token })
+            .post('/uploadAvatar', fd, config)
             .then((res) => {
                 let newAvatar = res.data.data
                 setUser({ ...user, avatar: newAvatar })
@@ -95,17 +147,16 @@ export const ProfileProvider = ({ children }) => {
 
         let fd = new FormData()
 
-        const imageUri = 'file:///' + img.split('file:/').join('')
         fd.append('cover', {
-            uri: imageUri,
-            type: mime.getType(imageUri),
-            name: imageUri.split('/').pop(),
+            uri: img,
+            type: mime.getType(img),
+            name: img.split('/').pop(),
         })
 
         fd.append('_method', 'PUT')
 
         await api({ token: user.token })
-            .post('/me/uploadCover', fd)
+            .post('/uploadCover', fd, config)
             .then((res) => dispatch({ type: 'UPDATE_COVER', payload: res.data.data }))
             .catch((err) => console.log(err))
     }
@@ -119,6 +170,9 @@ export const ProfileProvider = ({ children }) => {
                 getUserInfo,
                 getExperiences,
                 getEducationalBackgrounds,
+                createEducationalBackground,
+                createExperience,
+                uploadResume,
                 uploadAvatar,
                 uploadCover,
             }}

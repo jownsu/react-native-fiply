@@ -1,13 +1,27 @@
-import React, { useState } from 'react'
-import { StyleSheet, View, TouchableOpacity } from 'react-native'
+import React, { useState, useEffect, useContext } from 'react'
+import { StyleSheet, View, TouchableOpacity, Image } from 'react-native'
 import ChooseID from '../../../components/modals/ChooseID'
-import { SafeAreaView, Container, Text, Button } from '../../../components/FiplyComponents'
+import {
+    SafeAreaView,
+    Container,
+    Text,
+    Button,
+    Dropdown,
+} from '../../../components/FiplyComponents'
+import useValidIDs from '../../../../api/hooks/useValidIDs'
 import Colors from '../../../../utils/Colors'
 import StepIndicator from '../../../components/StepIndicator'
 import { FontAwesome5 } from '@expo/vector-icons'
+import SignUpContext from '../../../../api/context/auth/SignUpContext'
 
 const StepThree = ({ navigation }) => {
     const [showIdModal, setShowIdModal] = useState(false)
+    const [validId, setValidId] = useState('')
+    const { validIds, getValidIds, loading } = useValidIDs()
+
+    useEffect(() => {
+        getValidIds()
+    }, [])
 
     return (
         <SafeAreaView>
@@ -28,28 +42,40 @@ const StepThree = ({ navigation }) => {
                 </Text>
 
                 <View style={{ marginVertical: 30 }}>
-                    <Text weight="medium" size={15}>
-                        You are almost there...
+                    <Text weight="bold" size={21}>
+                        Almost there!
                     </Text>
-                    <Text>Take diploma photo and any valid ID to fully verify your account</Text>
-                    <Text>
-                        <Text weight="medium">Note: </Text>for <Text weight="medium">STUDENTS</Text>{' '}
-                        take photo of registration form and school ID
-                    </Text>
+                    <Text>Select one valid ID to scan</Text>
                 </View>
+                <TouchableOpacity style={styles.optionBtn}>
+                    <Image
+                        source={require('../../../../assets/img/scan.png')}
+                        style={styles.imgScan}
+                    />
+                    <Text color={Colors.black} center weight="medium" style={{ marginTop: 5 }}>
+                        Scan
+                    </Text>
+                </TouchableOpacity>
 
-                <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-                    <TouchableOpacity style={styles.optionBtn}>
-                        <Text color={Colors.primary} center weight="medium">
-                            Take diploma / registration form photo
-                        </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.optionBtn} onPress={() => setShowIdModal(true)}>
-                        <Text color={Colors.primary} center weight="medium">
-                            Take ID photo
-                        </Text>
-                    </TouchableOpacity>
-                </View>
+                <Dropdown
+                    label={'Valid ID'}
+                    value={validId}
+                    data={validIds}
+                    style={{ marginBottom: 5 }}
+                    onSubmit={(text) => setValidId(text)}
+                    // onTextInputPress={() => getEmploymentTypes()}
+                    isLoading={loading}
+                    noTextInput
+                    dropdownIcon
+                    // error={
+                    //     touched.employment_type && errors.employment_type ? true : false
+                    // }
+                    // errorMsg={
+                    //     touched.employment_type && errors.employment_type
+                    //         ? errors.employment_type
+                    //         : ''
+                    // }
+                />
 
                 <Button
                     title="Proceed"
@@ -80,10 +106,17 @@ const styles = StyleSheet.create({
     optionBtn: {
         borderWidth: 2,
         borderColor: Colors.primary,
-        borderRadius: 5,
-        flex: 1,
+        borderRadius: 15,
         marginHorizontal: 10,
-        height: 100,
-        justifyContent: 'flex-end',
+        marginBottom: 30,
+        borderStyle: 'dashed',
+        backgroundColor: Colors.primaryLight,
+        height: 150,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    imgScan: {
+        width: 100,
+        height: 86,
     },
 })

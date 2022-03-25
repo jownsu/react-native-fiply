@@ -100,9 +100,9 @@ const ProfileScreen = ({ navigation, route }) => {
         <CardInfo
             key={index}
             title="Education"
-            headers={['School', 'Degree', 'Field of Study', 'Starting Date', 'Completion Date']}
+            headers={['University', 'Degree', 'Field of Study', 'Starting Date', 'Completion Date']}
             infos={{
-                school: item.school,
+                university: item.university,
                 degree: item.degree,
                 fieldOfStudy: item.field_of_study,
                 startingDate: item.starting_date,

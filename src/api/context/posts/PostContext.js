@@ -45,11 +45,10 @@ export const PostProvider = ({ children }) => {
         let fd = new FormData()
 
         if (postData.image) {
-            const imageUri = 'file:///' + postData.image.split('file:/').join('')
             fd.append('image', {
-                uri: imageUri,
-                type: mime.getType(imageUri),
-                name: imageUri.split('/').pop(),
+                uri: postData.image,
+                type: mime.getType(postData.image),
+                name: postData.image.split('/').pop(),
             })
         }
 
@@ -66,11 +65,10 @@ export const PostProvider = ({ children }) => {
         const fd = new FormData()
 
         if (postData.image) {
-            const imageUri = 'file:///' + postData.image.split('file:/').join('')
             fd.append('image', {
-                uri: imageUri,
-                type: mime.getType(imageUri),
-                name: imageUri.split('/').pop(),
+                uri: postData.image,
+                type: mime.getType(postData.image),
+                name: postData.image.split('/').pop(),
             })
         }
 

@@ -6,7 +6,7 @@ import StepTwo from './JobSeekerSetup/StepTwo'
 import StepThree from './JobSeekerSetup/StepThree'
 import StepFour from './JobSeekerSetup/StepFour'
 import BasicUser from './JobSeekerSetup/BasicUser'
-import SemiVerifed from './JobSeekerSetup/SemiVerified'
+import SemiVerified from './JobSeekerSetup/SemiVerified'
 import Done from './JobSeekerSetup/Done'
 
 const Stack = createStackNavigator()
@@ -36,8 +36,8 @@ const JobSeekerSetupStack = () => {
             ></Stack.Screen>
             <Stack.Screen
                 options={{ headerShown: false }}
-                name={'SemiVerifed'}
-                component={SemiVerifed}
+                name={'SemiVerified'}
+                component={SemiVerified}
             ></Stack.Screen>
             <Stack.Screen
                 options={{ headerShown: false }}
