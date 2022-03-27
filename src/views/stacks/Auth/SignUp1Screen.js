@@ -16,6 +16,7 @@ import {
     TextInput,
     SafeAreaView,
 } from '../../components/FiplyComponents'
+import PasswordStrengthBar from '../../components/PasswordStrengthBar'
 
 const SignUp1Screen = ({ navigation }) => {
     const [hidePassword, setHidePassword] = useState(true)
@@ -115,56 +116,7 @@ const SignUp1Screen = ({ navigation }) => {
                                         />
                                     }
                                 />
-
-                                {values.password ? (
-                                    <BarPasswordStrengthDisplay
-                                        password={values.password}
-                                        minLength={1}
-                                        scoreLimit={90}
-                                        width={250}
-                                        wrapperStyle={{
-                                            flexDirection: 'row',
-                                            justifyContent: 'center',
-                                            alignItems: 'center',
-                                        }}
-                                        labelStyle={{
-                                            position: 'relative',
-                                            alignSelf: 'flex-start',
-                                        }}
-                                        levels={[
-                                            {
-                                                label: 'Weak',
-                                                labelColor: '#ff2900',
-                                                activeBarColor: '#ff2900',
-                                            },
-                                            {
-                                                label: 'Weak',
-                                                labelColor: '#ff3e00',
-                                                activeBarColor: '#ff3e00',
-                                            },
-                                            {
-                                                label: 'Average',
-                                                labelColor: '#f3d331',
-                                                activeBarColor: '#f3d331',
-                                            },
-                                            {
-                                                label: 'Average',
-                                                labelColor: '#f3d331',
-                                                activeBarColor: '#f3d331',
-                                            },
-                                            {
-                                                label: 'Strong',
-                                                labelColor: '#14eb6e',
-                                                activeBarColor: '#14eb6e',
-                                            },
-                                            {
-                                                label: 'Strong',
-                                                labelColor: '#14eb6e',
-                                                activeBarColor: '#14eb6e',
-                                            },
-                                        ]}
-                                    />
-                                ) : null}
+                                <PasswordStrengthBar password={values.password} />
 
                                 {touched.password && errors.password && (
                                     <Text color={Colors.red}>{errors.password}</Text>
