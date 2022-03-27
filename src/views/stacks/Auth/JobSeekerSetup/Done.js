@@ -1,5 +1,6 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { StyleSheet, View, BackHandler } from 'react-native'
+import Colors from '../../../../utils/Colors'
 import AuthContext from '../../../../api/context/auth/AuthContext'
 import {
     SafeAreaView,
@@ -28,7 +29,17 @@ const Done = ({ navigation }) => {
         <SafeAreaView>
             <Container center padding={20}>
                 <FiplyLogo style={{ marginVertical: 50 }} />
-                <Text center size={18} weight="medium">
+                <Text weight="bold" size={23}>
+                    Great! Request for
+                </Text>
+                <Text color={Colors.secondary} weight="bold" size={23}>
+                    fully verification
+                </Text>
+                <Text weight="bold" size={23}>
+                    is now under evaluation.
+                </Text>
+                <Text size={16}>Thank you for your coperation. Hav an awesome day ahead.</Text>
+                {/* <Text center size={18} weight="medium">
                     Great!
                 </Text>
                 <Text center>
@@ -38,7 +49,7 @@ const Done = ({ navigation }) => {
                 <Text center style={{ marginVertical: 20 }}>
                     Thank you for taking part in Fiply's security protocol.
                 </Text>
-                <Text center>Have an awesome day!</Text>
+                <Text center>Have an awesome day!</Text> */}
 
                 <Button
                     title={'Done'}

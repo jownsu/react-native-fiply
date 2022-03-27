@@ -120,7 +120,10 @@ const JobSetup = ({ navigation }) => {
                                 title="Done"
                                 style={{ marginVertical: 25 }}
                                 disabled={
-                                    values.job_title && values.location && values.employment_type
+                                    values.job_title &&
+                                    values.location &&
+                                    values.employment_type &&
+                                    !loading
                                         ? false
                                         : true
                                 }

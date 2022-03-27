@@ -19,33 +19,35 @@ const StepTwo = ({ navigation }) => {
     const [uploadedFile, setUploadedFile] = useState({})
 
     const onUploadBtnPress = () => {
-        pickDocument((uri, response) => {
+        pickDocument((response, uri) => {
             setUploadedFile(response)
             setResumeUri(uri)
         })
     }
 
     const onScanImagePress = () => {
-        captureImage((uri, response) => {
+        captureImage((response, uri) => {
             setUploadedFile(response)
             setResumeUri(uri)
         })
     }
 
     const onProceedPress = () => {
-        if (Object.keys(experience).length !== 0) {
-            createExperience(experience)
+        if (uploadedFile.size > 2048000) {
+            alert('Uploaded file is too large, 2mb is the limit')
+        } else {
+            if (Object.keys(experience).length !== 0) {
+                createExperience(experience)
+            }
+            if (Object.keys(educational_background).length !== 0) {
+                createEducationalBackground(educational_background)
+            }
+            if (resumeUri !== '') {
+                uploadResume(resumeUri, () => {
+                    navigation.navigate('SemiVerified')
+                })
+            }
         }
-
-        if (Object.keys(educational_background).length !== 0) {
-            createEducationalBackground(educational_background)
-        }
-
-        if (resumeUri !== '') {
-            uploadResume(resumeUri)
-        }
-
-        navigation.navigate('SemiVerified')
     }
 
     return (
@@ -116,7 +118,8 @@ const StepTwo = ({ navigation }) => {
                 <Button
                     title="Proceed"
                     style={{ marginTop: 75, marginBottom: 35 }}
-                    disabled={resumeUri === '' ? true : false}
+                    disabled={resumeUri != '' && !loading ? false : true}
+                    loading={loading}
                     onPress={onProceedPress}
                 />
 

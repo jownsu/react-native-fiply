@@ -5,14 +5,24 @@ const useDocumentPicker = () => {
     const [uri, setUri] = useState('')
     const [loading, setLoading] = useState(false)
 
-    const pickDocument = async (onUpload = () => {}) => {
+    const pickDocument = async (
+        onUpload = () => {},
+        type = ['image/*', 'application/msword', 'application/pdf']
+    ) => {
         setLoading(true)
-        await DocumentPicker.getDocumentAsync()
+        await DocumentPicker.getDocumentAsync({
+            type: type,
+            multiple: true,
+        })
             .then((response) => {
                 if (!response.cancelled) {
-                    const imageUri = 'file:///' + response.uri.split('file:/').join('')
-                    onUpload(imageUri, response)
-                    setUri(imageUri)
+                    if (response.size > 2048000) {
+                        alert('Uploaded file is too large, 2mb is the limit')
+                    } else {
+                        const imageUri = 'file:///' + response.uri.split('file:/').join('')
+                        onUpload(response, imageUri)
+                        setUri(imageUri)
+                    }
                 }
             })
             .catch((error) => console.log(error))

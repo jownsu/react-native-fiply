@@ -35,7 +35,7 @@ const useRegister = () => {
             .finally(() => setLoading(false))
     }
 
-    const uploadResume = async (doc) => {
+    const uploadResume = async (doc, onUpload = () => {}) => {
         setLoading(true)
 
         let fd = new FormData()
@@ -50,7 +50,33 @@ const useRegister = () => {
 
         await api({ token: user.token })
             .post('/uploadResume', fd, config)
-            .then((res) => console.log(res.data))
+            .then(() => onUpload())
+            .catch((err) => console.log(err))
+            .finally(() => setLoading(false))
+    }
+
+    const uploadValidIds = async (uploadData, onUpload = () => {}) => {
+        setLoading(true)
+
+        let fd = new FormData()
+
+        fd.append('valid_id_image_front', {
+            uri: uploadData.front,
+            type: mime.getType(uploadData.front),
+            name: uploadData.front.split('/').pop(),
+        })
+        fd.append('valid_id_image_back', {
+            uri: uploadData.back,
+            type: mime.getType(uploadData.back),
+            name: uploadData.back.split('/').pop(),
+        })
+        fd.append('valid_id', uploadData.valid_id)
+
+        fd.append('_method', 'PUT')
+
+        await api({ token: user.token })
+            .post('/uploadValidId', fd, config)
+            .then(() => onUpload())
             .catch((err) => console.log(err))
             .finally(() => setLoading(false))
     }
@@ -59,6 +85,7 @@ const useRegister = () => {
         createExperience,
         createEducationalBackground,
         uploadResume,
+        uploadValidIds,
         loading,
     }
 }

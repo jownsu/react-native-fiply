@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, isValidElement } from 'react'
 import { StyleSheet, View, TouchableOpacity } from 'react-native'
 import AuthContext from '../../../api/context/auth/AuthContext'
 import SignUpContext from '../../../api/context/auth/SignUpContext'
@@ -19,12 +19,9 @@ import {
 
 const SignUp1Screen = ({ navigation }) => {
     const [hidePassword, setHidePassword] = useState(true)
-    const { loading } = useContext(AuthContext)
+    const { checkEmail, loading } = useContext(AuthContext)
     const { setUserInfo1 } = useContext(SignUpContext)
-
-    const onChange = (password, score, { label, labelColor, activeBarColor }) => {
-        console.log(password, score, { label, labelColor, activeBarColor })
-    }
+    const [invalidEmail, setInvalidEmail] = useState(false)
 
     const signupSchema = yup.object({
         email: yup.string().trim().email('Invalid email').required('Email is required'),
@@ -33,11 +30,14 @@ const SignUp1Screen = ({ navigation }) => {
             .trim()
             .required('Password is required')
             .min(8)
+            .matches(
+                /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
+                'Must contain One Uppercase, One Lowercase, One Number and one special case Character'
+            )
             .oneOf([yup.ref('password_confirmation'), null], 'Passwords must match'),
         password_confirmation: yup
             .string()
             .trim()
-            .min(8)
             .required('Confirm password is required')
             .oneOf([yup.ref('password'), null], 'Passwords must match'),
     })
@@ -55,8 +55,15 @@ const SignUp1Screen = ({ navigation }) => {
                         password_confirmation: '',
                     }}
                     onSubmit={(values) => {
-                        setUserInfo1(values)
-                        navigation.push('SignUp2Screen')
+                        checkEmail(values.email).then((isTaken) => {
+                            if (!isTaken) {
+                                setInvalidEmail(false)
+                                setUserInfo1(values)
+                                navigation.push('SignUp2Screen')
+                            } else {
+                                setInvalidEmail(true)
+                            }
+                        })
                     }}
                     validationSchema={signupSchema}
                 >
@@ -67,19 +74,38 @@ const SignUp1Screen = ({ navigation }) => {
                                     label={'Your Email'}
                                     value={values.email}
                                     onChangeText={handleChange('email')}
-                                    onBlur={handleBlur('email')}
+                                    onBlur={(e) => {
+                                        // if (!errors.email) {
+                                        //     checkEmail(values.email).then((isTaken) => {
+                                        //         console.log(isTaken)
+                                        //         setValidEmail(!isTaken)
+                                        //     })
+                                        // }
+
+                                        handleBlur('email')(e)
+                                    }}
                                     error={touched.email && errors.email ? true : false}
                                     errorMsg={touched.email && errors.email ? errors.email : ''}
+                                    right={
+                                        invalidEmail ? (
+                                            <TxtInput.Icon name="close" color={Colors.red} />
+                                        ) : null
+                                    }
+                                    loading={loading}
                                 />
+                                {invalidEmail ? (
+                                    <Text color={Colors.red}>Email is already taken</Text>
+                                ) : null}
+
                                 <TextInput
                                     label={'Password'}
                                     value={values.password}
                                     onChangeText={handleChange('password')}
                                     onBlur={handleBlur('password')}
-                                    error={touched.password && errors.password ? true : false}
-                                    errorMsg={
-                                        touched.password && errors.password ? errors.password : ''
-                                    }
+                                    // error={touched.password && errors.password ? true : false}
+                                    // errorMsg={
+                                    //     touched.password && errors.password ? errors.password : ''
+                                    // }
                                     secureTextEntry={hidePassword}
                                     right={
                                         <TxtInput.Icon
@@ -89,15 +115,21 @@ const SignUp1Screen = ({ navigation }) => {
                                         />
                                     }
                                 />
+
                                 {values.password ? (
                                     <BarPasswordStrengthDisplay
                                         password={values.password}
                                         minLength={1}
                                         scoreLimit={90}
                                         width={250}
+                                        wrapperStyle={{
+                                            flexDirection: 'row',
+                                            justifyContent: 'center',
+                                            alignItems: 'center',
+                                        }}
                                         labelStyle={{
                                             position: 'relative',
-                                            alignSelf: 'flex-end',
+                                            alignSelf: 'flex-start',
                                         }}
                                         levels={[
                                             {
@@ -133,6 +165,10 @@ const SignUp1Screen = ({ navigation }) => {
                                         ]}
                                     />
                                 ) : null}
+
+                                {touched.password && errors.password && (
+                                    <Text color={Colors.red}>{errors.password}</Text>
+                                )}
 
                                 <TextInput
                                     label={'Confirm Password'}

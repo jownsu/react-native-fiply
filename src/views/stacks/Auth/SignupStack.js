@@ -9,6 +9,7 @@ import EmployerSetupStack from './EmployerSetupStack'
 import JobSeekerSetupStack from './JobSeekerSetupStack'
 import StepTwo from './JobSeekerSetup/StepTwo'
 import StepOne from './JobSeekerSetup/StepOne'
+import StepThree from './JobSeekerSetup/StepThree'
 import StepOneStudent from './JobSeekerSetup/StepOneStudent'
 
 const Stack = createStackNavigator()

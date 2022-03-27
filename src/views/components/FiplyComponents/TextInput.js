@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, TextInput as NativeTextInput } from 'react-native'
-import { TextInput as XTextInput } from 'react-native-paper'
+import { TextInput as XTextInput, ProgressBar } from 'react-native-paper'
 import { Text } from './Text'
 import Colors from '../../../utils/Colors'
 
@@ -27,6 +27,7 @@ export const TextInput = ({
     dense = false,
     autoFocus = false,
     disabled,
+    loading = false,
 }) => {
     return (
         <View style={{ ...containerStyle }}>
@@ -63,16 +64,14 @@ export const TextInput = ({
                 render={(innerProps) => (
                     <NativeTextInput
                         {...innerProps}
-                        style={[
-                            innerProps.style,
-                            { textAlignVertical: 'center' },
-                        ]}
+                        style={[innerProps.style, { textAlignVertical: 'center' }]}
                     />
                 )}
                 onSubmitEditing={onSubmitEditing}
                 autoFocus={autoFocus}
                 disabled={disabled}
             />
+            {loading ? <ProgressBar indeterminate color={Colors.primary} /> : null}
             {errorMsg ? <Text color={Colors.red}>{errorMsg}</Text> : null}
         </View>
     )

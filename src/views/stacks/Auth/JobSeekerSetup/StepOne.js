@@ -30,9 +30,9 @@ const StepOne = ({ navigation }) => {
 
     const experienceSchema = yup.object({
         job_title: yup.string().trim().required('Most recent job is required').min(2),
-        employment_type: yup.string().trim().required('Employment type is required').min(5),
-        company: yup.string().trim().required('Recent company is required').min(5),
-        location: yup.string().trim().required('Location is required').min(5),
+        employment_type: yup.string().trim().required('Employment type is required').min(2),
+        company: yup.string().trim().required('Recent company is required').min(2),
+        location: yup.string().trim().required('Location is required').min(2),
     })
 
     return (
@@ -66,7 +66,7 @@ const StepOne = ({ navigation }) => {
                     validationSchema={experienceSchema}
                     onSubmit={(values) => {
                         setExperience(values)
-                        navigation.navigate('StepTwo')
+                        navigation.push('StepTwo')
                     }}
                 >
                     {({

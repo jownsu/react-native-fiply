@@ -21,13 +21,17 @@ const SelectUserTypeScreen = ({ navigation }) => {
     const [btnDisabled, setBtnDisabled] = useState(true)
 
     const handleCardPress = (usertype) => {
-        setBtnDisabled(false)
         switch (usertype) {
             case 'jobseeker':
-                return setUserType({ jobseeker: true, employer: false })
+                return
+            // return setUserType({ jobseeker: true, employer: false })
             case 'employer':
+                setBtnDisabled(false)
+
                 return setUserType({ jobseeker: false, employer: true })
             default:
+                setBtnDisabled(false)
+
                 return setUserType({ jobseeker: true, employer: false })
         }
     }

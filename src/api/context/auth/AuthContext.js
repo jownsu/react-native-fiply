@@ -87,6 +87,17 @@ export const AuthProvider = ({ children }) => {
             .finally(() => setLoading(false))
     }
 
+    const checkEmail = async (email) => {
+        setLoading(true)
+        return await api()
+            .post('/checkEmail', { email })
+            .then((res) => {
+                return res.data.data
+            })
+            .catch((error) => console.log(error))
+            .finally(() => setLoading(false))
+    }
+
     return (
         <AuthContext.Provider
             value={{
@@ -103,6 +114,7 @@ export const AuthProvider = ({ children }) => {
                 verify,
                 isFirstLaunched,
                 setIsFirstLaunched,
+                checkEmail,
             }}
         >
             {children}

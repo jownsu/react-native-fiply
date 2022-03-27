@@ -23,11 +23,14 @@ const useCamera = () => {
             return false
         }
         setLoading(true)
-        await ImagePicker.launchCameraAsync()
+        await ImagePicker.launchCameraAsync({
+            allowsEditing: true,
+            quality: 0.5,
+        })
             .then((response) => {
                 if (!response.cancelled) {
                     const imageUri = 'file:///' + response.uri.split('file:/').join('')
-                    onUpload(imageUri, response)
+                    onUpload(response, imageUri)
                     setUri(imageUri)
                 }
             })
