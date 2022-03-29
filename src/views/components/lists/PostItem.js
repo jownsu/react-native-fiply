@@ -3,6 +3,7 @@ import { Text } from '../FiplyComponents'
 import React, { memo } from 'react'
 import { Avatar } from 'react-native-paper'
 import { FontAwesome5, FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons'
+import FastImage from 'react-native-fast-image'
 import Colors from '../../../utils/Colors'
 const PostItem = memo(
     ({
@@ -45,10 +46,13 @@ const PostItem = memo(
 
                 <Text style={postStyles.content}>{data.content}</Text>
                 {data.image ? (
-                    <Image
-                        source={{ uri: data.image }}
+                    <FastImage
                         style={postStyles.postImg}
-                        resizeMethod="resize"
+                        resizeMode={FastImage.resizeMode.contain}
+                        source={{
+                            uri: data.image,
+                            priority: FastImage.priority.high,
+                        }}
                     />
                 ) : null}
 

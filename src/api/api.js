@@ -1,11 +1,10 @@
 import axios from 'axios'
 import * as SecureStore from 'expo-secure-store'
-import config from './config'
 import { NativeModules } from 'react-native'
 
 const api = ({ token = null } = {}) => {
     const api = axios.create({
-        baseURL: config.api,
+        baseURL: process.env['LOCALHOST'],
     })
 
     if (token) {
