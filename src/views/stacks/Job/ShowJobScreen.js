@@ -9,7 +9,7 @@ import { Ionicons, FontAwesome, FontAwesome5 } from '@expo/vector-icons'
 import { ProgressBar } from 'react-native-paper'
 
 const ShowJobScreen = ({ navigation }) => {
-    const { job, loading, toggleSaveJob, toggleApplyJob } = useContext(JobContext)
+    const { job, loading, toggleSavedJob, toggleAppliedJob } = useContext(JobContext)
 
     const handleBackPress = () => {
         navigation.getParent().setOptions({
@@ -22,9 +22,9 @@ const ShowJobScreen = ({ navigation }) => {
         navigation.pop()
     }
 
-    const handleSavePress = () => toggleSaveJob(job.id)
+    const handleSavePress = () => toggleSavedJob(job.id)
 
-    const handleApplyPress = () => toggleApplyJob(job.id)
+    const handleApplyPress = () => toggleAppliedJob(job.id)
 
     return (
         <SafeAreaView flex statusBarColor={Colors.primary} style={{}}>

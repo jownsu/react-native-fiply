@@ -1,8 +1,9 @@
 import React, { useCallback, useRef, useEffect, useState, memo, useMemo, useContext } from 'react'
 
-import { StyleSheet, View, TouchableOpacity, FlatList, RefreshControl } from 'react-native'
+import { StyleSheet, View, TouchableOpacity, FlatList, RefreshControl, Alert } from 'react-native'
 import PostContext from '../../../api/context/posts/PostContext'
 import CommentContext from '../../../api/context/comments/CommentContext'
+import AuthContext from '../../../api/context/auth/AuthContext'
 import {
     SafeAreaView,
     Container,
@@ -22,6 +23,7 @@ const HomeScreen = ({ navigation }, offset) => {
     const { posts, getPosts, loading, morePosts, createPost, toggleUpVote } =
         useContext(PostContext)
     const { getComments } = useContext(CommentContext)
+    const { user } = useContext(AuthContext)
 
     const [showCreatePost, setShowCreatePost] = useState(false)
     const flatListRef = useRef(null)
@@ -39,13 +41,24 @@ const HomeScreen = ({ navigation }, offset) => {
     //     console.log('handleSheetChanges', index);
     //   }, []);
 
+    const handleCreatePostPress = () => {
+        if (user.account_level == 0) {
+            Alert.alert('Not Verified', 'This is not available for basic users')
+        } else {
+            setShowCreatePost(true)
+        }
+    }
+
     const ListHeaderComponent = useMemo(() => {
         return (
             <View style={createPostySTyles.createPostContainer}>
                 <TouchableOpacity
                     activeOpacity={0.5}
-                    style={createPostySTyles.textInputContainer}
-                    onPress={() => setShowCreatePost(true)}
+                    style={[
+                        createPostySTyles.textInputContainer,
+                        user.account_level == 0 ? { backgroundColor: Colors.light } : {},
+                    ]}
+                    onPress={handleCreatePostPress}
                 >
                     <Text>Create a post</Text>
                 </TouchableOpacity>

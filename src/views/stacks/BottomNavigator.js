@@ -14,6 +14,7 @@ import HomeStack from './Home/HomeStack'
 import CommunityStack from './Community/CommunityStack'
 import NotificationStack from './Notification/NotificationStack'
 import JobStack from './Job/JobStack'
+import AccountLevelBar from '../components/AccountLevelBar'
 
 const Tab = createBottomTabNavigator()
 
@@ -159,18 +160,12 @@ const BottomNavigator = ({ navigation }) => {
                                 weight="semi-bold"
                                 style={{ paddingHorizontal: 5 }}
                             >
-                                Basic User
+                                {user.account_level_str}
                             </Text>
                         </View>
-                        {/* <View>
-                                <Text color={Colors.secondary} weight='medium' size={16}>Basic User</Text>
-                            </View> */}
                     </View>
                     <View style={styles.btmBodyContainer}>
-                        <Text color={Colors.primary} center weight="medium">
-                            {user.status}
-                        </Text>
-                        {user.preview && <Text center>{user.preview}</Text>}
+                        <AccountLevelBar level={user.account_level} />
                     </View>
                     <View style={styles.btmFooterContainer}>
                         <TouchableOpacity style={styles.footerBtn}>
@@ -238,11 +233,7 @@ const styles = StyleSheet.create({
         height: 50,
         width: 50,
     },
-    btmBodyContainer: {
-        borderTopWidth: 1,
-        borderTopColor: Colors.light,
-        paddingTop: 5,
-    },
+    btmBodyContainer: {},
     btmFooterContainer: {
         flexDirection: 'row',
         alignItems: 'center',

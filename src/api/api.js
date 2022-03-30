@@ -1,10 +1,11 @@
 import axios from 'axios'
 import * as SecureStore from 'expo-secure-store'
 import { NativeModules } from 'react-native'
+import config from './config'
 
 const api = ({ token = null } = {}) => {
     const api = axios.create({
-        baseURL: process.env['LOCALHOST'],
+        baseURL: config.api,
     })
 
     if (token) {
@@ -28,7 +29,6 @@ const api = ({ token = null } = {}) => {
             // console.log(error)
 
             //return Promise.reject({status: error.response?.status, errors: ['Server Error xD!']});
-            console.log(error)
             return Promise.reject(error.response.data)
         }
     )
