@@ -105,7 +105,6 @@ export const ProfileProvider = ({ children }) => {
             await api({ token: user.token })
                 .get(state.followers.links.next)
                 .then((res) => {
-                    console.log(res.data)
                     reset
                         ? dispatch({ type: 'GET_FOLLOWERS', payload: res.data })
                         : dispatch({ type: 'MORE_FOLLOWERS', payload: res.data })

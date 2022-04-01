@@ -3,15 +3,18 @@ const PostReducer = (state, action) => {
         case 'GET_POSTS':
             return {
                 ...state,
-                posts: action.payload.data,
-                nextPath: action.payload.links.next,
+                posts: action.payload,
                 loading: false,
             }
+
         case 'MORE_POSTS':
             return {
                 ...state,
-                posts: [...state.posts, ...action.payload.data],
-                nextPath: action.payload.links.next,
+                posts: {
+                    ...state.posts,
+                    data: [...state.posts.data, ...action.payload.data],
+                    links: { ...action.payload.links },
+                },
                 loading: false,
             }
 

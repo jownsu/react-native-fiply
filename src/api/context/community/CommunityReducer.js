@@ -3,29 +3,33 @@ const CommunityReducer = (state, action) => {
         case 'GET_USERS':
             return {
                 ...state,
-                users: action.payload.data,
-                nextPath: action.payload.links.next,
+                users: action.payload,
                 loading: false,
             }
         case 'MORE_USERS':
             return {
                 ...state,
-                users: [...state.users, ...action.payload.data],
-                nextPath: action.payload.links.next,
+                users: {
+                    ...state.users,
+                    data: [...state.users.data, ...action.payload.data],
+                    links: { ...action.payload.links },
+                },
                 loading: false,
             }
         case 'GET_FOLLOWED_USERS':
             return {
                 ...state,
-                followedUsers: action.payload.data,
-                nextPath: action.payload.links.next,
+                followedUsers: action.payload,
                 loading: false,
             }
         case 'MORE_FOLLOWED_USERS':
             return {
                 ...state,
-                followedUsers: [...state.followedUsers, ...action.payload.data],
-                nextPath: action.payload.links.next,
+                followedUsers: {
+                    ...state.followedUsers,
+                    data: [...state.followedUsers.data, ...action.payload.data],
+                    links: { ...action.payload.links },
+                },
                 loading: false,
             }
         case 'SET_LOADING':

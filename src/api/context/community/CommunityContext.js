@@ -10,9 +10,24 @@ export const CommunityProvider = ({ children }) => {
     const { user } = useContext(AuthContext)
 
     const initialState = {
-        users: [],
-        followedUsers: [],
-        nextPath: '',
+        users: {
+            data: [],
+            links: {
+                next: '',
+            },
+            meta: {
+                total: 0,
+            },
+        },
+        followedUsers: {
+            data: [],
+            links: {
+                next: '',
+            },
+            meta: {
+                total: 0,
+            },
+        },
         loading: false,
     }
     const [state, dispatch] = useReducer(CommunityReducer, initialState)
@@ -26,10 +41,10 @@ export const CommunityProvider = ({ children }) => {
     }
 
     const moreUsers = async (reset = false) => {
-        if (state.nextPath) {
+        if (state.users.links.next) {
             setLoading()
             await api({ token: user.token })
-                .get(state.nextPath)
+                .get(state.users.links.next)
                 .then((res) => {
                     reset
                         ? dispatch({ type: 'GET_USERS', payload: res.data })
@@ -48,10 +63,10 @@ export const CommunityProvider = ({ children }) => {
     }
 
     const moreFollowedUsers = async (reset = false) => {
-        if (state.nextPath) {
+        if (state.followedUsers.links.next) {
             setLoading()
             await api({ token: user.token })
-                .get(state.nextPath)
+                .get(state.followedUsers.links.next)
                 .then((res) => {
                     reset
                         ? dispatch({ type: 'GET_FOLLOWED_USERS', payload: res.data })

@@ -55,7 +55,7 @@ const CommunityScreen = ({ navigation }, offset) => {
                 setDataType('discover')
                 break
             case 1:
-                if (followedUsers.length == 0) {
+                if (followedUsers.data.length == 0) {
                     getFollowedUsers()
                 }
                 setDataType('followed')
@@ -98,10 +98,10 @@ const CommunityScreen = ({ navigation }, offset) => {
                         onScroll={(e) => onScroll(e)}
                         style={{ flex: 0 }}
                         ref={flatListRef}
-                        data={users}
+                        data={users.data}
                         renderItem={renderItem}
                         onEndReached={() => {
-                            if (users.length < 30 && !loading) {
+                            if (users.data.length < 30 && !loading) {
                                 moreUsers()
                             }
                         }}
@@ -112,7 +112,7 @@ const CommunityScreen = ({ navigation }, offset) => {
                                     moreUsers(true)
                                     scrollToTop()
                                 }}
-                                isLoading={users.length >= 30 && !loading}
+                                isLoading={users.data.length >= 30 && !loading}
                             />
                         }
                         ListEmptyComponent={ListEmptyComponent}
@@ -131,10 +131,10 @@ const CommunityScreen = ({ navigation }, offset) => {
                         onScroll={(e) => onScroll(e)}
                         style={{ flex: 0 }}
                         ref={flatListRef}
-                        data={followedUsers}
+                        data={followedUsers.data}
                         renderItem={renderItem}
                         onEndReached={() => {
-                            if (followedUsers.length < 30 && !loading) {
+                            if (followedUsers.data.length < 30 && !loading) {
                                 moreFollowedUsers()
                             }
                         }}
@@ -145,7 +145,7 @@ const CommunityScreen = ({ navigation }, offset) => {
                                     moreFollowedUsers(true)
                                     scrollToTop()
                                 }}
-                                isLoading={followedUsers.length >= 30 && !loading}
+                                isLoading={followedUsers.data.length >= 30 && !loading}
                             />
                         }
                         ListEmptyComponent={ListEmptyComponent}

@@ -12,8 +12,15 @@ export const PostProvider = ({ children }) => {
     const { user } = useContext(AuthContext)
 
     const initialState = {
-        posts: [],
-        nextPath: '',
+        posts: {
+            data: [],
+            links: {
+                next: '',
+            },
+            meta: {
+                total: 0,
+            },
+        },
         loading: false,
     }
     const [state, dispatch] = useReducer(PostReducer, initialState)
@@ -27,10 +34,10 @@ export const PostProvider = ({ children }) => {
     }
 
     const morePosts = async (reset = false) => {
-        if (state.nextPath) {
+        if (state.posts.links.next) {
             setLoading()
             await api({ token: user.token })
-                .get(state.nextPath)
+                .get(state.posts.links.next)
                 .then((res) => {
                     reset
                         ? dispatch({ type: 'GET_POSTS', payload: res.data })

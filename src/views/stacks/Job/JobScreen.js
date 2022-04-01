@@ -86,19 +86,19 @@ const JobsScreen = ({ navigation }, offset) => {
     const handleTopNavigationPress = (id) => {
         switch (id) {
             case 0:
-                if (jobs.length == 0) {
+                if (jobs.data.length == 0) {
                     getJobs()
                 }
                 setDataType('discover')
                 break
             case 1:
-                if (savedJobs.length == 0) {
+                if (savedJobs.data.length == 0) {
                     getSavedJobs()
                 }
                 setDataType('saved')
                 break
             case 2:
-                if (appliedJobs.length == 0) {
+                if (appliedJobs.data.length == 0) {
                     getAppliedJobs()
                 }
                 setDataType('applied')
@@ -141,7 +141,7 @@ const JobsScreen = ({ navigation }, offset) => {
                         onScroll={(e) => onScroll(e)}
                         style={{ flex: 0 }}
                         ref={flatListRef}
-                        data={jobs}
+                        data={jobs.data}
                         renderItem={renderItem}
                         ListFooterComponent={
                             <LoadMore
@@ -149,12 +149,12 @@ const JobsScreen = ({ navigation }, offset) => {
                                     moreJobs(true)
                                     scrollToTop()
                                 }}
-                                isLoading={jobs.length >= 30 && !loading}
+                                isLoading={jobs.data.length >= 30 && !loading}
                             />
                         }
                         ListEmptyComponent={ListEmptyComponent}
                         onEndReached={() => {
-                            if (jobs.length < 30 && !loading) {
+                            if (jobs.data.length < 30 && !loading) {
                                 moreJobs()
                             }
                         }}
@@ -171,7 +171,7 @@ const JobsScreen = ({ navigation }, offset) => {
                         onScroll={(e) => onScroll(e)}
                         style={{ flex: 0 }}
                         ref={flatListRef}
-                        data={savedJobs}
+                        data={savedJobs.data}
                         renderItem={renderItem}
                         ListFooterComponent={
                             <LoadMore
@@ -179,12 +179,12 @@ const JobsScreen = ({ navigation }, offset) => {
                                     moreSavedJobs(true)
                                     scrollToTop()
                                 }}
-                                isLoading={moreSavedJobs.length >= 30 && !loading}
+                                isLoading={savedJobs.data.length >= 30 && !loading}
                             />
                         }
                         ListEmptyComponent={ListEmptyComponent}
                         onEndReached={() => {
-                            if (savedJobs.length < 30 && !loading) {
+                            if (savedJobs.data.length < 30 && !loading) {
                                 moreSavedJobs()
                             }
                         }}
@@ -201,7 +201,7 @@ const JobsScreen = ({ navigation }, offset) => {
                         onScroll={(e) => onScroll(e)}
                         style={{ flex: 0 }}
                         ref={flatListRef}
-                        data={appliedJobs}
+                        data={appliedJobs.data}
                         renderItem={renderItem}
                         ListFooterComponent={
                             <LoadMore
@@ -209,12 +209,12 @@ const JobsScreen = ({ navigation }, offset) => {
                                     moreAppliedJobs(true)
                                     scrollToTop()
                                 }}
-                                isLoading={moreAppliedJobs.length >= 30 && !loading}
+                                isLoading={appliedJobs.data.length >= 30 && !loading}
                             />
                         }
                         ListEmptyComponent={ListEmptyComponent}
                         onEndReached={() => {
-                            if (appliedJobs.length < 30 && !loading) {
+                            if (appliedJobs.data.length < 30 && !loading) {
                                 moreAppliedJobs()
                             }
                         }}

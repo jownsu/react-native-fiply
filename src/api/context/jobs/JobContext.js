@@ -10,10 +10,33 @@ export const JobProvider = ({ children }) => {
 
     const initialState = {
         job: {},
-        jobs: [],
-        savedJobs: [],
-        appliedJobs: [],
-        nextPath: '',
+        jobs: {
+            data: [],
+            links: {
+                next: '',
+            },
+            meta: {
+                total: 0,
+            },
+        },
+        savedJobs: {
+            data: [],
+            links: {
+                next: '',
+            },
+            meta: {
+                total: 0,
+            },
+        },
+        appliedJobs: {
+            data: [],
+            links: {
+                next: '',
+            },
+            meta: {
+                total: 0,
+            },
+        },
         loading: false,
     }
     const [state, dispatch] = useReducer(JobReducer, initialState)
@@ -37,10 +60,10 @@ export const JobProvider = ({ children }) => {
     }
 
     const moreJobs = async (reset = false) => {
-        if (state.nextPath) {
+        if (state.jobs.links.next) {
             setLoading()
             await api({ token: user.token })
-                .get(state.nextPath)
+                .get(state.jobs.links.next)
                 .then((res) => {
                     reset
                         ? dispatch({ type: 'GET_JOBS', payload: res.data })
@@ -61,10 +84,10 @@ export const JobProvider = ({ children }) => {
     }
 
     const moreSavedJobs = async (reset = false) => {
-        if (state.nextPath) {
+        if (state.savedJobs.links.next) {
             setLoading()
             await api({ token: user.token })
-                .get(state.nextPath)
+                .get(state.savedJobs.links.next)
                 .then((res) => {
                     reset
                         ? dispatch({ type: 'GET_SAVED_JOBS', payload: res.data })
@@ -85,10 +108,10 @@ export const JobProvider = ({ children }) => {
     }
 
     const moreAppliedJobs = async (reset = false) => {
-        if (state.nextPath) {
+        if (state.appliedJobs.links.next) {
             setLoading()
             await api({ token: user.token })
-                .get(state.nextPath)
+                .get(state.appliedJobs.links.next)
                 .then((res) => {
                     reset
                         ? dispatch({ type: 'GET_APPLIED_JOBS', payload: res.data })

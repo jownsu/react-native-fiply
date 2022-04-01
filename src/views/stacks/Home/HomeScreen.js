@@ -138,7 +138,7 @@ const HomeScreen = ({ navigation }, offset) => {
     const handleUpVotePress = (id) => toggleUpVote(id)
 
     const onEndReached = () => {
-        if (posts.length < 30 && !loading) {
+        if (posts.data.length < 30 && !loading) {
             morePosts()
         }
     }
@@ -181,7 +181,7 @@ const HomeScreen = ({ navigation }, offset) => {
                 )}
             />
             <Container style={{ paddingHorizontal: 0 }}>
-                {posts.length != 0 ? (
+                {posts.data.length != 0 ? (
                     <FlatList
                         refreshControl={
                             <RefreshControl refreshing={loading} onRefresh={() => getPosts()} />
@@ -189,7 +189,7 @@ const HomeScreen = ({ navigation }, offset) => {
                         onScroll={(e) => onScroll(e)}
                         style={{ flex: 0 }}
                         ref={flatListRef}
-                        data={posts}
+                        data={posts.data}
                         renderItem={renderItem}
                         ListHeaderComponent={ListHeaderComponent}
                         ListFooterComponent={
@@ -198,7 +198,7 @@ const HomeScreen = ({ navigation }, offset) => {
                                     morePosts(true)
                                     scrollToTop()
                                 }}
-                                isLoading={posts.length >= 30 && !loading}
+                                isLoading={posts.data.length >= 30 && !loading}
                             />
                         }
                         ListEmptyComponent={ListEmptyComponent}
