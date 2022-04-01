@@ -14,6 +14,24 @@ export const ProfileProvider = ({ children }) => {
         userInfo: {},
         experiences: [],
         educationalBackgrounds: [],
+        followers: {
+            data: [],
+            links: {
+                next: '',
+            },
+            meta: {
+                total: 0,
+            },
+        },
+        follows: {
+            data: [],
+            links: {
+                next: '',
+            },
+            meta: {
+                total: 0,
+            },
+        },
         loading: false,
     }
 
@@ -69,6 +87,56 @@ export const ProfileProvider = ({ children }) => {
                 dispatch({ type: 'GET_EDUCATIONAL_BACKGROUNDS', payload: res.data.data })
             )
             .catch((err) => console.log(err))
+    }
+
+    const getFollowers = async (id = 'me') => {
+        setLoading()
+        await api({ token: user.token })
+            .get(`/${id}/followers`)
+            .then((res) => {
+                dispatch({ type: 'GET_FOLLOWERS', payload: res.data })
+            })
+            .catch((err) => console.log(err))
+    }
+
+    const moreFollowers = async (reset = false) => {
+        if (state.followers.links.next) {
+            setLoading()
+            await api({ token: user.token })
+                .get(state.followers.links.next)
+                .then((res) => {
+                    console.log(res.data)
+                    reset
+                        ? dispatch({ type: 'GET_FOLLOWERS', payload: res.data })
+                        : dispatch({ type: 'MORE_FOLLOWERS', payload: res.data })
+                })
+                .catch((err) => console.log(err))
+        }
+    }
+
+    const getFollows = async (id = 'me') => {
+        setLoading()
+        await api({ token: user.token })
+            .get(`/${id}/follows`)
+            .then((res) => {
+                dispatch({ type: 'GET_FOLLOWS', payload: res.data })
+            })
+            .catch((err) => console.log(err))
+    }
+
+    const moreFollows = async (reset = false) => {
+        if (state.follows.links.next) {
+            setLoading()
+            await api({ token: user.token })
+                .get(state.follows.links.next)
+                .then((res) => {
+                    console.log(res.data)
+                    reset
+                        ? dispatch({ type: 'GET_FOLLOWS', payload: res.data })
+                        : dispatch({ type: 'MORE_FOLLOWS', payload: res.data })
+                })
+                .catch((err) => console.log(err))
+        }
     }
 
     const createExperience = async (data, setDispatch = false) => {
@@ -175,6 +243,10 @@ export const ProfileProvider = ({ children }) => {
                 uploadResume,
                 uploadAvatar,
                 uploadCover,
+                getFollowers,
+                moreFollowers,
+                getFollows,
+                moreFollows,
             }}
         >
             {children}

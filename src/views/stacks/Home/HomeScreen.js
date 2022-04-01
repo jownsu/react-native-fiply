@@ -18,6 +18,7 @@ import Colors from '../../../utils/Colors'
 import PostItem from '../../components/lists/PostItem'
 import CreatePost from '../../components/modals/CreatePost'
 import LoadMore from '../../components/lists/LoadMore'
+import PostSetting from '../../components/modals/PostSetting'
 
 const HomeScreen = ({ navigation }, offset) => {
     const { posts, getPosts, loading, morePosts, createPost, toggleUpVote } =
@@ -26,6 +27,7 @@ const HomeScreen = ({ navigation }, offset) => {
     const { user } = useContext(AuthContext)
 
     const [showCreatePost, setShowCreatePost] = useState(false)
+    const [showPostSettings, setShowPostSettings] = useState(false)
     const flatListRef = useRef(null)
 
     // bottom sheet reference
@@ -40,6 +42,10 @@ const HomeScreen = ({ navigation }, offset) => {
     //   const handleSheetChanges = useCallback((index) => {
     //     console.log('handleSheetChanges', index);
     //   }, []);
+
+    const handleDotPress = () => {
+        setShowPostSettings(true)
+    }
 
     const handleCreatePostPress = () => {
         if (user.account_level == 0) {
@@ -68,9 +74,9 @@ const HomeScreen = ({ navigation }, offset) => {
                         style={createPostySTyles.actionBtn}
                         onPress={() => navigation.navigate('CreateJobScreen')}
                     >
-                        <FontAwesome name="briefcase" size={24} color={Colors.secondary} />
-                        <Text weight="medium" style={styles.actionText}>
-                            HIRE NOW
+                        <FontAwesome name="picture-o" size={24} color={Colors.secondary} />
+                        <Text weight="medium" size={12} style={styles.actionText}>
+                            Photo
                         </Text>
                     </TouchableOpacity>
 
@@ -78,16 +84,16 @@ const HomeScreen = ({ navigation }, offset) => {
                         style={createPostySTyles.actionBtn}
                         onPress={() => navigation.navigate('CreateQuestionnaireScreen')}
                     >
-                        <FontAwesome5 name="calendar-week" size={24} color={Colors.primary} />
-                        <Text weight="medium" style={createPostySTyles.actionText}>
-                            SET EVENT
+                        <FontAwesome name="video-camera" size={24} color={Colors.black} />
+                        <Text weight="medium" size={12} style={styles.actionText}>
+                            Video
                         </Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity style={createPostySTyles.actionBtn}>
-                        <FontAwesome5 name="poll" size={24} color={Colors.grey} />
-                        <Text weight="medium" style={createPostySTyles.actionText}>
-                            POLL
+                        <FontAwesome5 name="paperclip" size={24} color={Colors.primary} />
+                        <Text weight="medium" size={12} style={styles.actionText}>
+                            File
                         </Text>
                     </TouchableOpacity>
                 </View>
@@ -110,7 +116,8 @@ const HomeScreen = ({ navigation }, offset) => {
         return (
             <PostItem
                 data={item}
-                onDotPress={handlePresentModalPress}
+                // onDotPress={handlePresentModalPress}
+                onDotPress={handleDotPress}
                 onAvatarPress={handleAvatarPress}
                 onCommentPress={handleCommentPress}
                 onUpVotePress={handleUpVotePress}
@@ -164,19 +171,6 @@ const HomeScreen = ({ navigation }, offset) => {
     return (
         <SafeAreaView flex>
             <SearchHeader
-                // leftIcon={ () => <FontAwesome5 name="th-large" size={24} color={Colors.grey} />}
-                leftIcon={() => (
-                    <FontAwesome5
-                        name="th-large"
-                        size={24}
-                        color={Colors.grey}
-                        onPress={() => {
-                            navigation.setOptions({
-                                tabBarStyle: { display: 'none' },
-                            })
-                        }}
-                    />
-                )}
                 rightIcon={() => (
                     <TouchableOpacity
                         onPress={() => navigation.navigate('MessageStack')}
@@ -224,6 +218,8 @@ const HomeScreen = ({ navigation }, offset) => {
                 }}
                 onRequestClose={() => setShowCreatePost(false)}
             />
+
+            <PostSetting visible={showPostSettings} onDismiss={() => setShowPostSettings(false)} />
 
             <BottomSheetModal bottomSheetModalRef={bottomSheetModalRef} pointsSnap={[225]}>
                 <View style={styles.btmSheetContainer}>
@@ -297,8 +293,7 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     actionText: {
-        fontSize: 12,
-        marginTop: 5,
+        marginLeft: 5,
     },
     textInputContainer: {
         borderWidth: 1,
@@ -335,6 +330,7 @@ const createPostySTyles = StyleSheet.create({
         justifyContent: 'center',
     },
     actionBtn: {
+        flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
         flex: 1,

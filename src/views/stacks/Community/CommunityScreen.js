@@ -64,7 +64,7 @@ const CommunityScreen = ({ navigation }, offset) => {
         scrollToTop()
     }
 
-    const ListEmptyComponent = () => <NoData />
+    const ListEmptyComponent = () => (!loading ? <NoData /> : null)
 
     const onScroll = (e) => {
         const currentOffset = e.nativeEvent.contentOffset.y
@@ -90,7 +90,7 @@ const CommunityScreen = ({ navigation }, offset) => {
     const renderFlatList = () => {
         switch (dataType) {
             case 'discover':
-                return users.length != 0 ? (
+                return (
                     <FlatList
                         refreshControl={
                             <RefreshControl refreshing={loading} onRefresh={() => getUsers()} />
@@ -118,11 +118,9 @@ const CommunityScreen = ({ navigation }, offset) => {
                         ListEmptyComponent={ListEmptyComponent}
                         numColumns={2}
                     />
-                ) : (
-                    <ActivityIndicator visible={true} />
                 )
             case 'followed':
-                return followedUsers.length != 0 ? (
+                return (
                     <FlatList
                         refreshControl={
                             <RefreshControl
@@ -153,8 +151,6 @@ const CommunityScreen = ({ navigation }, offset) => {
                         ListEmptyComponent={ListEmptyComponent}
                         numColumns={2}
                     />
-                ) : (
-                    <ActivityIndicator visible={true} />
                 )
 
             default:

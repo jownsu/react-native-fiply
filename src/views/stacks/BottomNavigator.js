@@ -126,7 +126,7 @@ const BottomNavigator = ({ navigation }) => {
                 ></Tab.Screen>
             </Tab.Navigator>
 
-            <BottomSheetModal bottomSheetModalRef={bottomSheetModalRef} pointsSnap={[175]}>
+            <BottomSheetModal bottomSheetModalRef={bottomSheetModalRef} pointsSnap={[200]}>
                 <View style={styles.bottomSheetContainer}>
                     <View style={styles.btmHeaderContainer}>
                         <View
@@ -152,19 +152,17 @@ const BottomNavigator = ({ navigation }) => {
                                 </Text>
 
                                 <TouchableOpacity activeOpacity={0.7} onPress={handleGoToProfile}>
-                                    <Text color={Colors.secondary}>See your profile</Text>
+                                    <Text weight="medium" color={Colors.secondary}>
+                                        See your profile
+                                    </Text>
                                 </TouchableOpacity>
                             </View>
-                            <Text
-                                color={Colors.secondary}
-                                weight="semi-bold"
-                                style={{ paddingHorizontal: 5 }}
-                            >
-                                {user.account_level_str}
-                            </Text>
                         </View>
                     </View>
                     <View style={styles.btmBodyContainer}>
+                        <Text size={11} color={Colors.secondary}>
+                            Your profile progress
+                        </Text>
                         <AccountLevelBar level={user.account_level} />
                     </View>
                     <View style={styles.btmFooterContainer}>
@@ -233,7 +231,9 @@ const styles = StyleSheet.create({
         height: 50,
         width: 50,
     },
-    btmBodyContainer: {},
+    btmBodyContainer: {
+        paddingVertical: 7,
+    },
     btmFooterContainer: {
         flexDirection: 'row',
         alignItems: 'center',

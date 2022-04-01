@@ -30,7 +30,11 @@ const ProfileScreen = ({ navigation, route }) => {
         getUserInfo,
         getExperiences,
         getEducationalBackgrounds,
+        getFollowers,
+        getFollows,
         experiences,
+        followers,
+        follows,
         educationalBackgrounds,
         loading,
     } = useContext(ProfileContext)
@@ -277,6 +281,18 @@ const ProfileScreen = ({ navigation, route }) => {
                                 is_me: userInfo.is_me,
                             }}
                             onBackPress={() => navigation.pop()}
+                            onFollowerPress={() => {
+                                if (followers.data.length == 0) {
+                                    getFollowers(userId)
+                                }
+                                navigation.push('FollowersScreen')
+                            }}
+                            onFollowingPress={() => {
+                                if (follows.data.length == 0) {
+                                    getFollows(userId)
+                                }
+                                navigation.push('FollowingScreen')
+                            }}
                         />
                         <TopNavigation
                             navTitles={['Activity', 'About', 'Background', 'Education']}

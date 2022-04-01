@@ -38,6 +38,42 @@ const ProfileReducer = (state, action) => {
                 loading: false,
             }
 
+        case 'GET_FOLLOWERS':
+            return {
+                ...state,
+                followers: action.payload,
+                loading: false,
+            }
+
+        case 'MORE_FOLLOWERS':
+            return {
+                ...state,
+                followers: {
+                    ...state.followers,
+                    data: [...state.followers.data, ...action.payload.data],
+                    links: { ...action.payload.links },
+                },
+                loading: false,
+            }
+
+        case 'GET_FOLLOWS':
+            return {
+                ...state,
+                follows: action.payload,
+                loading: false,
+            }
+
+        case 'MORE_FOLLOWS':
+            return {
+                ...state,
+                follows: {
+                    ...state.follows,
+                    data: [...state.follows.data, ...action.payload.data],
+                    links: { ...action.payload.links },
+                },
+                loading: false,
+            }
+
         case 'SET_LOADING':
             return {
                 ...state,

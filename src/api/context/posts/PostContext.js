@@ -1,5 +1,6 @@
 import React, { useState, useContext, useReducer, createContext } from 'react'
 import AuthContext from '../auth/AuthContext'
+import { Alert } from 'react-native'
 import api from '../../api'
 import mime from 'mime'
 import PostReducer from './PostReducer'
@@ -57,7 +58,11 @@ export const PostProvider = ({ children }) => {
         await api({ token: user.token })
             .post('/posts', fd)
             .then((res) => dispatch({ type: 'ADD_POST', payload: res.data.data }))
-            .catch((err) => console.log(err))
+            .catch((err) => {
+                if (err.message) {
+                    Alert.alert('Not Available', err.message)
+                }
+            })
     }
 
     const updatePost = async (id, postData) => {
@@ -94,9 +99,20 @@ export const PostProvider = ({ children }) => {
     const toggleUpVote = async (id) => {
         setLoading()
         await api({ token: user.token })
-            .post(`/posts/${id}/upVotes`)
+            .post(`/posts/upVote`, { post_id: id })
             .then((res) =>
                 dispatch({ type: 'TOGGLE_UPVOTE', payload: { id, data: res.data.data } })
+            )
+            .catch((err) => console.log(err))
+    }
+
+    const toggleSavePost = async (id) => {
+        setLoading()
+        await api({ token: user.token })
+            .post(`/posts/save`, { post_id: id })
+            .then(
+                (res) => {}
+                // dispatch({ type: 'TOGGLE_UPVOTE', payload: { id, data: res.data.data } })
             )
             .catch((err) => console.log(err))
     }
@@ -113,6 +129,7 @@ export const PostProvider = ({ children }) => {
                 updatePost,
                 deletePost,
                 toggleUpVote,
+                toggleSavePost,
             }}
         >
             <CommentProvider>{children}</CommentProvider>

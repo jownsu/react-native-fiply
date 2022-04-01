@@ -102,7 +102,7 @@ export const JobProvider = ({ children }) => {
     const toggleSavedJob = async (id) => {
         setLoading()
         await api({ token: user.token })
-            .post(`/jobs/${id}/saves`)
+            .post(`/jobs/save`, { job_id: id })
             .then((res) =>
                 dispatch({
                     type: 'TOGGLE_SAVED_JOB',
@@ -116,21 +116,21 @@ export const JobProvider = ({ children }) => {
     const toggleAppliedJob = async (id) => {
         setLoading()
         await api({ token: user.token })
-            .post(`/jobs/${id}/applies`)
+            .post(`/jobs/apply`, { job_id: id })
             .then((res) =>
                 dispatch({
                     type: 'TOGGLE_APPLIED_JOB',
                     payload: { data: res.data.data, id },
                 })
             )
-            .catch((err) => Alert.alert('Not Verified', err.message))
+            .catch((err) => Alert.alert('Not Available', err.message))
             .finally(() => stopLoading())
     }
 
     const removeAppliedJob = async (id) => {
         setLoading()
         await api({ token: user.token })
-            .post(`/jobs/${id}/applies`)
+            .post(`/jobs/apply`, { job_id: id })
             .then((res) =>
                 dispatch({
                     type: 'REMOVE_APPLIED_JOB',
@@ -144,7 +144,7 @@ export const JobProvider = ({ children }) => {
     const removeSavedJob = async (id) => {
         setLoading()
         await api({ token: user.token })
-            .post(`/jobs/${id}/saves`)
+            .post(`/jobs/save`, { job_id: id })
             .then((res) =>
                 dispatch({
                     type: 'REMOVE_SAVED_JOB',

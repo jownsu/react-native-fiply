@@ -107,7 +107,7 @@ const JobsScreen = ({ navigation }, offset) => {
         scrollToTop()
     }
 
-    const ListEmptyComponent = () => <NoData />
+    const ListEmptyComponent = () => (!loading ? <NoData /> : null)
 
     const onScroll = (e) => {
         const currentOffset = e.nativeEvent.contentOffset.y
@@ -133,7 +133,7 @@ const JobsScreen = ({ navigation }, offset) => {
     const renderFlatList = () => {
         switch (dataType) {
             case 'discover':
-                return jobs.length != 0 ? (
+                return (
                     <FlatList
                         refreshControl={
                             <RefreshControl refreshing={loading} onRefresh={() => getJobs()} />
@@ -160,12 +160,10 @@ const JobsScreen = ({ navigation }, offset) => {
                         }}
                         onEndReachedThreshold={0}
                     />
-                ) : (
-                    <ActivityIndicator visible={true} />
                 )
 
             case 'saved':
-                return savedJobs.length != 0 ? (
+                return (
                     <FlatList
                         refreshControl={
                             <RefreshControl refreshing={loading} onRefresh={() => getSavedJobs()} />
@@ -192,12 +190,10 @@ const JobsScreen = ({ navigation }, offset) => {
                         }}
                         onEndReachedThreshold={0}
                     />
-                ) : (
-                    <ActivityIndicator visible={true} />
                 )
 
             case 'applied':
-                return appliedJobs.length != 0 ? (
+                return (
                     <FlatList
                         refreshControl={
                             <RefreshControl refreshing={loading} onRefresh={() => getSavedJobs()} />
@@ -224,8 +220,6 @@ const JobsScreen = ({ navigation }, offset) => {
                         }}
                         onEndReachedThreshold={0}
                     />
-                ) : (
-                    <ActivityIndicator visible={true} />
                 )
 
             default:

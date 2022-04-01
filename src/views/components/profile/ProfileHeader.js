@@ -15,7 +15,13 @@ import ProfileContext from '../../../api/context/profile/ProfileContext'
             )} */
 }
 
-const ProfileHeader = ({ data, onBackPress = () => {}, style }) => {
+const ProfileHeader = ({
+    data,
+    onBackPress = () => {},
+    onFollowerPress = () => {},
+    onFollowingPress = () => {},
+    style,
+}) => {
     const { pickImage } = usePickImage()
     const { uploadAvatar, uploadCover } = useContext(ProfileContext)
 
@@ -76,17 +82,9 @@ const ProfileHeader = ({ data, onBackPress = () => {}, style }) => {
                         <Text size={12} numberOfLines={1} color={Colors.white}>
                             {data.email}
                         </Text>
-                        {/* {data.location ? (
-                        <Text size={11} numberOfLines={1} color={Colors.white}>
-                            {data.location}
-                        </Text>
-                    ) : null} */}
                     </View>
 
                     <View style={styles.footerContainer}>
-                        {/* <Text weight="medium" color={Colors.primary}>
-                        {data.status}
-                    </Text> */}
                         {data.preview && (
                             <Text
                                 color={Colors.white}
@@ -102,12 +100,17 @@ const ProfileHeader = ({ data, onBackPress = () => {}, style }) => {
                                 flexDirection: 'row',
                             }}
                         >
-                            <Text size={12} style={{ marginRight: 15 }} color={Colors.white}>
-                                {data.follows_count} Following
-                            </Text>
-                            <Text size={12} color={Colors.white}>
-                                {data.followers_count} Followers
-                            </Text>
+                            <TouchableOpacity onPress={onFollowingPress}>
+                                <Text size={12} style={{ marginRight: 15 }} color={Colors.white}>
+                                    {data.follows_count} Following
+                                </Text>
+                            </TouchableOpacity>
+
+                            <TouchableOpacity onPress={onFollowerPress}>
+                                <Text size={12} color={Colors.white}>
+                                    {data.followers_count} Followers
+                                </Text>
+                            </TouchableOpacity>
                         </View>
                     </View>
                 </View>
