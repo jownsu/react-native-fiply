@@ -1,5 +1,5 @@
-import { StyleSheet, View, Modal, FlatList } from 'react-native'
-import React, { useState, memo, useMemo, useContext } from 'react'
+import { StyleSheet, View, Modal, FlatList, RefreshControl } from 'react-native'
+import React, { useState, memo, useMemo, useContext, useRef } from 'react'
 import CommentContext from '../../../api/context/comments/CommentContext'
 import AuthContext from '../../../api/context/auth/AuthContext'
 import { Avatar } from 'react-native-paper'
@@ -11,21 +11,26 @@ import {
     SafeAreaView,
 } from '../../components/FiplyComponents'
 import Confirmation from '../../components/dialog/Confirmation'
+import LoadMore from '../../components/lists/LoadMore'
 import { TextInput as TxtInput } from 'react-native-paper'
 import { FontAwesome5, AntDesign } from '@expo/vector-icons'
 import Colors from '../../../utils/Colors'
 import NoData from '../../components/NoData'
 
-const CommentScreen = () => {
+const CommentScreen = ({ route }) => {
+    const { post } = route.params
     const [txtComment, setTxtComment] = useState('')
     const [showConfirmation, setShowConfirmation] = useState(false)
     const [selectedComment, setSelectedComment] = useState(0)
 
-    const { comments, loading, details, createComment, deleteComment } = useContext(CommentContext)
+    const { comments, moreComments, getComments, loading, createComment, deleteComment } =
+        useContext(CommentContext)
     const { user } = useContext(AuthContext)
 
+    const flatListRef = useRef(null)
+
     const handleSend = () => {
-        createComment(txtComment)
+        createComment(post.id, txtComment)
         setTxtComment('')
     }
 
@@ -34,7 +39,20 @@ const CommentScreen = () => {
         setShowConfirmation(false)
     }
 
-    const renderItem = (item) => {
+    const scrollToTop = () => {
+        flatListRef.current.scrollToOffset({
+            animated: true,
+            offset: 0,
+        })
+    }
+
+    const onEndReached = () => {
+        if (comments.data.length < 30 && !loading) {
+            moreComments()
+        }
+    }
+
+    const renderItem = ({ item }) => {
         return (
             <View style={styles.listContainer}>
                 <Avatar.Image
@@ -68,9 +86,17 @@ const CommentScreen = () => {
         return <NoData noDataMessage="No Comment" />
     }, [])
 
-    const ListFooterComponent = useMemo(() => {
-        return loading ? <ActivityIndicator visible={true} /> : null
-    }, [loading])
+    const ListFooterComponent = () => {
+        return (
+            <LoadMore
+                onLoadMorePress={() => {
+                    moreComments(true)
+                    scrollToTop()
+                }}
+                isLoading={comments.data.length >= 30 && !loading}
+            />
+        )
+    }
 
     return (
         <SafeAreaView flex>
@@ -82,15 +108,24 @@ const CommentScreen = () => {
                         size={24}
                         color={Colors.secondary}
                     />
-                    <Text weight="medium">{details.upVotes_count}</Text>
+                    <Text weight="medium">{post.upVotes_count}</Text>
                 </View>
 
                 <FlatList
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={loading}
+                            onRefresh={() => getComments(post.id)}
+                        />
+                    }
+                    ref={flatListRef}
                     style={{ flex: 0 }}
-                    data={comments}
-                    renderItem={({ item }) => renderItem(item)}
+                    data={comments.data}
+                    renderItem={renderItem}
                     ListEmptyComponent={ListEmptyComponent}
                     ListFooterComponent={ListFooterComponent}
+                    onEndReached={onEndReached}
+                    onEndReachedThreshold={0}
                 />
 
                 <TextInput

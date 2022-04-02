@@ -21,9 +21,13 @@ const PostReducer = (state, action) => {
         case 'ADD_POST':
             return {
                 ...state,
-                posts: [action.payload, ...state.posts],
+                posts: {
+                    ...state.posts,
+                    data: [action.payload, ...state.posts.data],
+                },
                 loading: false,
             }
+
         case 'UPDATE_POST':
             return {
                 ...state,
@@ -39,25 +43,33 @@ const PostReducer = (state, action) => {
         case 'DELETE_POST':
             return {
                 ...state,
-                posts: state.posts.filter((item) => item.id != action.payload),
+                posts: {
+                    ...state.posts,
+                    data: [...state.posts.data.filter((item) => item.id != action.payload)],
+                },
                 loading: false,
             }
 
         case 'TOGGLE_UPVOTE':
             return {
                 ...state,
-                posts: state.posts.map((item) => {
-                    if (item.id == action.payload.id) {
-                        return {
-                            ...item,
-                            is_upVoted: action.payload.data,
-                            upVotes_count: action.payload.data
-                                ? item.upVotes_count + 1
-                                : item.upVotes_count - 1,
-                        }
-                    }
-                    return item
-                }),
+                posts: {
+                    ...state.posts,
+                    data: [
+                        ...state.posts.data.map((item) => {
+                            if (item.id == action.payload.id) {
+                                return {
+                                    ...item,
+                                    is_upVoted: action.payload.data,
+                                    upVotes_count: action.payload.data
+                                        ? item.upVotes_count + 1
+                                        : item.upVotes_count - 1,
+                                }
+                            }
+                            return item
+                        }),
+                    ],
+                },
                 loading: false,
             }
 

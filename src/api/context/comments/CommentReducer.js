@@ -3,36 +3,51 @@ const CommentReducer = (state, action) => {
         case 'GET_COMMENTS':
             return {
                 ...state,
-                comments: action.payload.data,
-                details: action.payload.details,
+                comments: action.payload,
+                loading: false,
+            }
+
+        case 'MORE_COMMENTS':
+            return {
+                ...state,
+                comments: {
+                    ...state.comments,
+                    data: [...state.comments.data, ...action.payload.data],
+                    links: { ...action.payload.links },
+                },
                 loading: false,
             }
 
         case 'ADD_COMMENT':
             return {
                 ...state,
-                comments: [
+                comments: {
                     ...state.comments,
-                    {
-                        ...action.payload.data,
-                        commented_by: action.payload.user.fullname,
-                        avatar: action.payload.user.avatar,
-                    },
-                ],
+                    data: [
+                        ...state.comments.data,
+                        {
+                            ...action.payload.data,
+                            commented_by: action.payload.user.fullname,
+                            avatar: action.payload.user.avatar,
+                        },
+                    ],
+                },
                 loading: false,
             }
 
         case 'DELETE_COMMENT':
             return {
                 ...state,
-                comments: state.comments.filter((item) => item.id != action.payload),
+                comments: {
+                    ...state.comments,
+                    data: [...state.comments.data.filter((item) => item.id != action.payload)],
+                },
                 loading: false,
             }
 
         case 'RESET_COMMENT':
             return {
-                comments: [],
-                details: {},
+                comments: {},
                 loading: false,
             }
 

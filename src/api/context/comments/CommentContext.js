@@ -10,8 +10,15 @@ export const CommentProvider = ({ children }) => {
     const { user } = useContext(AuthContext)
 
     const initialState = {
-        comments: [],
-        details: {},
+        comments: {
+            data: [],
+            links: {
+                next: '',
+            },
+            meta: {
+                total: 0,
+            },
+        },
         loading: false,
     }
 
@@ -21,14 +28,30 @@ export const CommentProvider = ({ children }) => {
         setLoading()
         await api({ token: user.token })
             .get(`/posts/${postId}/comments`)
-            .then((res) => dispatch({ type: 'GET_COMMENTS', payload: res.data }))
+            .then((res) => {
+                dispatch({ type: 'GET_COMMENTS', payload: res.data })
+            })
             .catch((err) => console.log(err))
     }
 
-    const createComment = async (comment = '') => {
+    const moreComments = async (reset = false) => {
+        if (state.comments.links.next) {
+            setLoading()
+            await api({ token: user.token })
+                .get(state.comments.links.next)
+                .then((res) => {
+                    reset
+                        ? dispatch({ type: 'GET_COMMENTS', payload: res.data })
+                        : dispatch({ type: 'MORE_COMMENTS', payload: res.data })
+                })
+                .catch((err) => console.log(err))
+        }
+    }
+
+    const createComment = async (postId, comment = '') => {
         setLoading()
         await api({ token: user.token })
-            .post(`/posts/${state.details.post_id}/comments`, { comment })
+            .post(`/posts/${postId}/comments`, { comment })
             .then((res) =>
                 dispatch({ type: 'ADD_COMMENT', payload: { data: res.data.data, user } })
             )
@@ -52,6 +75,7 @@ export const CommentProvider = ({ children }) => {
             value={{
                 ...state,
                 getComments,
+                moreComments,
                 resetComments,
                 createComment,
                 deleteComment,

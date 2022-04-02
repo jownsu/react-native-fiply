@@ -119,7 +119,7 @@ const HomeScreen = ({ navigation }, offset) => {
                 // onDotPress={handlePresentModalPress}
                 onDotPress={handleDotPress}
                 onAvatarPress={handleAvatarPress}
-                onCommentPress={handleCommentPress}
+                onCommentPress={() => handleCommentPress(item)}
                 onUpVotePress={handleUpVotePress}
             />
         )
@@ -127,12 +127,12 @@ const HomeScreen = ({ navigation }, offset) => {
 
     const handleAvatarPress = (id) => navigation.navigate('ProfileStack', { userId: id })
 
-    const handleCommentPress = (id) => {
+    const handleCommentPress = (item) => {
         navigation.getParent().setOptions({
             tabBarStyle: { display: 'none' },
         })
-        getComments(id)
-        navigation.push('CommentScreen')
+        getComments(item.id)
+        navigation.push('CommentScreen', { post: item })
     }
 
     const handleUpVotePress = (id) => toggleUpVote(id)
