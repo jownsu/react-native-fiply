@@ -71,7 +71,7 @@ const ProfileScreen = ({ navigation, route }) => {
             <PostItem
                 data={item}
                 onDotPress={handleDotPress}
-                onCommentPress={handleCommentPress}
+                onCommentPress={() => handleCommentPress(item)}
                 onUpVotePress={handleUpVotePress}
             />
         )
@@ -120,9 +120,9 @@ const ProfileScreen = ({ navigation, route }) => {
         handlePresentModalPress()
     }
 
-    const handleCommentPress = (id) => {
-        getComments(id)
-        navigation.push('CommentScreen')
+    const handleCommentPress = (item) => {
+        getComments(item.id)
+        navigation.push('CommentScreen', { post: item })
     }
 
     const handleUpVotePress = (id) => toggleUpVote(id)
@@ -136,7 +136,7 @@ const ProfileScreen = ({ navigation, route }) => {
     }
 
     const ListFooterComponent = useMemo(() => {
-        return posts.length >= 30 ? (
+        return posts.data.length >= 30 ? (
             <TouchableOpacity onPress={handleMorePostPress}>
                 <Text
                     weight="medium"
@@ -203,12 +203,12 @@ const ProfileScreen = ({ navigation, route }) => {
             <View style={{ flex: 1 }}>
                 <TitleFilter title={'Posts'} onFilterPress={() => setShowModal(true)} />
                 <FlatList
-                    data={posts}
+                    data={posts.data}
                     renderItem={renderPostItem}
                     nestedScrollEnabled={true}
                     onEndReached={morePosts}
                     onEndReachedThreshold={0}
-                    ListEmptyComponent={!postLoading && posts.length == 0 && <NoData />}
+                    ListEmptyComponent={!postLoading && posts.data.length == 0 && <NoData />}
                     ListFooterComponent={ListFooterComponent}
                     progressViewOffset={10}
                 />
