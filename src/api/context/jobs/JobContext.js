@@ -122,30 +122,52 @@ export const JobProvider = ({ children }) => {
         }
     }
 
-    const toggleSavedJob = async (id) => {
+    const toggleSavedJob = async (id, action = 'save') => {
         setLoading()
+
+        let isSave = true
+
         await api({ token: user.token })
-            .post(`/jobs/save`, { job_id: id })
-            .then((res) =>
+            .post(`/jobs/${action}`, { job_id: id })
+            .then((res) => {
+                if (action == 'save') {
+                    isSave = res.data.data
+                }
+
+                if (action == 'unSave') {
+                    isSave = !res.data.data
+                }
+
                 dispatch({
                     type: 'TOGGLE_SAVED_JOB',
-                    payload: { data: res.data.data, id },
+                    payload: { data: isSave, id },
                 })
-            )
+            })
             .catch((err) => console.log(err))
             .finally(() => stopLoading())
     }
 
-    const toggleAppliedJob = async (id) => {
+    const toggleAppliedJob = async (id, action = 'apply') => {
         setLoading()
+
+        let isapplied = true
+
         await api({ token: user.token })
             .post(`/jobs/apply`, { job_id: id })
-            .then((res) =>
+            .then((res) => {
+                if (action == 'apply') {
+                    isapplied = res.data.data
+                }
+
+                if (action == 'unApply') {
+                    isapplied = !res.data.data
+                }
+
                 dispatch({
                     type: 'TOGGLE_APPLIED_JOB',
-                    payload: { data: res.data.data, id },
+                    payload: { data: isapplied, id },
                 })
-            )
+            })
             .catch((err) => Alert.alert('Not Available', err.message))
             .finally(() => stopLoading())
     }
@@ -167,7 +189,7 @@ export const JobProvider = ({ children }) => {
     const removeSavedJob = async (id) => {
         setLoading()
         await api({ token: user.token })
-            .post(`/jobs/save`, { job_id: id })
+            .post(`/jobs/unSave`, { job_id: id })
             .then((res) =>
                 dispatch({
                     type: 'REMOVE_SAVED_JOB',

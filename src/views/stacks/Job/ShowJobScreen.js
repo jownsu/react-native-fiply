@@ -22,9 +22,15 @@ const ShowJobScreen = ({ navigation }) => {
         navigation.pop()
     }
 
-    const handleSavePress = () => toggleSavedJob(job.id)
+    const handleSavePress = () => {
+        let action = job.is_saved ? 'unSave' : 'save'
+        toggleSavedJob(job.id, action)
+    }
 
-    const handleApplyPress = () => toggleAppliedJob(job.id)
+    const handleApplyPress = () => {
+        let action = job.is_applied ? 'unApply' : 'apply'
+        toggleAppliedJob(job.id, action)
+    }
 
     return (
         <SafeAreaView flex statusBarColor={Colors.primary} style={{}}>

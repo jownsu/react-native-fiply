@@ -55,16 +55,22 @@ const JobsScreen = ({ navigation }, offset) => {
         <JobItem
             data={item}
             onCardPress={handleCardPress}
-            onSavePress={handleSavePress}
-            onApplyPress={handleApplyPress}
+            onSavePress={() => handleSavePress(item)}
+            onApplyPress={() => handleApplyPress(item)}
             onRemovePress={handleRemovePress}
             showRemove={dataType !== 'discover'}
         />
     )
 
-    const handleSavePress = (id) => toggleSavedJob(id)
+    const handleSavePress = (item) => {
+        let action = item.is_saved ? 'unSave' : 'save'
+        toggleSavedJob(item.id, action)
+    }
 
-    const handleApplyPress = (id) => toggleAppliedJob(id)
+    const handleApplyPress = (item) => {
+        let action = item.is_saved ? 'unApply' : 'apply'
+        toggleAppliedJob(item.id, action)
+    }
 
     const handleRemovePress = (id) => {
         switch (dataType) {
