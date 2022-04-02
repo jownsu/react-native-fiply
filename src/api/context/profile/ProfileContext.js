@@ -23,7 +23,7 @@ export const ProfileProvider = ({ children }) => {
                 total: 0,
             },
         },
-        follows: {
+        following: {
             data: [],
             links: {
                 next: '',
@@ -113,26 +113,26 @@ export const ProfileProvider = ({ children }) => {
         }
     }
 
-    const getFollows = async (id = 'me') => {
+    const getFollowing = async (id = 'me') => {
         setLoading()
         await api({ token: user.token })
-            .get(`/${id}/follows`)
+            .get(`/${id}/following`)
             .then((res) => {
-                dispatch({ type: 'GET_FOLLOWS', payload: res.data })
+                dispatch({ type: 'GET_FOLLOWING', payload: res.data })
             })
             .catch((err) => console.log(err))
     }
 
-    const moreFollows = async (reset = false) => {
-        if (state.follows.links.next) {
+    const moreFollowing = async (reset = false) => {
+        if (state.following.links.next) {
             setLoading()
             await api({ token: user.token })
-                .get(state.follows.links.next)
+                .get(state.following.links.next)
                 .then((res) => {
                     console.log(res.data)
                     reset
-                        ? dispatch({ type: 'GET_FOLLOWS', payload: res.data })
-                        : dispatch({ type: 'MORE_FOLLOWS', payload: res.data })
+                        ? dispatch({ type: 'GET_FOLLOWING', payload: res.data })
+                        : dispatch({ type: 'MORE_FOLLOWING', payload: res.data })
                 })
                 .catch((err) => console.log(err))
         }
@@ -244,8 +244,8 @@ export const ProfileProvider = ({ children }) => {
                 uploadCover,
                 getFollowers,
                 moreFollowers,
-                getFollows,
-                moreFollows,
+                getFollowing,
+                moreFollowing,
             }}
         >
             {children}

@@ -102,7 +102,7 @@ const ProfileHeader = ({
                         >
                             <TouchableOpacity onPress={onFollowingPress}>
                                 <Text size={12} style={{ marginRight: 15 }} color={Colors.white}>
-                                    {data.follows_count} Following
+                                    {data.following_count} Following
                                 </Text>
                             </TouchableOpacity>
 

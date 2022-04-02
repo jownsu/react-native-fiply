@@ -1,4 +1,4 @@
-import { StyleSheet, View, Modal, FlatList, RefreshControl } from 'react-native'
+import { StyleSheet, View, FlatList, RefreshControl, TouchableOpacity } from 'react-native'
 import React, { useState, memo, useMemo, useContext, useRef } from 'react'
 import CommentContext from '../../../api/context/comments/CommentContext'
 import AuthContext from '../../../api/context/auth/AuthContext'
@@ -13,11 +13,11 @@ import {
 import Confirmation from '../../components/dialog/Confirmation'
 import LoadMore from '../../components/lists/LoadMore'
 import { TextInput as TxtInput } from 'react-native-paper'
-import { FontAwesome5, AntDesign } from '@expo/vector-icons'
+import { FontAwesome5, AntDesign, MaterialIcons } from '@expo/vector-icons'
 import Colors from '../../../utils/Colors'
 import NoData from '../../components/NoData'
 
-const CommentScreen = ({ route }) => {
+const CommentScreen = ({ navigation, route }) => {
     const { post } = route.params
     const [txtComment, setTxtComment] = useState('')
     const [showConfirmation, setShowConfirmation] = useState(false)
@@ -101,6 +101,13 @@ const CommentScreen = ({ route }) => {
     return (
         <SafeAreaView flex>
             <Container padding={10}>
+                <TouchableOpacity
+                    activeOpacity={0.8}
+                    style={styles.backContainer}
+                    onPress={() => navigation.pop()}
+                >
+                    <MaterialIcons name="arrow-back" size={16} color={Colors.white} />
+                </TouchableOpacity>
                 <View style={styles.headerContainer}>
                     <FontAwesome5
                         style={{ marginRight: 5 }}
@@ -182,4 +189,12 @@ const styles = StyleSheet.create({
         borderRadius: 7,
     },
     closeBtn: { position: 'absolute', right: 0, padding: 10 },
+    backContainer: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: 25,
+        width: 25,
+        backgroundColor: 'rgba(0,0,0,.5)',
+        borderRadius: 50,
+    },
 })

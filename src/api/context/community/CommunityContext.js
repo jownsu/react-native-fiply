@@ -57,7 +57,7 @@ export const CommunityProvider = ({ children }) => {
     const getFollowedUsers = async () => {
         setLoading()
         await api({ token: user.token })
-            .get('/me/follows')
+            .get('/me/following')
             .then((res) => dispatch({ type: 'GET_FOLLOWED_USERS', payload: res.data }))
             .catch((err) => console.log(err))
     }

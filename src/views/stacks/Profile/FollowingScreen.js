@@ -12,7 +12,7 @@ import NoData from '../../components/NoData'
 import FollowingAction from '../../components/modals/FollowingAction'
 
 const FollowingScreen = ({ navigation }) => {
-    const { userInfo, follows, loading, getFollows, moreFollows } = useContext(ProfileContext)
+    const { userInfo, following, loading, getFollowing, moreFollowing } = useContext(ProfileContext)
     const [showAction, setShowAction] = useState(false)
     const [selectedUser, setSelectedUser] = useState({})
 
@@ -26,7 +26,7 @@ const FollowingScreen = ({ navigation }) => {
     const flatListRef = useRef(null)
 
     const ListEmptyComponent = () => {
-        return follows.data == 0 ? <NoData /> : null
+        return following.data == 0 ? <NoData /> : null
     }
 
     const onMorePress = (item) => {
@@ -67,30 +67,30 @@ const FollowingScreen = ({ navigation }) => {
             />
             <SearchHeader />
             <Container padding={20}>
-                <Text weight="semi-bold">{follows.meta.total} Following</Text>
+                <Text weight="semi-bold">{following.meta.total} Following</Text>
 
                 <FlatList
                     refreshControl={
-                        <RefreshControl refreshing={loading} onRefresh={() => getFollows()} />
+                        <RefreshControl refreshing={loading} onRefresh={() => getFollowing()} />
                     }
                     ref={flatListRef}
                     style={{ flex: 0 }}
-                    data={follows.data}
+                    data={following.data}
                     renderItem={renderItem}
                     showsVerticalScrollIndicator={false}
                     onEndReached={() => {
-                        if (follows.data.length < 30 && !loading) {
-                            moreFollows()
+                        if (following.data.length < 30 && !loading) {
+                            moreFollowing()
                         }
                     }}
                     onEndReachedThreshold={0}
                     ListFooterComponent={
                         <LoadMore
                             onLoadMorePress={() => {
-                                moreFollows(true)
+                                moreFollowing(true)
                                 scrollToTop()
                             }}
-                            isLoading={follows.data.length >= 30 && !loading}
+                            isLoading={following.data.length >= 30 && !loading}
                         />
                     }
                     ListEmptyComponent={ListEmptyComponent}

@@ -31,10 +31,10 @@ const ProfileScreen = ({ navigation, route }) => {
         getExperiences,
         getEducationalBackgrounds,
         getFollowers,
-        getFollows,
+        getFollowing,
         experiences,
         followers,
-        follows,
+        following,
         educationalBackgrounds,
         loading,
     } = useContext(ProfileContext)
@@ -276,7 +276,7 @@ const ProfileScreen = ({ navigation, route }) => {
                                 preview: userInfo.preview,
                                 avatar: userInfo.avatar,
                                 cover: userInfo.cover,
-                                follows_count: userInfo.follows_count,
+                                following_count: userInfo.following_count,
                                 followers_count: userInfo.followers_count,
                                 is_me: userInfo.is_me,
                             }}
@@ -288,8 +288,8 @@ const ProfileScreen = ({ navigation, route }) => {
                                 navigation.push('FollowersScreen')
                             }}
                             onFollowingPress={() => {
-                                if (follows.data.length == 0) {
-                                    getFollows(userId)
+                                if (following.data.length == 0) {
+                                    getFollowing(userId)
                                 }
                                 navigation.push('FollowingScreen')
                             }}

@@ -56,19 +56,19 @@ const ProfileReducer = (state, action) => {
                 loading: false,
             }
 
-        case 'GET_FOLLOWS':
+        case 'GET_FOLLOWING':
             return {
                 ...state,
-                follows: action.payload,
+                following: action.payload,
                 loading: false,
             }
 
-        case 'MORE_FOLLOWS':
+        case 'MORE_FOLLOWING':
             return {
                 ...state,
-                follows: {
-                    ...state.follows,
-                    data: [...state.follows.data, ...action.payload.data],
+                following: {
+                    ...state.following,
+                    data: [...state.following.data, ...action.payload.data],
                     links: { ...action.payload.links },
                 },
                 loading: false,
