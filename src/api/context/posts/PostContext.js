@@ -24,6 +24,7 @@ export const PostProvider = ({ children }) => {
         loading: false,
     }
     const [state, dispatch] = useReducer(PostReducer, initialState)
+    const [snackBarMessage, setSnackBarMessage] = useState(null)
 
     const getPosts = async (path = 'posts', userId = '') => {
         setLoading()
@@ -101,6 +102,30 @@ export const PostProvider = ({ children }) => {
             .catch((err) => console.log(err))
     }
 
+    const savePost = async (id, action = 'save') => {
+        setLoading()
+        await api({ token: user.token })
+            .post(`/posts/${action}`, { post_id: id })
+            .then((res) => {
+                if (action == 'save') {
+                    let message = res.data.data
+                        ? 'Post has been saved'
+                        : 'Post did not save because it is already saved'
+                    setSnackBarMessage(message)
+                }
+
+                if (action == 'unSave') {
+                    let message = res.data.data
+                        ? 'Post has been removed'
+                        : 'Post did not removed because it is not saved'
+                    dispatch({ type: 'DELETE_POST', payload: id })
+                    setSnackBarMessage(message)
+                }
+            })
+            .catch((err) => console.log(err))
+            .finally(() => stopLoading())
+    }
+
     //UPVOTES
 
     const toggleUpVote = async (id) => {
@@ -113,18 +138,11 @@ export const PostProvider = ({ children }) => {
             .catch((err) => console.log(err))
     }
 
-    const toggleSavePost = async (id) => {
-        setLoading()
-        await api({ token: user.token })
-            .post(`/posts/save`, { post_id: id })
-            .then(
-                (res) => {}
-                // dispatch({ type: 'TOGGLE_UPVOTE', payload: { id, data: res.data.data } })
-            )
-            .catch((err) => console.log(err))
-    }
-
     const setLoading = () => dispatch({ type: 'SET_LOADING' })
+
+    const stopLoading = () => dispatch({ type: 'STOP_LOADING' })
+
+    const hideSnackBar = () => setSnackBarMessage(null)
 
     return (
         <PostContext.Provider
@@ -136,7 +154,9 @@ export const PostProvider = ({ children }) => {
                 updatePost,
                 deletePost,
                 toggleUpVote,
-                toggleSavePost,
+                savePost,
+                snackBarMessage,
+                hideSnackBar,
             }}
         >
             <CommentProvider>{children}</CommentProvider>

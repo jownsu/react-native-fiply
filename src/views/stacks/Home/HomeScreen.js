@@ -1,6 +1,7 @@
 import React, { useCallback, useRef, useEffect, useState, memo, useMemo, useContext } from 'react'
 
 import { StyleSheet, View, TouchableOpacity, FlatList, RefreshControl, Alert } from 'react-native'
+import { Snackbar } from 'react-native-paper'
 import PostContext from '../../../api/context/posts/PostContext'
 import CommentContext from '../../../api/context/comments/CommentContext'
 import AuthContext from '../../../api/context/auth/AuthContext'
@@ -18,16 +19,25 @@ import Colors from '../../../utils/Colors'
 import PostItem from '../../components/lists/PostItem'
 import CreatePost from '../../components/modals/CreatePost'
 import LoadMore from '../../components/lists/LoadMore'
-import PostSetting from '../../components/modals/PostSetting'
+import PostAction from '../../components/modals/PostAction'
 
 const HomeScreen = ({ navigation }, offset) => {
-    const { posts, getPosts, loading, morePosts, createPost, toggleUpVote } =
-        useContext(PostContext)
+    const {
+        posts,
+        getPosts,
+        loading,
+        morePosts,
+        createPost,
+        toggleUpVote,
+        savePost,
+        snackBarMessage,
+        hideSnackBar,
+    } = useContext(PostContext)
     const { getComments } = useContext(CommentContext)
     const { user } = useContext(AuthContext)
-
+    const [selectedPostId, setSelectedPostId] = useState(0)
     const [showCreatePost, setShowCreatePost] = useState(false)
-    const [showPostSettings, setShowPostSettings] = useState(false)
+    const [showPostActions, setShowPostActions] = useState(false)
     const flatListRef = useRef(null)
 
     // bottom sheet reference
@@ -43,8 +53,9 @@ const HomeScreen = ({ navigation }, offset) => {
     //     console.log('handleSheetChanges', index);
     //   }, []);
 
-    const handleDotPress = () => {
-        setShowPostSettings(true)
+    const handleDotPress = (id) => {
+        setSelectedPostId(id)
+        setShowPostActions(true)
     }
 
     const handleCreatePostPress = () => {
@@ -117,7 +128,7 @@ const HomeScreen = ({ navigation }, offset) => {
             <PostItem
                 data={item}
                 // onDotPress={handlePresentModalPress}
-                onDotPress={handleDotPress}
+                onDotPress={() => handleDotPress(item.id)}
                 onAvatarPress={handleAvatarPress}
                 onCommentPress={() => handleCommentPress(item)}
                 onUpVotePress={handleUpVotePress}
@@ -219,56 +230,26 @@ const HomeScreen = ({ navigation }, offset) => {
                 onRequestClose={() => setShowCreatePost(false)}
             />
 
-            <PostSetting visible={showPostSettings} onDismiss={() => setShowPostSettings(false)} />
+            <PostAction
+                visible={showPostActions}
+                onDismiss={() => {
+                    setSelectedPostId(0)
+                    setShowPostActions(false)
+                }}
+                onSavePress={() => {
+                    savePost(selectedPostId)
+                    setShowPostActions(false)
+                }}
+            />
 
-            <BottomSheetModal bottomSheetModalRef={bottomSheetModalRef} pointsSnap={[225]}>
-                <View style={styles.btmSheetContainer}>
-                    <TouchableOpacity style={styles.btmActionContainer}>
-                        <FontAwesome
-                            name="bookmark"
-                            size={28}
-                            color={Colors.black}
-                            style={styles.btmActionBtn}
-                        />
-                        <Text weight="medium" color={Colors.black}>
-                            Bookmark
-                        </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.btmActionContainer}>
-                        <FontAwesome
-                            name="share-alt"
-                            size={28}
-                            color={Colors.black}
-                            style={styles.btmActionBtn}
-                        />
-                        <Text weight="medium" color={Colors.black}>
-                            Share Via
-                        </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.btmActionContainer}>
-                        <FontAwesome5
-                            name="font-awesome-flag"
-                            size={28}
-                            color={Colors.black}
-                            style={styles.btmActionBtn}
-                        />
-                        <Text weight="medium" color={Colors.black}>
-                            Report this post
-                        </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.btmActionContainer}>
-                        <FontAwesome
-                            name="tasks"
-                            size={28}
-                            color={Colors.black}
-                            style={styles.btmActionBtn}
-                        />
-                        <Text weight="medium" color={Colors.black}>
-                            Improve my feed
-                        </Text>
-                    </TouchableOpacity>
-                </View>
-            </BottomSheetModal>
+            <Snackbar
+                visible={snackBarMessage ? true : false}
+                onDismiss={() => hideSnackBar()}
+                duration={3000}
+                style={{ backgroundColor: Colors.black }}
+            >
+                <Text color={Colors.white}>{snackBarMessage}</Text>
+            </Snackbar>
         </SafeAreaView>
     )
 }

@@ -5,7 +5,7 @@ import { Text } from '../FiplyComponents'
 import { FontAwesome, FontAwesome5 } from '@expo/vector-icons'
 import Colors from '../../../utils/Colors'
 
-const PostSetting = ({
+const PostAction = ({
     visible = false,
     onDismiss = () => {},
     onSavePress = () => {},
@@ -23,7 +23,7 @@ const PostSetting = ({
                                 color={Colors.black}
                                 style={{ width: 30 }}
                             />
-                            <Text>Save this post</Text>
+                            <Text weight="medium">Save this post</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.btn} onPress={onReportPress}>
                             <FontAwesome5
@@ -32,7 +32,7 @@ const PostSetting = ({
                                 color={Colors.black}
                                 style={{ width: 30 }}
                             />
-                            <Text>Report this post</Text>
+                            <Text weight="medium">Report this post</Text>
                         </TouchableOpacity>
                     </View>
                 </Dialog>
@@ -52,4 +52,4 @@ const styles = StyleSheet.create({
     },
 })
 
-export default PostSetting
+export default PostAction

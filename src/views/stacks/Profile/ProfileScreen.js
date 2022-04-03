@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback, useContext, useRef, memo, useMemo } from 'react'
 import { StyleSheet, View, TouchableOpacity, RefreshControl, FlatList, Image } from 'react-native'
+import { Snackbar } from 'react-native-paper'
 import ProfileContext from '../../../api/context/profile/ProfileContext'
 import PostContext from '../../../api/context/posts/PostContext'
 import CommentContext from '../../../api/context/comments/CommentContext'
@@ -11,12 +12,17 @@ import {
 } from '../../components/FiplyComponents'
 import Colors from '../../../utils/Colors'
 import { FontAwesome5, FontAwesome } from '@expo/vector-icons'
+import LoadMore from '../../components/lists/LoadMore'
 
 import ProfileHeader from '../../components/profile/ProfileHeader'
 import CardInfo from '../../components/profile/CardInfo'
 import TitleFilter from '../../components/headers/TitleFilter'
 import TopNavigation from '../../components/headers/TopNavigation'
 import PostFilterDialog from '../../components/dialog/PostFilterDialog'
+import MyPostAction from '../../components/modals/MyPostAction'
+import UnSavePostAction from '../../components/modals/UnSavePostAction'
+import PostAction from '../../components/modals/PostAction'
+
 import NoData from '../../components/NoData'
 import { default as EditPost } from '../../components/modals/CreatePost'
 import { default as DeleteConfirmation } from '../../components/dialog/Confirmation'
@@ -45,21 +51,33 @@ const ProfileScreen = ({ navigation, route }) => {
         morePosts,
         toggleUpVote,
         deletePost,
+        savePost,
+        snackBarMessage,
+        hideSnackBar,
     } = useContext(PostContext)
     const { getComments, loading: commentLoading } = useContext(CommentContext)
 
     const [showModal, setShowModal] = useState(false)
     const [navIndex, setNavIndex] = useState(0)
+    const [postFilter, setPostFilter] = useState('Posts')
+    const [postFilterIndex, setPostFilterIndex] = useState(0)
+
+    const [showUnSaveAction, setShowUnSaveAction] = useState(false)
+    const [showMyPostAction, setShowMyPostAction] = useState(false)
+    const [showPostAction, setShowPostAction] = useState(false)
+
     const [showCreatePost, setShowCreatePost] = useState(false)
     const [selectedPost, setSelectedPost] = useState({ content: '' })
     const [showConfirmation, setShowConfirmation] = useState(false)
 
-    const bottomSheetModalRef = useRef(null)
-    const handlePresentModalPress = useCallback(() => {
-        bottomSheetModalRef.current?.present()
-    }, [])
+    const flatListRef = useRef(null)
 
-    const handleClosePress = () => bottomSheetModalRef.current.close()
+    const scrollToTop = () => {
+        flatListRef.current.scrollToOffset({
+            animated: true,
+            offset: 0,
+        })
+    }
 
     useEffect(() => {
         getUserInfo(userId)
@@ -75,6 +93,25 @@ const ProfileScreen = ({ navigation, route }) => {
                 onUpVotePress={handleUpVotePress}
             />
         )
+    }
+
+    const handleDotPress = (postItem) => {
+        setSelectedPost(postItem)
+
+        if (!userInfo.is_me) {
+            return setShowPostAction(true)
+        }
+
+        if (postFilter == 'Saved Posts') {
+            return setShowUnSaveAction(true)
+        } else {
+            return setShowMyPostAction(true)
+        }
+    }
+
+    const handleCommentPress = (item) => {
+        getComments(item.id)
+        navigation.push('CommentScreen', { post: item })
     }
 
     const renderBackgroundItem = ({ item, index }) => (
@@ -115,42 +152,7 @@ const ProfileScreen = ({ navigation, route }) => {
         />
     )
 
-    const handleDotPress = (postItem) => {
-        setSelectedPost(postItem)
-        handlePresentModalPress()
-    }
-
-    const handleCommentPress = (item) => {
-        getComments(item.id)
-        navigation.push('CommentScreen', { post: item })
-    }
-
     const handleUpVotePress = (id) => toggleUpVote(id)
-
-    const handleMorePostPress = () => {
-        morePosts(true)
-        flatListRef.current.scrollToOffset({
-            animated: true,
-            offset: 0,
-        })
-    }
-
-    const ListFooterComponent = useMemo(() => {
-        return posts.data.length >= 30 ? (
-            <TouchableOpacity onPress={handleMorePostPress}>
-                <Text
-                    weight="medium"
-                    color={Colors.secondary}
-                    center
-                    style={{ marginTop: 10, marginBottom: 20 }}
-                >
-                    Load More
-                </Text>
-            </TouchableOpacity>
-        ) : (
-            <ActivityIndicator visible={postLoading} />
-        )
-    }, [postLoading])
 
     const About = () => {
         return (
@@ -201,20 +203,41 @@ const ProfileScreen = ({ navigation, route }) => {
     const Activity = () => {
         return (
             <View style={{ flex: 1 }}>
-                <TitleFilter title={'Posts'} onFilterPress={() => setShowModal(true)} />
+                <TitleFilter title={postFilter} onFilterPress={() => setShowModal(true)} />
                 <FlatList
+                    ref={flatListRef}
                     data={posts.data}
                     renderItem={renderPostItem}
                     nestedScrollEnabled={true}
-                    onEndReached={morePosts}
+                    onEndReached={onEndReachedActivity}
                     onEndReachedThreshold={0}
-                    ListEmptyComponent={!postLoading && posts.data.length == 0 && <NoData />}
-                    ListFooterComponent={ListFooterComponent}
-                    progressViewOffset={10}
+                    ListEmptyComponent={ListEmptyComponentActivity}
+                    ListFooterComponent={ListFooterComponentActivity}
                 />
-                <PostFilterDialog visible={showModal} onDismiss={() => setShowModal(false)} />
             </View>
         )
+    }
+
+    const onEndReachedActivity = () => {
+        if (posts.data.length < 30 && !loading) {
+            morePosts()
+        }
+    }
+
+    const ListFooterComponentActivity = () => {
+        return (
+            <LoadMore
+                onLoadMorePress={() => {
+                    morePosts(true)
+                    scrollToTop()
+                }}
+                isLoading={posts.data.length >= 30 && !loading}
+            />
+        )
+    }
+
+    const ListEmptyComponentActivity = () => {
+        return !postLoading && posts.data.length == 0 && <NoData />
     }
 
     const Education = () => {
@@ -263,7 +286,14 @@ const ProfileScreen = ({ navigation, route }) => {
         <Container>
             <FlatList
                 refreshControl={
-                    <RefreshControl refreshing={loading} onRefresh={() => getUserInfo()} />
+                    <RefreshControl
+                        refreshing={postLoading}
+                        onRefresh={() => {
+                            getPosts('/posts', userId)
+                            setPostFilter('Posts')
+                            setPostFilterIndex(0)
+                        }}
+                    />
                 }
                 ListHeaderComponent={
                     <View>
@@ -329,6 +359,36 @@ const ProfileScreen = ({ navigation, route }) => {
 
             {/* MODALS */}
 
+            <PostFilterDialog
+                visible={showModal}
+                onDismiss={() => {
+                    setShowModal(false)
+                }}
+                isMe={userInfo.is_me}
+                filterIndex={postFilterIndex}
+                onMyPostPress={(text, index) => {
+                    getPosts('/posts', userId)
+                    setPostFilter(text)
+                    setPostFilterIndex(index)
+                }}
+                onSharedPostPress={() => {}}
+                onSavedPostPress={(text, index) => {
+                    getPosts('/savedPosts', userId)
+                    setPostFilter(text)
+                    setPostFilterIndex(index)
+                }}
+                onMostUpVotedPress={(text, index) => {
+                    getPosts('/posts?q=mostUpVoted', userId)
+                    setPostFilter(text)
+                    setPostFilterIndex(index)
+                }}
+                onLeastUpVotedPress={(text, index) => {
+                    getPosts('/posts?q=leastUpVoted', userId)
+                    setPostFilter(text)
+                    setPostFilterIndex(index)
+                }}
+            />
+
             <EditPost
                 visible={showCreatePost}
                 edit
@@ -353,66 +413,45 @@ const ProfileScreen = ({ navigation, route }) => {
                 }}
             />
 
-            <BottomSheetModal bottomSheetModalRef={bottomSheetModalRef} pointsSnap={[225]}>
-                <View style={styles.btmSheetContainer}>
-                    <TouchableOpacity
-                        style={styles.btmActionContainer}
-                        onPress={() => {
-                            setShowCreatePost(true)
-                            handleClosePress()
-                        }}
-                    >
-                        <FontAwesome5
-                            name="edit"
-                            size={23}
-                            color={Colors.black}
-                            style={styles.btmActionBtn}
-                        />
-                        <Text weight="medium" color={Colors.black}>
-                            Edit Post
-                        </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={styles.btmActionContainer}
-                        onPress={() => {
-                            setShowConfirmation(true)
-                            handleClosePress()
-                        }}
-                    >
-                        <FontAwesome
-                            name="trash-o"
-                            size={29}
-                            color={Colors.black}
-                            style={styles.btmActionBtn}
-                        />
-                        <Text weight="medium" color={Colors.black}>
-                            Delete Post
-                        </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.btmActionContainer}>
-                        <FontAwesome5
-                            name="font-awesome-flag"
-                            size={23}
-                            color={Colors.black}
-                            style={styles.btmActionBtn}
-                        />
-                        <Text weight="medium" color={Colors.black}>
-                            Report this post
-                        </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.btmActionContainer}>
-                        <FontAwesome
-                            name="tasks"
-                            size={23}
-                            color={Colors.black}
-                            style={styles.btmActionBtn}
-                        />
-                        <Text weight="medium" color={Colors.black}>
-                            Improve my feed
-                        </Text>
-                    </TouchableOpacity>
-                </View>
-            </BottomSheetModal>
+            <MyPostAction
+                visible={showMyPostAction}
+                onDismiss={() => setShowMyPostAction(false)}
+                onEditPress={() => {
+                    setShowCreatePost(true)
+                    setShowMyPostAction(false)
+                }}
+                onDeletePress={() => {
+                    setShowConfirmation(true)
+                    setShowMyPostAction(false)
+                }}
+            />
+
+            <PostAction
+                visible={showPostAction}
+                onDismiss={() => setShowPostAction(false)}
+                onSavePress={() => {
+                    savePost(selectedPost.id)
+                    setShowPostAction(false)
+                }}
+            />
+
+            <UnSavePostAction
+                visible={showUnSaveAction}
+                onDismiss={() => setShowUnSaveAction(false)}
+                onUnsavePress={() => {
+                    savePost(selectedPost.id, 'unSave')
+                    setShowUnSaveAction(false)
+                }}
+            />
+
+            <Snackbar
+                visible={snackBarMessage ? true : false}
+                onDismiss={() => hideSnackBar()}
+                duration={3000}
+                style={{ backgroundColor: Colors.black }}
+            >
+                <Text color={Colors.white}>{snackBarMessage}</Text>
+            </Snackbar>
         </Container>
     )
 }

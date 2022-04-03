@@ -78,6 +78,13 @@ const PostReducer = (state, action) => {
                 ...state,
                 loading: true,
             }
+
+        case 'STOP_LOADING':
+            return {
+                ...state,
+                loading: false,
+            }
+
         default:
             return state
     }

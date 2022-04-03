@@ -153,7 +153,7 @@ export const JobProvider = ({ children }) => {
         let isapplied = true
 
         await api({ token: user.token })
-            .post(`/jobs/apply`, { job_id: id })
+            .post(`/jobs/${action}`, { job_id: id })
             .then((res) => {
                 if (action == 'apply') {
                     isapplied = res.data.data
