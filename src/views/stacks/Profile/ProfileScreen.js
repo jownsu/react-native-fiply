@@ -52,6 +52,7 @@ const ProfileScreen = ({ navigation, route }) => {
         toggleUpVote,
         deletePost,
         savePost,
+        updatePost,
         snackBarMessage,
         hideSnackBar,
     } = useContext(PostContext)
@@ -415,7 +416,9 @@ const ProfileScreen = ({ navigation, route }) => {
 
             <MyPostAction
                 visible={showMyPostAction}
-                onDismiss={() => setShowMyPostAction(false)}
+                onDismiss={() => {
+                    setShowMyPostAction(false)
+                }}
                 onEditPress={() => {
                     setShowCreatePost(true)
                     setShowMyPostAction(false)
@@ -428,7 +431,9 @@ const ProfileScreen = ({ navigation, route }) => {
 
             <PostAction
                 visible={showPostAction}
-                onDismiss={() => setShowPostAction(false)}
+                onDismiss={() => {
+                    setShowPostAction(false)
+                }}
                 onSavePress={() => {
                     savePost(selectedPost.id)
                     setShowPostAction(false)
@@ -437,7 +442,9 @@ const ProfileScreen = ({ navigation, route }) => {
 
             <UnSavePostAction
                 visible={showUnSaveAction}
-                onDismiss={() => setShowUnSaveAction(false)}
+                onDismiss={() => {
+                    setShowUnSaveAction(false)
+                }}
                 onUnsavePress={() => {
                     savePost(selectedPost.id, 'unSave')
                     setShowUnSaveAction(false)

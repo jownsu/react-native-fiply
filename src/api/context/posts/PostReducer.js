@@ -31,12 +31,17 @@ const PostReducer = (state, action) => {
         case 'UPDATE_POST':
             return {
                 ...state,
-                posts: state.posts.map((item) => {
-                    if (item.id == res.data.data.id) {
-                        return { ...item, ...action.payload }
-                    }
-                    return item
-                }),
+                posts: {
+                    ...state.posts,
+                    data: [
+                        ...state.posts.data.map((item) => {
+                            if (item.id == action.payload.id) {
+                                return { ...item, ...action.payload }
+                            }
+                            return item
+                        }),
+                    ],
+                },
                 loading: false,
             }
 

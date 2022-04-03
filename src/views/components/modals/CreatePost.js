@@ -128,6 +128,15 @@ const CreatePost = ({
                         </View>
                     ) : null}
 
+                    {data.image && !pickUri ? (
+                        <View style={styles.uploadImgContainer}>
+                            {/* <ProgressBar indeterminate color={Colors.primary} visible={isUploading} /> */}
+                            <Image source={{ uri: data.image }} style={styles.uploadImg} />
+                        </View>
+                    ) : null}
+
+                    {}
+
                     <View style={styles.footerContainer}>
                         <TouchableOpacity onPress={() => pickImage([3, 2])}>
                             <FontAwesome5 name="image" size={24} color={Colors.secondary} />
