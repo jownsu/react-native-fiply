@@ -1,10 +1,10 @@
 import React, { useContext, useRef, useState } from 'react'
 import { StyleSheet, View, FlatList, RefreshControl, TouchableOpacity } from 'react-native'
-import { Avatar } from 'react-native-paper'
+import { Avatar, Searchbar } from 'react-native-paper'
 import { SafeAreaView, Text, Container } from '../../components/FiplyComponents'
 import Header from '../../components/headers/Header'
 import ProfileContext from '../../../api/context/profile/ProfileContext'
-import SearchHeader from '../../components/headers/SearchHeader'
+import SearchBar from '../../components/headers/SearchBar'
 import { MaterialIcons } from '@expo/vector-icons'
 import Colors from '../../../utils/Colors'
 import LoadMore from '../../components/lists/LoadMore'
@@ -65,13 +65,20 @@ const FollowersScreen = ({ navigation }) => {
                 style={{ backgroundColor: Colors.white }}
                 onBackPress={() => navigation.pop()}
             />
-            <SearchHeader />
+            <SearchBar
+                containerStyle={{ marginVertical: 10 }}
+                onSubmit={(text) => getFollowers(userInfo.id, text)}
+                onBlurClear={() => getFollowers(userInfo.id)}
+            />
             <Container padding={20}>
                 <Text weight="semi-bold">{followers.meta.total} Followers</Text>
 
                 <FlatList
                     refreshControl={
-                        <RefreshControl refreshing={loading} onRefresh={() => getFollowers()} />
+                        <RefreshControl
+                            refreshing={loading}
+                            onRefresh={() => getFollowers(userInfo.id)}
+                        />
                     }
                     ref={flatListRef}
                     style={{ flex: 0 }}

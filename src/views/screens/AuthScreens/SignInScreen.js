@@ -84,6 +84,7 @@ const SignInScreen = ({ navigation }) => {
                                     title="Sign In"
                                     onPress={() => handleSubmit()}
                                     loading={loading}
+                                    disabled={loading}
                                 />
                             </View>
                         )}

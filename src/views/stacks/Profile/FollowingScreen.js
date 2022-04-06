@@ -4,7 +4,7 @@ import { Avatar } from 'react-native-paper'
 import { SafeAreaView, Text, Container } from '../../components/FiplyComponents'
 import Header from '../../components/headers/Header'
 import ProfileContext from '../../../api/context/profile/ProfileContext'
-import SearchHeader from '../../components/headers/SearchHeader'
+import SearchBar from '../../components/headers/SearchBar'
 import { MaterialIcons } from '@expo/vector-icons'
 import Colors from '../../../utils/Colors'
 import LoadMore from '../../components/lists/LoadMore'
@@ -65,13 +65,20 @@ const FollowingScreen = ({ navigation }) => {
                 style={{ backgroundColor: Colors.white }}
                 onBackPress={() => navigation.pop()}
             />
-            <SearchHeader />
+            <SearchBar
+                containerStyle={{ marginVertical: 10 }}
+                onSubmit={(text) => getFollowing(userInfo.id, text)}
+                onBlurClear={() => getFollowing(userInfo.id)}
+            />
             <Container padding={20}>
                 <Text weight="semi-bold">{following.meta.total} Following</Text>
 
                 <FlatList
                     refreshControl={
-                        <RefreshControl refreshing={loading} onRefresh={() => getFollowing()} />
+                        <RefreshControl
+                            refreshing={loading}
+                            onRefresh={() => getFollowing(userInfo.id)}
+                        />
                     }
                     ref={flatListRef}
                     style={{ flex: 0 }}

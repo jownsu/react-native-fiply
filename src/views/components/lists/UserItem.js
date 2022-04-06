@@ -43,7 +43,7 @@ const UserItem = memo(
     }
 )
 
-export default memo(UserItem)
+export default UserItem
 
 const discoverListStyles = StyleSheet.create({
     img: {

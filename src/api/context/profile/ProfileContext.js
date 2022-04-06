@@ -89,10 +89,15 @@ export const ProfileProvider = ({ children }) => {
             .catch((err) => console.log(err))
     }
 
-    const getFollowers = async (id = 'me') => {
+    const getFollowers = async (id = 'me', search = '') => {
         setLoading()
+        let searchQuery = ''
+        if (search != '') {
+            searchQuery = `?search=${search}`
+        }
+
         await api({ token: user.token })
-            .get(`/${id}/followers`)
+            .get(`/${id}/followers${searchQuery}`)
             .then((res) => {
                 dispatch({ type: 'GET_FOLLOWERS', payload: res.data })
             })
@@ -113,10 +118,14 @@ export const ProfileProvider = ({ children }) => {
         }
     }
 
-    const getFollowing = async (id = 'me') => {
+    const getFollowing = async (id = 'me', search = '') => {
         setLoading()
+        let searchQuery = ''
+        if (search != '') {
+            searchQuery = `?search=${search}`
+        }
         await api({ token: user.token })
-            .get(`/${id}/following`)
+            .get(`/${id}/following${searchQuery}`)
             .then((res) => {
                 dispatch({ type: 'GET_FOLLOWING', payload: res.data })
             })

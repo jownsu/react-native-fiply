@@ -13,7 +13,7 @@ import {
     ActivityIndicator,
 } from '../../components/FiplyComponents'
 import NoData from '../../components/NoData'
-import SearchHeader from '../../components/headers/SearchHeader'
+import SearchBar from '../../components/headers/SearchBar'
 import { FontAwesome5, FontAwesome } from '@expo/vector-icons'
 import Colors from '../../../utils/Colors'
 import PostItem from '../../components/lists/PostItem'
@@ -181,7 +181,7 @@ const HomeScreen = ({ navigation }, offset) => {
 
     return (
         <SafeAreaView flex>
-            <SearchHeader
+            <SearchBar
                 rightIcon={() => (
                     <TouchableOpacity
                         onPress={() => navigation.navigate('MessageStack')}
@@ -304,7 +304,7 @@ const createPostySTyles = StyleSheet.create({
         borderWidth: 1,
         borderColor: Colors.light,
         borderRadius: 15,
-        marginHorizontal: 10,
+        margin: 10,
     },
     postActionContainer: {
         flexDirection: 'row',

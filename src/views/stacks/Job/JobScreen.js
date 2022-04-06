@@ -11,7 +11,7 @@ import {
     ActivityIndicator,
 } from '../../../views/components/FiplyComponents'
 import NoData from '../../components/NoData'
-import SearchHeader from '../../../views/components/headers/SearchHeader'
+import SearchBar from '../../../views/components/headers/SearchBar'
 import TitleFilter from '../../../views/components/headers/TitleFilter'
 import TopNavigation from '../../../views/components/headers/TopNavigation'
 import JobItem from '../../../views/components/lists/JobItem'
@@ -235,7 +235,7 @@ const JobsScreen = ({ navigation }, offset) => {
 
     return (
         <SafeAreaView flex>
-            <SearchHeader
+            <SearchBar
                 rightIcon={() => (
                     <TouchableOpacity
                         onPress={() => navigation.navigate('MessageStack')}

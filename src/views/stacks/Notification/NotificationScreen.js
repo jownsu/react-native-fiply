@@ -1,7 +1,7 @@
 import React from 'react'
 import { StyleSheet, View, TouchableOpacity, Image } from 'react-native'
 import { SafeAreaView, Text, Container, FlatList } from '../../components/FiplyComponents'
-import SearchHeader from '../../components/headers/SearchHeader'
+import SearchBar from '../../components/headers/SearchBar'
 import { FontAwesome, Entypo } from '@expo/vector-icons'
 import Colors from '../../../utils/Colors'
 import TitleFilter from '../../components/headers/TitleFilter'
@@ -27,7 +27,7 @@ const NotificationScreen = ({ navigation }) => {
 
     return (
         <SafeAreaView flex>
-            <SearchHeader
+            <SearchBar
                 rightIcon={() => (
                     <TouchableOpacity
                         onPress={() => navigation.navigate('MessageStack')}

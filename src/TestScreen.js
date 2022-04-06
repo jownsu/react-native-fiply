@@ -70,8 +70,9 @@ const TestScreen = () => {
                 setImgSrc({ uri: uri })
                 TesseractOcr.recognize(uri, LANG_ENGLISH, {})
                     .then((res) => {
-                        setText(res)
+                        console.log('@@@@@@@@@@@@@@')
                         console.log(res)
+                        setText(res)
                     })
                     .catch((err) => console.log(err))
             })
