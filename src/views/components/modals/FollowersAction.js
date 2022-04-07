@@ -40,7 +40,7 @@ const FollowersAction = ({
                                 Message {user.fullname}
                             </Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.btn} onPress={onRemovePress}>
+                        <TouchableOpacity style={styles.btn} onPress={() => onRemovePress(user.id)}>
                             <FontAwesome
                                 name="user-times"
                                 size={24}

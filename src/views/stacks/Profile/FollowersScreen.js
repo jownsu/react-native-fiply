@@ -1,6 +1,6 @@
 import React, { useContext, useRef, useState } from 'react'
 import { StyleSheet, View, FlatList, RefreshControl, TouchableOpacity } from 'react-native'
-import { Avatar, Searchbar } from 'react-native-paper'
+import { Avatar, Snackbar } from 'react-native-paper'
 import { SafeAreaView, Text, Container } from '../../components/FiplyComponents'
 import Header from '../../components/headers/Header'
 import ProfileContext from '../../../api/context/profile/ProfileContext'
@@ -12,7 +12,16 @@ import NoData from '../../components/NoData'
 import FollowersAction from '../../components/modals/FollowersAction'
 
 const FollowersScreen = ({ navigation }) => {
-    const { userInfo, followers, loading, getFollowers, moreFollowers } = useContext(ProfileContext)
+    const {
+        userInfo,
+        followers,
+        loading,
+        getFollowers,
+        moreFollowers,
+        removeFollower,
+        snackBarMessage,
+        hideSnackBar,
+    } = useContext(ProfileContext)
     const [showAction, setShowAction] = useState(false)
     const [selectedUser, setSelectedUser] = useState({})
 
@@ -32,6 +41,11 @@ const FollowersScreen = ({ navigation }) => {
     const onMorePress = (item) => {
         setShowAction(true)
         setSelectedUser(item)
+    }
+
+    const handleRemovePress = (id) => {
+        removeFollower(id)
+        setShowAction(false)
     }
 
     const renderItem = ({ item }) => {
@@ -112,7 +126,17 @@ const FollowersScreen = ({ navigation }) => {
                     setShowAction(false)
                     setSelectedUser({})
                 }}
+                onRemovePress={handleRemovePress}
             />
+
+            <Snackbar
+                visible={snackBarMessage ? true : false}
+                onDismiss={() => hideSnackBar()}
+                duration={3000}
+                style={{ backgroundColor: Colors.black }}
+            >
+                <Text color={Colors.white}>{snackBarMessage}</Text>
+            </Snackbar>
         </SafeAreaView>
     )
 }

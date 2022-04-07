@@ -46,6 +46,7 @@ export const ProfileProvider = ({ children }) => {
     }
 
     const [state, dispatch] = useReducer(ProfileReducer, initialState)
+    const [snackBarMessage, setSnackBarMessage] = useState(null)
 
     const getUserInfo = async (id = 'me') => {
         setLoading()
@@ -147,6 +148,32 @@ export const ProfileProvider = ({ children }) => {
         }
     }
 
+    const unFollow = async (id) => {
+        await api({ token: user.token })
+            .post('/unFollow', { user_id: id })
+            .then((res) => {
+                if (res.data.data) {
+                    dispatch({ type: 'REMOVE_FOLLOWING', payload: id })
+                }
+                setSnackBarMessage(res.data.message)
+            })
+            .catch((err) => setSnackBarMessage(err.message))
+    }
+
+    const removeFollower = async (id) => {
+        await api({ token: user.token })
+            .post('/removeFollower', { user_id: id })
+            .then((res) => {
+                if (res.data.data) {
+                    dispatch({ type: 'REMOVE_FOLLOWER', payload: id })
+                }
+                setSnackBarMessage(res.data.message)
+            })
+            .catch((err) => setSnackBarMessage(err.message))
+    }
+
+    //PROFILE FUNCTIONS
+
     const createExperience = async (data, setDispatch = false) => {
         setLoading()
         await api({ token: user.token })
@@ -237,6 +264,8 @@ export const ProfileProvider = ({ children }) => {
             .catch((err) => console.log(err))
     }
 
+    const hideSnackBar = () => setSnackBarMessage(null)
+
     const setLoading = () => dispatch({ type: 'SET_LOADING' })
 
     return (
@@ -255,6 +284,10 @@ export const ProfileProvider = ({ children }) => {
                 moreFollowers,
                 getFollowing,
                 moreFollowing,
+                unFollow,
+                removeFollower,
+                snackBarMessage,
+                hideSnackBar,
             }}
         >
             {children}

@@ -56,6 +56,24 @@ const ProfileReducer = (state, action) => {
                 loading: false,
             }
 
+        case 'REMOVE_FOLLOWER':
+            return {
+                ...state,
+                userInfo: {
+                    ...state.userInfo,
+                    followers_count: state.userInfo.followers_count - 1,
+                },
+                followers: {
+                    ...state.followers,
+                    data: [...state.followers.data.filter((item) => item.id != action.payload)],
+                    meta: {
+                        ...state.followers.meta,
+                        total: state.followers.meta.total - 1,
+                    },
+                },
+                loading: false,
+            }
+
         case 'GET_FOLLOWING':
             return {
                 ...state,
@@ -70,6 +88,24 @@ const ProfileReducer = (state, action) => {
                     ...state.following,
                     data: [...state.following.data, ...action.payload.data],
                     links: { ...action.payload.links },
+                },
+                loading: false,
+            }
+
+        case 'REMOVE_FOLLOWING':
+            return {
+                ...state,
+                userInfo: {
+                    ...state.userInfo,
+                    following_count: state.userInfo.following_count - 1,
+                },
+                following: {
+                    ...state.following,
+                    data: [...state.following.data.filter((item) => item.id != action.payload)],
+                    meta: {
+                        ...state.following.meta,
+                        total: state.following.meta.total - 1,
+                    },
                 },
                 loading: false,
             }
