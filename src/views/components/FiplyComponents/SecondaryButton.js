@@ -11,12 +11,8 @@ export const SecondaryButton = ({
     style,
     labelStyle,
 }) => {
-    let btnStyle = disabled
-        ? { borderColor: Colors.light }
-        : { borderColor: Colors.primary }
-    let lblStyle = disabled
-        ? { color: Colors.light }
-        : { color: Colors.primary }
+    let btnStyle = disabled ? { borderColor: Colors.light } : { borderColor: Colors.primary }
+    let lblStyle = disabled ? { color: Colors.light } : { color: Colors.primary }
     return (
         <View>
             <XButton
@@ -36,7 +32,6 @@ export const SecondaryButton = ({
                 uppercase={false}
                 disabled={disabled}
                 loading={loading}
-                theme={{ colors: { primary: Colors.primary } }}
             >
                 {title}
             </XButton>

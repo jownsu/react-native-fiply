@@ -5,6 +5,7 @@ import AuthStack from './views/stacks/Auth/AuthStack'
 import * as SecureStore from 'expo-secure-store'
 import AuthContext from './api/context/auth/AuthContext'
 import TestScreen from './TestScreen'
+import TestScreen1 from './TestScreen1'
 
 const Routes = () => {
     const { user, setUser, logged_in, setLogged_in, isFirstLaunched, setIsFirstLaunched } =
@@ -41,6 +42,7 @@ const Routes = () => {
     }, [])
 
     return (
+        // <TestScreen1 />
         // <TestScreen />
         <NavigationContainer>
             {user && logged_in == 'true' ? <AppStack /> : <AuthStack />}

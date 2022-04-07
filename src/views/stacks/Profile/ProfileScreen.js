@@ -312,17 +312,15 @@ const ProfileScreen = ({ navigation, route }) => {
                                 is_me: userInfo.is_me,
                             }}
                             onBackPress={() => navigation.pop()}
-                            onFollowerPress={() => {
-                                if (followers.data.length == 0) {
-                                    getFollowers(userId)
-                                }
-                                navigation.push('FollowersScreen')
-                            }}
-                            onFollowingPress={() => {
+                            onFollowCountsPress={() => {
                                 if (following.data.length == 0) {
                                     getFollowing(userId)
                                 }
-                                navigation.push('FollowingScreen')
+                                if (followers.data.length == 0) {
+                                    getFollowers(userId)
+                                }
+
+                                navigation.push('FollowScreen')
                             }}
                         />
                         <TopNavigation

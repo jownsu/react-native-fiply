@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { View, StyleSheet, TouchableOpacity } from 'react-native'
-import { Dialog, Portal, Button } from 'react-native-paper'
+import { Dialog, Portal, Button, Avatar } from 'react-native-paper'
 import { Text } from '../FiplyComponents'
 import { FontAwesome, FontAwesome5, MaterialIcons } from '@expo/vector-icons'
 import Colors from '../../../utils/Colors'
@@ -9,49 +9,37 @@ const FollowersAction = ({
     visible = false,
     user = {},
     onDismiss = () => {},
-    onVisitPress = () => {},
-    onMessagePress = () => {},
     onRemovePress = () => {},
 }) => {
     return (
         <View>
             <Portal>
                 <Dialog style={styles.dialogContainer} visible={visible} onDismiss={onDismiss}>
-                    <View>
-                        <TouchableOpacity style={styles.btn} onPress={onVisitPress}>
-                            <FontAwesome
-                                name="user"
-                                size={24}
-                                color={Colors.black}
-                                style={{ width: 40 }}
-                            />
-                            <Text weight="medium" flex>
-                                Visit Profile
+                    <View style={styles.headerContainer}>
+                        <Avatar.Image
+                            source={{ uri: user.avatar }}
+                            size={100}
+                            backgroundColor={Colors.light}
+                            style={{ marginBottom: 20 }}
+                        />
+                        <View style={styles.textContainer}>
+                            <Text center size={21} style={{ marginBottom: 10 }}>
+                                Remove Follower?
                             </Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.btn} onPress={onMessagePress}>
-                            <MaterialIcons
-                                name="message"
-                                size={24}
-                                color={Colors.black}
-                                style={{ width: 40 }}
-                            />
-                            <Text weight="medium" flex>
-                                Message {user.fullname}
+                            <Text center size={14}>
+                                Fiply wont tell <Text weight="medium">{user.fullname}</Text> they
+                                were removed from your followers
                             </Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.btn} onPress={() => onRemovePress(user.id)}>
-                            <FontAwesome
-                                name="user-times"
-                                size={24}
-                                color={Colors.red}
-                                style={{ width: 40 }}
-                            />
-                            <Text color={Colors.red} weight="medium" flex>
-                                Remove {user.fullname} as your follower
-                            </Text>
-                        </TouchableOpacity>
+                        </View>
                     </View>
+                    <TouchableOpacity style={styles.btn} onPress={() => onRemovePress(user.id)}>
+                        <Text color={Colors.red} weight="medium">
+                            Remove
+                        </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.btn} onPress={onDismiss}>
+                        <Text weight="medium">Cancel</Text>
+                    </TouchableOpacity>
                 </Dialog>
             </Portal>
         </View>
@@ -59,13 +47,23 @@ const FollowersAction = ({
 }
 
 const styles = StyleSheet.create({
-    dialogContainer: {},
+    dialogContainer: {
+        borderRadius: 10,
+    },
+    headerContainer: {
+        alignItems: 'center',
+        paddingVertical: 25,
+    },
+    textContainer: {
+        paddingHorizontal: 20,
+    },
     btn: {
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'flex-start',
-        paddingHorizontal: 20,
-        paddingVertical: 10,
+        justifyContent: 'center',
+        paddingVertical: 15,
+        borderTopWidth: 1,
+        borderColor: Colors.light,
     },
 })
 

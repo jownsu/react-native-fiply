@@ -18,6 +18,7 @@ import ProfileContext from '../../../api/context/profile/ProfileContext'
 const ProfileHeader = ({
     data,
     onBackPress = () => {},
+    onFollowCountsPress = () => {},
     onFollowerPress = () => {},
     onFollowingPress = () => {},
     style,
@@ -95,23 +96,24 @@ const ProfileHeader = ({
                                 {data.preview}
                             </Text>
                         )}
-                        <View
+                        <TouchableOpacity
+                            onPress={onFollowCountsPress}
                             style={{
                                 flexDirection: 'row',
                             }}
                         >
-                            <TouchableOpacity onPress={onFollowingPress}>
+                            <View>
                                 <Text size={12} style={{ marginRight: 15 }} color={Colors.white}>
                                     {data.following_count} Following
                                 </Text>
-                            </TouchableOpacity>
+                            </View>
 
-                            <TouchableOpacity onPress={onFollowerPress}>
+                            <View>
                                 <Text size={12} color={Colors.white}>
                                     {data.followers_count} Followers
                                 </Text>
-                            </TouchableOpacity>
-                        </View>
+                            </View>
+                        </TouchableOpacity>
                     </View>
                 </View>
             </View>
