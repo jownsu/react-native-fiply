@@ -1,5 +1,5 @@
 import React, { useContext, useRef, useState } from 'react'
-import { StyleSheet, View, FlatList, RefreshControl } from 'react-native'
+import { StyleSheet, View, FlatList, RefreshControl, useWindowDimensions } from 'react-native'
 import { Avatar, Snackbar } from 'react-native-paper'
 
 import { SafeAreaView, Text, Container, SecondaryButton } from '../../components/FiplyComponents'
@@ -13,7 +13,8 @@ import FollowingAction from '../../components/modals/FollowingAction'
 import FollowersAction from '../../components/modals/FollowersAction'
 import FollowingItem from '../../components/lists/FollowingItem'
 import FollowerItem from '../../components/lists/FollowerItem'
-import { Tabs, TabScreen } from 'react-native-paper-tabs'
+
+import { TabView, SceneMap, TabBar } from 'react-native-tab-view'
 
 const FollowScreen = ({ navigation }) => {
     const {
@@ -75,6 +76,123 @@ const FollowScreen = ({ navigation }) => {
         return <FollowerItem item={item} onRemoveBtnPress={handleFollowerBtnPress} />
     }
 
+    const FollowersRoute = () => (
+        <Container padding={10}>
+            <SearchBar
+                containerStyle={{ marginVertical: 10, paddingHorizontal: 0 }}
+                onSubmit={(text) => getFollowers(userInfo.id, text)}
+                onBlurClear={() => getFollowers(userInfo.id)}
+            />
+            <FlatList
+                refreshControl={
+                    <RefreshControl
+                        refreshing={loading}
+                        onRefresh={() => getFollowers(userInfo.id)}
+                    />
+                }
+                ref={flatListRef}
+                style={{ flex: 0 }}
+                data={followers.data}
+                renderItem={renderFollowerItem}
+                showsVerticalScrollIndicator={false}
+                onEndReached={() => {
+                    if (followers.data.length < 30 && !loading) {
+                        moreFollowers()
+                    }
+                }}
+                onEndReachedThreshold={0}
+                ListFooterComponent={
+                    <LoadMore
+                        onLoadMorePress={() => {
+                            moreFollowers(true)
+                            scrollToTop()
+                        }}
+                        isLoading={followers.data.length >= 30 && !loading}
+                    />
+                }
+                ListEmptyComponent={ListEmptyComponent}
+            />
+        </Container>
+    )
+
+    const FollowingRoute = () => (
+        <Container padding={10}>
+            <SearchBar
+                containerStyle={{ marginVertical: 10, paddingHorizontal: 0 }}
+                onSubmit={(text) => getFollowing(userInfo.id, text)}
+                onBlurClear={() => getFollowing(userInfo.id)}
+            />
+            <FlatList
+                refreshControl={
+                    <RefreshControl
+                        refreshing={loading}
+                        onRefresh={() => getFollowing(userInfo.id)}
+                    />
+                }
+                ref={flatListRef}
+                style={{ flex: 0 }}
+                data={following.data}
+                renderItem={renderFollowingItem}
+                showsVerticalScrollIndicator={false}
+                onEndReached={() => {
+                    if (following.data.length < 30 && !loading) {
+                        moreFollowing()
+                    }
+                }}
+                onEndReachedThreshold={0}
+                ListFooterComponent={
+                    <LoadMore
+                        onLoadMorePress={() => {
+                            moreFollowing(true)
+                            scrollToTop()
+                        }}
+                        isLoading={following.data.length >= 30 && !loading}
+                    />
+                }
+                ListEmptyComponent={ListEmptyComponent}
+            />
+        </Container>
+    )
+
+    const renderScene = SceneMap({
+        following: FollowingRoute,
+        follower: FollowersRoute,
+    })
+
+    const layout = useWindowDimensions()
+
+    const [index, setIndex] = useState(0)
+    const [routes] = useState([
+        { key: 'following', title: `Following` },
+        { key: 'follower', title: `Followers` },
+    ])
+
+    const renderTabBar = (props) => (
+        <TabBar
+            {...props}
+            indicatorStyle={{ backgroundColor: Colors.primary }}
+            style={{ backgroundColor: Colors.white }}
+            labelStyle={{
+                color: Colors.black,
+                fontFamily: 'EncodeSansExpaded-Medium',
+                textTransform: 'none',
+            }}
+            renderLabel={({ route }) => {
+                return route.title == 'Following' ? (
+                    <Text>
+                        {following.meta.total} {route.title}
+                    </Text>
+                ) : (
+                    <Text>
+                        {followers.meta.total} {route.title}
+                    </Text>
+                )
+            }}
+            inactiveColor={'black'}
+            activeColor={Colors.primary}
+        />
+    )
+
     return (
         <SafeAreaView statusBarColor={Colors.white} flex>
             <Header
@@ -82,84 +200,16 @@ const FollowScreen = ({ navigation }) => {
                 style={{ backgroundColor: Colors.white }}
                 onBackPress={() => navigation.pop()}
             />
-            <Tabs style={{ backgroundColor: '#fff', color: 'red' }} uppercase={false}>
-                <TabScreen label={`${followers.meta.total} Follower`}>
-                    <Container padding={10}>
-                        <SearchBar
-                            containerStyle={{ marginVertical: 10, paddingHorizontal: 0 }}
-                            onSubmit={(text) => getFollowers(userInfo.id, text)}
-                            onBlurClear={() => getFollowers(userInfo.id)}
-                        />
-                        <FlatList
-                            refreshControl={
-                                <RefreshControl
-                                    refreshing={loading}
-                                    onRefresh={() => getFollowers(userInfo.id)}
-                                />
-                            }
-                            ref={flatListRef}
-                            style={{ flex: 0 }}
-                            data={followers.data}
-                            renderItem={renderFollowerItem}
-                            showsVerticalScrollIndicator={false}
-                            onEndReached={() => {
-                                if (followers.data.length < 30 && !loading) {
-                                    moreFollowers()
-                                }
-                            }}
-                            onEndReachedThreshold={0}
-                            ListFooterComponent={
-                                <LoadMore
-                                    onLoadMorePress={() => {
-                                        moreFollowers(true)
-                                        scrollToTop()
-                                    }}
-                                    isLoading={followers.data.length >= 30 && !loading}
-                                />
-                            }
-                            ListEmptyComponent={ListEmptyComponent}
-                        />
-                    </Container>
-                </TabScreen>
-                <TabScreen label={`${following.meta.total} Following`}>
-                    <Container padding={10}>
-                        <SearchBar
-                            containerStyle={{ marginVertical: 10, paddingHorizontal: 0 }}
-                            onSubmit={(text) => getFollowing(userInfo.id, text)}
-                            onBlurClear={() => getFollowing(userInfo.id)}
-                        />
-                        <FlatList
-                            refreshControl={
-                                <RefreshControl
-                                    refreshing={loading}
-                                    onRefresh={() => getFollowing(userInfo.id)}
-                                />
-                            }
-                            ref={flatListRef}
-                            style={{ flex: 0 }}
-                            data={following.data}
-                            renderItem={renderFollowingItem}
-                            showsVerticalScrollIndicator={false}
-                            onEndReached={() => {
-                                if (following.data.length < 30 && !loading) {
-                                    moreFollowing()
-                                }
-                            }}
-                            onEndReachedThreshold={0}
-                            ListFooterComponent={
-                                <LoadMore
-                                    onLoadMorePress={() => {
-                                        moreFollowing(true)
-                                        scrollToTop()
-                                    }}
-                                    isLoading={following.data.length >= 30 && !loading}
-                                />
-                            }
-                            ListEmptyComponent={ListEmptyComponent}
-                        />
-                    </Container>
-                </TabScreen>
-            </Tabs>
+
+            <TabView
+                lazy
+                renderTabBar={renderTabBar}
+                navigationState={{ index, routes }}
+                renderScene={renderScene}
+                onIndexChange={setIndex}
+                initialLayout={{ width: layout.width }}
+            />
+
             {/* MODALS */}
             <FollowingAction
                 visible={showFollowingAction}
@@ -192,20 +242,3 @@ const FollowScreen = ({ navigation }) => {
 }
 
 export default FollowScreen
-
-const styles = StyleSheet.create({
-    itemContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        paddingVertical: 10,
-    },
-    itemBodyContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
-    nameContainer: {
-        paddingHorizontal: 10,
-        flex: 1,
-    },
-})
