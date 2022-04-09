@@ -1,24 +1,26 @@
 import React, { useContext, useRef, useState } from 'react'
-import { StyleSheet, View, FlatList, RefreshControl, useWindowDimensions } from 'react-native'
-import { Avatar, Snackbar } from 'react-native-paper'
+import { FlatList, RefreshControl, useWindowDimensions } from 'react-native'
+import { Snackbar } from 'react-native-paper'
 
 import { SafeAreaView, Text, Container, SecondaryButton } from '../../components/FiplyComponents'
 import Header from '../../components/headers/Header'
 import ProfileContext from '../../../api/context/profile/ProfileContext'
+import FollowContext from '../../../api/context/follow/FollowContext'
 import SearchBar from '../../components/headers/SearchBar'
 import Colors from '../../../utils/Colors'
 import LoadMore from '../../components/lists/LoadMore'
 import NoData from '../../components/NoData'
 import FollowingAction from '../../components/modals/FollowingAction'
 import FollowersAction from '../../components/modals/FollowersAction'
+import CancelFollowAction from '../../components/modals/CancelFollowAction'
 import FollowingItem from '../../components/lists/FollowingItem'
 import FollowerItem from '../../components/lists/FollowerItem'
 
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view'
 
-const FollowScreen = ({ navigation }) => {
+const FollowScreen = ({ navigation, route }) => {
+    const { userInfo } = useContext(ProfileContext)
     const {
-        userInfo,
         followers,
         following,
         getFollowers,
@@ -26,14 +28,18 @@ const FollowScreen = ({ navigation }) => {
         moreFollowers,
         moreFollowing,
         unFollow,
+        follow,
+        cancelFollowRequest,
         removeFollower,
-        loading,
         snackBarMessage,
         hideSnackBar,
-    } = useContext(ProfileContext)
+        loading,
+    } = useContext(FollowContext)
+
     const [showFollowingAction, setShowFollowingAction] = useState(false)
     const [showFollowerAction, setShowFollowerAction] = useState(false)
-    const [selectedUser, setSelectedUser] = useState({})
+    const [showCancelFollowAction, setShowCancelFollowAction] = useState(false)
+    const [selectedUser, setSelectedUser] = useState({ item: {}, type: {} })
 
     const scrollToTop = () => {
         flatListRef.current.scrollToOffset({
@@ -48,32 +54,69 @@ const FollowScreen = ({ navigation }) => {
         return followers.data == 0 ? <NoData /> : null
     }
 
-    const handleFollowingBtnPress = (item) => {
+    // modal functions
+
+    const handleFollowingBtnPress = (item, type) => {
         setShowFollowingAction(true)
-        setSelectedUser(item)
+        setSelectedUser({ item, type })
     }
 
-    const handleFollowerBtnPress = (item) => {
+    const handleFollowerBtnPress = (item, type) => {
         setShowFollowerAction(true)
-        setSelectedUser(item)
+        setSelectedUser({ item, type })
+    }
+
+    const handlePendingBtnPress = (item, type) => {
+        setShowCancelFollowAction(true)
+        setSelectedUser({ item, type })
+    }
+
+    //actions functions
+
+    const handleFollowBtnPress = (item, type) => {
+        follow(item.id, type)
     }
 
     const handleUnFollowPress = (id) => {
-        unFollow(id)
+        unFollow(id, userInfo.is_me, selectedUser.type)
+        setSelectedUser({ item: {}, type: {} })
         setShowFollowingAction(false)
     }
 
     const handleRemovePress = (id) => {
         removeFollower(id)
+        setSelectedUser({ item: {}, type: {} })
         setShowFollowerAction(false)
     }
 
+    const handleCancelFollowPress = (id) => {
+        cancelFollowRequest(id, selectedUser.type)
+        setSelectedUser({ item: {}, type: {} })
+        setShowCancelFollowAction(false)
+    }
+
     const renderFollowingItem = ({ item }) => {
-        return <FollowingItem item={item} onFollowingBtnPress={handleFollowingBtnPress} />
+        return (
+            <FollowingItem
+                item={item}
+                onPendingtBtnPress={(item) => handlePendingBtnPress(item, 'followingItem')}
+                onFollowingBtnPress={(item) => handleFollowingBtnPress(item, 'followingItem')}
+                onFollowBtnPress={(item) => handleFollowBtnPress(item, 'followingItem')}
+            />
+        )
     }
 
     const renderFollowerItem = ({ item }) => {
-        return <FollowerItem item={item} onRemoveBtnPress={handleFollowerBtnPress} />
+        return (
+            <FollowerItem
+                item={item}
+                is_me={userInfo.is_me}
+                onPendingtBtnPress={(item) => handlePendingBtnPress(item, 'followerItem')}
+                onFollowingBtnPress={(item) => handleFollowingBtnPress(item, 'followerItem')}
+                onFollowBtnPress={(item) => handleFollowBtnPress(item, 'followerItem')}
+                onRemoveBtnPress={handleFollowerBtnPress}
+            />
+        )
     }
 
     const FollowersRoute = () => (
@@ -211,24 +254,37 @@ const FollowScreen = ({ navigation }) => {
             />
 
             {/* MODALS */}
+
             <FollowingAction
                 visible={showFollowingAction}
-                user={selectedUser}
+                user={selectedUser.item}
                 onDismiss={() => {
                     setShowFollowingAction(false)
-                    setSelectedUser({})
+                    setSelectedUser({ item: {}, type: {} })
                 }}
                 onUnFollowPress={handleUnFollowPress}
             />
+
             <FollowersAction
                 visible={showFollowerAction}
-                user={selectedUser}
+                user={selectedUser.item}
                 onDismiss={() => {
                     setShowFollowerAction(false)
-                    setSelectedUser({})
+                    setSelectedUser({ item: {}, type: {} })
                 }}
                 onRemovePress={handleRemovePress}
             />
+
+            <CancelFollowAction
+                visible={showCancelFollowAction}
+                user={selectedUser.item}
+                onDismiss={() => {
+                    setShowCancelFollowAction(false)
+                    setSelectedUser({ item: {}, type: {} })
+                }}
+                onCancelFollow={handleCancelFollowPress}
+            />
+
             <Snackbar
                 visible={snackBarMessage ? true : false}
                 onDismiss={() => hideSnackBar()}

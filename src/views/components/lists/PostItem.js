@@ -97,13 +97,12 @@ const PostItem = memo(
     (prevProps, nextProps) => {
         if (prevProps.data.is_upVoted != nextProps.data.is_upVoted) return false
         if (prevProps.data.upVotes_count != nextProps.data.upVotes_count) return false
-        if (prevProps.id == nextProps.id) return true
-
+        if (prevProps.data.id == nextProps.data.id) return true
         return false
     }
 )
 
-export default memo(PostItem)
+export default PostItem
 
 const postStyles = StyleSheet.create({
     postContainer: {

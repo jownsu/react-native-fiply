@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import { StyleSheet, View, Image, TouchableOpacity, ImageBackground } from 'react-native'
 import { Avatar, Badge } from 'react-native-paper'
-import { Text } from '../FiplyComponents'
+import { Text, SecondaryButton, Button } from '../FiplyComponents'
 import Colors from '../../../utils/Colors'
 import { FontAwesome, MaterialIcons } from '@expo/vector-icons'
 import usePickImage from '../../../utils/usePIckImage'
@@ -19,12 +19,48 @@ const ProfileHeader = ({
     data,
     onBackPress = () => {},
     onFollowCountsPress = () => {},
-    onFollowerPress = () => {},
     onFollowingPress = () => {},
-    style,
+    onPendingPress = () => {},
+    onFollowPress = () => {},
 }) => {
     const { pickImage } = usePickImage()
     const { uploadAvatar, uploadCover } = useContext(ProfileContext)
+
+    const renderFollowBtn = () => {
+        if (!data.is_me) {
+            if (data.is_following) {
+                return (
+                    <Button
+                        onPress={onFollowingPress}
+                        title={'Following'}
+                        style={styles.btnStyle}
+                        labelStyle={styles.btnLabelStyle}
+                    />
+                )
+            }
+
+            if (data.is_following_pending) {
+                return (
+                    <Button
+                        onPress={onPendingPress}
+                        title={'Pending'}
+                        style={styles.btnStyle}
+                        labelStyle={styles.btnLabelStyle}
+                    />
+                )
+            }
+
+            return (
+                <Button
+                    onPress={onFollowPress}
+                    title={'Follow'}
+                    style={styles.btnStyle}
+                    labelStyle={styles.btnLabelStyle}
+                />
+            )
+        }
+        return null
+    }
 
     return (
         <ImageBackground
@@ -39,6 +75,7 @@ const ProfileHeader = ({
             >
                 <MaterialIcons name="arrow-back" size={18} color={Colors.white} />
             </TouchableOpacity>
+
             {data.is_me && (
                 <TouchableOpacity
                     activeOpacity={0.8}
@@ -53,26 +90,34 @@ const ProfileHeader = ({
                 </TouchableOpacity>
             )}
 
-            <View style={{ ...styles.container, ...style }}>
+            <View style={styles.container}>
                 <View style={styles.imgContainer}>
-                    <Avatar.Image
-                        size={85}
-                        source={{ uri: data.avatar }}
-                        backgroundColor={Colors.light}
-                    />
-                    {data.is_me && (
-                        <TouchableOpacity
-                            activeOpacity={0.8}
-                            style={styles.avatarUploadBtn}
-                            onPress={() =>
-                                pickImage([1, 1], (uri) => {
-                                    uploadAvatar(uri)
-                                })
-                            }
-                        >
-                            <FontAwesome name="upload" size={12} color={Colors.light} />
-                        </TouchableOpacity>
-                    )}
+                    <View>
+                        <Avatar.Image
+                            size={100}
+                            source={{ uri: data.avatar }}
+                            backgroundColor={Colors.light}
+                        />
+                        {data.is_me && (
+                            <TouchableOpacity
+                                activeOpacity={0.8}
+                                style={styles.avatarUploadBtn}
+                                onPress={() =>
+                                    pickImage([1, 1], (uri) => {
+                                        uploadAvatar(uri)
+                                    })
+                                }
+                            >
+                                <FontAwesome name="upload" size={12} color={Colors.light} />
+                            </TouchableOpacity>
+                        )}
+                    </View>
+                    {/* <SecondaryButton
+                        onPress={() => {}}
+                        title={'See Resume'}
+                        style={styles.secondaryBtnStyle}
+                        labelStyle={styles.secondaryBtnlabelStyle}
+                    /> */}
                 </View>
 
                 <View>
@@ -83,10 +128,8 @@ const ProfileHeader = ({
                         <Text size={12} numberOfLines={1} color={Colors.white}>
                             {data.email}
                         </Text>
-                    </View>
 
-                    <View style={styles.footerContainer}>
-                        {data.preview && (
+                        {/* {data.preview && (
                             <Text
                                 color={Colors.white}
                                 size={12}
@@ -95,7 +138,9 @@ const ProfileHeader = ({
                             >
                                 {data.preview}
                             </Text>
-                        )}
+                        )} */}
+                        {renderFollowBtn()}
+
                         <TouchableOpacity
                             onPress={onFollowCountsPress}
                             style={{
@@ -103,7 +148,7 @@ const ProfileHeader = ({
                             }}
                         >
                             <View>
-                                <Text size={12} style={{ marginRight: 15 }} color={Colors.white}>
+                                <Text size={12} style={{ marginRight: 5 }} color={Colors.white}>
                                     {data.following_count} Following
                                 </Text>
                             </View>
@@ -125,7 +170,7 @@ export default ProfileHeader
 
 const styles = StyleSheet.create({
     imgBgContainer: {
-        height: 225,
+        height: 250,
     },
     container: {
         position: 'absolute',
@@ -140,9 +185,6 @@ const styles = StyleSheet.create({
         borderColor: 'lime',
     },
     imgContainer: {
-        borderRadius: 100,
-        height: 85,
-        width: 85,
         marginRight: 10,
     },
     avatarUploadBtn: {
@@ -158,10 +200,11 @@ const styles = StyleSheet.create({
         top: 10,
         right: 10,
     },
-    bodyContainer: {},
-    footerContainer: {
-        borderColor: Colors.light,
+    bodyContainer: {
+        justifyContent: 'space-evenly',
+        flex: 1,
     },
+    footerContainer: {},
     cameraContainer: {
         position: 'absolute',
         top: 35,
@@ -180,5 +223,29 @@ const styles = StyleSheet.create({
         padding: 5,
         backgroundColor: 'rgba(0,0,0,.5)',
         borderRadius: 50,
+    },
+    secondaryBtnStyle: {
+        marginHorizontal: 0,
+        borderColor: Colors.white,
+        borderRadius: 10,
+        borderWidth: 1,
+        marginTop: 5,
+    },
+    secondaryBtnlabelStyle: {
+        fontSize: 12,
+        marginVertical: 5,
+        marginHorizontal: 10,
+        color: Colors.white,
+    },
+    btnStyle: {
+        marginHorizontal: 0,
+        borderRadius: 7,
+        borderWidth: 1,
+        elevation: 1,
+    },
+    btnLabelStyle: {
+        fontSize: 12,
+        marginVertical: 5,
+        marginHorizontal: 10,
     },
 })

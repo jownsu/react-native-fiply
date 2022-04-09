@@ -1,5 +1,6 @@
 import React, { useState, useContext, useReducer, createContext } from 'react'
 import AuthContext from '../auth/AuthContext'
+import { FollowProvider } from '../follow/FollowContext'
 import api from '../../api'
 import ProfileReducer from './ProfileReducer'
 import * as SecureStore from 'expo-secure-store'
@@ -14,24 +15,6 @@ export const ProfileProvider = ({ children }) => {
         userInfo: {},
         experiences: [],
         educationalBackgrounds: [],
-        followers: {
-            data: [],
-            links: {
-                next: '',
-            },
-            meta: {
-                total: 0,
-            },
-        },
-        following: {
-            data: [],
-            links: {
-                next: '',
-            },
-            meta: {
-                total: 0,
-            },
-        },
         loading: false,
     }
 
@@ -89,90 +72,6 @@ export const ProfileProvider = ({ children }) => {
             )
             .catch((err) => console.log(err))
     }
-
-    const getFollowers = async (id = 'me', search = '') => {
-        setLoading()
-        let searchQuery = ''
-        if (search != '') {
-            searchQuery = `?search=${search}`
-        }
-
-        await api({ token: user.token })
-            .get(`/${id}/followers${searchQuery}`)
-            .then((res) => {
-                dispatch({ type: 'GET_FOLLOWERS', payload: res.data })
-            })
-            .catch((err) => console.log(err))
-    }
-
-    const moreFollowers = async (reset = false) => {
-        if (state.followers.links.next) {
-            setLoading()
-            await api({ token: user.token })
-                .get(state.followers.links.next)
-                .then((res) => {
-                    reset
-                        ? dispatch({ type: 'GET_FOLLOWERS', payload: res.data })
-                        : dispatch({ type: 'MORE_FOLLOWERS', payload: res.data })
-                })
-                .catch((err) => console.log(err))
-        }
-    }
-
-    const getFollowing = async (id = 'me', search = '') => {
-        setLoading()
-        let searchQuery = ''
-        if (search != '') {
-            searchQuery = `?search=${search}`
-        }
-        await api({ token: user.token })
-            .get(`/${id}/following${searchQuery}`)
-            .then((res) => {
-                dispatch({ type: 'GET_FOLLOWING', payload: res.data })
-            })
-            .catch((err) => console.log(err))
-    }
-
-    const moreFollowing = async (reset = false) => {
-        if (state.following.links.next) {
-            setLoading()
-            await api({ token: user.token })
-                .get(state.following.links.next)
-                .then((res) => {
-                    console.log(res.data)
-                    reset
-                        ? dispatch({ type: 'GET_FOLLOWING', payload: res.data })
-                        : dispatch({ type: 'MORE_FOLLOWING', payload: res.data })
-                })
-                .catch((err) => console.log(err))
-        }
-    }
-
-    const unFollow = async (id) => {
-        await api({ token: user.token })
-            .post('/unFollow', { user_id: id })
-            .then((res) => {
-                if (res.data.data) {
-                    dispatch({ type: 'REMOVE_FOLLOWING', payload: id })
-                }
-                setSnackBarMessage(res.data.message)
-            })
-            .catch((err) => setSnackBarMessage(err.message))
-    }
-
-    const removeFollower = async (id) => {
-        await api({ token: user.token })
-            .post('/removeFollower', { user_id: id })
-            .then((res) => {
-                if (res.data.data) {
-                    dispatch({ type: 'REMOVE_FOLLOWER', payload: id })
-                }
-                setSnackBarMessage(res.data.message)
-            })
-            .catch((err) => setSnackBarMessage(err.message))
-    }
-
-    //PROFILE FUNCTIONS
 
     const createExperience = async (data, setDispatch = false) => {
         setLoading()
@@ -264,6 +163,41 @@ export const ProfileProvider = ({ children }) => {
             .catch((err) => console.log(err))
     }
 
+    const follow = async () => {
+        await api({ token: user.token })
+            .post('/follow', { user_id: state.userInfo.id })
+            .then((res) => {
+                if (res.data.data) {
+                    dispatch({ type: 'SET_TO_PENDING' })
+                }
+                setSnackBarMessage(res.data.message)
+            })
+            .catch((err) => setSnackBarMessage(err.message))
+    }
+
+    const unFollow = async () => {
+        await api({ token: user.token })
+            .post('/unFollow', { user_id: state.userInfo.id })
+            .then((res) => {
+                if (res.data.data) {
+                    dispatch({ type: 'SET_TO_FOLLOW' })
+                }
+                setSnackBarMessage(res.data.message)
+            })
+            .catch((err) => setSnackBarMessage(err.message))
+    }
+
+    const cancelFollowRequest = async () => {
+        await api({ token: user.token })
+            .post('/unFollow', { user_id: state.userInfo.id })
+            .then((res) => {
+                if (res.data.data) {
+                    dispatch({ type: 'SET_TO_FOLLOW' })
+                    setSnackBarMessage('Cancelled follow request')
+                }
+            })
+            .catch((err) => setSnackBarMessage(err.message))
+    }
     const hideSnackBar = () => setSnackBarMessage(null)
 
     const setLoading = () => dispatch({ type: 'SET_LOADING' })
@@ -280,17 +214,14 @@ export const ProfileProvider = ({ children }) => {
                 uploadResume,
                 uploadAvatar,
                 uploadCover,
-                getFollowers,
-                moreFollowers,
-                getFollowing,
-                moreFollowing,
+                follow,
                 unFollow,
-                removeFollower,
+                cancelFollowRequest,
                 snackBarMessage,
                 hideSnackBar,
             }}
         >
-            {children}
+            <FollowProvider>{children}</FollowProvider>
         </ProfileContext.Provider>
     )
 }

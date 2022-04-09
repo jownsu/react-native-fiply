@@ -4,11 +4,11 @@ import { Dialog, Portal, Avatar } from 'react-native-paper'
 import { Text } from '../FiplyComponents'
 import Colors from '../../../utils/Colors'
 
-const FollowingAction = ({
+const CancelFollowAction = ({
     visible = false,
     user = {},
     onDismiss = () => {},
-    onUnFollowPress = () => {},
+    onCancelFollow = () => {},
 }) => {
     return (
         <View>
@@ -22,12 +22,12 @@ const FollowingAction = ({
                             style={{ marginBottom: 20 }}
                         />
                         <Text>
-                            Unfollow <Text weight="medium">{user.fullname}</Text>?
+                            Cancel follow request to <Text weight="medium">{user.fullname}</Text>?
                         </Text>
                     </View>
-                    <TouchableOpacity style={styles.btn} onPress={() => onUnFollowPress(user.id)}>
+                    <TouchableOpacity style={styles.btn} onPress={() => onCancelFollow(user.id)}>
                         <Text color={Colors.red} weight="medium">
-                            Unfollow
+                            Cancel follow request
                         </Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.btn} onPress={onDismiss}>
@@ -57,4 +57,4 @@ const styles = StyleSheet.create({
     },
 })
 
-export default FollowingAction
+export default CancelFollowAction

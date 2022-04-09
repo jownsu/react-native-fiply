@@ -4,6 +4,7 @@ import { Snackbar } from 'react-native-paper'
 import ProfileContext from '../../../api/context/profile/ProfileContext'
 import PostContext from '../../../api/context/posts/PostContext'
 import CommentContext from '../../../api/context/comments/CommentContext'
+import FollowContext from '../../../api/context/follow/FollowContext'
 import {
     Text,
     BottomSheetModal,
@@ -23,6 +24,9 @@ import MyPostAction from '../../components/modals/MyPostAction'
 import UnSavePostAction from '../../components/modals/UnSavePostAction'
 import PostAction from '../../components/modals/PostAction'
 
+import FollowingAction from '../../components/modals/FollowingAction'
+import CancelFollowAction from '../../components/modals/CancelFollowAction'
+
 import NoData from '../../components/NoData'
 import { default as EditPost } from '../../components/modals/CreatePost'
 import { default as DeleteConfirmation } from '../../components/dialog/Confirmation'
@@ -36,14 +40,15 @@ const ProfileScreen = ({ navigation, route }) => {
         getUserInfo,
         getExperiences,
         getEducationalBackgrounds,
-        getFollowers,
-        getFollowing,
         experiences,
-        followers,
-        following,
         educationalBackgrounds,
+        follow,
+        unFollow,
+        cancelFollowRequest,
         loading,
     } = useContext(ProfileContext)
+
+    const { followers, following, getFollowers, getFollowing } = useContext(FollowContext)
     const {
         posts,
         getPosts,
@@ -66,6 +71,9 @@ const ProfileScreen = ({ navigation, route }) => {
     const [showUnSaveAction, setShowUnSaveAction] = useState(false)
     const [showMyPostAction, setShowMyPostAction] = useState(false)
     const [showPostAction, setShowPostAction] = useState(false)
+
+    const [showFollowingAction, setShowFollowingAction] = useState(false)
+    const [showCancelFollowAction, setShowCancelFollowAction] = useState(false)
 
     const [showCreatePost, setShowCreatePost] = useState(false)
     const [selectedPost, setSelectedPost] = useState({ content: '' })
@@ -283,6 +291,20 @@ const ProfileScreen = ({ navigation, route }) => {
         }
     }
 
+    const handleUnFollowPress = () => {
+        unFollow()
+        setShowFollowingAction(false)
+    }
+
+    const handleCancelFollowPress = () => {
+        cancelFollowRequest()
+        setShowCancelFollowAction(false)
+    }
+
+    const handleFollowPress = () => {
+        follow()
+    }
+
     return (
         <Container>
             <FlatList
@@ -309,6 +331,8 @@ const ProfileScreen = ({ navigation, route }) => {
                                 cover: userInfo.cover,
                                 following_count: userInfo.following_count,
                                 followers_count: userInfo.followers_count,
+                                is_following: userInfo.is_following,
+                                is_following_pending: userInfo.is_following_pending,
                                 is_me: userInfo.is_me,
                             }}
                             onBackPress={() => navigation.pop()}
@@ -319,9 +343,11 @@ const ProfileScreen = ({ navigation, route }) => {
                                 if (followers.data.length == 0) {
                                     getFollowers(userId)
                                 }
-
                                 navigation.push('FollowScreen')
                             }}
+                            onFollowingPress={() => setShowFollowingAction(true)}
+                            onPendingPress={() => setShowCancelFollowAction(true)}
+                            onFollowPress={handleFollowPress}
                         />
                         <TopNavigation
                             navTitles={['Activity', 'About', 'Background', 'Education']}
@@ -449,6 +475,23 @@ const ProfileScreen = ({ navigation, route }) => {
                 }}
             />
 
+            <FollowingAction
+                visible={showFollowingAction}
+                user={userInfo}
+                onDismiss={() => {
+                    setShowFollowingAction(false)
+                }}
+                onUnFollowPress={handleUnFollowPress}
+            />
+
+            <CancelFollowAction
+                visible={showCancelFollowAction}
+                user={userInfo}
+                onDismiss={() => {
+                    setShowCancelFollowAction(false)
+                }}
+                onCancelFollow={handleCancelFollowPress}
+            />
             <Snackbar
                 visible={snackBarMessage ? true : false}
                 onDismiss={() => hideSnackBar()}

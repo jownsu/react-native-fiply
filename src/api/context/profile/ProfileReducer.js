@@ -38,76 +38,23 @@ const ProfileReducer = (state, action) => {
                 loading: false,
             }
 
-        case 'GET_FOLLOWERS':
-            return {
-                ...state,
-                followers: action.payload,
-                loading: false,
-            }
-
-        case 'MORE_FOLLOWERS':
-            return {
-                ...state,
-                followers: {
-                    ...state.followers,
-                    data: [...state.followers.data, ...action.payload.data],
-                    links: { ...action.payload.links },
-                },
-                loading: false,
-            }
-
-        case 'REMOVE_FOLLOWER':
+        case 'SET_TO_PENDING':
             return {
                 ...state,
                 userInfo: {
                     ...state.userInfo,
-                    followers_count: state.userInfo.followers_count - 1,
+                    is_following_pending: true,
                 },
-                followers: {
-                    ...state.followers,
-                    data: [...state.followers.data.filter((item) => item.id != action.payload)],
-                    meta: {
-                        ...state.followers.meta,
-                        total: state.followers.meta.total - 1,
-                    },
-                },
-                loading: false,
             }
 
-        case 'GET_FOLLOWING':
-            return {
-                ...state,
-                following: action.payload,
-                loading: false,
-            }
-
-        case 'MORE_FOLLOWING':
-            return {
-                ...state,
-                following: {
-                    ...state.following,
-                    data: [...state.following.data, ...action.payload.data],
-                    links: { ...action.payload.links },
-                },
-                loading: false,
-            }
-
-        case 'REMOVE_FOLLOWING':
+        case 'SET_TO_FOLLOW':
             return {
                 ...state,
                 userInfo: {
                     ...state.userInfo,
-                    following_count: state.userInfo.following_count - 1,
+                    is_following_pending: false,
+                    is_following: false,
                 },
-                following: {
-                    ...state.following,
-                    data: [...state.following.data.filter((item) => item.id != action.payload)],
-                    meta: {
-                        ...state.following.meta,
-                        total: state.following.meta.total - 1,
-                    },
-                },
-                loading: false,
             }
 
         case 'SET_LOADING':

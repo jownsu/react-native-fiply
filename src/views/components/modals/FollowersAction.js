@@ -1,8 +1,7 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { View, StyleSheet, TouchableOpacity } from 'react-native'
-import { Dialog, Portal, Button, Avatar } from 'react-native-paper'
+import { Dialog, Portal, Avatar } from 'react-native-paper'
 import { Text } from '../FiplyComponents'
-import { FontAwesome, FontAwesome5, MaterialIcons } from '@expo/vector-icons'
 import Colors from '../../../utils/Colors'
 
 const FollowersAction = ({

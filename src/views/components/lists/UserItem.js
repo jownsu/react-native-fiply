@@ -38,7 +38,7 @@ const UserItem = memo(
         )
     },
     (prevProps, nextProps) => {
-        if (prevProps.id == nextProps.id) return true
+        if (prevProps.data.id == nextProps.data.id) return true
         return false
     }
 )
