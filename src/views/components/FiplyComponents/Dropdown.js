@@ -21,6 +21,7 @@ export const Dropdown = ({
     iconStyle,
     noTextInput,
     isLoading = false,
+    mode = 'outlined',
     onChangeTextDelay = () => {},
     onTextInputPress = () => {},
     delay = 500,
@@ -67,6 +68,7 @@ export const Dropdown = ({
                     label={label}
                     value={value}
                     error={error}
+                    mode={mode}
                     errorMsg={errorMsg}
                     nonEditable
                     style={{ ...textInputStyle }}

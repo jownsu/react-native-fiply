@@ -1,21 +1,54 @@
 import React from 'react'
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet, View, TouchableOpacity } from 'react-native'
 import { Text } from '../FiplyComponents'
 import Colors from '../../../utils/Colors'
-import { FontAwesome } from '@expo/vector-icons'
+import { FontAwesome, MaterialIcons } from '@expo/vector-icons'
 
-const CardInfo = ({ title, headers, infos }) => {
+const CardInfo = ({
+    title = ' ',
+    centerTitle = false,
+    headers,
+    infos,
+    showAction = false,
+    onEditPress = () => {},
+    onDeletePress = () => {},
+}) => {
     return (
         <View style={styles.container}>
             <View style={styles.headerContainer}>
-                <Text center weight="medium" size={14}>
-                    {title}
-                </Text>
-                {/* <FontAwesome name="edit" size={21} color={Colors.black} style={styles.editIcon}/>  */}
+                {title ? (
+                    <Text center={centerTitle} flex weight="medium" size={16}>
+                        {title}
+                    </Text>
+                ) : null}
+                {showAction ? (
+                    <View style={styles.actionContainer}>
+                        <TouchableOpacity onPress={onEditPress}>
+                            <FontAwesome
+                                name="edit"
+                                size={21}
+                                color={Colors.black}
+                                style={styles.icon}
+                            />
+                        </TouchableOpacity>
+
+                        <TouchableOpacity onPress={onDeletePress}>
+                            <MaterialIcons
+                                name="delete"
+                                size={21}
+                                color={Colors.red}
+                                style={styles.icon}
+                            />
+                        </TouchableOpacity>
+                    </View>
+                ) : null}
             </View>
 
             <View style={styles.bodyContainer}>
                 {Object.values(infos).map((item, index) => {
+                    if (!item) {
+                        return null
+                    }
                     return (
                         <View style={styles.col} key={index}>
                             <Text weight="medium" style={styles.colKey}>
@@ -36,20 +69,26 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor: Colors.white,
         borderRadius: 15,
-        padding: 10,
+        paddingHorizontal: 10,
+        paddingBottom: 10,
         borderWidth: 1,
         borderColor: Colors.light,
         marginBottom: 5,
     },
     headerContainer: {
-        justifyContent: 'center',
-        paddingVertical: 5,
+        flexDirection: 'row',
         borderBottomWidth: 1,
         borderColor: Colors.light,
+        paddingVertical: 10,
+        alignItems: 'center',
+        justifyContent: 'space-between',
     },
-    editIcon: {
-        position: 'absolute',
-        right: 10,
+    actionContainer: {
+        flexDirection: 'row',
+        alignSelf: 'flex-end',
+    },
+    icon: {
+        paddingHorizontal: 5,
     },
     col: {
         flexDirection: 'row',

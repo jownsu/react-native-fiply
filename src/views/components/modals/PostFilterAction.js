@@ -5,7 +5,7 @@ import { Text } from '../FiplyComponents'
 import { FontAwesome5 } from '@expo/vector-icons'
 import Colors from '../../../utils/Colors'
 
-const PostFilterDialog = ({
+const PostFilterAction = ({
     visible = false,
     isMe = false,
     filterIndex = 0,
@@ -143,4 +143,4 @@ const styles = StyleSheet.create({
     },
 })
 
-export default PostFilterDialog
+export default PostFilterAction

@@ -13,6 +13,7 @@ export const ProfileProvider = ({ children }) => {
 
     const initialState = {
         userInfo: {},
+        jobPreference: {},
         experiences: [],
         educationalBackgrounds: [],
         loading: false,
@@ -45,12 +46,28 @@ export const ProfileProvider = ({ children }) => {
                         status: profileData.status,
                         preview: profileData.preview,
                         avatar: profileData.avatar,
+                        account_level: profileData.account_level,
                     }
 
                     setUser({ ...user, ...userData })
                 }
 
                 dispatch({ type: 'GET_USER_INFO', payload: profileData })
+            })
+            .catch((err) => console.log(err))
+    }
+
+    const updateProfile = async (data) => {
+        setLoading()
+        await api({ token: user.token })
+            .put(`/me`, {
+                ...data,
+                firstname: state.userInfo.firstname,
+                lastname: state.userInfo.lastname,
+            })
+            .then((res) => {
+                dispatch({ type: 'UPDATE_PROFILE', payload: res.data.data })
+                setSnackBarMessage('Updated')
             })
             .catch((err) => console.log(err))
     }
@@ -73,28 +90,92 @@ export const ProfileProvider = ({ children }) => {
             .catch((err) => console.log(err))
     }
 
-    const createExperience = async (data, setDispatch = false) => {
+    const getJobPreference = async (id = 'me') => {
+        setLoading()
+        await api({ token: user.token })
+            .get(`/${id}/jobPreferences`)
+            .then((res) => dispatch({ type: 'GET_JOB_PREFERENCE', payload: res.data.data }))
+            .catch((err) => console.log(err))
+    }
+
+    const updateJobPreference = async (data) => {
+        setLoading()
+        await api({ token: user.token })
+            .put(`/jobPreferences/${state.jobPreference.id}`, data)
+            .then((res) => {
+                dispatch({ type: 'UPDATE_JOB_PREFERENCE', payload: res.data.data })
+                setSnackBarMessage('Updated')
+            })
+            .catch((err) => console.log(err))
+    }
+
+    const createExperience = async (data) => {
         setLoading()
         await api({ token: user.token })
             .post(`/experiences`, data)
             .then((res) => {
-                setDispatch ?? dispatch({ type: 'SET_EXPERIENCE', payload: res.data.data })
+                dispatch({ type: 'ADD_EXPERIENCE', payload: res.data.data })
+                setSnackBarMessage('Addded')
             })
             .catch((err) => console.log(err))
     }
 
-    const createEducationalBackground = async (data, setDispatch = false) => {
+    const updateExperience = async (data) => {
+        setLoading()
+        await api({ token: user.token })
+            .put(`/experiences/${data.id}`, data)
+            .then((res) => {
+                dispatch({ type: 'UPDATE_EXPERIENCE', payload: res.data.data })
+                setSnackBarMessage('Updated')
+            })
+            .catch((err) => console.log(err))
+    }
+
+    const deleteExperience = async (id) => {
+        setLoading()
+        await api({ token: user.token })
+            .delete(`/experiences/${id}`)
+            .then((res) => {
+                dispatch({ type: 'DELETE_EXPERIENCE', payload: id })
+                setSnackBarMessage('Deleted')
+            })
+            .catch((err) => console.log(err))
+    }
+
+    const createEducationalBackground = async (data) => {
         setLoading()
         await api({ token: user.token })
             .post(`/educationalBackgrounds`, data)
             .then((res) => {
-                setDispatch ??
-                    dispatch({ type: 'SET_EDUCATIONAL_BACKGROUND', payload: res.data.data })
+                dispatch({ type: 'ADD_EDUCATIONAL_BACKGROUND', payload: res.data.data })
+                setSnackBarMessage('Added')
             })
             .catch((err) => console.log(err))
     }
 
-    const uploadResume = async (doc, setDispatch = false) => {
+    const updateEducationalBackground = async (data) => {
+        setLoading()
+        await api({ token: user.token })
+            .put(`/educationalBackgrounds/${data.id}`, data)
+            .then((res) => {
+                dispatch({ type: 'UPDATE_EDUCATIONAL_BACKGROUND', payload: res.data.data })
+                setSnackBarMessage('Updated')
+            })
+            .catch((err) => console.log(err))
+    }
+
+    const deleteEducationalBackground = async (id) => {
+        setLoading()
+        await api({ token: user.token })
+            .delete(`/educationalBackgrounds/${id}`)
+            .then((res) => {
+                dispatch({ type: 'DELETE_EDUCATIONAL_BACKGROUND', payload: id })
+                setSnackBarMessage('Deleted')
+            })
+            .catch((err) => console.log(err))
+    }
+
+    const uploadResume = async (doc) => {
         setLoading()
 
         let fd = new FormData()
@@ -110,7 +191,7 @@ export const ProfileProvider = ({ children }) => {
         await api({ token: user.token })
             .post('/uploadResume', fd, config)
             .then((res) => {
-                setDispatch ?? dispatch({ type: 'SET_RESUME', payload: res.data })
+                dispatch({ type: 'SET_RESUME', payload: res.data })
             })
             .catch((err) => console.log(err))
     }
@@ -209,8 +290,15 @@ export const ProfileProvider = ({ children }) => {
                 getUserInfo,
                 getExperiences,
                 getEducationalBackgrounds,
+                getJobPreference,
                 createEducationalBackground,
                 createExperience,
+                updateProfile,
+                updateJobPreference,
+                updateExperience,
+                deleteExperience,
+                updateEducationalBackground,
+                deleteEducationalBackground,
                 uploadResume,
                 uploadAvatar,
                 uploadCover,

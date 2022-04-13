@@ -1,7 +1,9 @@
 import { Button, StyleSheet, Text, View, Image } from 'react-native'
 import React, { useState } from 'react'
+import { ActivityIndicator } from 'react-native-paper'
 import TesseractOcr, { LANG_ENGLISH, useEventListener } from 'react-native-tesseract-ocr'
 import useCamera from './utils/useCamera'
+import usePickImage from './utils/usePIckImage'
 
 const DEFAULT_HEIGHT = 500
 const DEFAULT_WITH = 600
@@ -17,36 +19,24 @@ const TestScreen = () => {
     const [imgSrc, setImgSrc] = useState(null)
     const [text, setText] = useState('')
     const { captureImage } = useCamera()
+    const [loading, setLoading] = useState(false)
+    const { pickImage } = usePickImage()
 
     useEventListener('onProgressChange', (p) => {
         setProgress(p.percent / 100)
     })
 
-    const recognizeTextFromImage = async (path) => {
-        setIsLoading(true)
-
-        try {
-            const tesseractOptions = {}
-            const recognizedText = await TesseractOcr.recognize(
-                path,
-                LANG_ENGLISH,
-                tesseractOptions
-            )
-            setText(recognizedText)
-        } catch (err) {
-            console.error(err)
-            setText('')
-        }
-
-        setIsLoading(false)
-        setProgress(0)
-    }
-
     const recognizeFromPicker = async (options = defaultPickerOptions) => {
         try {
-            const image = await ImagePicker.openPicker(options)
-            setImgSrc({ uri: image.path })
-            await recognizeTextFromImage(image.path)
+            pickImage(false, (uri) => {
+                setImgSrc({ uri: uri })
+                TesseractOcr.recognize(uri, LANG_ENGLISH, {})
+                    .then((res) => {
+                        console.log(res)
+                        setText(res)
+                    })
+                    .catch((err) => console.log(err))
+            })
         } catch (err) {
             if (err.message !== 'User cancelled image selection') {
                 console.error(err)
@@ -55,22 +45,11 @@ const TestScreen = () => {
     }
 
     const recognizeFromCamera = async (options = defaultPickerOptions) => {
-        // try {
-        //     const image = await ImagePicker.openCamera(options)
-        //     setImgSrc({ uri: image.path })
-        //     await recognizeTextFromImage(image.path)
-        // } catch (err) {
-        //     if (err.message !== 'User cancelled image selection') {
-        //         console.error(err)
-        //     }
-        // }
-
         try {
             captureImage((response, uri) => {
                 setImgSrc({ uri: uri })
                 TesseractOcr.recognize(uri, LANG_ENGLISH, {})
                     .then((res) => {
-                        console.log('@@@@@@@@@@@@@@')
                         console.log(res)
                         setText(res)
                     })
@@ -106,10 +85,11 @@ const TestScreen = () => {
                         }}
                     />
                 </View>
+                <ActivityIndicator animating={loading} />
             </View>
             {imgSrc && (
                 <View style={styles.imageContainer}>
-                    <Image style={styles.image} source={imgSrc} />
+                    <Image style={styles.image} source={imgSrc} resizeMode="contain" />
                     {isLoading ? <Text>Loading...</Text> : <Text>{text}</Text>}
                 </View>
             )}

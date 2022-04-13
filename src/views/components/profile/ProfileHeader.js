@@ -22,6 +22,7 @@ const ProfileHeader = ({
     onFollowingPress = () => {},
     onPendingPress = () => {},
     onFollowPress = () => {},
+    onSettingPress = () => {},
 }) => {
     const { pickImage } = usePickImage()
     const { uploadAvatar, uploadCover } = useContext(ProfileContext)
@@ -98,7 +99,7 @@ const ProfileHeader = ({
                             source={{ uri: data.avatar }}
                             backgroundColor={Colors.light}
                         />
-                        {data.is_me && (
+                        {/* {data.is_me && (
                             <TouchableOpacity
                                 activeOpacity={0.8}
                                 style={styles.avatarUploadBtn}
@@ -109,6 +110,15 @@ const ProfileHeader = ({
                                 }
                             >
                                 <FontAwesome name="upload" size={12} color={Colors.light} />
+                            </TouchableOpacity>
+                        )} */}
+                        {data.is_me && (
+                            <TouchableOpacity
+                                activeOpacity={0.8}
+                                style={styles.avatarUploadBtn}
+                                onPress={onSettingPress}
+                            >
+                                <MaterialIcons name="settings" size={14} color={Colors.light} />
                             </TouchableOpacity>
                         )}
                     </View>

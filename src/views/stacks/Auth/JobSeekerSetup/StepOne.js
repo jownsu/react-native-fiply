@@ -25,8 +25,8 @@ const StepOne = ({ navigation }) => {
         loading: employmentTypeLoading,
         getEmploymentTypes,
     } = useEmploymentType()
-    const { setExperience } = useContext(SignUpContext)
     const { locations, loading: locationLoading, getLocations } = useLocation()
+    const { setExperience } = useContext(SignUpContext)
 
     const experienceSchema = yup.object({
         job_title: yup.string().trim().required('Most recent job is required').min(2),

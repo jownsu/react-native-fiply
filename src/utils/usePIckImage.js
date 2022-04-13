@@ -5,14 +5,18 @@ const usePickImage = () => {
     const [pickUri, setPickUri] = useState('')
     const [loading, setLoading] = useState(false)
 
-    const pickImage = async (aspect = [1, 1], onUpload = () => {}) => {
+    const pickImage = async (aspect, onUpload = () => {}) => {
         setLoading(true)
-        await ImagePicker.launchImageLibraryAsync({
+
+        const imgPickerConfig = {
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsEditing: true,
-            aspect: aspect,
             quality: 0.5,
-        })
+        }
+
+        const test = aspect == false ? {} : { aspect: aspect }
+
+        await ImagePicker.launchImageLibraryAsync({ ...imgPickerConfig, ...test })
             .then((response) => {
                 if (!response.cancelled) {
                     const imageUri = 'file:///' + response.uri.split('file:/').join('')

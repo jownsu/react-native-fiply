@@ -19,10 +19,11 @@ import ProfileHeader from '../../components/profile/ProfileHeader'
 import CardInfo from '../../components/profile/CardInfo'
 import TitleFilter from '../../components/headers/TitleFilter'
 import TopNavigation from '../../components/headers/TopNavigation'
-import PostFilterDialog from '../../components/dialog/PostFilterDialog'
+import PostFilterAction from '../../components/modals/PostFilterAction'
 import MyPostAction from '../../components/modals/MyPostAction'
 import UnSavePostAction from '../../components/modals/UnSavePostAction'
 import PostAction from '../../components/modals/PostAction'
+import EditProfileAction from '../../components/modals/EditProfileAction'
 
 import FollowingAction from '../../components/modals/FollowingAction'
 import CancelFollowAction from '../../components/modals/CancelFollowAction'
@@ -41,6 +42,8 @@ const ProfileScreen = ({ navigation, route }) => {
         getExperiences,
         getEducationalBackgrounds,
         experiences,
+        getJobPreference,
+        jobPreference,
         educationalBackgrounds,
         follow,
         unFollow,
@@ -71,6 +74,7 @@ const ProfileScreen = ({ navigation, route }) => {
     const [showUnSaveAction, setShowUnSaveAction] = useState(false)
     const [showMyPostAction, setShowMyPostAction] = useState(false)
     const [showPostAction, setShowPostAction] = useState(false)
+    const [showEditProfileAction, setShowEditProfileAction] = useState(false)
 
     const [showFollowingAction, setShowFollowingAction] = useState(false)
     const [showCancelFollowAction, setShowCancelFollowAction] = useState(false)
@@ -90,6 +94,7 @@ const ProfileScreen = ({ navigation, route }) => {
 
     useEffect(() => {
         getUserInfo(userId)
+        getJobPreference(userId)
         getPosts('/posts', userId)
     }, [])
 
@@ -123,9 +128,9 @@ const ProfileScreen = ({ navigation, route }) => {
         navigation.push('CommentScreen', { post: item })
     }
 
-    const renderBackgroundItem = ({ item, index }) => (
+    const renderBackgroundItem = ({ item }) => (
         <CardInfo
-            key={index}
+            key={item.id}
             title="Work Experience"
             headers={[
                 'Company',
@@ -143,12 +148,14 @@ const ProfileScreen = ({ navigation, route }) => {
                 starting_date: item.starting_date,
                 completion_date: item.completion_date,
             }}
+            showAction={userInfo.is_me}
+            onEditPress={() => navigation.push('EditExperienceScreen', { data: item })}
         />
     )
 
-    const renderEducationItem = ({ item, index }) => (
+    const renderEducationItem = ({ item }) => (
         <CardInfo
-            key={index}
+            key={item.id}
             title="Education"
             headers={['University', 'Degree', 'Field of Study', 'Starting Date', 'Completion Date']}
             infos={{
@@ -158,6 +165,8 @@ const ProfileScreen = ({ navigation, route }) => {
                 startingDate: item.starting_date,
                 completionDate: item.completion_date,
             }}
+            showAction={userInfo.is_me}
+            onEditPress={() => navigation.push('EditEducationalBackgroundScreen', { data: item })}
         />
     )
 
@@ -187,6 +196,15 @@ const ProfileScreen = ({ navigation, route }) => {
                                 telephone: userInfo.telephone_no,
                                 email: userInfo.email,
                                 website: userInfo.website,
+                            }}
+                        />
+                        <CardInfo
+                            title={'Job Preference'}
+                            headers={['Job Title', 'Location', 'Employment Type']}
+                            infos={{
+                                jobTitle: jobPreference.job_title,
+                                location: jobPreference.location,
+                                employmentType: jobPreference.employment_type,
                             }}
                         />
                     </>
@@ -281,12 +299,18 @@ const ProfileScreen = ({ navigation, route }) => {
     const getData = (id) => {
         switch (id) {
             case 0:
-                getPosts('/posts', userId)
+                if (posts.length == 0) {
+                    getPosts('/posts', userId)
+                }
             case 2:
-                getExperiences()
+                if (experiences.length == 0) {
+                    getExperiences()
+                }
                 break
             case 3:
-                getEducationalBackgrounds()
+                if (educationalBackgrounds.length == 0) {
+                    getEducationalBackgrounds()
+                }
                 break
         }
     }
@@ -348,6 +372,7 @@ const ProfileScreen = ({ navigation, route }) => {
                             onFollowingPress={() => setShowFollowingAction(true)}
                             onPendingPress={() => setShowCancelFollowAction(true)}
                             onFollowPress={handleFollowPress}
+                            onSettingPress={() => setShowEditProfileAction(true)}
                         />
                         <TopNavigation
                             navTitles={['Activity', 'About', 'Background', 'Education']}
@@ -384,7 +409,7 @@ const ProfileScreen = ({ navigation, route }) => {
 
             {/* MODALS */}
 
-            <PostFilterDialog
+            <PostFilterAction
                 visible={showModal}
                 onDismiss={() => {
                     setShowModal(false)
@@ -492,6 +517,16 @@ const ProfileScreen = ({ navigation, route }) => {
                 }}
                 onCancelFollow={handleCancelFollowPress}
             />
+
+            <EditProfileAction
+                visible={showEditProfileAction}
+                onDismiss={() => setShowEditProfileAction(false)}
+                onEditProfilePress={() => {
+                    setShowEditProfileAction(false)
+                    navigation.push('EditProfileScreen')
+                }}
+            />
+
             <Snackbar
                 visible={snackBarMessage ? true : false}
                 onDismiss={() => hideSnackBar()}

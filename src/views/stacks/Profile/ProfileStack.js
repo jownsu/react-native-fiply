@@ -3,6 +3,12 @@ import { createStackNavigator } from '@react-navigation/stack'
 import ProfileScreen from './ProfileScreen'
 import CommentScreen from '../Home/CommentScreen'
 import FollowScreen from './FollowScreen'
+import EditProfileScreen from './EditProfileScreen'
+import EditAboutScreen from './EditAboutScreen'
+import EditJobPreferenceScreen from './EditJobPreferenceScreen'
+import EditEducationalBackgroundScreen from './EditEducationalBackgroundScreen'
+import EditExperienceScreen from './EditExperienceScreen'
+import ChangePasswordScreen from './ChangePasswordScreen'
 import { PostProvider } from '../../../api/context/posts/PostContext'
 import { ProfileProvider } from '../../../api/context/profile/ProfileContext'
 const Stack = createStackNavigator()
@@ -22,6 +28,36 @@ const ProfileStack = ({ route }) => {
                         options={{ headerShown: false }}
                         name={'FollowScreen'}
                         component={FollowScreen}
+                    ></Stack.Screen>
+                    <Stack.Screen
+                        options={{ headerShown: false }}
+                        name={'EditProfileScreen'}
+                        component={EditProfileScreen}
+                    ></Stack.Screen>
+                    <Stack.Screen
+                        options={{ headerShown: false }}
+                        name={'EditAboutScreen'}
+                        component={EditAboutScreen}
+                    ></Stack.Screen>
+                    <Stack.Screen
+                        options={{ headerShown: false }}
+                        name={'EditJobPreferenceScreen'}
+                        component={EditJobPreferenceScreen}
+                    ></Stack.Screen>
+                    <Stack.Screen
+                        options={{ headerShown: false }}
+                        name={'EditEducationalBackgroundScreen'}
+                        component={EditEducationalBackgroundScreen}
+                    ></Stack.Screen>
+                    <Stack.Screen
+                        options={{ headerShown: false }}
+                        name={'EditExperienceScreen'}
+                        component={EditExperienceScreen}
+                    ></Stack.Screen>
+                    <Stack.Screen
+                        options={{ headerShown: false }}
+                        name={'ChangePasswordScreen'}
+                        component={ChangePasswordScreen}
                     ></Stack.Screen>
                     <Stack.Screen
                         options={{ headerShown: false }}
