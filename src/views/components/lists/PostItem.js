@@ -97,6 +97,8 @@ const PostItem = memo(
     (prevProps, nextProps) => {
         if (prevProps.data.is_upVoted != nextProps.data.is_upVoted) return false
         if (prevProps.data.upVotes_count != nextProps.data.upVotes_count) return false
+        if (prevProps.data.content != nextProps.data.content) return false
+        if (prevProps.data.image != nextProps.data.image) return false
         if (prevProps.data.id == nextProps.data.id) return true
         return false
     }

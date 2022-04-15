@@ -22,16 +22,18 @@ const Routes = () => {
             })
             .catch((error) => console.log(error))
 
-        SecureStore.getItemAsync('isFirstLaunch').then((res) => {
-            if (res == null) {
-                setIsFirstLaunched(true)
-                SecureStore.setItemAsync('isFirstLaunch', 'true')
-            } else {
-                setIsFirstLaunched(false)
-            }
+        SecureStore.getItemAsync('isFirstLaunch')
+            .then((res) => {
+                if (res == null) {
+                    setIsFirstLaunched(true)
+                    SecureStore.setItemAsync('isFirstLaunch', 'true')
+                } else {
+                    setIsFirstLaunched(false)
+                }
 
-            //SecureStore.deleteItemAsync('isFirstLaunch')
-        })
+                //SecureStore.deleteItemAsync('isFirstLaunch')
+            })
+            .catch((err) => console.log(err))
         // SecureStore.getItemAsync('logged_in')
         //     .then(response => {
         //         let logged = JSON.parse(response)

@@ -90,7 +90,10 @@ export const PostProvider = ({ children }) => {
 
         await api({ token: user.token })
             .post(`/posts/${id}`, fd)
-            .then((res) => dispatch({ type: 'UPDATE_POST', payload: res.data.data }))
+            .then((res) => {
+                console.log(res.data.data)
+                dispatch({ type: 'UPDATE_POST', payload: res.data.data })
+            })
             .catch((err) => console.log(err))
     }
 

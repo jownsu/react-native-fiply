@@ -3,7 +3,7 @@ import { StyleSheet, View, Image, TouchableOpacity, ImageBackground } from 'reac
 import { Avatar, Badge } from 'react-native-paper'
 import { Text, SecondaryButton, Button } from '../FiplyComponents'
 import Colors from '../../../utils/Colors'
-import { FontAwesome, MaterialIcons } from '@expo/vector-icons'
+import { FontAwesome, MaterialIcons, FontAwesome5, Ionicons } from '@expo/vector-icons'
 import usePickImage from '../../../utils/usePIckImage'
 import ProfileContext from '../../../api/context/profile/ProfileContext'
 
@@ -22,7 +22,9 @@ const ProfileHeader = ({
     onFollowingPress = () => {},
     onPendingPress = () => {},
     onFollowPress = () => {},
-    onSettingPress = () => {},
+    onEditProfilePress = () => {},
+    onSeeDetailsPress = () => {},
+    onMessagePress = () => {},
 }) => {
     const { pickImage } = usePickImage()
     const { uploadAvatar, uploadCover } = useContext(ProfileContext)
@@ -36,6 +38,7 @@ const ProfileHeader = ({
                         title={'Following'}
                         style={styles.btnStyle}
                         labelStyle={styles.btnLabelStyle}
+                        labelWeight={'Light'}
                     />
                 )
             }
@@ -47,6 +50,7 @@ const ProfileHeader = ({
                         title={'Pending'}
                         style={styles.btnStyle}
                         labelStyle={styles.btnLabelStyle}
+                        labelWeight={'Light'}
                     />
                 )
             }
@@ -57,87 +61,104 @@ const ProfileHeader = ({
                     title={'Follow'}
                     style={styles.btnStyle}
                     labelStyle={styles.btnLabelStyle}
+                    labelWeight={'Light'}
                 />
             )
         }
-        return null
+        return (
+            <Button
+                onPress={() => {}}
+                title={'Profile Link'}
+                style={styles.btnStyle}
+                labelStyle={styles.btnLabelStyle}
+                labelWeight={'Light'}
+            />
+        )
+    }
+    const renderEditButton = () => {
+        if (data.is_me) {
+            return (
+                <Button
+                    onPress={onEditProfilePress}
+                    title={'Edit Profile'}
+                    style={styles.btnEditStyle}
+                    labelStyle={styles.btnLabelStyle}
+                    icon={<FontAwesome5 name="user-edit" size={14} color={Colors.light} />}
+                    labelWeight={'Light'}
+                />
+            )
+        } else {
+            if (data.is_public || data.is_following) {
+                return (
+                    <Button
+                        onPress={onSeeDetailsPress}
+                        title={'See Details'}
+                        style={styles.btnEditStyle}
+                        labelStyle={styles.btnLabelStyle}
+                        icon={<FontAwesome5 name="user-alt" size={14} color={Colors.light} />}
+                        labelWeight={'Light'}
+                    />
+                )
+            } else {
+                return (
+                    <Button
+                        style={styles.btnEditStyle}
+                        labelStyle={styles.btnLabelStyle}
+                        icon={<FontAwesome5 name="eye-slash" size={14} color={Colors.light} />}
+                        disabled
+                        labelWeight={'Light'}
+                    />
+                )
+            }
+        }
     }
 
     return (
-        <ImageBackground
-            source={{ uri: data.cover }}
-            resizeMode="cover"
-            style={styles.imgBgContainer}
-        >
-            <TouchableOpacity
-                activeOpacity={0.8}
-                style={styles.backContainer}
-                onPress={onBackPress}
+        <View>
+            <ImageBackground
+                source={{ uri: data.cover }}
+                resizeMode="cover"
+                style={styles.imgBgContainer}
             >
-                <MaterialIcons name="arrow-back" size={18} color={Colors.white} />
-            </TouchableOpacity>
-
-            {data.is_me && (
                 <TouchableOpacity
                     activeOpacity={0.8}
-                    style={styles.cameraContainer}
-                    onPress={() => {
-                        pickImage([3, 2], (uri) => {
-                            uploadCover(uri)
-                        })
-                    }}
+                    style={styles.backContainer}
+                    onPress={onBackPress}
                 >
-                    <FontAwesome name="upload" size={12} color={Colors.white} />
+                    <MaterialIcons name="arrow-back" size={18} color={Colors.white} />
                 </TouchableOpacity>
-            )}
 
-            <View style={styles.container}>
-                <View style={styles.imgContainer}>
-                    <View>
-                        <Avatar.Image
-                            size={100}
-                            source={{ uri: data.avatar }}
-                            backgroundColor={Colors.light}
-                        />
-                        {/* {data.is_me && (
-                            <TouchableOpacity
-                                activeOpacity={0.8}
-                                style={styles.avatarUploadBtn}
-                                onPress={() =>
-                                    pickImage([1, 1], (uri) => {
-                                        uploadAvatar(uri)
-                                    })
-                                }
-                            >
-                                <FontAwesome name="upload" size={12} color={Colors.light} />
-                            </TouchableOpacity>
-                        )} */}
-                        {data.is_me && (
-                            <TouchableOpacity
-                                activeOpacity={0.8}
-                                style={styles.avatarUploadBtn}
-                                onPress={onSettingPress}
-                            >
-                                <MaterialIcons name="settings" size={14} color={Colors.light} />
-                            </TouchableOpacity>
-                        )}
-                    </View>
-                    {/* <SecondaryButton
-                        onPress={() => {}}
-                        title={'See Resume'}
-                        style={styles.secondaryBtnStyle}
-                        labelStyle={styles.secondaryBtnlabelStyle}
-                    /> */}
+                {data.is_me && (
+                    <TouchableOpacity
+                        activeOpacity={0.8}
+                        style={styles.cameraContainer}
+                        onPress={() => {
+                            pickImage([3, 2], (uri) => {
+                                uploadCover(uri)
+                            })
+                        }}
+                    >
+                        <FontAwesome name="upload" size={12} color={Colors.white} />
+                    </TouchableOpacity>
+                )}
+
+                <View style={styles.avatar}>
+                    <Avatar.Image
+                        size={125}
+                        source={{ uri: data.avatar }}
+                        backgroundColor={Colors.light}
+                    />
                 </View>
-
-                <View>
+            </ImageBackground>
+            <View style={styles.container}>
+                <View style={styles.mainInfoContainer}>
                     <View style={styles.bodyContainer}>
-                        <Text weight="semi-bold" size={14} numberOfLines={1} color={Colors.white}>
-                            {data.fullname}
-                        </Text>
-                        <Text size={12} numberOfLines={1} color={Colors.white}>
-                            {data.email}
-                        </Text>
+                        <View style={{ flex: 1.3 }}>
+                            <Text weight="semi-bold" size={16} numberOfLines={1}>
+                                {data.fullname}
+                            </Text>
+                            <Text>{data.description}</Text>
+                        </View>
 
                         {/* {data.preview && (
                             <Text
@@ -149,30 +170,44 @@ const ProfileHeader = ({
                                 {data.preview}
                             </Text>
                         )} */}
-                        {renderFollowBtn()}
-
-                        <TouchableOpacity
-                            onPress={onFollowCountsPress}
-                            style={{
-                                flexDirection: 'row',
-                            }}
-                        >
-                            <View>
-                                <Text size={12} style={{ marginRight: 5 }} color={Colors.white}>
-                                    {data.following_count} Following
-                                </Text>
-                            </View>
-
-                            <View>
-                                <Text size={12} color={Colors.white}>
-                                    {data.followers_count} Followers
-                                </Text>
-                            </View>
-                        </TouchableOpacity>
                     </View>
                 </View>
+                <View style={styles.profileBtnContainer}>
+                    {renderFollowBtn()}
+                    {!data.is_me && (
+                        <Button
+                            onPress={onMessagePress}
+                            title={'Message'}
+                            style={styles.btnEditStyle}
+                            labelStyle={styles.btnLabelStyle}
+                            icon={
+                                <Ionicons name="chatbubbles-sharp" size={14} color={Colors.light} />
+                            }
+                            labelWeight={'Light'}
+                        />
+                    )}
+
+                    {renderEditButton()}
+                </View>
+                <View style={styles.footerContainer}>
+                    <TouchableOpacity onPress={onFollowCountsPress} style={styles.followContainer}>
+                        <View style={{ marginRight: 15 }}>
+                            <Text size={14}>Following</Text>
+                            <Text size={16} weight="medium">
+                                {data.following_count}
+                            </Text>
+                        </View>
+
+                        <View>
+                            <Text size={14}>Followers</Text>
+                            <Text size={16} weight="medium">
+                                {data.followers_count}
+                            </Text>
+                        </View>
+                    </TouchableOpacity>
+                </View>
             </View>
-        </ImageBackground>
+        </View>
     )
 }
 
@@ -180,19 +215,28 @@ export default ProfileHeader
 
 const styles = StyleSheet.create({
     imgBgContainer: {
-        height: 250,
+        height: 200,
+        zIndex: 100,
     },
     container: {
-        position: 'absolute',
-        bottom: 0,
-        backgroundColor: 'rgba(0,0,0,.5)',
-        borderRadius: 10,
-        paddingHorizontal: 15,
+        backgroundColor: Colors.white,
+        borderColor: Colors.light,
+        paddingHorizontal: 20,
+    },
+    mainInfoContainer: {
+        marginTop: 30,
         paddingVertical: 10,
-        margin: 5,
         flexDirection: 'row',
-        alignItems: 'center',
-        borderColor: 'lime',
+        borderColor: Colors.light,
+    },
+    avatar: {
+        borderWidth: 5,
+        borderRadius: 100,
+        borderColor: Colors.lighter,
+        overflow: 'hidden',
+        position: 'absolute',
+        bottom: -35,
+        left: 10,
     },
     imgContainer: {
         marginRight: 10,
@@ -211,10 +255,18 @@ const styles = StyleSheet.create({
         right: 10,
     },
     bodyContainer: {
-        justifyContent: 'space-evenly',
+        justifyContent: 'space-between',
         flex: 1,
+        flexDirection: 'row',
     },
-    footerContainer: {},
+    profileBtnContainer: {
+        flexDirection: 'row',
+        paddingBottom: 10,
+        alignItems: 'center',
+    },
+    footerContainer: {
+        paddingBottom: 10,
+    },
     cameraContainer: {
         position: 'absolute',
         top: 35,
@@ -249,13 +301,26 @@ const styles = StyleSheet.create({
     },
     btnStyle: {
         marginHorizontal: 0,
-        borderRadius: 7,
+        borderRadius: 5,
         borderWidth: 1,
         elevation: 1,
+        marginRight: 5,
     },
     btnLabelStyle: {
-        fontSize: 12,
+        fontSize: 11,
         marginVertical: 5,
         marginHorizontal: 10,
+    },
+    btnEditStyle: {
+        marginHorizontal: 0,
+        borderRadius: 5,
+        marginRight: 5,
+        borderWidth: 1,
+        elevation: 1,
+        backgroundColor: Colors.grey,
+    },
+    followContainer: {
+        flexDirection: 'row',
+        flex: 1,
     },
 })

@@ -1,5 +1,13 @@
 import React, { useState, useEffect, useCallback, useContext, useRef, memo, useMemo } from 'react'
-import { StyleSheet, View, TouchableOpacity, RefreshControl, FlatList, Image } from 'react-native'
+import {
+    StyleSheet,
+    View,
+    TouchableOpacity,
+    RefreshControl,
+    FlatList,
+    Image,
+    Alert,
+} from 'react-native'
 import { Snackbar } from 'react-native-paper'
 import ProfileContext from '../../../api/context/profile/ProfileContext'
 import PostContext from '../../../api/context/posts/PostContext'
@@ -14,11 +22,10 @@ import {
 import Colors from '../../../utils/Colors'
 import { FontAwesome5, FontAwesome } from '@expo/vector-icons'
 import LoadMore from '../../components/lists/LoadMore'
+import CreatePostBar from '../../components/headers/CreatePostBar'
 
 import ProfileHeader from '../../components/profile/ProfileHeader'
-import CardInfo from '../../components/profile/CardInfo'
 import TitleFilter from '../../components/headers/TitleFilter'
-import TopNavigation from '../../components/headers/TopNavigation'
 import PostFilterAction from '../../components/modals/PostFilterAction'
 import MyPostAction from '../../components/modals/MyPostAction'
 import UnSavePostAction from '../../components/modals/UnSavePostAction'
@@ -29,6 +36,7 @@ import FollowingAction from '../../components/modals/FollowingAction'
 import CancelFollowAction from '../../components/modals/CancelFollowAction'
 
 import NoData from '../../components/NoData'
+import CreatePost from '../../components/modals/CreatePost'
 import { default as EditPost } from '../../components/modals/CreatePost'
 import { default as DeleteConfirmation } from '../../components/dialog/Confirmation'
 import PostItem from '../../components/lists/PostItem'
@@ -39,16 +47,11 @@ const ProfileScreen = ({ navigation, route }) => {
     const {
         userInfo,
         getUserInfo,
-        getExperiences,
-        getEducationalBackgrounds,
-        experiences,
-        getJobPreference,
-        jobPreference,
-        educationalBackgrounds,
         follow,
         unFollow,
         cancelFollowRequest,
         loading,
+        getJobPreference,
     } = useContext(ProfileContext)
 
     const { followers, following, getFollowers, getFollowing } = useContext(FollowContext)
@@ -61,13 +64,13 @@ const ProfileScreen = ({ navigation, route }) => {
         deletePost,
         savePost,
         updatePost,
+        createPost,
         snackBarMessage,
         hideSnackBar,
     } = useContext(PostContext)
     const { getComments, loading: commentLoading } = useContext(CommentContext)
 
     const [showModal, setShowModal] = useState(false)
-    const [navIndex, setNavIndex] = useState(0)
     const [postFilter, setPostFilter] = useState('Posts')
     const [postFilterIndex, setPostFilterIndex] = useState(0)
 
@@ -79,6 +82,7 @@ const ProfileScreen = ({ navigation, route }) => {
     const [showFollowingAction, setShowFollowingAction] = useState(false)
     const [showCancelFollowAction, setShowCancelFollowAction] = useState(false)
 
+    const [showEditPost, setShowEditPost] = useState(false)
     const [showCreatePost, setShowCreatePost] = useState(false)
     const [selectedPost, setSelectedPost] = useState({ content: '' })
     const [showConfirmation, setShowConfirmation] = useState(false)
@@ -94,8 +98,8 @@ const ProfileScreen = ({ navigation, route }) => {
 
     useEffect(() => {
         getUserInfo(userId)
-        getJobPreference(userId)
         getPosts('/posts', userId)
+        // getJobPreference(userId)
     }, [])
 
     const renderPostItem = ({ item }) => {
@@ -128,122 +132,7 @@ const ProfileScreen = ({ navigation, route }) => {
         navigation.push('CommentScreen', { post: item })
     }
 
-    const renderBackgroundItem = ({ item }) => (
-        <CardInfo
-            key={item.id}
-            title="Work Experience"
-            headers={[
-                'Company',
-                'Location',
-                'Title',
-                'Employment Type',
-                'Date Started',
-                'Date Ended',
-            ]}
-            infos={{
-                company: item.company,
-                location: item.location,
-                title: item.job_title,
-                employment_type: item.employment_type,
-                starting_date: item.starting_date,
-                completion_date: item.completion_date,
-            }}
-            showAction={userInfo.is_me}
-            onEditPress={() => navigation.push('EditExperienceScreen', { data: item })}
-        />
-    )
-
-    const renderEducationItem = ({ item }) => (
-        <CardInfo
-            key={item.id}
-            title="Education"
-            headers={['University', 'Degree', 'Field of Study', 'Starting Date', 'Completion Date']}
-            infos={{
-                university: item.university,
-                degree: item.degree,
-                fieldOfStudy: item.field_of_study,
-                startingDate: item.starting_date,
-                completionDate: item.completion_date,
-            }}
-            showAction={userInfo.is_me}
-            onEditPress={() => navigation.push('EditEducationalBackgroundScreen', { data: item })}
-        />
-    )
-
     const handleUpVotePress = (id) => toggleUpVote(id)
-
-    const About = () => {
-        return (
-            <Container padding={10}>
-                {!loading ? (
-                    <>
-                        <CardInfo
-                            title={'Basic Information'}
-                            headers={['Gender', 'Age', 'Birthday', 'Language', 'Status']}
-                            infos={{
-                                gender: userInfo.gender,
-                                age: userInfo.age,
-                                birthday: userInfo.birthday,
-                                language: userInfo.language,
-                                status: userInfo.status,
-                            }}
-                        />
-                        <CardInfo
-                            title={'Contact Information'}
-                            headers={['Mobile', 'Telephone', 'Email', 'Website']}
-                            infos={{
-                                mobile: userInfo.mobile_no,
-                                telephone: userInfo.telephone_no,
-                                email: userInfo.email,
-                                website: userInfo.website,
-                            }}
-                        />
-                        <CardInfo
-                            title={'Job Preference'}
-                            headers={['Job Title', 'Location', 'Employment Type']}
-                            infos={{
-                                jobTitle: jobPreference.job_title,
-                                location: jobPreference.location,
-                                employmentType: jobPreference.employment_type,
-                            }}
-                        />
-                    </>
-                ) : (
-                    <ActivityIndicator visible={true} />
-                )}
-            </Container>
-        )
-    }
-
-    const Background = () => {
-        return (
-            <Container padding={10}>
-                <FlatList
-                    data={experiences}
-                    renderItem={renderBackgroundItem}
-                    ListEmptyComponent={!loading && experiences.length == 0 && <NoData />}
-                />
-            </Container>
-        )
-    }
-
-    const Activity = () => {
-        return (
-            <View style={{ flex: 1 }}>
-                <TitleFilter title={postFilter} onFilterPress={() => setShowModal(true)} />
-                <FlatList
-                    ref={flatListRef}
-                    data={posts.data}
-                    renderItem={renderPostItem}
-                    nestedScrollEnabled={true}
-                    onEndReached={onEndReachedActivity}
-                    onEndReachedThreshold={0}
-                    ListEmptyComponent={ListEmptyComponentActivity}
-                    ListFooterComponent={ListFooterComponentActivity}
-                />
-            </View>
-        )
-    }
 
     const onEndReachedActivity = () => {
         if (posts.data.length < 30 && !loading) {
@@ -267,54 +156,6 @@ const ProfileScreen = ({ navigation, route }) => {
         return !postLoading && posts.data.length == 0 && <NoData />
     }
 
-    const Education = () => {
-        return (
-            <Container padding={10}>
-                <FlatList
-                    data={educationalBackgrounds}
-                    renderItem={renderEducationItem}
-                    ListEmptyComponent={
-                        !loading && educationalBackgrounds.length == 0 && <NoData />
-                    }
-                />
-            </Container>
-        )
-    }
-
-    const renderInfo = (id) => {
-        switch (id) {
-            case 0:
-                return <Activity />
-            case 1:
-                return <About />
-            case 2:
-                return <Background />
-            case 3:
-                return <Education />
-            default:
-                break
-        }
-    }
-
-    const getData = (id) => {
-        switch (id) {
-            case 0:
-                if (posts.length == 0) {
-                    getPosts('/posts', userId)
-                }
-            case 2:
-                if (experiences.length == 0) {
-                    getExperiences()
-                }
-                break
-            case 3:
-                if (educationalBackgrounds.length == 0) {
-                    getEducationalBackgrounds()
-                }
-                break
-        }
-    }
-
     const handleUnFollowPress = () => {
         unFollow()
         setShowFollowingAction(false)
@@ -329,36 +170,24 @@ const ProfileScreen = ({ navigation, route }) => {
         follow()
     }
 
+    const handleCreatePostBarInputPress = () => {
+        if (userInfo.account_level == 0) {
+            Alert.alert('Not Verified', 'This is not available for basic users')
+        } else {
+            setShowCreatePost(true)
+        }
+    }
+
     return (
         <Container>
             <FlatList
-                refreshControl={
-                    <RefreshControl
-                        refreshing={postLoading}
-                        onRefresh={() => {
-                            getPosts('/posts', userId)
-                            setPostFilter('Posts')
-                            setPostFilterIndex(0)
-                        }}
-                    />
-                }
+                ref={flatListRef}
+                data={posts.data}
+                renderItem={renderPostItem}
                 ListHeaderComponent={
-                    <View>
+                    <>
                         <ProfileHeader
-                            data={{
-                                fullname: userInfo.fullname,
-                                email: userInfo.email,
-                                location: userInfo.location,
-                                status: userInfo.status ?? 'Not Verified',
-                                preview: userInfo.preview,
-                                avatar: userInfo.avatar,
-                                cover: userInfo.cover,
-                                following_count: userInfo.following_count,
-                                followers_count: userInfo.followers_count,
-                                is_following: userInfo.is_following,
-                                is_following_pending: userInfo.is_following_pending,
-                                is_me: userInfo.is_me,
-                            }}
+                            data={userInfo}
                             onBackPress={() => navigation.pop()}
                             onFollowCountsPress={() => {
                                 if (following.data.length == 0) {
@@ -372,39 +201,25 @@ const ProfileScreen = ({ navigation, route }) => {
                             onFollowingPress={() => setShowFollowingAction(true)}
                             onPendingPress={() => setShowCancelFollowAction(true)}
                             onFollowPress={handleFollowPress}
-                            onSettingPress={() => setShowEditProfileAction(true)}
+                            // onSettingPress={() => setShowEditProfileAction(true)}
+                            onEditProfilePress={() => navigation.push('EditProfileScreen')}
+                            onSeeDetailsPress={() => navigation.push('ProfileInfoScreen')}
                         />
-                        <TopNavigation
-                            navTitles={['Activity', 'About', 'Background', 'Education']}
-                            onBtnPress={(i) => {
-                                setNavIndex(i)
-                                getData(i)
-                            }}
-                            index={navIndex}
-                            style={{
-                                marginHorizontal: 10,
-                                borderRadius: 0,
-                                padding: 0,
-                                justifyContent: 'flex-start',
-                                marginHorizontal: 0,
-                                paddingVertical: 0,
-                                borderWidth: 0,
-                                borderColor: Colors.light,
-                                borderBottomWidth: 2,
-                            }}
-                            btnStyles={{
-                                paddingVertical: 5,
-                                paddingHorizontal: 10,
-                            }}
-                            activeBtnStyle={{
-                                borderBottomWidth: 2,
-                                borderColor: Colors.primary,
-                            }}
-                        />
+                        {userInfo.is_me ? (
+                            <CreatePostBar
+                                onInputPress={handleCreatePostBarInputPress}
+                                style={{ marginTop: 10 }}
+                            />
+                        ) : null}
 
-                        {renderInfo(navIndex)}
-                    </View>
+                        <TitleFilter title={postFilter} onFilterPress={() => setShowModal(true)} />
+                    </>
                 }
+                nestedScrollEnabled={true}
+                onEndReached={onEndReachedActivity}
+                onEndReachedThreshold={0}
+                ListEmptyComponent={ListEmptyComponentActivity}
+                ListFooterComponent={ListFooterComponentActivity}
             />
 
             {/* MODALS */}
@@ -440,17 +255,26 @@ const ProfileScreen = ({ navigation, route }) => {
             />
 
             <EditPost
-                visible={showCreatePost}
+                visible={showEditPost}
                 edit
                 onEditPress={(postData) => {
                     updatePost(selectedPost.id, postData)
-                    setShowCreatePost(false)
+                    setShowEditPost(false)
                 }}
                 data={selectedPost}
                 onRequestClose={() => {
-                    setShowCreatePost(false)
+                    setShowEditPost(false)
                     setSelectedPost({})
                 }}
+            />
+
+            <CreatePost
+                visible={showCreatePost}
+                onPostPress={(postData) => {
+                    createPost(postData)
+                    setShowCreatePost(false)
+                }}
+                onRequestClose={() => setShowCreatePost(false)}
             />
 
             <DeleteConfirmation
@@ -469,7 +293,7 @@ const ProfileScreen = ({ navigation, route }) => {
                     setShowMyPostAction(false)
                 }}
                 onEditPress={() => {
-                    setShowCreatePost(true)
+                    setShowEditPost(true)
                     setShowMyPostAction(false)
                 }}
                 onDeletePress={() => {

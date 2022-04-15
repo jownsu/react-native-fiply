@@ -12,9 +12,10 @@ const CardInfo = ({
     showAction = false,
     onEditPress = () => {},
     onDeletePress = () => {},
+    style = {},
 }) => {
     return (
-        <View style={styles.container}>
+        <View style={{ ...styles.container, ...style }}>
             <View style={styles.headerContainer}>
                 {title ? (
                     <Text center={centerTitle} flex weight="medium" size={16}>
@@ -98,6 +99,6 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     colVal: {
-        flex: 2,
+        flex: 1.7,
     },
 })

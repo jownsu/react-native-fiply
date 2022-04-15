@@ -23,13 +23,22 @@ import { Formik } from 'formik'
 import * as yup from 'yup'
 
 const EditJobPreferenceScreen = ({ navigation }) => {
-    const { jobPreference, updateJobPreference, loading, snackBarMessage, hideSnackBar } =
-        useContext(ProfileContext)
+    const {
+        jobPreference,
+        updateJobPreference,
+        loading,
+        getJobPreference,
+        snackBarMessage,
+        hideSnackBar,
+    } = useContext(ProfileContext)
     const { getEmploymentTypes, employmentTypes, loading: empTypeLoading } = useEmploymentType()
     const { jobTitles, loading: jobTitleLoading, getJobTitles } = useJobTitle()
     const { locations, loading: locationLoading, getLocations } = useLocation()
 
     useEffect(() => {
+        if (Object.keys(jobPreference).length === 0) {
+            getJobPreference()
+        }
         getEmploymentTypes()
     }, [])
 
@@ -47,6 +56,7 @@ const EditJobPreferenceScreen = ({ navigation }) => {
                 onBackPress={() => navigation.pop()}
             />
             <Formik
+                enableReinitialize
                 initialValues={{
                     job_title: jobPreference.job_title,
                     location: jobPreference.location,

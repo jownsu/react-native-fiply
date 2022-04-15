@@ -27,6 +27,7 @@ const EditEducationalBackgroundScreen = ({ navigation }) => {
         snackBarMessage,
         hideSnackBar,
         loading,
+        userInfo,
     } = useContext(ProfileContext)
     const [showEditModal, setShowEditModal] = useState({ modal: false, type: '' })
     const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false)
@@ -49,7 +50,7 @@ const EditEducationalBackgroundScreen = ({ navigation }) => {
                 startingDate: item.starting_date,
                 completionDate: item.completion_date,
             }}
-            showAction
+            showAction={userInfo.is_me}
             onEditPress={() => {
                 setSelectedEducationalBackground(item)
                 setShowEditModal({ modal: true, type: 'edit' })
@@ -64,17 +65,21 @@ const EditEducationalBackgroundScreen = ({ navigation }) => {
     return (
         <SafeAreaView statusBarColor={Colors.white} flex>
             <Header
-                title={'Edit Educational Background'}
+                title={userInfo.is_me ? 'Edit Educational Background' : 'Educational Background'}
                 style={{ backgroundColor: Colors.white }}
                 onBackPress={() => navigation.pop()}
-                rightIcon={() => (
-                    <MaterialIcons
-                        name="add"
-                        size={24}
-                        color={Colors.primary}
-                        onPress={() => setShowEditModal({ modal: true, type: 'add' })}
-                    />
-                )}
+                rightIcon={
+                    userInfo.is_me
+                        ? () => (
+                              <MaterialIcons
+                                  name="add"
+                                  size={24}
+                                  color={Colors.primary}
+                                  onPress={() => setShowEditModal({ modal: true, type: 'add' })}
+                              />
+                          )
+                        : null
+                }
             />
             <Container padding={10}>
                 <FlatList data={educationalBackgrounds} renderItem={renderItem} />

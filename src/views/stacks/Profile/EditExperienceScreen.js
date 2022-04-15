@@ -27,6 +27,7 @@ const EditExperienceScreen = ({ navigation }) => {
         deleteExperience,
         snackBarMessage,
         hideSnackBar,
+        userInfo,
         loading,
     } = useContext(ProfileContext)
     const [showEditModal, setShowEditModal] = useState({ modal: false, type: '' })
@@ -58,7 +59,7 @@ const EditExperienceScreen = ({ navigation }) => {
                 startingDate: item.starting_date,
                 completionDate: item.completion_date,
             }}
-            showAction
+            showAction={userInfo.is_me}
             onEditPress={() => {
                 setSelectedExperience(item)
                 setShowEditModal({ modal: true, type: 'edit' })
@@ -73,17 +74,21 @@ const EditExperienceScreen = ({ navigation }) => {
     return (
         <SafeAreaView statusBarColor={Colors.white}>
             <Header
-                title={'Edit Work Experiences'}
+                title={userInfo.is_me ? 'Edit Work Experience' : 'Work Experiences'}
                 style={{ backgroundColor: Colors.white }}
                 onBackPress={() => navigation.pop()}
-                rightIcon={() => (
-                    <MaterialIcons
-                        name="add"
-                        size={24}
-                        color={Colors.primary}
-                        onPress={() => setShowEditModal({ modal: true, type: 'add' })}
-                    />
-                )}
+                rightIcon={
+                    userInfo.is_me
+                        ? () => (
+                              <MaterialIcons
+                                  name="add"
+                                  size={24}
+                                  color={Colors.primary}
+                                  onPress={() => setShowEditModal({ modal: true, type: 'add' })}
+                              />
+                          )
+                        : null
+                }
             />
             <Container padding={10}>
                 <FlatList data={experiences} renderItem={renderItem} />

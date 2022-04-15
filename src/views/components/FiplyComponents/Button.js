@@ -10,6 +10,8 @@ export const Button = ({
     loading = false,
     style,
     labelStyle,
+    labelWeight = 'Medium',
+    icon = false,
 }) => {
     let btnStyle = disabled
         ? { backgroundColor: Colors.black }
@@ -27,7 +29,7 @@ export const Button = ({
                     ...style,
                 }}
                 labelStyle={{
-                    fontFamily: 'EncodeSansExpaded-Medium',
+                    fontFamily: `EncodeSansExpaded-${labelWeight}`,
                     color: Colors.white,
                     ...labelStyle,
                 }}
@@ -35,6 +37,8 @@ export const Button = ({
                 disabled={disabled}
                 loading={loading}
             >
+                {icon}
+                {icon ? ' ' : ''}
                 {title}
             </XButton>
         </View>

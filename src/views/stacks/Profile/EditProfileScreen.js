@@ -13,9 +13,11 @@ import ProfileContext from '../../../api/context/profile/ProfileContext'
 import Header from '../../components/headers/Header'
 import Colors from '../../../utils/Colors'
 import { MaterialIcons } from '@expo/vector-icons'
+import usePickImage from '../../../utils/usePIckImage'
 
 const EditProfileScreen = ({ navigation }) => {
-    const { userInfo } = useContext(ProfileContext)
+    const { userInfo, uploadAvatar } = useContext(ProfileContext)
+    const { pickImage } = usePickImage()
 
     return (
         <SafeAreaView statusBarColor={Colors.white} flex>
@@ -33,6 +35,11 @@ const EditProfileScreen = ({ navigation }) => {
                         style={styles.avatar}
                     />
                     <SecondaryButton
+                        onPress={() => {
+                            pickImage([1, 1], (uri) => {
+                                uploadAvatar(uri)
+                            })
+                        }}
                         title={'Change photo'}
                         style={styles.changeProfileBtn}
                         labelStyle={styles.changeProfileLabel}

@@ -9,6 +9,7 @@ import EditJobPreferenceScreen from './EditJobPreferenceScreen'
 import EditEducationalBackgroundScreen from './EditEducationalBackgroundScreen'
 import EditExperienceScreen from './EditExperienceScreen'
 import ChangePasswordScreen from './ChangePasswordScreen'
+import ProfileInfoScreen from './ProfileInfoScreen'
 import { PostProvider } from '../../../api/context/posts/PostContext'
 import { ProfileProvider } from '../../../api/context/profile/ProfileContext'
 const Stack = createStackNavigator()
@@ -28,6 +29,11 @@ const ProfileStack = ({ route }) => {
                         options={{ headerShown: false }}
                         name={'FollowScreen'}
                         component={FollowScreen}
+                    ></Stack.Screen>
+                    <Stack.Screen
+                        options={{ headerShown: false }}
+                        name={'ProfileInfoScreen'}
+                        component={ProfileInfoScreen}
                     ></Stack.Screen>
                     <Stack.Screen
                         options={{ headerShown: false }}

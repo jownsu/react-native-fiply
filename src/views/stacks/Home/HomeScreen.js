@@ -20,6 +20,7 @@ import PostItem from '../../components/lists/PostItem'
 import CreatePost from '../../components/modals/CreatePost'
 import LoadMore from '../../components/lists/LoadMore'
 import PostAction from '../../components/modals/PostAction'
+import CreatePostBar from '../../components/headers/CreatePostBar'
 
 const HomeScreen = ({ navigation }, offset) => {
     const {
@@ -68,47 +69,13 @@ const HomeScreen = ({ navigation }, offset) => {
 
     const ListHeaderComponent = useMemo(() => {
         return (
-            <View style={createPostySTyles.createPostContainer}>
-                <TouchableOpacity
-                    activeOpacity={0.5}
-                    style={[
-                        createPostySTyles.textInputContainer,
-                        user.account_level == 0 ? { backgroundColor: Colors.light } : {},
-                    ]}
-                    onPress={handleCreatePostPress}
-                >
-                    <Text>Create a post</Text>
-                </TouchableOpacity>
-
-                <View style={createPostySTyles.postActionContainer}>
-                    <TouchableOpacity
-                        style={createPostySTyles.actionBtn}
-                        onPress={() => navigation.navigate('CreateJobScreen')}
-                    >
-                        <FontAwesome name="picture-o" size={24} color={Colors.secondary} />
-                        <Text weight="medium" size={12} style={styles.actionText}>
-                            Photo
-                        </Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity
-                        style={createPostySTyles.actionBtn}
-                        onPress={() => navigation.navigate('CreateQuestionnaireScreen')}
-                    >
-                        <FontAwesome name="video-camera" size={24} color={Colors.black} />
-                        <Text weight="medium" size={12} style={styles.actionText}>
-                            Video
-                        </Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity style={createPostySTyles.actionBtn}>
-                        <FontAwesome5 name="paperclip" size={24} color={Colors.primary} />
-                        <Text weight="medium" size={12} style={styles.actionText}>
-                            File
-                        </Text>
-                    </TouchableOpacity>
-                </View>
-            </View>
+            <CreatePostBar
+                onPhotoPress={() => navigation.navigate('CreateJobScreen')}
+                onVideoPress={() => navigation.navigate('CreateQuestionnaireScreen')}
+                onFilePress={() => {}}
+                onInputPress={handleCreatePostPress}
+                style={{ marginHorizontal: 10, marginTop: 10, borderRadius: 10 }}
+            />
         )
     }, [])
 
@@ -282,61 +249,5 @@ const styles = StyleSheet.create({
         borderRadius: 100,
         borderColor: Colors.light,
         marginVertical: 10,
-    },
-    btmSheetContainer: {
-        paddingVertical: 10,
-        paddingHorizontal: 20,
-    },
-    btmActionContainer: {
-        flexDirection: 'row',
-        paddingVertical: 5,
-        alignItems: 'center',
-    },
-    btmActionBtn: {
-        width: 40,
-    },
-})
-
-const createPostySTyles = StyleSheet.create({
-    createPostContainer: {
-        backgroundColor: Colors.white,
-        padding: 10,
-        borderWidth: 1,
-        borderColor: Colors.light,
-        borderRadius: 15,
-        margin: 10,
-    },
-    postActionContainer: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-    },
-    actionBtn: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-        flex: 1,
-    },
-    actionText: {
-        fontSize: 12,
-        marginTop: 5,
-    },
-    textInputContainer: {
-        borderWidth: 1,
-        padding: 10,
-        borderRadius: 100,
-        borderColor: Colors.light,
-        marginVertical: 10,
-    },
-    btmSheetContainer: {
-        paddingVertical: 10,
-        paddingHorizontal: 20,
-    },
-    btmActionContainer: {
-        flexDirection: 'row',
-        paddingVertical: 5,
-        alignItems: 'center',
-    },
-    btmActionBtn: {
-        width: 40,
     },
 })
