@@ -2,7 +2,12 @@ import { StyleSheet, View, Image, TouchableOpacity } from 'react-native'
 import { Text } from '../FiplyComponents'
 import React, { memo } from 'react'
 import { Avatar } from 'react-native-paper'
-import { FontAwesome5, FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons'
+import {
+    FontAwesome5,
+    FontAwesome,
+    MaterialCommunityIcons,
+    MaterialIcons,
+} from '@expo/vector-icons'
 import FastImage from 'react-native-fast-image'
 import Colors from '../../../utils/Colors'
 const PostItem = memo(
@@ -12,6 +17,7 @@ const PostItem = memo(
         onAvatarPress = () => {},
         onCommentPress = () => {},
         onUpVotePress = () => {},
+        is_me = false,
     }) => {
         return (
             <View style={postStyles.postContainer}>
@@ -31,7 +37,31 @@ const PostItem = memo(
 
                         <View style={{ flex: 1 }}>
                             <Text weight="medium">{data.posted_by}</Text>
-                            <Text>{data.date}</Text>
+                            <View
+                                style={{
+                                    flexDirection: 'row',
+                                    alignItems: 'center',
+                                }}
+                            >
+                                <Text>{data.date}</Text>
+                                {is_me ? (
+                                    data.is_public ? (
+                                        <MaterialIcons
+                                            name="public"
+                                            size={16}
+                                            color={Colors.black}
+                                            style={{ marginLeft: 5 }}
+                                        />
+                                    ) : (
+                                        <FontAwesome5
+                                            name="eye-slash"
+                                            size={16}
+                                            color={Colors.black}
+                                            style={{ marginLeft: 5 }}
+                                        />
+                                    )
+                                ) : null}
+                            </View>
                         </View>
 
                         <TouchableOpacity onPress={() => onDotPress(data)}>
@@ -43,8 +73,8 @@ const PostItem = memo(
                         </TouchableOpacity>
                     </View>
                 </View>
+                {data.content ? <Text style={postStyles.content}>{data.content}</Text> : null}
 
-                <Text style={postStyles.content}>{data.content}</Text>
                 {data.image ? (
                     <FastImage
                         style={postStyles.postImg}
@@ -152,6 +182,6 @@ const postStyles = StyleSheet.create({
         marginRight: 5,
     },
     content: {
-        marginVertical: 10,
+        marginTop: 20,
     },
 })

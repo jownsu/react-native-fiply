@@ -50,11 +50,18 @@ export const ProfileProvider = ({ children }) => {
                     }
 
                     setUser({ ...user, ...userData })
+
+                    SecureStore.getItemAsync('user').then((response) => {
+                        let storeUser = JSON.parse(response)
+                        storeUser = { ...storeUser, ...userData }
+                        SecureStore.setItemAsync('user', JSON.stringify(storeUser))
+                    })
                 }
 
                 dispatch({ type: 'GET_USER_INFO', payload: profileData })
             })
             .catch((err) => console.log(err))
+            .finally(() => stopLoading())
     }
 
     const updateProfile = async (data) => {
@@ -62,14 +69,24 @@ export const ProfileProvider = ({ children }) => {
         await api({ token: user.token })
             .put(`/me`, {
                 ...data,
-                firstname: state.userInfo.firstname,
-                lastname: state.userInfo.lastname,
+                firstname: data.firstname ? data.firstname : state.userInfo.firstname,
+                middlename: data.middlename ? data.middlename : state.userInfo.middlename,
+                lastname: data.lastname ? data.lastname : state.userInfo.lastname,
             })
             .then((res) => {
-                dispatch({ type: 'UPDATE_PROFILE', payload: res.data.data })
+                dispatch({ type: 'UPDATE_PROFILE', payload: data })
+                setUser({ ...user, ...data })
+
+                SecureStore.getItemAsync('user').then((response) => {
+                    let storeUser = JSON.parse(response)
+                    storeUser = { ...storeUser, ...data }
+                    SecureStore.setItemAsync('user', JSON.stringify(storeUser))
+                })
+
                 setSnackBarMessage('Updated')
             })
             .catch((err) => console.log(err))
+            .finally(() => stopLoading())
     }
 
     const getExperiences = async (id = 'me') => {
@@ -78,6 +95,7 @@ export const ProfileProvider = ({ children }) => {
             .get(`/${id}/experiences`)
             .then((res) => dispatch({ type: 'GET_EXPERIENCES', payload: res.data.data }))
             .catch((err) => console.log(err))
+            .finally(() => stopLoading())
     }
 
     const getEducationalBackgrounds = async (id = 'me') => {
@@ -88,6 +106,7 @@ export const ProfileProvider = ({ children }) => {
                 dispatch({ type: 'GET_EDUCATIONAL_BACKGROUNDS', payload: res.data.data })
             )
             .catch((err) => console.log(err))
+            .finally(() => stopLoading())
     }
 
     const getJobPreference = async (id = 'me') => {
@@ -96,6 +115,7 @@ export const ProfileProvider = ({ children }) => {
             .get(`/${id}/jobPreferences`)
             .then((res) => dispatch({ type: 'GET_JOB_PREFERENCE', payload: res.data.data }))
             .catch((err) => console.log(err))
+            .finally(() => stopLoading())
     }
 
     const updateJobPreference = async (data) => {
@@ -107,6 +127,7 @@ export const ProfileProvider = ({ children }) => {
                 setSnackBarMessage('Updated')
             })
             .catch((err) => console.log(err))
+            .finally(() => stopLoading())
     }
 
     const createExperience = async (data) => {
@@ -118,6 +139,7 @@ export const ProfileProvider = ({ children }) => {
                 setSnackBarMessage('Addded')
             })
             .catch((err) => console.log(err))
+            .finally(() => stopLoading())
     }
 
     const updateExperience = async (data) => {
@@ -129,6 +151,7 @@ export const ProfileProvider = ({ children }) => {
                 setSnackBarMessage('Updated')
             })
             .catch((err) => console.log(err))
+            .finally(() => stopLoading())
     }
 
     const deleteExperience = async (id) => {
@@ -140,6 +163,7 @@ export const ProfileProvider = ({ children }) => {
                 setSnackBarMessage('Deleted')
             })
             .catch((err) => console.log(err))
+            .finally(() => stopLoading())
     }
 
     const createEducationalBackground = async (data) => {
@@ -151,6 +175,7 @@ export const ProfileProvider = ({ children }) => {
                 setSnackBarMessage('Added')
             })
             .catch((err) => console.log(err))
+            .finally(() => stopLoading())
     }
 
     const updateEducationalBackground = async (data) => {
@@ -162,6 +187,7 @@ export const ProfileProvider = ({ children }) => {
                 setSnackBarMessage('Updated')
             })
             .catch((err) => console.log(err))
+            .finally(() => stopLoading())
     }
 
     const deleteEducationalBackground = async (id) => {
@@ -173,6 +199,7 @@ export const ProfileProvider = ({ children }) => {
                 setSnackBarMessage('Deleted')
             })
             .catch((err) => console.log(err))
+            .finally(() => stopLoading())
     }
 
     const uploadResume = async (doc) => {
@@ -194,6 +221,7 @@ export const ProfileProvider = ({ children }) => {
                 dispatch({ type: 'SET_RESUME', payload: res.data })
             })
             .catch((err) => console.log(err))
+            .finally(() => stopLoading())
     }
 
     const uploadAvatar = async (img) => {
@@ -223,6 +251,7 @@ export const ProfileProvider = ({ children }) => {
                 dispatch({ type: 'UPDATE_AVATAR', payload: res.data.data })
             })
             .catch((err) => console.log(err))
+            .finally(() => stopLoading())
     }
 
     const uploadCover = async (img) => {
@@ -242,6 +271,7 @@ export const ProfileProvider = ({ children }) => {
             .post('/uploadCover', fd, config)
             .then((res) => dispatch({ type: 'UPDATE_COVER', payload: res.data.data }))
             .catch((err) => console.log(err))
+            .finally(() => stopLoading())
     }
 
     const follow = async () => {
@@ -254,6 +284,7 @@ export const ProfileProvider = ({ children }) => {
                 setSnackBarMessage(res.data.message)
             })
             .catch((err) => setSnackBarMessage(err.message))
+            .finally(() => stopLoading())
     }
 
     const unFollow = async () => {
@@ -266,6 +297,7 @@ export const ProfileProvider = ({ children }) => {
                 setSnackBarMessage(res.data.message)
             })
             .catch((err) => setSnackBarMessage(err.message))
+            .finally(() => stopLoading())
     }
 
     const cancelFollowRequest = async () => {
@@ -278,10 +310,28 @@ export const ProfileProvider = ({ children }) => {
                 }
             })
             .catch((err) => setSnackBarMessage(err.message))
+            .finally(() => stopLoading())
     }
+
+    const setAudience = async (data) => {
+        await api({ token: user.token })
+            .put('/me/setAudience', { is_public: data })
+            .then((res) => {
+                dispatch({
+                    type: 'SET_AUDIENCE',
+                    payload: data,
+                })
+                setSnackBarMessage(`Audience Updated to ${data ? 'Public' : 'Only Followers'}`)
+            })
+            .catch((err) => setSnackBarMessage(err.message))
+            .finally(() => stopLoading())
+    }
+
     const hideSnackBar = () => setSnackBarMessage(null)
 
     const setLoading = () => dispatch({ type: 'SET_LOADING' })
+
+    const stopLoading = () => dispatch({ type: 'STOP_LOADING' })
 
     return (
         <ProfileContext.Provider
@@ -305,6 +355,7 @@ export const ProfileProvider = ({ children }) => {
                 follow,
                 unFollow,
                 cancelFollowRequest,
+                setAudience,
                 snackBarMessage,
                 hideSnackBar,
             }}

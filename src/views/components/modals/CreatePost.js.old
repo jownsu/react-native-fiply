@@ -16,7 +16,7 @@ const CreatePost = ({
     edit = false,
     data = '',
 }) => {
-    const [postStatus, setPostStatus] = useState('Public')
+    const [postStatus, setPostStatus] = useState(true)
     const [postText, setPostText] = useState('')
     const { user } = useContext(AuthContext)
     //require('../../../assets/img/test.jpg')
@@ -91,22 +91,25 @@ const CreatePost = ({
                                 {user.fullname}
                             </Text>
                             <Dropdown
+                                label={'Audience'}
                                 data={[
                                     { id: 1, name: 'Public' },
-                                    { id: 2, name: 'Friends' },
+                                    { id: 2, name: 'Only Followers' },
                                 ]}
-                                value={postStatus}
-                                noTextInput
-                                onSubmit={(text) => setPostStatus(text)}
-                                dropdownIcon
-                                style={{ height: 25, width: 100 }}
-                                textInputStyle={{
-                                    height: 25,
-                                    width: 100,
-                                    fontSize: 11,
+                                value={postStatus.is_public ? 'Public' : 'Only Followers'}
+                                onSubmit={(text) => {
+                                    if (text == 'Public') {
+                                        setPostStatus(true)
+                                    } else {
+                                        setPostStatus(false)
+                                    }
                                 }}
-                                iconStyle={{ marginTop: 15 }}
-                                iconSize={26}
+                                style={{ width: '50%' }}
+                                textInputStyle={{
+                                    fontSize: 12,
+                                }}
+                                noTextInput
+                                dropdownIcon
                             />
                         </View>
                     </View>

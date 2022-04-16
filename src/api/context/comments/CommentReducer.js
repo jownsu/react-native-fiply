@@ -4,7 +4,6 @@ const CommentReducer = (state, action) => {
             return {
                 ...state,
                 comments: action.payload,
-                loading: false,
             }
 
         case 'MORE_COMMENTS':
@@ -15,7 +14,6 @@ const CommentReducer = (state, action) => {
                     data: [...state.comments.data, ...action.payload.data],
                     links: { ...action.payload.links },
                 },
-                loading: false,
             }
 
         case 'ADD_COMMENT':
@@ -32,7 +30,6 @@ const CommentReducer = (state, action) => {
                         },
                     ],
                 },
-                loading: false,
             }
 
         case 'DELETE_COMMENT':
@@ -42,7 +39,6 @@ const CommentReducer = (state, action) => {
                     ...state.comments,
                     data: [...state.comments.data.filter((item) => item.id != action.payload)],
                 },
-                loading: false,
             }
 
         case 'RESET_COMMENT':
@@ -55,6 +51,12 @@ const CommentReducer = (state, action) => {
             return {
                 ...state,
                 loading: true,
+            }
+
+        case 'STOP_LOADING':
+            return {
+                ...state,
+                loading: false,
             }
 
         default:

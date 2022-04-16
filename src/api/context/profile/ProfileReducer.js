@@ -4,28 +4,24 @@ const ProfileReducer = (state, action) => {
             return {
                 ...state,
                 userInfo: action.payload,
-                loading: false,
             }
 
         case 'UPDATE_PROFILE':
             return {
                 ...state,
-                userInfo: action.payload,
-                loading: false,
+                userInfo: { ...state.userInfo, ...action.payload },
             }
 
         case 'GET_EXPERIENCES':
             return {
                 ...state,
                 experiences: action.payload,
-                loading: false,
             }
 
         case 'ADD_EXPERIENCE':
             return {
                 ...state,
                 experiences: [...state.experiences, action.payload],
-                loading: false,
             }
 
         case 'UPDATE_EXPERIENCE':
@@ -39,28 +35,24 @@ const ProfileReducer = (state, action) => {
                         return item
                     }),
                 ],
-                loading: false,
             }
 
         case 'DELETE_EXPERIENCE':
             return {
                 ...state,
                 experiences: [...state.experiences.filter((item) => item.id != action.payload)],
-                loading: false,
             }
 
         case 'GET_EDUCATIONAL_BACKGROUNDS':
             return {
                 ...state,
                 educationalBackgrounds: action.payload,
-                loading: false,
             }
 
         case 'ADD_EDUCATIONAL_BACKGROUND':
             return {
                 ...state,
                 educationalBackgrounds: [...state.educationalBackgrounds, action.payload],
-                loading: false,
             }
 
         case 'UPDATE_EDUCATIONAL_BACKGROUND':
@@ -74,7 +66,6 @@ const ProfileReducer = (state, action) => {
                         return item
                     }),
                 ],
-                loading: false,
             }
 
         case 'DELETE_EDUCATIONAL_BACKGROUND':
@@ -83,28 +74,24 @@ const ProfileReducer = (state, action) => {
                 educationalBackgrounds: [
                     ...state.educationalBackgrounds.filter((item) => item.id != action.payload),
                 ],
-                loading: false,
             }
 
         case 'GET_JOB_PREFERENCE':
             return {
                 ...state,
                 jobPreference: action.payload,
-                loading: false,
             }
 
         case 'UPDATE_JOB_PREFERENCE':
             return {
                 ...state,
                 jobPreference: action.payload,
-                loading: false,
             }
 
         case 'UPDATE_AVATAR':
             return {
                 ...state,
                 userInfo: { ...state.userInfo, avatar: action.payload },
-                loading: false,
             }
 
         case 'UPDATE_COVER':
@@ -114,7 +101,6 @@ const ProfileReducer = (state, action) => {
                     ...state.userInfo,
                     cover: action.payload,
                 },
-                loading: false,
             }
 
         case 'SET_TO_PENDING':
@@ -124,7 +110,6 @@ const ProfileReducer = (state, action) => {
                     ...state.userInfo,
                     is_following_pending: true,
                 },
-                loading: false,
             }
 
         case 'SET_TO_FOLLOW':
@@ -135,13 +120,27 @@ const ProfileReducer = (state, action) => {
                     is_following_pending: false,
                     is_following: false,
                 },
-                loading: false,
+            }
+
+        case 'SET_AUDIENCE':
+            return {
+                ...state,
+                userInfo: {
+                    ...state.userInfo,
+                    is_public: action.payload,
+                },
             }
 
         case 'SET_LOADING':
             return {
                 ...state,
                 loading: true,
+            }
+
+        case 'STOP_LOADING':
+            return {
+                ...state,
+                loading: false,
             }
         default:
             return state

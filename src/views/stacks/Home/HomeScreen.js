@@ -1,23 +1,16 @@
-import React, { useCallback, useRef, useEffect, useState, memo, useMemo, useContext } from 'react'
+import React, { useRef, useEffect, useState, useMemo, useContext } from 'react'
 
 import { StyleSheet, View, TouchableOpacity, FlatList, RefreshControl, Alert } from 'react-native'
 import { Snackbar } from 'react-native-paper'
 import PostContext from '../../../api/context/posts/PostContext'
 import CommentContext from '../../../api/context/comments/CommentContext'
 import AuthContext from '../../../api/context/auth/AuthContext'
-import {
-    SafeAreaView,
-    Container,
-    Text,
-    BottomSheetModal,
-    ActivityIndicator,
-} from '../../components/FiplyComponents'
+import { SafeAreaView, Container, Text, ActivityIndicator } from '../../components/FiplyComponents'
 import NoData from '../../components/NoData'
 import SearchBar from '../../components/headers/SearchBar'
 import { FontAwesome5, FontAwesome } from '@expo/vector-icons'
 import Colors from '../../../utils/Colors'
 import PostItem from '../../components/lists/PostItem'
-import CreatePost from '../../components/modals/CreatePost'
 import LoadMore from '../../components/lists/LoadMore'
 import PostAction from '../../components/modals/PostAction'
 import CreatePostBar from '../../components/headers/CreatePostBar'
@@ -28,7 +21,6 @@ const HomeScreen = ({ navigation }, offset) => {
         getPosts,
         loading,
         morePosts,
-        createPost,
         toggleUpVote,
         savePost,
         snackBarMessage,
@@ -37,22 +29,8 @@ const HomeScreen = ({ navigation }, offset) => {
     const { getComments } = useContext(CommentContext)
     const { user } = useContext(AuthContext)
     const [selectedPostId, setSelectedPostId] = useState(0)
-    const [showCreatePost, setShowCreatePost] = useState(false)
     const [showPostActions, setShowPostActions] = useState(false)
     const flatListRef = useRef(null)
-
-    // bottom sheet reference
-    const bottomSheetModalRef = useRef(null)
-
-    const handlePresentModalPress = useCallback(() => {
-        bottomSheetModalRef.current?.present()
-    }, [])
-
-    const handleClosePress = () => bottomSheetRef.current.close()
-
-    //   const handleSheetChanges = useCallback((index) => {
-    //     console.log('handleSheetChanges', index);
-    //   }, []);
 
     const handleDotPress = (id) => {
         setSelectedPostId(id)
@@ -63,15 +41,19 @@ const HomeScreen = ({ navigation }, offset) => {
         if (user.account_level == 0) {
             Alert.alert('Not Verified', 'This is not available for basic users')
         } else {
-            setShowCreatePost(true)
+            //setShowCreatePost(true)
+            navigation.getParent().setOptions({
+                tabBarStyle: { display: 'none' },
+            })
+            navigation.push('CreatePostScreen')
         }
     }
 
     const ListHeaderComponent = useMemo(() => {
         return (
             <CreatePostBar
-                onPhotoPress={() => navigation.navigate('CreateJobScreen')}
-                onVideoPress={() => navigation.navigate('CreateQuestionnaireScreen')}
+                onPhotoPress={() => navigation.push('CreateJobScreen')}
+                onVideoPress={() => navigation.push('CreateQuestionnaireScreen')}
                 onFilePress={() => {}}
                 onInputPress={handleCreatePostPress}
                 style={{ marginHorizontal: 10, marginTop: 10, borderRadius: 10 }}
@@ -168,6 +150,7 @@ const HomeScreen = ({ navigation }, offset) => {
                         style={{ flex: 0 }}
                         ref={flatListRef}
                         data={posts.data}
+                        keyExtractor={(item) => item.id}
                         renderItem={renderItem}
                         ListHeaderComponent={ListHeaderComponent}
                         ListFooterComponent={
@@ -187,15 +170,6 @@ const HomeScreen = ({ navigation }, offset) => {
                     <ActivityIndicator visible={true} />
                 )}
             </Container>
-
-            <CreatePost
-                visible={showCreatePost}
-                onPostPress={(postData) => {
-                    createPost(postData)
-                    setShowCreatePost(false)
-                }}
-                onRequestClose={() => setShowCreatePost(false)}
-            />
 
             <PostAction
                 visible={showPostActions}

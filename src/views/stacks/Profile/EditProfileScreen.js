@@ -1,23 +1,39 @@
 import React, { useContext } from 'react'
 import { StyleSheet, View, TouchableOpacity } from 'react-native'
-import { Avatar } from 'react-native-paper'
+import { Avatar, Snackbar } from 'react-native-paper'
 import {
     Text,
     SafeAreaView,
     Container,
-    SecondaryButton,
     TextInput,
+    SecondaryButton,
+    Dropdown,
 } from '../../components/FiplyComponents'
 import ProfileContext from '../../../api/context/profile/ProfileContext'
-
+import { Formik } from 'formik'
+import * as yup from 'yup'
 import Header from '../../components/headers/Header'
 import Colors from '../../../utils/Colors'
 import { MaterialIcons } from '@expo/vector-icons'
 import usePickImage from '../../../utils/usePIckImage'
 
 const EditProfileScreen = ({ navigation }) => {
-    const { userInfo, uploadAvatar } = useContext(ProfileContext)
+    const {
+        userInfo,
+        uploadAvatar,
+        updateProfile,
+        loading,
+        snackBarMessage,
+        hideSnackBar,
+        setAudience,
+    } = useContext(ProfileContext)
     const { pickImage } = usePickImage()
+
+    const formSchema = yup.object({
+        firstname: yup.string().trim().min(2).required('Firstname is required'),
+        middlename: yup.string().nullable(),
+        lastname: yup.string().trim().min(2).required('Lastname is required'),
+    })
 
     return (
         <SafeAreaView statusBarColor={Colors.white} flex>
@@ -26,7 +42,6 @@ const EditProfileScreen = ({ navigation }) => {
                 style={{ backgroundColor: Colors.white }}
                 onBackPress={() => navigation.pop()}
             />
-
             <Container style={styles.container} padding={10}>
                 <View style={styles.headerContainer}>
                     <Avatar.Image
@@ -34,6 +49,7 @@ const EditProfileScreen = ({ navigation }) => {
                         size={100}
                         style={styles.avatar}
                     />
+
                     <SecondaryButton
                         onPress={() => {
                             pickImage([1, 1], (uri) => {
@@ -45,11 +61,95 @@ const EditProfileScreen = ({ navigation }) => {
                         labelStyle={styles.changeProfileLabel}
                     />
                 </View>
+                <View
+                    style={{
+                        flexDirection: 'row',
+                    }}
+                >
+                    <Dropdown
+                        label={'Audience'}
+                        data={[
+                            { id: 1, name: 'Public' },
+                            { id: 2, name: 'Only Followers' },
+                        ]}
+                        value={userInfo.is_public ? 'Public' : 'Only Followers'}
+                        onSubmit={(text) => {
+                            if (text == 'Public') {
+                                setAudience(true)
+                            } else {
+                                setAudience(false)
+                            }
+                        }}
+                        iconSize={28}
+                        iconStyle={{ marginTop: 15 }}
+                        style={{ height: 40, marginBottom: 15, marginLeft: 15 }}
+                        textInputStyle={{
+                            height: 40,
+                            fontSize: 14,
+                        }}
+                        noTextInput
+                        dropdownIcon
+                    />
+                </View>
 
-                <TextInput value={userInfo.firstname} label={'Firstname'} mode={'flat'} />
-                <TextInput value={userInfo.middlename} label={'Middlename'} mode={'flat'} />
-                <TextInput value={userInfo.lastname} label={'Lastname'} mode={'flat'} />
-                <TextInput value={userInfo.description} label={'Bio'} mode={'flat'} />
+                <Formik
+                    initialValues={{
+                        firstname: userInfo.firstname,
+                        middlename: userInfo.middlename,
+                        lastname: userInfo.lastname,
+                    }}
+                    validationSchema={formSchema}
+                    onSubmit={(values) => {
+                        updateProfile(values)
+                    }}
+                >
+                    {({ handleChange, handleSubmit, handleBlur, values, errors, touched }) => (
+                        <>
+                            <TextInput
+                                label={'Firstname'}
+                                mode={'flat'}
+                                value={values.firstname}
+                                onChangeText={handleChange('firstname')}
+                                onBlur={handleBlur('firstname')}
+                                error={touched.firstname && errors.firstname ? true : false}
+                                errorMsg={
+                                    touched.firstname && errors.firstname ? errors.firstname : ''
+                                }
+                            />
+                            <TextInput
+                                label={'Middlename'}
+                                mode={'flat'}
+                                value={values.middlename}
+                                onChangeText={handleChange('middlename')}
+                                onBlur={handleBlur('middlename')}
+                                error={touched.middlename && errors.middlename ? true : false}
+                                errorMsg={
+                                    touched.middlename && errors.middlename ? errors.middlename : ''
+                                }
+                            />
+                            <TextInput
+                                label={'Lastname'}
+                                mode={'flat'}
+                                value={values.lastname}
+                                onChangeText={handleChange('lastname')}
+                                onBlur={handleBlur('lastname')}
+                                error={touched.lastname && errors.lastname ? true : false}
+                                errorMsg={
+                                    touched.lastname && errors.lastname ? errors.lastname : ''
+                                }
+                            />
+                            <SecondaryButton
+                                title="Save"
+                                style={{ borderWidth: 0, marginTop: 20 }}
+                                onPress={handleSubmit}
+                                loading={loading}
+                                disabled={loading}
+                            />
+                        </>
+                    )}
+                </Formik>
+
+                {/* <TextInput value={userInfo.description} label={'Bio'} mode={'flat'} /> */}
 
                 <View style={styles.actionContainer}>
                     <TouchableOpacity
@@ -93,6 +193,14 @@ const EditProfileScreen = ({ navigation }) => {
                         </Text>
                     </TouchableOpacity>
                 </View>
+                <Snackbar
+                    visible={snackBarMessage ? true : false}
+                    onDismiss={() => hideSnackBar()}
+                    duration={3000}
+                    style={{ backgroundColor: Colors.black, zIndex: 99, elevation: 10 }}
+                >
+                    <Text color={Colors.white}>{snackBarMessage}</Text>
+                </Snackbar>
             </Container>
         </SafeAreaView>
     )

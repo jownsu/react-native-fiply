@@ -4,7 +4,6 @@ const CommunityReducer = (state, action) => {
             return {
                 ...state,
                 users: action.payload,
-                loading: false,
             }
 
         case 'MORE_USERS':
@@ -15,7 +14,6 @@ const CommunityReducer = (state, action) => {
                     data: [...state.users.data, ...action.payload.data],
                     links: { ...action.payload.links },
                 },
-                loading: false,
             }
 
         case 'REMOVE_USER':
@@ -25,14 +23,12 @@ const CommunityReducer = (state, action) => {
                     ...state.users,
                     data: [...state.users.data.filter((item) => item.id != action.payload)],
                 },
-                loading: false,
             }
 
         case 'GET_FOLLOWED_USERS':
             return {
                 ...state,
                 followedUsers: action.payload,
-                loading: false,
             }
 
         case 'MORE_FOLLOWED_USERS':
@@ -43,14 +39,12 @@ const CommunityReducer = (state, action) => {
                     data: [...state.followedUsers.data, ...action.payload.data],
                     links: { ...action.payload.links },
                 },
-                loading: false,
             }
 
         case 'GET_FOLLOWER_REQUESTS':
             return {
                 ...state,
                 followerRequests: action.payload,
-                loading: false,
             }
 
         case 'MORE_FOLLOWER_REQUESTS':
@@ -61,7 +55,6 @@ const CommunityReducer = (state, action) => {
                     data: [...state.followerRequests.data, ...action.payload.data],
                     links: { ...action.payload.links },
                 },
-                loading: false,
             }
 
         case 'REMOVE_FOLLOWER_REQUEST':
@@ -73,14 +66,12 @@ const CommunityReducer = (state, action) => {
                         ...state.followerRequests.data.filter((item) => item.id != action.payload),
                     ],
                 },
-                loading: false,
             }
 
         case 'GET_PENDING_REQUESTS':
             return {
                 ...state,
                 pendingRequests: action.payload,
-                loading: false,
             }
 
         case 'MORE_PENDING_REQUESTS':
@@ -91,7 +82,6 @@ const CommunityReducer = (state, action) => {
                     data: [...state.pendingRequests.data, ...action.payload.data],
                     links: { ...action.payload.links },
                 },
-                loading: false,
             }
 
         case 'REMOVE_PENDING_REQUEST':
@@ -103,7 +93,6 @@ const CommunityReducer = (state, action) => {
                         ...state.pendingRequests.data.filter((item) => item.id != action.payload),
                     ],
                 },
-                loading: false,
             }
 
         case 'SET_LOADING':
@@ -112,6 +101,11 @@ const CommunityReducer = (state, action) => {
                 loading: true,
             }
 
+        case 'STOP_LOADING':
+            return {
+                ...state,
+                loading: false,
+            }
         default:
             return state
     }

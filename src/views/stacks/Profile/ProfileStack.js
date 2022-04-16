@@ -10,6 +10,7 @@ import EditEducationalBackgroundScreen from './EditEducationalBackgroundScreen'
 import EditExperienceScreen from './EditExperienceScreen'
 import ChangePasswordScreen from './ChangePasswordScreen'
 import ProfileInfoScreen from './ProfileInfoScreen'
+import CreatePostScreen from '../../screens/CreatePostScreen'
 import { PostProvider } from '../../../api/context/posts/PostContext'
 import { ProfileProvider } from '../../../api/context/profile/ProfileContext'
 const Stack = createStackNavigator()
@@ -69,6 +70,12 @@ const ProfileStack = ({ route }) => {
                         options={{ headerShown: false }}
                         name={'CommentScreen'}
                         component={CommentScreen}
+                    ></Stack.Screen>
+                    <Stack.Screen
+                        options={{ headerShown: false }}
+                        name={'CreatePostScreen'}
+                        component={CreatePostScreen}
+                        initialParams={{ edit: false, data: {} }}
                     ></Stack.Screen>
                 </Stack.Navigator>
             </ProfileProvider>

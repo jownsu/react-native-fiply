@@ -51,12 +51,13 @@ export const CommunityProvider = ({ children }) => {
     const [state, dispatch] = useReducer(CommunityReducer, initialState)
     const [snackBarMessage, setSnackBarMessage] = useState(null)
 
-    const getUsers = async () => {
+    const getUsers = async ($q = '') => {
         setLoading()
         await api({ token: user.token })
-            .get('/users')
+            .get(`/users${$q}`)
             .then((res) => dispatch({ type: 'GET_USERS', payload: res.data }))
             .catch((err) => console.log(err))
+            .finally(() => stopLoading())
     }
 
     const moreUsers = async (reset = false) => {
@@ -70,6 +71,7 @@ export const CommunityProvider = ({ children }) => {
                         : dispatch({ type: 'MORE_USERS', payload: res.data })
                 })
                 .catch((err) => console.log(err))
+                .finally(() => stopLoading())
         }
     }
 
@@ -79,6 +81,7 @@ export const CommunityProvider = ({ children }) => {
             .get('/me/following')
             .then((res) => dispatch({ type: 'GET_FOLLOWED_USERS', payload: res.data }))
             .catch((err) => console.log(err))
+            .finally(() => stopLoading())
     }
 
     const moreFollowedUsers = async (reset = false) => {
@@ -92,6 +95,7 @@ export const CommunityProvider = ({ children }) => {
                         : dispatch({ type: 'MORE_FOLLOWED_USERS', payload: res.data })
                 })
                 .catch((err) => console.log(err))
+                .finally(() => stopLoading())
         }
     }
 
@@ -101,6 +105,7 @@ export const CommunityProvider = ({ children }) => {
             .get('/me/followerRequests')
             .then((res) => dispatch({ type: 'GET_FOLLOWER_REQUESTS', payload: res.data }))
             .catch((err) => console.log(err))
+            .finally(() => stopLoading())
     }
 
     const moreFollowerRequests = async (reset = false) => {
@@ -115,6 +120,7 @@ export const CommunityProvider = ({ children }) => {
                         : dispatch({ type: 'MORE_FOLLOWER_REQUESTS', payload: res.data })
                 })
                 .catch((err) => console.log(err))
+                .finally(() => stopLoading())
         }
     }
 
@@ -124,6 +130,7 @@ export const CommunityProvider = ({ children }) => {
             .get('/me/followPendings')
             .then((res) => dispatch({ type: 'GET_PENDING_REQUESTS', payload: res.data }))
             .catch((err) => console.log(err))
+            .finally(() => stopLoading())
     }
 
     const morePendingRequests = async (reset = false) => {
@@ -138,6 +145,7 @@ export const CommunityProvider = ({ children }) => {
                         : dispatch({ type: 'MORE_PENDING_REQUESTS', payload: res.data })
                 })
                 .catch((err) => console.log(err))
+                .finally(() => stopLoading())
         }
     }
 
@@ -149,6 +157,7 @@ export const CommunityProvider = ({ children }) => {
                 setSnackBarMessage(res.data.message)
             })
             .catch((err) => setSnackBarMessage(err.message))
+            .finally(() => stopLoading())
     }
 
     const follow = async (id) => {
@@ -161,6 +170,7 @@ export const CommunityProvider = ({ children }) => {
                 setSnackBarMessage(res.data.message)
             })
             .catch((err) => setSnackBarMessage(err.message))
+            .finally(() => stopLoading())
     }
 
     const unFollow = async (id) => {
@@ -173,9 +183,12 @@ export const CommunityProvider = ({ children }) => {
                 setSnackBarMessage(res.data.message)
             })
             .catch((err) => setSnackBarMessage(err.message))
+            .finally(() => stopLoading())
     }
 
     const setLoading = () => dispatch({ type: 'SET_LOADING' })
+
+    const stopLoading = () => dispatch({ type: 'STOP_LOADING' })
 
     const hideSnackBar = () => setSnackBarMessage(null)
 

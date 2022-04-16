@@ -6,114 +6,181 @@ import {
     TouchableOpacity,
     KeyboardAvoidingView,
 } from 'react-native'
-import React, { useState } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
+import PostContext from '../../api/context/posts/PostContext'
+import AuthContext from '../../api/context/auth/AuthContext'
 import {
     Text,
     SafeAreaView,
-    Container2,
     Container,
     InputDropdown,
     Dropdown,
 } from '../components/FiplyComponents'
+import usePickImage from '../../utils/usePIckImage'
+import { Avatar, ProgressBar } from 'react-native-paper'
 import Header from '../components/headers/Header'
 import Colors from '../../utils/Colors'
 import { FontAwesome5 } from '@expo/vector-icons'
 
-const CreatePostScreen = ({ navigation }) => {
-    const [showDropdown, setShowDropdown] = useState(false)
-    const [postStatus, setPostStatus] = useState('Public')
+const CreatePostScreen = ({ navigation, route }) => {
+    const { edit, data } = route.params
+
+    const [isPublic, setIsPublic] = useState(true)
     const [postText, setPostText] = useState('')
+    const { loading, createPost, updatePost } = useContext(PostContext)
+    const { user } = useContext(AuthContext)
+    const { pickImage, pickUri } = usePickImage()
+
+    const handleBackPress = () => {
+        navigation.getParent().setOptions({
+            tabBarStyle: {
+                display: 'flex',
+                borderTopWidth: 1,
+                elevation: 0,
+            },
+        })
+        navigation.pop()
+    }
+
+    function isEmpty(obj) {
+        return Object.keys(obj).length === 0
+    }
+
+    const handlePostPress = () => {
+        createPost({ content: postText, image: pickUri, is_public: isPublic }, () =>
+            navigation.pop()
+        )
+    }
+
+    const handleEditPress = () => {
+        updatePost(data.id, { content: postText, image: pickUri, is_public: isPublic }, () => {
+            navigation.pop()
+        })
+    }
+
+    useEffect(() => {
+        setPostText(data.content)
+        setIsPublic(data.is_public)
+    }, [])
 
     return (
         <SafeAreaView flex statusBarColor={Colors.white}>
             <Header
-                title="Create Post"
+                title={edit ? 'Update Post' : 'Create Post'}
                 style={{ backgroundColor: Colors.white }}
-                rightIcon={() => (
-                    <TouchableOpacity activeOpacity={0.7}>
-                        <Text weight="medium" color={Colors.secondary}>
-                            POST
-                        </Text>
-                    </TouchableOpacity>
-                )}
-                onBackPress={() => navigation.pop()}
+                rightIcon={() => {
+                    {
+                        return isEmpty(data) && !edit ? (
+                            <TouchableOpacity
+                                activeOpacity={0.7}
+                                onPress={handlePostPress}
+                                disabled={!postText && !pickUri}
+                            >
+                                <Text
+                                    weight="medium"
+                                    color={postText || pickUri ? Colors.secondary : Colors.black}
+                                >
+                                    POST
+                                </Text>
+                            </TouchableOpacity>
+                        ) : (
+                            <TouchableOpacity
+                                activeOpacity={0.7}
+                                onPress={handleEditPress}
+                                disabled={!postText && !pickUri}
+                            >
+                                <Text
+                                    weight="medium"
+                                    color={postText || pickUri ? Colors.secondary : Colors.black}
+                                >
+                                    EDIT
+                                </Text>
+                            </TouchableOpacity>
+                        )
+                    }
+                }}
+                onBackPress={handleBackPress}
             />
+            <ProgressBar indeterminate color={Colors.secondary} visible={loading} />
+
             <Container>
                 <View style={styles.container}>
                     <View style={styles.headerContainer}>
-                        <View style={styles.imgContainer}>
-                            <Image
-                                source={require('../../assets/img/members/digno.jpg')}
-                                style={styles.img}
-                            />
-                        </View>
+                        <Avatar.Image
+                            source={{ uri: user.avatar }}
+                            size={75}
+                            backgroundColor={Colors.light}
+                            style={styles.img}
+                        />
                         <View style={styles.headerDetails}>
-                            <Text weight="medium" size={16}>
-                                Jhones Digno
+                            <Text weight="medium" size={16} adjustsFontSizeToFit numberOfLines={1}>
+                                {user.fullname}
                             </Text>
                             <Dropdown
                                 data={[
                                     { id: 1, name: 'Public' },
-                                    { id: 2, name: 'Friends' },
+                                    { id: 2, name: 'Only Followers' },
                                 ]}
-                                value={postStatus}
+                                value={isPublic ? 'Public' : 'Only Followers'}
+                                onSubmit={(text) => {
+                                    if (text == 'Public') {
+                                        setIsPublic(true)
+                                    } else {
+                                        setIsPublic(false)
+                                    }
+                                }}
                                 noTextInput
-                                onSubmit={(text) => setPostStatus(text)}
                                 dropdownIcon
-                                style={{ height: 25, width: 100 }}
+                                iconSize={28}
+                                iconStyle={{ marginTop: 15 }}
+                                style={{ height: 25 }}
                                 textInputStyle={{
                                     height: 25,
-                                    width: 100,
                                     fontSize: 11,
                                 }}
-                                iconStyle={{ marginTop: 15 }}
-                                iconSize={26}
                             />
                         </View>
                     </View>
                     <View style={styles.txtInputContainer}>
                         <TextInput
                             style={styles.txtInputStyle}
+                            value={postText}
+                            onChangeText={(text) => setPostText(text)}
                             multiline
                             textAlignVertical="top"
                             placeholder="What do you want to discuss?"
                         />
                     </View>
+
+                    {pickUri ? (
+                        <View style={styles.uploadImgContainer}>
+                            {/* <ProgressBar indeterminate color={Colors.primary} visible={isUploading} /> */}
+                            <Image source={{ uri: pickUri }} style={styles.uploadImg} />
+                        </View>
+                    ) : null}
+
+                    {data.image && !pickUri ? (
+                        <View style={styles.uploadImgContainer}>
+                            {/* <ProgressBar indeterminate color={Colors.primary} visible={isUploading} /> */}
+                            <Image source={{ uri: data.image }} style={styles.uploadImg} />
+                        </View>
+                    ) : null}
+
                     <View style={styles.footerContainer}>
-                        <TouchableOpacity>
-                            <FontAwesome5
-                                name="image"
-                                size={24}
-                                color={Colors.secondary}
-                            />
+                        <TouchableOpacity onPress={() => pickImage([3, 2])}>
+                            <FontAwesome5 name="image" size={24} color={Colors.secondary} />
                         </TouchableOpacity>
                         <TouchableOpacity>
-                            <FontAwesome5
-                                name="video"
-                                size={24}
-                                color={Colors.primary}
-                            />
+                            <FontAwesome5 name="video" size={24} color={Colors.primary} />
                         </TouchableOpacity>
                         <TouchableOpacity>
-                            <FontAwesome5
-                                name="hashtag"
-                                size={24}
-                                color={Colors.black}
-                            />
+                            <FontAwesome5 name="hashtag" size={24} color={Colors.black} />
                         </TouchableOpacity>
                         <TouchableOpacity>
-                            <FontAwesome5
-                                name="link"
-                                size={24}
-                                color={Colors.secondary}
-                            />
+                            <FontAwesome5 name="link" size={24} color={Colors.secondary} />
                         </TouchableOpacity>
                         <TouchableOpacity>
-                            <FontAwesome5
-                                name="paperclip"
-                                size={24}
-                                color={Colors.grey}
-                            />
+                            <FontAwesome5 name="paperclip" size={24} color={Colors.grey} />
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -137,19 +204,13 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         paddingVertical: 15,
         alignItems: 'center',
+        paddingHorizontal: 10,
     },
     headerDetails: {},
-    imgContainer: {
-        height: 75,
-        width: 75,
-        borderWidth: 1,
-        borderRadius: 100,
-        overflow: 'hidden',
-        marginHorizontal: 10,
-    },
     img: {
-        height: 75,
-        width: 75,
+        borderWidth: 1,
+        overflow: 'hidden',
+        marginRight: 10,
     },
     txtInputContainer: {
         flex: 1,
@@ -166,5 +227,12 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-evenly',
+    },
+    uploadImgContainer: {
+        flex: 1,
+    },
+    uploadImg: {
+        height: '100%',
+        width: '100%',
     },
 })

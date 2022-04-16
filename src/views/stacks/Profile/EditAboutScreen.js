@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react'
-import { StyleSheet, View, TouchableOpacity, ScrollView } from 'react-native'
+import { StyleSheet, View, TouchableOpacity, ScrollView, KeyboardAvoidingView } from 'react-native'
 import { Snackbar } from 'react-native-paper'
 import {
     Text,
@@ -34,16 +34,17 @@ const EditAboutScreen = ({ navigation }) => {
     }
 
     const formSchema = yup.object({
-        gender: yup.string().trim().min(2),
+        gender: yup.string().trim().min(2).nullable(),
         birthday: yup.string().trim().required('Birthday is required'),
-        language: yup.string().trim().min(2),
-        mobile_no: yup.string().trim().min(2),
-        telephone_no: yup.string().trim().min(2),
-        website: yup.string().trim().min(2),
+        language: yup.string().trim().min(2).nullable(),
+        mobile_no: yup.string().trim().min(2).nullable(),
+        telephone_no: yup.string().trim().min(2).nullable(),
+        website: yup.string().trim().min(2).nullable(),
+        description: yup.string().trim().min(2).nullable(),
     })
 
     return (
-        <SafeAreaView statusBarColor={Colors.white}>
+        <SafeAreaView flex statusBarColor={Colors.white}>
             <Header
                 title={'Edit About'}
                 style={{ backgroundColor: Colors.white }}
@@ -57,6 +58,7 @@ const EditAboutScreen = ({ navigation }) => {
                     mobile_no: userInfo.mobile_no,
                     telephone_no: userInfo.telephone_no,
                     website: userInfo.website,
+                    description: userInfo.description,
                 }}
                 onSubmit={(values) => {
                     updateProfile(values)
@@ -73,14 +75,27 @@ const EditAboutScreen = ({ navigation }) => {
                     setFieldValue,
                 }) => (
                     <>
-                        <View style={styles.container}>
+                        <KeyboardAvoidingView style={styles.container} behavior={'position'}>
                             <Text weight="medium" size={16}>
                                 Basic Information
                             </Text>
+                            <TextInput
+                                label={'Bio'}
+                                value={values.description}
+                                onChangeText={handleChange('description')}
+                                onBlur={handleBlur('description')}
+                                error={touched.description && errors.description ? true : false}
+                                errorMsg={
+                                    touched.description && errors.description
+                                        ? errors.description
+                                        : ''
+                                }
+                                mode="flat"
+                            />
                             <Dropdown
                                 label={'Gender'}
                                 value={values.gender}
-                                onChangeText={handleChange('gender')}
+                                onSubmit={handleChange('gender')}
                                 onBlur={handleBlur('gender')}
                                 error={touched.gender && errors.gender ? true : false}
                                 errorMsg={touched.gender && errors.gender ? errors.gender : ''}
@@ -131,9 +146,9 @@ const EditAboutScreen = ({ navigation }) => {
                                 mode="flat"
                                 dropdownIcon
                             />
-                        </View>
+                        </KeyboardAvoidingView>
 
-                        <View style={styles.container}>
+                        <KeyboardAvoidingView style={styles.container} behavior="position">
                             <Text weight="medium" size={16}>
                                 Contact Information
                             </Text>
@@ -170,14 +185,14 @@ const EditAboutScreen = ({ navigation }) => {
                                 errorMsg={touched.website && errors.website ? errors.website : ''}
                                 mode="flat"
                             />
-                        </View>
+                        </KeyboardAvoidingView>
 
                         <Button
                             title="Save"
                             disabled={loading}
                             loading={loading}
                             onPress={handleSubmit}
-                            style={{ marginTop: 10 }}
+                            style={{ marginTop: 10, zIndex: 1 }}
                         />
                         {showDatePicker && (
                             <DateTimePicker
@@ -192,11 +207,6 @@ const EditAboutScreen = ({ navigation }) => {
                                         )
                                     })
                                 }
-                                // onChange={(e, val) =>
-                                //     onChange(e, val, (strVal) => {
-                                //         setFieldValue('birthday', strVal)
-                                //     })
-                                // }
                             />
                         )}
                     </>
@@ -207,7 +217,7 @@ const EditAboutScreen = ({ navigation }) => {
                 visible={snackBarMessage ? true : false}
                 onDismiss={() => hideSnackBar()}
                 duration={3000}
-                style={{ backgroundColor: Colors.black }}
+                style={{ backgroundColor: Colors.black, zIndex: 99, elevation: 10 }}
             >
                 <Text color={Colors.white}>{snackBarMessage}</Text>
             </Snackbar>

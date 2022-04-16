@@ -4,7 +4,6 @@ const FollowReducer = (state, action) => {
             return {
                 ...state,
                 followers: action.payload,
-                loading: false,
             }
 
         case 'MORE_FOLLOWERS':
@@ -15,7 +14,6 @@ const FollowReducer = (state, action) => {
                     data: [...state.followers.data, ...action.payload.data],
                     links: { ...action.payload.links },
                 },
-                loading: false,
             }
 
         case 'REMOVE_FOLLOWER':
@@ -29,14 +27,12 @@ const FollowReducer = (state, action) => {
                         total: state.followers.meta.total - 1,
                     },
                 },
-                loading: false,
             }
 
         case 'GET_FOLLOWING':
             return {
                 ...state,
                 following: action.payload,
-                loading: false,
             }
 
         case 'MORE_FOLLOWING':
@@ -47,7 +43,6 @@ const FollowReducer = (state, action) => {
                     data: [...state.following.data, ...action.payload.data],
                     links: { ...action.payload.links },
                 },
-                loading: false,
             }
 
         case 'SET_TO_PENDING_FROM_FOLLOWING_ITEM':
@@ -139,13 +134,18 @@ const FollowReducer = (state, action) => {
                         total: state.following.meta.total - 1,
                     },
                 },
-                loading: false,
             }
 
         case 'SET_LOADING':
             return {
                 ...state,
                 loading: true,
+            }
+
+        case 'STOP_LOADING':
+            return {
+                ...state,
+                loading: false,
             }
 
         default:

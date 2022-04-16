@@ -1,26 +1,12 @@
-import React, { useState, useEffect, useCallback, useContext, useRef, memo, useMemo } from 'react'
-import {
-    StyleSheet,
-    View,
-    TouchableOpacity,
-    RefreshControl,
-    FlatList,
-    Image,
-    Alert,
-} from 'react-native'
+import React, { useState, useEffect, useContext, useRef } from 'react'
+import { StyleSheet, FlatList, Alert } from 'react-native'
 import { Snackbar } from 'react-native-paper'
 import ProfileContext from '../../../api/context/profile/ProfileContext'
 import PostContext from '../../../api/context/posts/PostContext'
 import CommentContext from '../../../api/context/comments/CommentContext'
 import FollowContext from '../../../api/context/follow/FollowContext'
-import {
-    Text,
-    BottomSheetModal,
-    Container,
-    ActivityIndicator,
-} from '../../components/FiplyComponents'
+import { Text, Container } from '../../components/FiplyComponents'
 import Colors from '../../../utils/Colors'
-import { FontAwesome5, FontAwesome } from '@expo/vector-icons'
 import LoadMore from '../../components/lists/LoadMore'
 import CreatePostBar from '../../components/headers/CreatePostBar'
 
@@ -36,8 +22,6 @@ import FollowingAction from '../../components/modals/FollowingAction'
 import CancelFollowAction from '../../components/modals/CancelFollowAction'
 
 import NoData from '../../components/NoData'
-import CreatePost from '../../components/modals/CreatePost'
-import { default as EditPost } from '../../components/modals/CreatePost'
 import { default as DeleteConfirmation } from '../../components/dialog/Confirmation'
 import PostItem from '../../components/lists/PostItem'
 
@@ -63,8 +47,6 @@ const ProfileScreen = ({ navigation, route }) => {
         toggleUpVote,
         deletePost,
         savePost,
-        updatePost,
-        createPost,
         snackBarMessage,
         hideSnackBar,
     } = useContext(PostContext)
@@ -82,8 +64,6 @@ const ProfileScreen = ({ navigation, route }) => {
     const [showFollowingAction, setShowFollowingAction] = useState(false)
     const [showCancelFollowAction, setShowCancelFollowAction] = useState(false)
 
-    const [showEditPost, setShowEditPost] = useState(false)
-    const [showCreatePost, setShowCreatePost] = useState(false)
     const [selectedPost, setSelectedPost] = useState({ content: '' })
     const [showConfirmation, setShowConfirmation] = useState(false)
 
@@ -99,7 +79,6 @@ const ProfileScreen = ({ navigation, route }) => {
     useEffect(() => {
         getUserInfo(userId)
         getPosts('/posts', userId)
-        // getJobPreference(userId)
     }, [])
 
     const renderPostItem = ({ item }) => {
@@ -109,6 +88,7 @@ const ProfileScreen = ({ navigation, route }) => {
                 onDotPress={handleDotPress}
                 onCommentPress={() => handleCommentPress(item)}
                 onUpVotePress={handleUpVotePress}
+                is_me={userInfo.is_me}
             />
         )
     }
@@ -116,14 +96,15 @@ const ProfileScreen = ({ navigation, route }) => {
     const handleDotPress = (postItem) => {
         setSelectedPost(postItem)
 
-        if (!userInfo.is_me) {
-            return setShowPostAction(true)
-        }
-
-        if (postFilter == 'Saved Posts') {
-            return setShowUnSaveAction(true)
-        } else {
-            return setShowMyPostAction(true)
+        switch (true) {
+            case postFilter == 'Saved Posts':
+                return setShowUnSaveAction(true)
+            case userInfo.is_me:
+                return setShowMyPostAction(true)
+            case !userInfo.is_me:
+                return setShowPostAction(true)
+            default:
+                break
         }
     }
 
@@ -174,7 +155,7 @@ const ProfileScreen = ({ navigation, route }) => {
         if (userInfo.account_level == 0) {
             Alert.alert('Not Verified', 'This is not available for basic users')
         } else {
-            setShowCreatePost(true)
+            navigation.push('CreatePostScreen')
         }
     }
 
@@ -254,29 +235,6 @@ const ProfileScreen = ({ navigation, route }) => {
                 }}
             />
 
-            <EditPost
-                visible={showEditPost}
-                edit
-                onEditPress={(postData) => {
-                    updatePost(selectedPost.id, postData)
-                    setShowEditPost(false)
-                }}
-                data={selectedPost}
-                onRequestClose={() => {
-                    setShowEditPost(false)
-                    setSelectedPost({})
-                }}
-            />
-
-            <CreatePost
-                visible={showCreatePost}
-                onPostPress={(postData) => {
-                    createPost(postData)
-                    setShowCreatePost(false)
-                }}
-                onRequestClose={() => setShowCreatePost(false)}
-            />
-
             <DeleteConfirmation
                 visible={showConfirmation}
                 dialogText="Are you sure to delete this post? It cannot be undone."
@@ -293,7 +251,8 @@ const ProfileScreen = ({ navigation, route }) => {
                     setShowMyPostAction(false)
                 }}
                 onEditPress={() => {
-                    setShowEditPost(true)
+                    navigation.push('CreatePostScreen', { edit: true, data: selectedPost })
+                    // setShowEditPost(true)
                     setShowMyPostAction(false)
                 }}
                 onDeletePress={() => {

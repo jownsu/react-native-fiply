@@ -41,7 +41,7 @@ const CommunityScreen = ({ navigation }, offset) => {
     const flatListRef = useRef(null)
 
     useEffect(() => {
-        getUsers()
+        getUsers('?q=notFollowing')
     }, [])
 
     const scrollToTop = () => {

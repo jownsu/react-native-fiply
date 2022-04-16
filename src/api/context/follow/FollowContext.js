@@ -46,6 +46,7 @@ export const FollowProvider = ({ children }) => {
                 dispatch({ type: 'GET_FOLLOWERS', payload: res.data })
             })
             .catch((err) => console.log(err))
+            .finally(() => stopLoading())
     }
 
     const moreFollowers = async (reset = false) => {
@@ -59,6 +60,7 @@ export const FollowProvider = ({ children }) => {
                         : dispatch({ type: 'MORE_FOLLOWERS', payload: res.data })
                 })
                 .catch((err) => console.log(err))
+                .finally(() => stopLoading())
         }
     }
 
@@ -74,6 +76,7 @@ export const FollowProvider = ({ children }) => {
                 dispatch({ type: 'GET_FOLLOWING', payload: res.data })
             })
             .catch((err) => console.log(err))
+            .finally(() => stopLoading())
     }
 
     const moreFollowing = async (reset = false) => {
@@ -87,6 +90,7 @@ export const FollowProvider = ({ children }) => {
                         : dispatch({ type: 'MORE_FOLLOWING', payload: res.data })
                 })
                 .catch((err) => console.log(err))
+                .finally(() => stopLoading())
         }
     }
 
@@ -102,6 +106,7 @@ export const FollowProvider = ({ children }) => {
                 setSnackBarMessage(res.data.message)
             })
             .catch((err) => setSnackBarMessage(err.message))
+            .finally(() => stopLoading())
     }
 
     const unFollow = async (id, is_me = false, type = 'followingItem') => {
@@ -120,6 +125,7 @@ export const FollowProvider = ({ children }) => {
                 setSnackBarMessage(res.data.message)
             })
             .catch((err) => setSnackBarMessage(err.message))
+            .finally(() => stopLoading())
     }
 
     const cancelFollowRequest = async (id, type = 'followingItem') => {
@@ -134,6 +140,7 @@ export const FollowProvider = ({ children }) => {
                 }
             })
             .catch((err) => setSnackBarMessage(err.message))
+            .finally(() => stopLoading())
     }
 
     const removeFollower = async (id) => {
@@ -146,11 +153,14 @@ export const FollowProvider = ({ children }) => {
                 setSnackBarMessage(res.data.message)
             })
             .catch((err) => setSnackBarMessage(err.message))
+            .finally(() => stopLoading())
     }
 
     const hideSnackBar = () => setSnackBarMessage(null)
 
     const setLoading = () => dispatch({ type: 'SET_LOADING' })
+
+    const stopLoading = () => dispatch({ type: 'STOP_LOADING' })
 
     return (
         <FollowContext.Provider

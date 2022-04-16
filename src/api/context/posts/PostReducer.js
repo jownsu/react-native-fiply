@@ -4,7 +4,6 @@ const PostReducer = (state, action) => {
             return {
                 ...state,
                 posts: action.payload,
-                loading: false,
             }
 
         case 'MORE_POSTS':
@@ -15,7 +14,6 @@ const PostReducer = (state, action) => {
                     data: [...state.posts.data, ...action.payload.data],
                     links: { ...action.payload.links },
                 },
-                loading: false,
             }
 
         case 'ADD_POST':
@@ -25,7 +23,6 @@ const PostReducer = (state, action) => {
                     ...state.posts,
                     data: [action.payload, ...state.posts.data],
                 },
-                loading: false,
             }
 
         case 'UPDATE_POST':
@@ -42,7 +39,6 @@ const PostReducer = (state, action) => {
                         }),
                     ],
                 },
-                loading: false,
             }
 
         case 'DELETE_POST':
@@ -52,7 +48,6 @@ const PostReducer = (state, action) => {
                     ...state.posts,
                     data: [...state.posts.data.filter((item) => item.id != action.payload)],
                 },
-                loading: false,
             }
 
         case 'TOGGLE_UPVOTE':
@@ -74,6 +69,15 @@ const PostReducer = (state, action) => {
                             return item
                         }),
                     ],
+                },
+            }
+
+        case 'RESET_POSTS':
+            return {
+                ...state,
+                posts: {
+                    ...state.posts,
+                    data: [],
                 },
                 loading: false,
             }

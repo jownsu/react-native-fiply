@@ -30,8 +30,12 @@ export const PostProvider = ({ children }) => {
         setLoading()
         await api({ token: user.token })
             .get(`/${userId}${path}`)
-            .then((res) => dispatch({ type: 'GET_POSTS', payload: res.data }))
+            .then((res) => {
+                dispatch({ type: 'RESET_POSTS' })
+                dispatch({ type: 'GET_POSTS', payload: res.data })
+            })
             .catch((err) => console.log(err))
+            .finally(() => stopLoading())
     }
 
     const morePosts = async (reset = false) => {
@@ -45,10 +49,11 @@ export const PostProvider = ({ children }) => {
                         : dispatch({ type: 'MORE_POSTS', payload: res.data })
                 })
                 .catch((err) => console.log(err))
+                .finally(() => stopLoading())
         }
     }
 
-    const createPost = async (postData) => {
+    const createPost = async (postData, callback = () => {}) => {
         //postData = content, image
         setLoading()
         let fd = new FormData()
@@ -62,18 +67,24 @@ export const PostProvider = ({ children }) => {
         }
 
         fd.append('content', postData.content)
+        fd.append('is_public', postData.is_public ? 1 : 0)
 
         await api({ token: user.token })
             .post('/posts', fd)
-            .then((res) => dispatch({ type: 'ADD_POST', payload: res.data.data }))
+            .then((res) => {
+                dispatch({ type: 'ADD_POST', payload: res.data.data })
+                callback()
+                setSnackBarMessage('Posted')
+            })
             .catch((err) => {
                 if (err.message) {
                     Alert.alert('Not Available', err.message)
                 }
             })
+            .finally(() => stopLoading())
     }
 
-    const updatePost = async (id, postData) => {
+    const updatePost = async (id, postData, callback = () => {}) => {
         setLoading()
         const fd = new FormData()
 
@@ -86,23 +97,30 @@ export const PostProvider = ({ children }) => {
         }
 
         fd.append('content', postData.content)
+        fd.append('is_public', postData.is_public ? 1 : 0)
         fd.append('_method', 'PUT')
 
         await api({ token: user.token })
             .post(`/posts/${id}`, fd)
             .then((res) => {
-                console.log(res.data.data)
                 dispatch({ type: 'UPDATE_POST', payload: res.data.data })
+                callback()
+                setSnackBarMessage('Post Updated')
             })
             .catch((err) => console.log(err))
+            .finally(() => stopLoading())
     }
 
     const deletePost = async (id) => {
         setLoading()
         await api({ token: user.token })
             .delete(`/posts/${id}`)
-            .then((res) => dispatch({ type: 'DELETE_POST', payload: id }))
+            .then((res) => {
+                dispatch({ type: 'DELETE_POST', payload: id })
+                setSnackBarMessage('Post Deleted')
+            })
             .catch((err) => console.log(err))
+            .finally(() => stopLoading())
     }
 
     const savePost = async (id, action = 'save') => {
@@ -139,6 +157,7 @@ export const PostProvider = ({ children }) => {
                 dispatch({ type: 'TOGGLE_UPVOTE', payload: { id, data: res.data.data } })
             )
             .catch((err) => console.log(err))
+            .finally(() => stopLoading())
     }
 
     const setLoading = () => dispatch({ type: 'SET_LOADING' })

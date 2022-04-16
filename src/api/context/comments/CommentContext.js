@@ -32,6 +32,7 @@ export const CommentProvider = ({ children }) => {
                 dispatch({ type: 'GET_COMMENTS', payload: res.data })
             })
             .catch((err) => console.log(err))
+            .finally(() => stopLoading())
     }
 
     const moreComments = async (reset = false) => {
@@ -45,6 +46,7 @@ export const CommentProvider = ({ children }) => {
                         : dispatch({ type: 'MORE_COMMENTS', payload: res.data })
                 })
                 .catch((err) => console.log(err))
+                .finally(() => stopLoading())
         }
     }
 
@@ -56,6 +58,7 @@ export const CommentProvider = ({ children }) => {
                 dispatch({ type: 'ADD_COMMENT', payload: { data: res.data.data, user } })
             )
             .catch((err) => console.log(err))
+            .finally(() => stopLoading())
     }
 
     const deleteComment = async (id) => {
@@ -64,9 +67,12 @@ export const CommentProvider = ({ children }) => {
             .delete(`/comments/${id}`)
             .then((res) => dispatch({ type: 'DELETE_COMMENT', payload: id }))
             .catch((err) => console.log(err))
+            .finally(() => stopLoading())
     }
 
     const setLoading = () => dispatch({ type: 'SET_LOADING' })
+
+    const stopLoading = () => dispatch({ type: 'STOP_LOADING' })
 
     const resetComments = () => dispatch({ type: 'RESET_COMMENT' })
 
