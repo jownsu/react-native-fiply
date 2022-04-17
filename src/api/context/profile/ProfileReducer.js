@@ -131,6 +131,19 @@ const ProfileReducer = (state, action) => {
                 },
             }
 
+        case 'SET_RESUME':
+            return {
+                ...state,
+                resume: action.payload,
+                userInfo: {
+                    ...state.userInfo,
+                    account_level:
+                        state.userInfo.account_level == 0
+                            ? state.userInfo.account_level + 1
+                            : state.userInfo.account_level,
+                },
+            }
+
         case 'SET_LOADING':
             return {
                 ...state,

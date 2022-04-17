@@ -16,6 +16,7 @@ import Header from '../../components/headers/Header'
 import Colors from '../../../utils/Colors'
 import { MaterialIcons } from '@expo/vector-icons'
 import usePickImage from '../../../utils/usePIckImage'
+import useDocumentPicker from '../../../utils/useDocumentPicker'
 
 const EditProfileScreen = ({ navigation }) => {
     const {
@@ -26,12 +27,23 @@ const EditProfileScreen = ({ navigation }) => {
         snackBarMessage,
         hideSnackBar,
         setAudience,
+        uploadResume,
     } = useContext(ProfileContext)
     const { pickImage } = usePickImage()
+    const { pickDocument } = useDocumentPicker()
+
+    const onUploadResumeBtnPress = () => {
+        pickDocument(
+            (response, uri) => {
+                uploadResume(uri)
+                navigation.navigate('ResumeScreen')
+            },
+            ['application/pdf']
+        )
+    }
 
     const formSchema = yup.object({
         firstname: yup.string().trim().min(2).required('Firstname is required'),
-        middlename: yup.string().nullable(),
         lastname: yup.string().trim().min(2).required('Lastname is required'),
     })
 
@@ -95,7 +107,6 @@ const EditProfileScreen = ({ navigation }) => {
                 <Formik
                     initialValues={{
                         firstname: userInfo.firstname,
-                        middlename: userInfo.middlename,
                         lastname: userInfo.lastname,
                     }}
                     validationSchema={formSchema}
@@ -114,17 +125,6 @@ const EditProfileScreen = ({ navigation }) => {
                                 error={touched.firstname && errors.firstname ? true : false}
                                 errorMsg={
                                     touched.firstname && errors.firstname ? errors.firstname : ''
-                                }
-                            />
-                            <TextInput
-                                label={'Middlename'}
-                                mode={'flat'}
-                                value={values.middlename}
-                                onChangeText={handleChange('middlename')}
-                                onBlur={handleBlur('middlename')}
-                                error={touched.middlename && errors.middlename ? true : false}
-                                errorMsg={
-                                    touched.middlename && errors.middlename ? errors.middlename : ''
                                 }
                             />
                             <TextInput
@@ -149,9 +149,26 @@ const EditProfileScreen = ({ navigation }) => {
                     )}
                 </Formik>
 
-                {/* <TextInput value={userInfo.description} label={'Bio'} mode={'flat'} /> */}
+                {/* <TextInput value={userInfo.bio} label={'Bio'} mode={'flat'} /> */}
 
                 <View style={styles.actionContainer}>
+                    {userInfo.account_level > 0 ? (
+                        <TouchableOpacity
+                            style={styles.actionBtn}
+                            onPress={() => navigation.push('ResumeScreen')}
+                        >
+                            <Text color={Colors.secondary} weight="medium" size={16}>
+                                Resume
+                            </Text>
+                        </TouchableOpacity>
+                    ) : (
+                        <TouchableOpacity style={styles.actionBtn} onPress={onUploadResumeBtnPress}>
+                            <Text color={Colors.secondary} weight="medium" size={16}>
+                                Upload Resume
+                            </Text>
+                        </TouchableOpacity>
+                    )}
+
                     <TouchableOpacity
                         style={styles.actionBtn}
                         onPress={() => navigation.push('EditAboutScreen')}
@@ -216,6 +233,7 @@ const styles = StyleSheet.create({
     avatar: {
         borderWidth: 1,
         overflow: 'hidden',
+        backgroundColor: Colors.light,
     },
     headerContainer: {
         flexDirection: 'row',

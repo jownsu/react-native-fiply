@@ -1,48 +1,44 @@
-import { StyleSheet, Text, View, useWindowDimensions } from 'react-native'
-import { SafeAreaView } from './views/components/FiplyComponents'
+import { StyleSheet, Dimensions, Text, View } from 'react-native'
 import React from 'react'
-import Colors from './utils/Colors'
+import Pdf from 'react-native-pdf'
 
-import { TabView, SceneMap, TabBar } from 'react-native-tab-view'
-const FirstRoute = () => <View style={{ flex: 1, backgroundColor: 'red' }} />
+const source = { uri: 'http://samples.leanpub.com/thereactnativebook-sample.pdf', cache: true }
 
-const SecondRoute = () => <View style={{ flex: 1, backgroundColor: '#673ab7' }} />
-
-const renderScene = SceneMap({
-    following: FirstRoute,
-    follower: SecondRoute,
-})
 const TestScreen1 = () => {
-    const layout = useWindowDimensions()
-
-    const [index, setIndex] = React.useState(0)
-    const [routes] = React.useState([
-        { key: 'following', title: 'Following' },
-        { key: 'follower', title: 'Followers' },
-    ])
-    const renderTabBar = (props) => (
-        <TabBar
-            {...props}
-            indicatorStyle={{ backgroundColor: Colors.primary }}
-            style={{ backgroundColor: Colors.white }}
-            labelStyle={{ color: Colors.black, fontFamily: 'EncodeSansExpaded-Medium' }}
-            inactiveColor={'black'}
-            activeColor={Colors.primary}
-        />
-    )
     return (
-        <SafeAreaView style={{ flex: 1 }}>
-            <TabView
-                renderTabBar={renderTabBar}
-                navigationState={{ index, routes }}
-                renderScene={renderScene}
-                onIndexChange={setIndex}
-                initialLayout={{ width: layout.width }}
+        <View style={styles.container}>
+            <Pdf
+                source={source}
+                onLoadComplete={(numberOfPages, filePath) => {
+                    console.log(`Number of pages: ${numberOfPages}`)
+                }}
+                onPageChanged={(page, numberOfPages) => {
+                    console.log(`Current page: ${page}`)
+                }}
+                onError={(error) => {
+                    console.log(error)
+                }}
+                onPressLink={(uri) => {
+                    console.log(`Link pressed: ${uri}`)
+                }}
+                style={styles.pdf}
             />
-        </SafeAreaView>
+        </View>
     )
 }
 
 export default TestScreen1
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+        marginTop: 25,
+    },
+    pdf: {
+        flex: 1,
+        width: Dimensions.get('window').width,
+        height: Dimensions.get('window').height,
+    },
+})

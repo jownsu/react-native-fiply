@@ -83,7 +83,12 @@ const BottomNavigator = ({ navigation }) => {
                     options={{
                         tabBarIcon: ({ color }) => (
                             <View style={styles.profileIconStyle}>
-                                <FontAwesome5 name="user-tie" size={38} color={color} />
+                                {/* <FontAwesome5 name="user-tie" size={38} color={color} /> */}
+                                <Avatar.Image
+                                    size={55}
+                                    source={{ uri: user.avatar }}
+                                    backgroundColor={Colors.light}
+                                />
                             </View>
                         ),
                         tabBarButton: (props) => (
@@ -148,7 +153,7 @@ const BottomNavigator = ({ navigation }) => {
                                     adjustsFontSizeToFit
                                     numberOfLines={1}
                                 >
-                                    {user.fullname}
+                                    {user.firstname} {user.lastname}
                                 </Text>
 
                                 <TouchableOpacity activeOpacity={0.7} onPress={handleGoToProfile}>

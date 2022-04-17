@@ -17,7 +17,7 @@ const api = ({ token = null } = {}) => {
         (error) => {
             if (error.response?.status == 401) {
                 SecureStore.deleteItemAsync('user')
-                // NativeModules.DevSettings.reload()
+                NativeModules.DevSettings.reload()
                 return Promise.reject({ status: 401, errors: ['Unauthorized'] })
             }
 

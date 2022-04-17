@@ -155,21 +155,10 @@ const ProfileHeader = ({
                     <View style={styles.bodyContainer}>
                         <View style={{ flex: 1.3 }}>
                             <Text weight="semi-bold" size={16} numberOfLines={1}>
-                                {data.fullname}
+                                {data.firstname} {data.lastname}
                             </Text>
-                            <Text>{data.description}</Text>
+                            <Text>{data.bio}</Text>
                         </View>
-
-                        {/* {data.preview && (
-                            <Text
-                                color={Colors.white}
-                                size={12}
-                                weight="semi-bold"
-                                style={{ marginVertical: 5 }}
-                            >
-                                {data.preview}
-                            </Text>
-                        )} */}
                     </View>
                 </View>
                 <View style={styles.profileBtnContainer}>

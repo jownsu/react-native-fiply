@@ -40,7 +40,7 @@ const EditAboutScreen = ({ navigation }) => {
         mobile_no: yup.string().trim().min(2).nullable(),
         telephone_no: yup.string().trim().min(2).nullable(),
         website: yup.string().trim().min(2).nullable(),
-        description: yup.string().trim().min(2).nullable(),
+        bio: yup.string().trim().min(2).nullable(),
     })
 
     return (
@@ -58,7 +58,7 @@ const EditAboutScreen = ({ navigation }) => {
                     mobile_no: userInfo.mobile_no,
                     telephone_no: userInfo.telephone_no,
                     website: userInfo.website,
-                    description: userInfo.description,
+                    bio: userInfo.bio,
                 }}
                 onSubmit={(values) => {
                     updateProfile(values)
@@ -81,15 +81,11 @@ const EditAboutScreen = ({ navigation }) => {
                             </Text>
                             <TextInput
                                 label={'Bio'}
-                                value={values.description}
-                                onChangeText={handleChange('description')}
-                                onBlur={handleBlur('description')}
-                                error={touched.description && errors.description ? true : false}
-                                errorMsg={
-                                    touched.description && errors.description
-                                        ? errors.description
-                                        : ''
-                                }
+                                value={values.bio}
+                                onChangeText={handleChange('bio')}
+                                onBlur={handleBlur('bio')}
+                                error={touched.bio && errors.bio ? true : false}
+                                errorMsg={touched.bio && errors.bio ? errors.bio : ''}
                                 mode="flat"
                             />
                             <Dropdown

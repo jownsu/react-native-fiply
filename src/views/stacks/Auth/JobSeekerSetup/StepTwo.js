@@ -19,10 +19,13 @@ const StepTwo = ({ navigation }) => {
     const [uploadedFile, setUploadedFile] = useState({})
 
     const onUploadBtnPress = () => {
-        pickDocument((response, uri) => {
-            setUploadedFile(response)
-            setResumeUri(uri)
-        })
+        pickDocument(
+            (response, uri) => {
+                setUploadedFile(response)
+                setResumeUri(uri)
+            },
+            ['application/pdf']
+        )
     }
 
     const onScanImagePress = () => {
@@ -90,7 +93,7 @@ const StepTwo = ({ navigation }) => {
                             style={styles.imgScan}
                         />
                         <Text color={Colors.black} weight="medium" center>
-                            Scan Image
+                            Take a Picture
                         </Text>
                     </TouchableOpacity>
                 </View>

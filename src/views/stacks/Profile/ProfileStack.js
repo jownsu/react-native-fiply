@@ -11,6 +11,7 @@ import EditExperienceScreen from './EditExperienceScreen'
 import ChangePasswordScreen from './ChangePasswordScreen'
 import ProfileInfoScreen from './ProfileInfoScreen'
 import CreatePostScreen from '../../screens/CreatePostScreen'
+import ResumeScreen from './ResumeScreen'
 import { PostProvider } from '../../../api/context/posts/PostContext'
 import { ProfileProvider } from '../../../api/context/profile/ProfileContext'
 const Stack = createStackNavigator()
@@ -35,6 +36,11 @@ const ProfileStack = ({ route }) => {
                         options={{ headerShown: false }}
                         name={'ProfileInfoScreen'}
                         component={ProfileInfoScreen}
+                    ></Stack.Screen>
+                    <Stack.Screen
+                        options={{ headerShown: false }}
+                        name={'ResumeScreen'}
+                        component={ResumeScreen}
                     ></Stack.Screen>
                     <Stack.Screen
                         options={{ headerShown: false }}

@@ -16,6 +16,7 @@ export const ProfileProvider = ({ children }) => {
         jobPreference: {},
         experiences: [],
         educationalBackgrounds: [],
+        resume: '',
         loading: false,
     }
 
@@ -70,10 +71,10 @@ export const ProfileProvider = ({ children }) => {
             .put(`/me`, {
                 ...data,
                 firstname: data.firstname ? data.firstname : state.userInfo.firstname,
-                middlename: data.middlename ? data.middlename : state.userInfo.middlename,
                 lastname: data.lastname ? data.lastname : state.userInfo.lastname,
             })
             .then((res) => {
+                console.log(res.data)
                 dispatch({ type: 'UPDATE_PROFILE', payload: data })
                 setUser({ ...user, ...data })
 
@@ -114,6 +115,15 @@ export const ProfileProvider = ({ children }) => {
         await api({ token: user.token })
             .get(`/${id}/jobPreferences`)
             .then((res) => dispatch({ type: 'GET_JOB_PREFERENCE', payload: res.data.data }))
+            .catch((err) => console.log(err))
+            .finally(() => stopLoading())
+    }
+
+    const getResume = async (id = '') => {
+        setLoading()
+        await api({ token: user.token })
+            .get(`/${id}/resume`)
+            .then((res) => dispatch({ type: 'SET_RESUME', payload: res.data.data }))
             .catch((err) => console.log(err))
             .finally(() => stopLoading())
     }
@@ -218,7 +228,8 @@ export const ProfileProvider = ({ children }) => {
         await api({ token: user.token })
             .post('/uploadResume', fd, config)
             .then((res) => {
-                dispatch({ type: 'SET_RESUME', payload: res.data })
+                dispatch({ type: 'SET_RESUME', payload: res.data.data })
+                setSnackBarMessage('Uploaded')
             })
             .catch((err) => console.log(err))
             .finally(() => stopLoading())
@@ -341,6 +352,7 @@ export const ProfileProvider = ({ children }) => {
                 getExperiences,
                 getEducationalBackgrounds,
                 getJobPreference,
+                getResume,
                 createEducationalBackground,
                 createExperience,
                 updateProfile,
