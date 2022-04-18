@@ -1,5 +1,5 @@
 import { StyleSheet, View, ScrollView, TouchableOpacity } from 'react-native'
-import { SafeAreaView, Container, Text, ActivityIndicator } from '../../components/FiplyComponents'
+import { SafeAreaView, Container, Text, SecondaryButton } from '../../components/FiplyComponents'
 import { Avatar } from 'react-native-paper'
 import Header from '../../components/headers/Header'
 import React, { useContext } from 'react'
@@ -33,15 +33,15 @@ const ShowJobScreen = ({ navigation }) => {
     }
 
     return (
-        <SafeAreaView flex statusBarColor={Colors.primary} style={{}}>
+        <SafeAreaView flex statusBarColor={Colors.white}>
             <Header
                 title="Job Details"
                 centerTitle
                 style={{
-                    backgroundColor: Colors.primary,
+                    backgroundColor: Colors.white,
                 }}
-                textColor={Colors.white}
-                iconColor={Colors.white}
+                textColor={Colors.black}
+                iconColor={Colors.black}
                 onBackPress={handleBackPress}
             />
 
@@ -131,6 +131,12 @@ const ShowJobScreen = ({ navigation }) => {
                         </Text>
                         <Text>{job.qualifications}</Text>
                     </View>
+
+                    <SecondaryButton
+                        title="Answer Questionnaire"
+                        labelStyle={{ marginHorizontal: 0 }}
+                        style={{ borderRadius: 15, marginBottom: 10 }}
+                    />
                 </Container>
             </ScrollView>
 

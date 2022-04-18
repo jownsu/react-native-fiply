@@ -31,11 +31,14 @@ const SignUp1Screen = ({ navigation }) => {
             .trim()
             .required('Password is required')
             .min(8)
+            .matches(/^(?=.*[0-9])/, 'At least have a number.')
+            .matches(/^(?=.*[a-z])/, 'There must be at least one lowercase letters')
+            .matches(/^(?=.*[A-Z])/, 'There must be at least one uppercase letters')
             .matches(
-                /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
-                'Must contain One Uppercase, One Lowercase, One Number and one special case Character'
-            )
-            .oneOf([yup.ref('password_confirmation'), null], 'Passwords must match'),
+                /^(?=.*[$&+,:;=?@#|'<>.^*()%!-])/,
+                'There must be at least one special character.'
+            ),
+        // .oneOf([yup.ref('password_confirmation'), null], 'Passwords must match'),
         password_confirmation: yup
             .string()
             .trim()

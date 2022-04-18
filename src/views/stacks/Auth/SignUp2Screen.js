@@ -33,10 +33,21 @@ const SignUp2Screen = ({ navigation }) => {
         }
     }
 
+    let sixteenYearsAgo = new Date()
+    sixteenYearsAgo = sixteenYearsAgo.setFullYear(sixteenYearsAgo.getFullYear() - 18)
+
     const signupSchema = yup.object({
         firstname: yup.string().trim().required('Firstname is required'),
         lastname: yup.string().trim().required('Lastname is required'),
-        birthday: yup.string().trim().required('Birthday is required'),
+        birthday: yup
+            .string()
+            .trim()
+            .required('Birthday is required')
+            .test(
+                'Validate 18 years above',
+                'Age must be 18 years above.',
+                (value) => new Date(value).getFullYear() <= new Date().getFullYear() - 18
+            ),
     })
 
     return (
@@ -129,6 +140,8 @@ const SignUp2Screen = ({ navigation }) => {
                                                     setFieldValue('birthday', strVal)
                                                 })
                                             }
+                                            minimumDate={new Date(1950, 0, 1)}
+                                            maximumDate={sixteenYearsAgo}
                                         />
                                     )}
 
