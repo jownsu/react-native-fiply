@@ -11,6 +11,7 @@ const SearchBar = ({
     inputStyle = {},
     onSubmit = () => {},
     onBlurClear = () => {},
+    style = {},
 }) => {
     const [searchVal, setSearchVal] = useState('')
 
@@ -23,7 +24,7 @@ const SearchBar = ({
     return (
         <View style={[styles.container, containerStyle]}>
             {leftIcon ? leftIcon() : null}
-            <View style={styles.searchBarStyle}>
+            <View style={{ ...styles.searchBarStyle, ...style }}>
                 <Searchbar
                     style={{ borderRadius: 10, height: 35 }}
                     placeholder="Search"

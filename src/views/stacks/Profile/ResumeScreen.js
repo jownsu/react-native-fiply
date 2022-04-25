@@ -16,7 +16,7 @@ const ResumeScreen = ({ navigation }) => {
     const { pickDocument } = useDocumentPicker()
 
     useEffect(() => {
-        if (resume == '') {
+        if (!resume) {
             getResume(userInfo.id)
         }
     }, [])
@@ -52,7 +52,7 @@ const ResumeScreen = ({ navigation }) => {
             />
             <ProgressBar indeterminate color={Colors.secondary} visible={loading} />
 
-            {resume != '' ? (
+            {resume ? (
                 <Pdf
                     source={{
                         uri: resume,
@@ -73,8 +73,10 @@ const ResumeScreen = ({ navigation }) => {
                     style={styles.pdf}
                 />
             ) : (
-                <ActivityIndicator visible={true} />
+                <Text>No Resume</Text>
             )}
+
+            <ActivityIndicator visible={loading} />
 
             <Snackbar
                 visible={snackBarMessage ? true : false}

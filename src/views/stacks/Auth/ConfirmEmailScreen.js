@@ -34,6 +34,7 @@ const ConfirmEmailScreen = ({ navigation }) => {
 
     const handleConfirm = () => {
         const SignUpdata = getAllSignUpData()
+        // console.log({ ...SignUpdata, code: code.join('') })
         signup({ ...SignUpdata, code: code.join('') }, () => navigation.navigate('BasicUser'))
         setCode([])
     }
@@ -246,6 +247,8 @@ const styles = StyleSheet.create({
     },
     textInputContainer: {
         flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     img: {
         height: 150,

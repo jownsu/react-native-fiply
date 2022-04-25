@@ -7,15 +7,15 @@ import {
     Text,
     Button,
     SecondaryButton,
-} from '../../../components/FiplyComponents'
-import AuthContext from '../../../../api/context/auth/AuthContext'
-import SignUpContext from '../../../../api/context/auth/SignUpContext'
-import Colors from '../../../../utils/Colors'
-import Skip from '../../../components/Skip'
+} from '../../components/FiplyComponents'
+import AuthContext from '../../../api/context/auth/AuthContext'
+import SignUpContext from '../../../api/context/auth/SignUpContext'
+import Colors from '../../../utils/Colors'
+import Skip from '../../components/Skip'
 
 const SemiVerified = ({ navigation }) => {
     const { setLogged_in } = useContext(AuthContext)
-    const { firstname } = useContext(SignUpContext)
+    const { profile } = useContext(SignUpContext)
 
     function handleBackButtonClick() {
         setLogged_in('true')
@@ -35,7 +35,7 @@ const SemiVerified = ({ navigation }) => {
                 <FiplyLogo />
                 <View style={{ marginVertical: 25 }}>
                     <Text weight="bold" size={21}>
-                        Congratulations {firstname ? firstname : 'User'},
+                        Congratulations {profile.firstname ? profile.firstname : 'User'},
                     </Text>
                     <Text weight="bold" size={21} style={{ marginVertical: 5 }}>
                         your account has been

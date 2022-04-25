@@ -22,7 +22,7 @@ const FollowingAction = ({
                             style={{ marginBottom: 20 }}
                         />
                         <Text>
-                            Unfollow <Text weight="medium">{user.fullname}</Text>?
+                            Unfollow <Text weight="medium">{user.name}</Text>?
                         </Text>
                     </View>
                     <TouchableOpacity style={styles.btn} onPress={() => onUnFollowPress(user.id)}>

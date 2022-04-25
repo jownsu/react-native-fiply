@@ -114,7 +114,7 @@ const CreatePostScreen = ({ navigation, route }) => {
                         />
                         <View style={styles.headerDetails}>
                             <Text weight="medium" size={16} adjustsFontSizeToFit numberOfLines={1}>
-                                {user.fullname}
+                                {user.name}
                             </Text>
                             <Dropdown
                                 data={[

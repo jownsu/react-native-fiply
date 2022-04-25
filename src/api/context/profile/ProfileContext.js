@@ -40,10 +40,12 @@ export const ProfileProvider = ({ children }) => {
             .then((res) => {
                 let profileData = res.data.data
 
+                console.log(profileData)
+
                 if (id == 'me') {
                     let userData = {
                         id: profileData.id,
-                        fullname: profileData.fullname,
+                        name: profileData.name,
                         status: profileData.status,
                         preview: profileData.preview,
                         avatar: profileData.avatar,
@@ -67,20 +69,22 @@ export const ProfileProvider = ({ children }) => {
 
     const updateProfile = async (data) => {
         setLoading()
+        let firstname = data.firstname ? data.firstname : state.userInfo.firstname
+        let lastname = data.lastname ? data.lastname : state.userInfo.lastname
+        let name = firstname + ' ' + lastname
         await api({ token: user.token })
             .put(`/me`, {
                 ...data,
-                firstname: data.firstname ? data.firstname : state.userInfo.firstname,
-                lastname: data.lastname ? data.lastname : state.userInfo.lastname,
+                firstname,
+                lastname,
             })
             .then((res) => {
-                console.log(res.data)
-                dispatch({ type: 'UPDATE_PROFILE', payload: data })
-                setUser({ ...user, ...data })
+                dispatch({ type: 'UPDATE_PROFILE', payload: { ...data, name } })
+                setUser({ ...user, ...data, name })
 
                 SecureStore.getItemAsync('user').then((response) => {
                     let storeUser = JSON.parse(response)
-                    storeUser = { ...storeUser, ...data }
+                    storeUser = { ...storeUser, ...data, name }
                     SecureStore.setItemAsync('user', JSON.stringify(storeUser))
                 })
 
@@ -131,7 +135,7 @@ export const ProfileProvider = ({ children }) => {
     const updateJobPreference = async (data) => {
         setLoading()
         await api({ token: user.token })
-            .put(`/jobPreferences/${state.jobPreference.id}`, data)
+            .put(`/me/jobPreferences/${state.jobPreference.id}`, data)
             .then((res) => {
                 dispatch({ type: 'UPDATE_JOB_PREFERENCE', payload: res.data.data })
                 setSnackBarMessage('Updated')
@@ -143,7 +147,7 @@ export const ProfileProvider = ({ children }) => {
     const createExperience = async (data) => {
         setLoading()
         await api({ token: user.token })
-            .post(`/experiences`, data)
+            .post(`/me/experiences`, data)
             .then((res) => {
                 dispatch({ type: 'ADD_EXPERIENCE', payload: res.data.data })
                 setSnackBarMessage('Addded')
@@ -155,7 +159,7 @@ export const ProfileProvider = ({ children }) => {
     const updateExperience = async (data) => {
         setLoading()
         await api({ token: user.token })
-            .put(`/experiences/${data.id}`, data)
+            .put(`/me/experiences/${data.id}`, data)
             .then((res) => {
                 dispatch({ type: 'UPDATE_EXPERIENCE', payload: res.data.data })
                 setSnackBarMessage('Updated')
@@ -167,7 +171,7 @@ export const ProfileProvider = ({ children }) => {
     const deleteExperience = async (id) => {
         setLoading()
         await api({ token: user.token })
-            .delete(`/experiences/${id}`)
+            .delete(`/me/experiences/${id}`)
             .then((res) => {
                 dispatch({ type: 'DELETE_EXPERIENCE', payload: id })
                 setSnackBarMessage('Deleted')
@@ -179,7 +183,7 @@ export const ProfileProvider = ({ children }) => {
     const createEducationalBackground = async (data) => {
         setLoading()
         await api({ token: user.token })
-            .post(`/educationalBackgrounds`, data)
+            .post(`/me/educationalBackgrounds`, data)
             .then((res) => {
                 dispatch({ type: 'ADD_EDUCATIONAL_BACKGROUND', payload: res.data.data })
                 setSnackBarMessage('Added')
@@ -191,7 +195,7 @@ export const ProfileProvider = ({ children }) => {
     const updateEducationalBackground = async (data) => {
         setLoading()
         await api({ token: user.token })
-            .put(`/educationalBackgrounds/${data.id}`, data)
+            .put(`/me/educationalBackgrounds/${data.id}`, data)
             .then((res) => {
                 dispatch({ type: 'UPDATE_EDUCATIONAL_BACKGROUND', payload: res.data.data })
                 setSnackBarMessage('Updated')
@@ -203,7 +207,7 @@ export const ProfileProvider = ({ children }) => {
     const deleteEducationalBackground = async (id) => {
         setLoading()
         await api({ token: user.token })
-            .delete(`/educationalBackgrounds/${id}`)
+            .delete(`/me/educationalBackgrounds/${id}`)
             .then((res) => {
                 dispatch({ type: 'DELETE_EDUCATIONAL_BACKGROUND', payload: id })
                 setSnackBarMessage('Deleted')

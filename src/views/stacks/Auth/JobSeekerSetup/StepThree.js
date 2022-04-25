@@ -134,7 +134,7 @@ const StepThree = ({ navigation }) => {
 
                 <Button
                     title="Proceed"
-                    disabled={validId && !loading ? false : true}
+                    disabled={validId && frontUri && backUri && !loading ? false : true}
                     loading={loading}
                     style={{ marginTop: 75, marginBottom: 35 }}
                     onPress={onProceedPress}

@@ -1,13 +1,13 @@
 import React, { useState, useContext } from 'react'
 import { StyleSheet, View, TouchableOpacity } from 'react-native'
-import AuthContext from '../../../api/context/auth/AuthContext'
-import SignUpContext from '../../../api/context/auth/SignUpContext'
+import AuthContext from '../../../../api/context/auth/AuthContext'
+import SignUpContext from '../../../../api/context/auth/SignUpContext'
 import { Formik } from 'formik'
 import * as yup from 'yup'
-import Colors from '../../../utils/Colors'
+import Colors from '../../../../utils/Colors'
 import { TextInput as TxtInput } from 'react-native-paper'
 import DateTimePicker from '@react-native-community/datetimepicker'
-import Back from '../../components/Back'
+import Back from '../../../components/Back'
 
 import {
     Text,
@@ -17,11 +17,12 @@ import {
     Button,
     TextInput,
     SafeAreaView,
-} from '../../components/FiplyComponents'
+} from '../../../components/FiplyComponents'
 
-const SignUp2Screen = ({ navigation }) => {
+const SignUpProfileScreen = ({ navigation, route }) => {
+    let { usertype } = route.params
     const { loading } = useContext(AuthContext)
-    const { setUserInfo2 } = useContext(SignUpContext)
+    const { setProfile } = useContext(SignUpContext)
 
     const [date, setDate] = useState(new Date())
     const [showDatePicker, setShowDatePicker] = useState(false)
@@ -52,7 +53,7 @@ const SignUp2Screen = ({ navigation }) => {
 
     return (
         <SafeAreaView>
-            <WaveHeader waveimg={require('../../../assets/img/waves/2.png')} />
+            <WaveHeader waveimg={require('../../../../assets/img/waves/2.png')} />
             <Container center padding={20}>
                 <FiplyLogo style={{ marginBottom: 25 }} />
 
@@ -60,11 +61,15 @@ const SignUp2Screen = ({ navigation }) => {
                     initialValues={{
                         firstname: '',
                         lastname: '',
-                        date: '',
+                        birthday: '',
                     }}
                     onSubmit={(values) => {
-                        setUserInfo2(values)
-                        navigation.push('SelectUserTypeScreen')
+                        if (usertype == 'jobseeker') {
+                            setProfile(values)
+                            navigation.push('JobSetup')
+                        } else {
+                            navigation.push('ApplicantSetup')
+                        }
                     }}
                     validationSchema={signupSchema}
                 >
@@ -166,6 +171,6 @@ const SignUp2Screen = ({ navigation }) => {
     )
 }
 
-export default SignUp2Screen
+export default SignUpProfileScreen
 
 const styles = StyleSheet.create({})

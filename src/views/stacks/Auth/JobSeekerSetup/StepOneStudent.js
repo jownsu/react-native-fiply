@@ -72,8 +72,9 @@ const StepOneStudent = ({ navigation }) => {
                     }}
                     validationSchema={studentSchema}
                     onSubmit={(values) => {
-                        setEducationalBackground(values)
-                        navigation.navigate('StepTwo')
+                        setEducationalBackground(values, () => {
+                            navigation.navigate('StepTwo')
+                        })
                     }}
                 >
                     {({

@@ -25,7 +25,7 @@ const CommentReducer = (state, action) => {
                         ...state.comments.data,
                         {
                             ...action.payload.data,
-                            commented_by: action.payload.user.fullname,
+                            commented_by: action.payload.user.name,
                             avatar: action.payload.user.avatar,
                         },
                     ],

@@ -1,9 +1,9 @@
 import React from 'react'
-import { PostProvider } from '../../../api/context/posts/PostContext'
+import { PostProvider } from '../../../../api/context/posts/PostContext'
 import { createStackNavigator } from '@react-navigation/stack'
 import HomeSreen from './HomeScreen'
-import CommentScreen from './CommentScreen'
-import CreatePostScreen from '../../screens/CreatePostScreen'
+import CommentScreen from '../../../screens/CommentScreen'
+import CreatePostScreen from '../../../screens/CreatePostScreen'
 
 const Stack = createStackNavigator()
 
@@ -25,6 +25,7 @@ const HomeStack = () => {
                     options={{ headerShown: false }}
                     name={'CreatePostScreen'}
                     component={CreatePostScreen}
+                    initialParams={{ edit: false, data: {} }}
                 ></Stack.Screen>
             </Stack.Navigator>
         </PostProvider>

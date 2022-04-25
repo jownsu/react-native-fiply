@@ -87,8 +87,18 @@ const ProfileHeader = ({
                     labelWeight={'Light'}
                 />
             )
-        } else {
-            if (data.is_public || data.is_following) {
+        }
+        if (data.is_public || data.is_following) {
+            if (data.company) {
+                return null
+                // <Button
+                //     title={'Hiring Managers'}
+                //     style={styles.btnEditStyle}
+                //     labelStyle={styles.btnLabelStyle}
+                //     icon={<FontAwesome5 name="user-alt" size={14} color={Colors.light} />}
+                //     labelWeight={'Light'}
+                // />
+            } else {
                 return (
                     <Button
                         onPress={onSeeDetailsPress}
@@ -99,17 +109,17 @@ const ProfileHeader = ({
                         labelWeight={'Light'}
                     />
                 )
-            } else {
-                return (
-                    <Button
-                        style={styles.btnEditStyle}
-                        labelStyle={styles.btnLabelStyle}
-                        icon={<FontAwesome5 name="eye-slash" size={14} color={Colors.light} />}
-                        disabled
-                        labelWeight={'Light'}
-                    />
-                )
             }
+        } else {
+            return (
+                <Button
+                    style={styles.btnEditStyle}
+                    labelStyle={styles.btnLabelStyle}
+                    icon={<FontAwesome5 name="eye-slash" size={14} color={Colors.light} />}
+                    disabled
+                    labelWeight={'Light'}
+                />
+            )
         }
     }
 
@@ -151,11 +161,16 @@ const ProfileHeader = ({
                 </View>
             </ImageBackground>
             <View style={styles.container}>
+                {/* <View style={{ position: 'absolute', right: 10, top: 10 }}>
+                    {renderFollowBtn()}
+                </View> */}
+
                 <View style={styles.mainInfoContainer}>
                     <View style={styles.bodyContainer}>
                         <View style={{ flex: 1.3 }}>
                             <Text weight="semi-bold" size={16} numberOfLines={1}>
-                                {data.firstname} {data.lastname}
+                                {/* {data.firstname} {data.lastname} */}
+                                {data.name}
                             </Text>
                             <Text>{data.bio}</Text>
                         </View>
@@ -163,6 +178,7 @@ const ProfileHeader = ({
                 </View>
                 <View style={styles.profileBtnContainer}>
                     {renderFollowBtn()}
+
                     {!data.is_me && (
                         <Button
                             onPress={onMessagePress}
@@ -179,7 +195,14 @@ const ProfileHeader = ({
                     {renderEditButton()}
                 </View>
                 <View style={styles.footerContainer}>
-                    <TouchableOpacity onPress={onFollowCountsPress} style={styles.followContainer}>
+                    <TouchableOpacity
+                        onPress={() => {
+                            if (data.is_public || data.is_following) {
+                                onFollowCountsPress()
+                            }
+                        }}
+                        style={styles.followContainer}
+                    >
                         <View style={{ marginRight: 15 }}>
                             <Text size={14}>Following</Text>
                             <Text size={16} weight="medium">

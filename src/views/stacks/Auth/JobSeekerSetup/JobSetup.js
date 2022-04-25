@@ -31,9 +31,9 @@ const JobSetup = ({ navigation }) => {
     const { verify, loading } = useContext(AuthContext)
 
     const formSchema = yup.object({
-        job_title: yup.string().trim().required('Job title is required'),
-        location: yup.string().trim().required('Location is required'),
-        employment_type: yup.string().trim().required('Employment type is required'),
+        job_title: yup.string().trim().min(2).required('Job title is required'),
+        location: yup.string().trim().min(2).required('Location is required'),
+        employment_type: yup.string().min(2).trim().required('Employment type is required'),
     })
 
     return (

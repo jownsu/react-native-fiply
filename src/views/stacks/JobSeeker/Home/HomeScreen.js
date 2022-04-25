@@ -2,18 +2,23 @@ import React, { useRef, useEffect, useState, useMemo, useContext } from 'react'
 
 import { StyleSheet, View, TouchableOpacity, FlatList, RefreshControl, Alert } from 'react-native'
 import { Snackbar } from 'react-native-paper'
-import PostContext from '../../../api/context/posts/PostContext'
-import CommentContext from '../../../api/context/comments/CommentContext'
-import AuthContext from '../../../api/context/auth/AuthContext'
-import { SafeAreaView, Container, Text, ActivityIndicator } from '../../components/FiplyComponents'
-import NoData from '../../components/NoData'
-import SearchBar from '../../components/headers/SearchBar'
+import PostContext from '../../../../api/context/posts/PostContext'
+import CommentContext from '../../../../api/context/comments/CommentContext'
+import AuthContext from '../../../../api/context/auth/AuthContext'
+import {
+    SafeAreaView,
+    Container,
+    Text,
+    ActivityIndicator,
+} from '../../../components/FiplyComponents'
+import NoData from '../../../components/NoData'
+import SearchBar from '../../../components/headers/SearchBar'
 import { FontAwesome5, FontAwesome } from '@expo/vector-icons'
-import Colors from '../../../utils/Colors'
-import PostItem from '../../components/lists/PostItem'
-import LoadMore from '../../components/lists/LoadMore'
-import PostAction from '../../components/modals/PostAction'
-import CreatePostBar from '../../components/headers/CreatePostBar'
+import Colors from '../../../../utils/Colors'
+import PostItem from '../../../components/lists/PostItem'
+import LoadMore from '../../../components/lists/LoadMore'
+import PostAction from '../../../components/modals/PostAction'
+import CreatePostBar from '../../../components/headers/CreatePostBar'
 
 const HomeScreen = ({ navigation }, offset) => {
     const {
@@ -75,6 +80,7 @@ const HomeScreen = ({ navigation }, offset) => {
     const renderItem = ({ item }) => {
         return (
             <PostItem
+                key={item.id}
                 data={item}
                 // onDotPress={handlePresentModalPress}
                 onDotPress={() => handleDotPress(item.id)}

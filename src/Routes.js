@@ -1,6 +1,7 @@
 import React, { useContext, useEffect } from 'react'
 import { NavigationContainer } from '@react-navigation/native'
-import AppStack from './views/stacks/AppStack'
+import JobSeekerStack from './views/stacks/JobSeeker/JobSeekerStack'
+import EmployerStack from './views/stacks/Employer/EmployerStack'
 import AuthStack from './views/stacks/Auth/AuthStack'
 import * as SecureStore from 'expo-secure-store'
 import AuthContext from './api/context/auth/AuthContext'
@@ -8,8 +9,16 @@ import TestScreen from './TestScreen'
 import TestScreen1 from './TestScreen1'
 
 const Routes = () => {
-    const { user, setUser, logged_in, setLogged_in, isFirstLaunched, setIsFirstLaunched } =
-        useContext(AuthContext)
+    const {
+        user,
+        setUser,
+        company,
+        setCompany,
+        logged_in,
+        setLogged_in,
+        isFirstLaunched,
+        setIsFirstLaunched,
+    } = useContext(AuthContext)
 
     useEffect(() => {
         SecureStore.getItemAsync('user')
@@ -17,6 +26,7 @@ const Routes = () => {
                 let user = JSON.parse(response)
                 if (user) {
                     setUser(user)
+                    setCompany(user.company)
                     setLogged_in('true')
                 }
             })
@@ -47,7 +57,16 @@ const Routes = () => {
         // <TestScreen1 />
         // <TestScreen />
         <NavigationContainer>
-            {user && logged_in == 'true' ? <AppStack /> : <AuthStack />}
+            {user && logged_in == 'true' ? (
+                company == 'true' ? (
+                    <EmployerStack />
+                ) : (
+                    <JobSeekerStack />
+                )
+            ) : (
+                <AuthStack />
+            )}
+            {/* <EmployerStack /> */}
         </NavigationContainer>
     )
 }

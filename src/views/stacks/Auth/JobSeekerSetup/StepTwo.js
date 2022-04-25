@@ -87,15 +87,6 @@ const StepTwo = ({ navigation }) => {
                             Upload File
                         </Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.optionBtn} onPress={onScanImagePress}>
-                        <Image
-                            source={require('../../../../assets/img/scan.png')}
-                            style={styles.imgScan}
-                        />
-                        <Text color={Colors.black} weight="medium" center>
-                            Take a Picture
-                        </Text>
-                    </TouchableOpacity>
                 </View>
 
                 {resumeUri !== '' && uploadedFile.type == 'image' && (
@@ -147,14 +138,15 @@ const styles = StyleSheet.create({
     optionBtn: {
         borderWidth: 2,
         borderColor: Colors.primary,
-        borderStyle: 'dashed',
-        backgroundColor: Colors.primaryLight,
         borderRadius: 15,
         marginHorizontal: 10,
+        marginBottom: 30,
+        borderStyle: 'dashed',
+        backgroundColor: Colors.primaryLight,
+        height: 150,
+        flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        height: 120,
-        width: 150,
     },
     imgScan: {
         width: 90,

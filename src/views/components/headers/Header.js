@@ -19,10 +19,7 @@ const Header = ({
 
     return (
         <View style={{ ...styles.container, ...containerStyle, ...style }}>
-            <TouchableOpacity
-                onPress={() => onBackPress()}
-                style={styles.backIcon}
-            >
+            <TouchableOpacity onPress={() => onBackPress()} style={styles.backIcon}>
                 <FontAwesome5 name="angle-left" size={24} color={iconColor} />
             </TouchableOpacity>
             <Text
@@ -34,9 +31,7 @@ const Header = ({
                 {title}
             </Text>
 
-            {rightIcon ? (
-                <View style={styles.rightIcon}>{rightIcon()}</View>
-            ) : null}
+            {rightIcon ? <View style={styles.rightIcon}>{rightIcon()}</View> : null}
         </View>
     )
 }

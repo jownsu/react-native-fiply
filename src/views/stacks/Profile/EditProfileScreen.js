@@ -152,22 +152,14 @@ const EditProfileScreen = ({ navigation }) => {
                 {/* <TextInput value={userInfo.bio} label={'Bio'} mode={'flat'} /> */}
 
                 <View style={styles.actionContainer}>
-                    {userInfo.account_level > 0 ? (
-                        <TouchableOpacity
-                            style={styles.actionBtn}
-                            onPress={() => navigation.push('ResumeScreen')}
-                        >
-                            <Text color={Colors.secondary} weight="medium" size={16}>
-                                Resume
-                            </Text>
-                        </TouchableOpacity>
-                    ) : (
-                        <TouchableOpacity style={styles.actionBtn} onPress={onUploadResumeBtnPress}>
-                            <Text color={Colors.secondary} weight="medium" size={16}>
-                                Upload Resume
-                            </Text>
-                        </TouchableOpacity>
-                    )}
+                    <TouchableOpacity
+                        style={styles.actionBtn}
+                        onPress={() => navigation.push('ResumeScreen')}
+                    >
+                        <Text color={Colors.secondary} weight="medium" size={16}>
+                            Resume
+                        </Text>
+                    </TouchableOpacity>
 
                     <TouchableOpacity
                         style={styles.actionBtn}

@@ -2,7 +2,7 @@ import React from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
 import JobScreen from './JobScreen'
 import ShowJobScreen from './ShowJobScreen'
-import { JobProvider } from '../../../api/context/jobs/JobContext'
+import { JobProvider } from '../../../../api/context/jobs/JobContext'
 
 const Stack = createStackNavigator()
 

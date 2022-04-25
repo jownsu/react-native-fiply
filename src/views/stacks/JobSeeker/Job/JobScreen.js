@@ -1,21 +1,21 @@
 import React, { useState, useEffect, useRef, useMemo, useContext } from 'react'
 import { StyleSheet, TouchableOpacity, View, FlatList, RefreshControl } from 'react-native'
-import JobContext from '../../../api/context/jobs/JobContext'
+import JobContext from '../../../../api/context/jobs/JobContext'
 import { FontAwesome } from '@expo/vector-icons'
-import Colors from '../../../utils/Colors'
+import Colors from '../../../../utils/Colors'
 
 import {
     SafeAreaView,
     Container,
     Text,
     ActivityIndicator,
-} from '../../../views/components/FiplyComponents'
-import NoData from '../../components/NoData'
-import SearchBar from '../../../views/components/headers/SearchBar'
-import TitleFilter from '../../../views/components/headers/TitleFilter'
-import TopNavigation from '../../../views/components/headers/TopNavigation'
-import JobItem from '../../../views/components/lists/JobItem'
-import LoadMore from '../../../views/components/lists/LoadMore'
+} from '../../../../views/components/FiplyComponents'
+import NoData from '../../../components/NoData'
+import SearchBar from '../../../../views/components/headers/SearchBar'
+import TitleFilter from '../../../../views/components/headers/TitleFilter'
+import TopNavigation from '../../../../views/components/headers/TopNavigation'
+import JobItem from '../../../../views/components/lists/JobItem'
+import LoadMore from '../../../../views/components/lists/LoadMore'
 
 const JobsScreen = ({ navigation }, offset) => {
     const {
@@ -147,6 +147,7 @@ const JobsScreen = ({ navigation }, offset) => {
                         onScroll={(e) => onScroll(e)}
                         style={{ flex: 0 }}
                         ref={flatListRef}
+                        keyExtractor={(item) => item.id}
                         data={jobs.data}
                         renderItem={renderItem}
                         ListFooterComponent={
@@ -179,6 +180,7 @@ const JobsScreen = ({ navigation }, offset) => {
                         ref={flatListRef}
                         data={savedJobs.data}
                         renderItem={renderItem}
+                        keyExtractor={(item) => item.id}
                         ListFooterComponent={
                             <LoadMore
                                 onLoadMorePress={() => {
@@ -209,6 +211,7 @@ const JobsScreen = ({ navigation }, offset) => {
                         ref={flatListRef}
                         data={appliedJobs.data}
                         renderItem={renderItem}
+                        keyExtractor={(item) => item.id}
                         ListFooterComponent={
                             <LoadMore
                                 onLoadMorePress={() => {

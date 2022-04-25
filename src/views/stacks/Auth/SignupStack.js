@@ -1,8 +1,6 @@
 import React from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
 import { SignUpProvider } from '../../../api/context/auth/SignUpContext'
-import SignUp1Screen from './SignUp1Screen'
-import SignUp2Screen from './SignUp2Screen'
 import SelectUserTypeScreen from './SelectUserTypeScreen'
 import ConfirmEmailScreen from './ConfirmEmailScreen'
 import EmployerSetupStack from './EmployerSetupStack'
@@ -20,21 +18,6 @@ const SignUpStack = () => {
             <Stack.Navigator>
                 <Stack.Screen
                     options={{ headerShown: false }}
-                    name={'SignUp1Screen'}
-                    component={SignUp1Screen}
-                ></Stack.Screen>
-                <Stack.Screen
-                    options={{ headerShown: false }}
-                    name={'SignUp2Screen'}
-                    component={SignUp2Screen}
-                ></Stack.Screen>
-                <Stack.Screen
-                    options={{ headerShown: false }}
-                    name={'ConfirmEmailScreen'}
-                    component={ConfirmEmailScreen}
-                ></Stack.Screen>
-                <Stack.Screen
-                    options={{ headerShown: false }}
                     name={'SelectUserTypeScreen'}
                     component={SelectUserTypeScreen}
                 ></Stack.Screen>
@@ -47,6 +30,11 @@ const SignUpStack = () => {
                     options={{ headerShown: false }}
                     name={'JobSeekerSetupStack'}
                     component={JobSeekerSetupStack}
+                ></Stack.Screen>
+                <Stack.Screen
+                    options={{ headerShown: false }}
+                    name={'ConfirmEmailScreen'}
+                    component={ConfirmEmailScreen}
                 ></Stack.Screen>
             </Stack.Navigator>
         </SignUpProvider>

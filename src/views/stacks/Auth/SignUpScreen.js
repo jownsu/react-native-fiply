@@ -18,10 +18,12 @@ import {
 } from '../../components/FiplyComponents'
 import PasswordStrengthBar from '../../components/PasswordStrengthBar'
 
-const SignUp1Screen = ({ navigation }) => {
+const SignUpScreen = ({ navigation, route }) => {
+    let { usertype } = route.params
+
     const [hidePassword, setHidePassword] = useState(true)
     const { checkEmail, loading } = useContext(AuthContext)
-    const { setUserInfo1 } = useContext(SignUpContext)
+    const { setUserInfo } = useContext(SignUpContext)
     const [invalidEmail, setInvalidEmail] = useState(false)
 
     const signupSchema = yup.object({
@@ -62,8 +64,12 @@ const SignUp1Screen = ({ navigation }) => {
                         checkEmail(values.email).then((isTaken) => {
                             if (!isTaken) {
                                 setInvalidEmail(false)
-                                setUserInfo1(values)
-                                navigation.push('SignUp2Screen')
+                                setUserInfo(values)
+                                if (usertype == 'jobseeker') {
+                                    navigation.push('SignUpProfileScreen')
+                                } else {
+                                    navigation.push('SignUpCompanyScreen')
+                                }
                             } else {
                                 setInvalidEmail(true)
                             }
@@ -75,7 +81,7 @@ const SignUp1Screen = ({ navigation }) => {
                         <View style={styles.formContainer}>
                             <View>
                                 <TextInput
-                                    label={'Your Email'}
+                                    label={'Email'}
                                     value={values.email}
                                     onChangeText={handleChange('email')}
                                     onBlur={(e) => {
@@ -180,6 +186,6 @@ const SignUp1Screen = ({ navigation }) => {
     )
 }
 
-export default SignUp1Screen
+export default SignUpScreen
 
 const styles = StyleSheet.create({})

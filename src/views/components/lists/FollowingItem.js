@@ -60,7 +60,7 @@ const FollowingItem = memo(
 
                     <View style={styles.nameContainer}>
                         <Text weight="semi-bold" size={14} numberOfLines={2} adjustsFontSizeToFit>
-                            {item.fullname}
+                            {item.name}
                         </Text>
                         <Text size={12} numberOfLines={1} adjustsFontSizeToFit>
                             {item.email}

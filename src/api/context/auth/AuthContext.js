@@ -7,6 +7,7 @@ const AuthContext = createContext()
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState({})
     const [logged_in, setLogged_in] = useState('false')
+    const [company, setCompany] = useState('false')
     const [error, setError] = useState(null)
     const [loading, setLoading] = useState(false)
     const [isFirstLaunched, setIsFirstLaunched] = useState(true)
@@ -19,11 +20,11 @@ export const AuthProvider = ({ children }) => {
             .then((response) => {
                 const userData = response.data.data
                 setUser(userData)
-                setError(null)
+                setCompany(userData.company ? userData.company.toString() : 'false')
                 setLogged_in('true')
                 SecureStore.setItemAsync('user', JSON.stringify(userData))
                 SecureStore.setItemAsync('logged_in', logged_in)
-                setLoading(false)
+                SecureStore.setItemAsync('company', company)
             })
             .catch((error) => {
                 if (error.message === 'Network Error') {
@@ -34,8 +35,8 @@ export const AuthProvider = ({ children }) => {
                     //setError(errData)
                     alert(errData)
                 }
-                setLoading(false)
             })
+            .finally(() => setLoading(false))
     }
 
     const logout = async () => {
@@ -44,12 +45,14 @@ export const AuthProvider = ({ children }) => {
             .then((response) => {
                 SecureStore.deleteItemAsync('user')
                 SecureStore.deleteItemAsync('logged_in')
+                SecureStore.deleteItemAsync('company')
                 setUser({})
                 setLogged_in('false')
             })
             .catch((err) => {
                 console.log(err)
             })
+            .finally(() => setLoading(false))
     }
 
     const signup = async (signUpInfo, onSignedUp = () => {}) => {
@@ -60,14 +63,15 @@ export const AuthProvider = ({ children }) => {
                 const userData = response.data.data
                 setUser(userData)
                 setError(null)
+                setCompany(userData.company ? userData.company.toString() : 'false')
                 SecureStore.setItemAsync('user', JSON.stringify(userData))
-                setLoading(false)
+                SecureStore.setItemAsync('company', company)
                 onSignedUp()
             })
             .catch((error) => {
                 alert(error.message)
-                setLoading(false)
             })
+            .finally(() => setLoading(false))
     }
 
     const verify = async (signUpInfo, onVerifySent = () => {}) => {
@@ -105,6 +109,8 @@ export const AuthProvider = ({ children }) => {
                 error,
                 loading,
                 logged_in,
+                company,
+                setCompany,
                 setUser,
                 setLogged_in,
                 setLoading,

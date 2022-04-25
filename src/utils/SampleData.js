@@ -141,22 +141,19 @@ const SampleData = {
         {
             id: '1',
             name: 'Backend Developers',
-            description:
-                'Lorem Ipsum dolor sit amet, consectetur adipiscing elit',
+            description: 'Lorem Ipsum dolor sit amet, consectetur adipiscing elit',
             image: require('../assets/img/forums/backend.png'),
         },
         {
             id: '2',
             name: 'White Hackers 2021',
-            description:
-                'Lorem Ipsum dolor sit amet, consectetur adipiscing elit',
+            description: 'Lorem Ipsum dolor sit amet, consectetur adipiscing elit',
             image: require('../assets/img/forums/csd.png'),
         },
         {
             id: '3',
             name: 'UCC NORTH CSD',
-            description:
-                'Lorem Ipsum dolor sit amet, consectetur adipiscing elit',
+            description: 'Lorem Ipsum dolor sit amet, consectetur adipiscing elit',
             image: require('../assets/img/forums/whitehacker.png'),
         },
     ],
@@ -165,8 +162,7 @@ const SampleData = {
         {
             id: '1',
             name: 'Facebook, Inc.',
-            description:
-                'Facebook, Inc. is now hiring fresh graduates developer.',
+            description: 'Facebook, Inc. is now hiring fresh graduates developer.',
             time: '12:03 PM',
             image: require('../assets/img/companies/facebook.png'),
         },
@@ -180,8 +176,7 @@ const SampleData = {
         {
             id: '3',
             name: 'UCC NORTH CSD',
-            description:
-                'Lorem Ipsum dolor sit amet, consectetur adipiscing elit',
+            description: 'Lorem Ipsum dolor sit amet, consectetur adipiscing elit',
             time: '1:03 PM',
             image: require('../assets/img/forums/csd.png'),
         },
@@ -274,8 +269,7 @@ const SampleData = {
                 {
                     id: 2,
                     questionType: 'paragraph',
-                    question:
-                        'How do you keep up with the latest trends in this field?',
+                    question: 'How do you keep up with the latest trends in this field?',
                 },
                 {
                     id: 3,
@@ -403,8 +397,7 @@ const SampleData = {
             id: '1',
             name: 'Backend Developers',
             date: 'Aug 21',
-            lastMessage:
-                'See this link that might help you in developing your skills....',
+            lastMessage: 'See this link that might help you in developing your skills....',
             image: require('../assets/img/forums/backend.png'),
             isRead: true,
             isActive: false,
@@ -413,8 +406,7 @@ const SampleData = {
             id: '2',
             name: 'White Hackers 2021',
             date: 'Sept 21',
-            lastMessage:
-                'Welcome White Hackers! Today is a very special day....',
+            lastMessage: 'Welcome White Hackers! Today is a very special day....',
             image: require('../assets/img/forums/whitehacker.png'),
             isRead: true,
             isActive: false,
@@ -464,7 +456,7 @@ const SampleData = {
     ],
 
     profileInfo: {
-        fullname: 'Jhones Digno',
+        name: 'Jhones Digno',
         description: 'Student at University of Caloocan City',
         address: 'Caloocan City, National Capital Region, Philippines',
         status: 'Ready to work',

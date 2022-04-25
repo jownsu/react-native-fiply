@@ -12,29 +12,17 @@ import Colors from '../../../../utils/Colors'
 import { Formik } from 'formik'
 import * as yup from 'yup'
 import StepIndicator from '../../../components/StepIndicator'
+import useRegister from '../../../../api/hooks/auth/useRegister'
 
 const StepOne = ({ navigation }) => {
     const companySchema = yup.object({
-        company: yup.string().trim().required('Company is required'),
-        companyRegNum: yup.string().trim().required('Company Registration Number is required'),
-        position: yup.string().trim().required('Position is required'),
-        location: yup.string().trim().required('Location is required'),
+        firstname: yup.string().trim().min(2).required('Firstname is required'),
+        lastname: yup.string().trim().min(2).required('Lastname is required'),
+        email: yup.string().trim().min(2).email().required('Email is required'),
+        contact_no: yup.string().trim().min(2).required('Contact Number is required'),
     })
 
-    const locationList = [
-        {
-            id: '1',
-            name: 'Cavite',
-        },
-        {
-            id: '2',
-            name: 'Quezon City',
-        },
-        {
-            id: '3',
-            name: 'Caloocan City',
-        },
-    ]
+    const { createHiringManager, loading } = useRegister()
 
     return (
         <SafeAreaView>
@@ -59,13 +47,17 @@ const StepOne = ({ navigation }) => {
                 </Text>
                 <Formik
                     initialValues={{
-                        company: '',
-                        companyRegNum: '',
-                        position: '',
-                        location: '',
+                        firstname: '',
+                        lastname: '',
+                        email: '',
+                        contact_no: '',
                     }}
                     validationSchema={companySchema}
-                    onSubmit={(values) => navigation.navigate('StepTwo')}
+                    onSubmit={(values) => {
+                        createHiringManager(values, () => {
+                            navigation.navigate('StepTwo')
+                        })
+                    }}
                 >
                     {({
                         handleChange,
@@ -78,56 +70,57 @@ const StepOne = ({ navigation }) => {
                     }) => (
                         <View>
                             <TextInput
-                                label="Company"
-                                value={values.company}
-                                onChangeText={handleChange('company')}
-                                onBlur={handleBlur('company')}
-                                error={touched.company && errors.company ? true : false}
-                                errorMsg={touched.company && errors.company ? errors.company : ''}
-                            />
-                            <TextInput
-                                label="Company Registration Number"
-                                value={values.companyRegNum}
-                                onChangeText={handleChange('companyRegNum')}
-                                onBlur={handleBlur('companyRegNum')}
-                                error={touched.companyRegNum && errors.companyRegNum ? true : false}
+                                label="Firstname"
+                                value={values.firstname}
+                                onChangeText={handleChange('firstname')}
+                                onBlur={handleBlur('firstname')}
+                                error={touched.firstname && errors.firstname ? true : false}
                                 errorMsg={
-                                    touched.companyRegNum && errors.companyRegNum
-                                        ? errors.companyRegNum
-                                        : ''
+                                    touched.firstname && errors.firstname ? errors.firstname : ''
                                 }
                             />
                             <TextInput
-                                label="Position"
-                                value={values.position}
-                                onChangeText={handleChange('position')}
-                                onBlur={handleBlur('position')}
-                                error={touched.position && errors.position ? true : false}
+                                label="Lastname"
+                                value={values.lastname}
+                                onChangeText={handleChange('lastname')}
+                                onBlur={handleBlur('lastname')}
+                                error={touched.lastname && errors.lastname ? true : false}
                                 errorMsg={
-                                    touched.position && errors.position ? errors.position : ''
+                                    touched.lastname && errors.lastname ? errors.lastname : ''
                                 }
                             />
-                            <Dropdown
-                                label={'Location'}
-                                value={values.location}
-                                data={locationList}
-                                style={{ marginBottom: 5 }}
-                                onChangeTextDelay={() => console.log('API CALLED')}
-                                onSubmit={(text) => setFieldValue('location', text)}
-                                error={touched.location && errors.location ? true : false}
+                            <TextInput
+                                label="Email"
+                                value={values.email}
+                                onChangeText={handleChange('email')}
+                                onBlur={handleBlur('email')}
+                                keyboardType="email-address"
+                                error={touched.email && errors.email ? true : false}
+                                errorMsg={touched.email && errors.email ? errors.email : ''}
+                            />
+                            <TextInput
+                                label="Contact Number"
+                                value={values.contact_no}
+                                onChangeText={handleChange('contact_no')}
+                                onBlur={handleBlur('contact_no')}
+                                keyboardType="number-pad"
+                                error={touched.contact_no && errors.contact_no ? true : false}
                                 errorMsg={
-                                    touched.location && errors.location ? errors.location : ''
+                                    touched.contact_no && errors.contact_no ? errors.contact_no : ''
                                 }
                             />
+
                             <Button
                                 title="Continue"
-                                onPress={() => handleSubmit()}
+                                onPress={handleSubmit}
                                 style={{ marginVertical: 25 }}
+                                loading={loading}
                                 disabled={
-                                    values.company &&
-                                    values.companyRegNum &&
-                                    values.position &&
-                                    values.location
+                                    values.firstname &&
+                                    values.lastname &&
+                                    values.email &&
+                                    values.contact_no &&
+                                    !loading
                                         ? false
                                         : true
                                 }

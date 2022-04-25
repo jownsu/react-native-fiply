@@ -239,7 +239,7 @@ const FollowScreen = ({ navigation, route }) => {
     return (
         <SafeAreaView statusBarColor={Colors.white} flex>
             <Header
-                title={userInfo.fullname}
+                title={userInfo.name}
                 style={{ backgroundColor: Colors.white }}
                 onBackPress={() => navigation.pop()}
             />

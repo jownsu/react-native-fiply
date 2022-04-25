@@ -5,16 +5,29 @@ import StepOne from './JobSeekerSetup/StepOne'
 import StepTwo from './JobSeekerSetup/StepTwo'
 import StepThree from './JobSeekerSetup/StepThree'
 import StepFour from './JobSeekerSetup/StepFour'
-import BasicUser from './JobSeekerSetup/BasicUser'
-import SemiVerified from './JobSeekerSetup/SemiVerified'
-import Done from './JobSeekerSetup/Done'
+import BasicUser from './BasicUser'
+import SemiVerified from './SemiVerified'
+import Done from './Done'
 import StepOneStudent from './JobSeekerSetup/StepOneStudent'
-
+import SignUpScreen from './SignUpScreen'
+import SignUpProfileScreen from './JobSeekerSetup/SignUpProfileScreen'
 const Stack = createStackNavigator()
 
 const JobSeekerSetupStack = () => {
     return (
         <Stack.Navigator>
+            <Stack.Screen
+                options={{ headerShown: false }}
+                name={'SignUpScreen'}
+                component={SignUpScreen}
+                initialParams={{ usertype: 'jobseeker' }}
+            ></Stack.Screen>
+            <Stack.Screen
+                options={{ headerShown: false }}
+                name={'SignUpProfileScreen'}
+                component={SignUpProfileScreen}
+                initialParams={{ usertype: 'jobseeker' }}
+            ></Stack.Screen>
             <Stack.Screen
                 options={{ headerShown: false }}
                 name={'JobSetup'}
@@ -24,6 +37,7 @@ const JobSeekerSetupStack = () => {
                 options={{ headerShown: false }}
                 name={'BasicUser'}
                 component={BasicUser}
+                initialParams={{ usertype: 'jobseeker' }}
             ></Stack.Screen>
             <Stack.Screen
                 options={{ headerShown: false }}
@@ -44,6 +58,7 @@ const JobSeekerSetupStack = () => {
                 options={{ headerShown: false }}
                 name={'SemiVerified'}
                 component={SemiVerified}
+                initialParams={{ usertype: 'jobseeker' }}
             ></Stack.Screen>
             <Stack.Screen
                 options={{ headerShown: false }}
@@ -59,6 +74,7 @@ const JobSeekerSetupStack = () => {
                 options={{ headerShown: false }}
                 name={'Done'}
                 component={Done}
+                initialParams={{ usertype: 'jobseeker' }}
             ></Stack.Screen>
         </Stack.Navigator>
     )

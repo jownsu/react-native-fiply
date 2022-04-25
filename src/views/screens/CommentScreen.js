@@ -1,7 +1,7 @@
 import { StyleSheet, View, FlatList, RefreshControl, TouchableOpacity } from 'react-native'
 import React, { useState, memo, useMemo, useContext, useRef } from 'react'
-import CommentContext from '../../../api/context/comments/CommentContext'
-import AuthContext from '../../../api/context/auth/AuthContext'
+import CommentContext from '../../api/context/comments/CommentContext'
+import AuthContext from '../../api/context/auth/AuthContext'
 import { Avatar } from 'react-native-paper'
 import {
     Container,
@@ -9,13 +9,13 @@ import {
     TextInput,
     ActivityIndicator,
     SafeAreaView,
-} from '../../components/FiplyComponents'
-import Confirmation from '../../components/dialog/Confirmation'
-import LoadMore from '../../components/lists/LoadMore'
+} from '../components/FiplyComponents'
+import Confirmation from '../components/dialog/Confirmation'
+import LoadMore from '../components/lists/LoadMore'
 import { TextInput as TxtInput } from 'react-native-paper'
 import { FontAwesome5, AntDesign, MaterialIcons } from '@expo/vector-icons'
-import Colors from '../../../utils/Colors'
-import NoData from '../../components/NoData'
+import Colors from '../../utils/Colors'
+import NoData from '../components/NoData'
 
 const CommentScreen = ({ navigation, route }) => {
     const { post } = route.params

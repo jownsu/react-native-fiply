@@ -1,21 +1,72 @@
-import React, { useState } from 'react'
-import { StyleSheet, View, TouchableOpacity } from 'react-native'
-import ChooseCertificate from '../../../components/modals/ChooseCertificate'
-import { SafeAreaView, Container, Text, Button } from '../../../components/FiplyComponents'
+import React, { useState, useEffect } from 'react'
+import { StyleSheet, View, TouchableOpacity, Image } from 'react-native'
+import {
+    SafeAreaView,
+    Container,
+    Text,
+    Button,
+    Dropdown,
+} from '../../../components/FiplyComponents'
+import useValidIDs from '../../../../api/hooks/useValidIDs'
 import Colors from '../../../../utils/Colors'
 import StepIndicator from '../../../components/StepIndicator'
 import { FontAwesome5 } from '@expo/vector-icons'
+import useRegister from '../../../../api/hooks/auth/useRegister'
+import useDocumentPicker from '../../../../utils/useDocumentPicker'
 
 const StepTwo = ({ navigation }) => {
-    const [showModal, setShowModal] = useState(false)
+    const [validId, setValidId] = useState('')
+    const { uploadCompanyValidIds, loading } = useRegister()
+
+    const { validIds, getValidIds, loading: validIdLoading } = useValidIDs()
+    const { pickDocument } = useDocumentPicker()
+    const [frontUri, setFrontUri] = useState('')
+    const [backUri, setBackUri] = useState('')
+
+    const onUploadFrontBtnPress = () => {
+        pickDocument(
+            (response, uri) => {
+                setFrontUri(uri)
+            },
+            ['image/*']
+        )
+    }
+
+    const onUploadBackBtnPress = () => {
+        pickDocument(
+            (response, uri) => {
+                setBackUri(uri)
+            },
+            ['image/*']
+        )
+    }
+
+    const onProceedPress = () => {
+        if (frontUri !== '' && backUri !== '' && validId !== '') {
+            uploadCompanyValidIds(
+                {
+                    front: frontUri,
+                    back: backUri,
+                    valid_id: validId,
+                },
+                () => {
+                    navigation.navigate('StepThree')
+                }
+            )
+        }
+    }
+
+    useEffect(() => {
+        getValidIds()
+    }, [])
 
     return (
-        <SafeAreaView>
+        <SafeAreaView flex>
             <View
                 style={{
                     flexDirection: 'row',
                     justifyContent: 'center',
-                    marginTop: 35,
+                    marginTop: 20,
                 }}
             >
                 <StepIndicator />
@@ -27,32 +78,64 @@ const StepTwo = ({ navigation }) => {
                 </Text>
 
                 <View style={{ marginVertical: 30 }}>
-                    <Text weight="medium" size={15}>
-                        You are almost there...
-                    </Text>
-                    <Text>
-                        Take a photo of recommended certificates or upload attachment file to
-                        semi-verify your account.
+                    <Text weight="bold" size={21}>
+                        Almost there!
                     </Text>
                 </View>
 
+                <Dropdown
+                    label={'Select Valid ID'}
+                    value={validId}
+                    data={validIds}
+                    style={{ marginBottom: 25 }}
+                    onSubmit={(text) => setValidId(text)}
+                    isLoading={validIdLoading}
+                    noTextInput
+                    dropdownIcon
+                />
+
                 <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-                    <TouchableOpacity style={styles.optionBtn} onPress={() => setShowModal(true)}>
-                        <Text color={Colors.primary} center weight="medium">
-                            Take certificate photo
+                    <TouchableOpacity style={styles.optionBtn} onPress={onUploadFrontBtnPress}>
+                        <Image
+                            source={require('../../../../assets/img/addfile.png')}
+                            style={styles.imgScan}
+                        />
+                        <Text color={Colors.black} center weight="medium" style={{ marginTop: 5 }}>
+                            Upload Front
                         </Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.optionBtn} onPress={() => setShowModal(true)}>
-                        <Text color={Colors.primary} center weight="medium">
-                            Upload attachment file
+                    <TouchableOpacity style={styles.optionBtn} onPress={onUploadBackBtnPress}>
+                        <Image
+                            source={require('../../../../assets/img/addfile.png')}
+                            style={styles.imgScan}
+                        />
+                        <Text color={Colors.black} center weight="medium" style={{ marginTop: 5 }}>
+                            Upload Back
                         </Text>
                     </TouchableOpacity>
+                </View>
+
+                <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+                    {frontUri ? (
+                        <View style={styles.uploadContainer}>
+                            <Text weight="medium">Front</Text>
+                            <Image source={{ uri: frontUri }} style={styles.uploadedImg} />
+                        </View>
+                    ) : null}
+                    {backUri ? (
+                        <View style={styles.uploadContainer}>
+                            <Text weight="medium">Back</Text>
+                            <Image source={{ uri: backUri }} style={styles.uploadedImg} />
+                        </View>
+                    ) : null}
                 </View>
 
                 <Button
                     title="Proceed"
+                    disabled={validId && !loading ? false : true}
+                    loading={loading}
                     style={{ marginTop: 75, marginBottom: 35 }}
-                    onPress={() => navigation.navigate('SemiVerified')}
+                    onPress={onProceedPress}
                 />
 
                 <View
@@ -66,8 +149,6 @@ const StepTwo = ({ navigation }) => {
                     <FontAwesome5 name="chevron-right" size={16} color={Colors.primary} />
                 </View>
             </Container>
-
-            <ChooseCertificate visible={showModal} onBackPress={() => setShowModal(false)} />
         </SafeAreaView>
     )
 }
@@ -78,11 +159,27 @@ const styles = StyleSheet.create({
     optionBtn: {
         borderWidth: 2,
         borderColor: Colors.primary,
-        borderRadius: 5,
-        flex: 1,
+        borderRadius: 15,
         marginHorizontal: 10,
-        height: 100,
-        paddingBottom: 15,
-        justifyContent: 'flex-end',
+        marginBottom: 30,
+        borderStyle: 'dashed',
+        backgroundColor: Colors.primaryLight,
+        height: 150,
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    imgScan: {
+        width: 105,
+        height: 96,
+    },
+    uploadContainer: {
+        alignItems: 'center',
+        paddingHorizontal: 20,
+    },
+    uploadedImg: {
+        borderRadius: 10,
+        height: 75,
+        width: 75,
     },
 })

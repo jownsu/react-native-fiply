@@ -14,7 +14,7 @@ const UserItem = memo(
             <View style={discoverListStyles.cardContainer}>
                 <Image source={{ uri: data.avatar }} style={discoverListStyles.img} />
                 <Text center size={16} weight="medium" numberOfLines={1} adjustsFontSizeToFit>
-                    {data.fullname}
+                    {data.name}
                 </Text>
                 <Text center size={12} numberOfLines={2} adjustsFontSizeToFit>
                     {data.preview}

@@ -27,6 +27,7 @@ export const TextInput = ({
     dense = false,
     autoFocus = false,
     disabled,
+    keyboardType = 'default',
     loading = false,
 }) => {
     return (
@@ -42,6 +43,7 @@ export const TextInput = ({
                 activeOutlineColor={Colors.primary}
                 activeUnderlineColor={Colors.primary}
                 onBlur={onBlur}
+                keyboardType={keyboardType}
                 theme={{
                     colors: {
                         text: Colors.black,

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { StyleSheet, View } from 'react-native'
 import {
     SafeAreaView,
@@ -9,69 +9,27 @@ import {
     Button,
     Dropdown,
 } from '../../../components/FiplyComponents'
+import SignUpContext from '../../../../api/context/auth/SignUpContext'
+import AuthContext from '../../../../api/context/auth/AuthContext'
+import useLocation from '../../../../api/hooks/useLocation'
+import usePositionLevel from '../../../../api/hooks/usePositionLevel'
+import useJobCategory from '../../../../api/hooks/useJobCategory'
+
 import { Formik } from 'formik'
 import * as yup from 'yup'
 
 const ApplicantSetup = ({ navigation }) => {
-    const levelOfExperienceList = [
-        {
-            id: '1',
-            name: 'Entry Level',
-        },
-        {
-            id: '2',
-            name: 'Intermediate',
-        },
-        {
-            id: '3',
-            name: 'Mid Level',
-        },
-        {
-            id: '4',
-            name: 'Senior Level',
-        },
-    ]
-    const fieldOfExpertiseList = [
-        {
-            id: '1',
-            name: 'Business and Entrepreneurship',
-        },
-        {
-            id: '2',
-            name: 'Creativity and Aesthetics',
-        },
-        {
-            id: '3',
-            name: 'Math, Data and Computing',
-        },
-        {
-            id: '4',
-            name: 'Technology and Realization',
-        },
-        {
-            id: '5',
-            name: 'User and Society',
-        },
-    ]
-    const locationList = [
-        {
-            id: '1',
-            name: 'Cavite',
-        },
-        {
-            id: '2',
-            name: 'Quezon City',
-        },
-        {
-            id: '3',
-            name: 'Caloocan City',
-        },
-    ]
+    const { locations, loading: locationLoading, getLocations } = useLocation()
+    const { positionLevels, loading: positionLevelsLoading, getPositionLevels } = usePositionLevel()
+    const { jobCategories, loading: jobCategoriesLoading, getJobCategories } = useJobCategory()
+
+    const { setApplicantPreference, getAllSignUpData } = useContext(SignUpContext)
+    const { verify, loading } = useContext(AuthContext)
 
     const formSchema = yup.object({
-        levelOfExperience: yup.string().trim().required('Level of experience required'),
-        fieldOfExpertise: yup.string().trim().required('Field of expertise required'),
-        location: yup.string().trim().required('Location is required'),
+        level_of_experience: yup.string().min(2).trim().required('Level of experience required'),
+        field_of_expertise: yup.string().min(2).trim().required('Field of expertise required'),
+        location: yup.string().trim().min(2).required('Location is required'),
     })
 
     return (
@@ -85,12 +43,16 @@ const ApplicantSetup = ({ navigation }) => {
 
                 <Formik
                     initialValues={{
-                        levelOfExperience: '',
-                        fieldOfExpertise: '',
+                        level_of_experience: '',
+                        field_of_expertise: '',
                         location: '',
                     }}
                     validationSchema={formSchema}
-                    onSubmit={(values) => navigation.navigate('BasicUser')}
+                    onSubmit={(values) => {
+                        setApplicantPreference(values)
+                        const signupData = getAllSignUpData()
+                        verify(signupData, () => navigation.navigate('ConfirmEmailScreen'))
+                    }}
                 >
                     {({
                         handleChange,
@@ -104,39 +66,43 @@ const ApplicantSetup = ({ navigation }) => {
                         <View>
                             <Dropdown
                                 label={'Level of experience'}
-                                value={values.levelOfExperience}
-                                data={levelOfExperienceList}
+                                value={values.level_of_experience}
+                                data={positionLevels}
+                                onTextInputPress={() => getPositionLevels()}
+                                isLoading={positionLevelsLoading}
                                 style={{ marginBottom: 5 }}
-                                onSubmit={(text) => setFieldValue('levelOfExperience', text)}
+                                onSubmit={(text) => setFieldValue('level_of_experience', text)}
                                 noTextInput
                                 dropdownIcon
                                 error={
-                                    touched.levelOfExperience && errors.levelOfExperience
+                                    touched.level_of_experience && errors.level_of_experience
                                         ? true
                                         : false
                                 }
                                 errorMsg={
-                                    touched.levelOfExperience && errors.levelOfExperience
-                                        ? errors.levelOfExperience
+                                    touched.level_of_experience && errors.level_of_experience
+                                        ? errors.level_of_experience
                                         : ''
                                 }
                             />
 
                             <Dropdown
                                 label={'Field of expertise'}
-                                value={values.fieldOfExpertise}
-                                data={fieldOfExpertiseList}
+                                value={values.field_of_expertise}
+                                data={jobCategories}
+                                onTextInputPress={() => getJobCategories()}
+                                isLoading={jobCategoriesLoading}
+                                onChangeTextDelay={(text) => getJobCategories(text)}
                                 style={{ marginBottom: 5 }}
-                                onChangeTextDelay={() => console.log('API CALLED')}
-                                onSubmit={(text) => setFieldValue('fieldOfExpertise', text)}
+                                onSubmit={(text) => setFieldValue('field_of_expertise', text)}
                                 error={
-                                    touched.fieldOfExpertise && errors.fieldOfExpertise
+                                    touched.field_of_expertise && errors.field_of_expertise
                                         ? true
                                         : false
                                 }
                                 errorMsg={
-                                    touched.fieldOfExpertise && errors.fieldOfExpertise
-                                        ? errors.fieldOfExpertise
+                                    touched.field_of_expertise && errors.field_of_expertise
+                                        ? errors.field_of_expertise
                                         : ''
                                 }
                             />
@@ -144,9 +110,11 @@ const ApplicantSetup = ({ navigation }) => {
                             <Dropdown
                                 label={'Location'}
                                 value={values.location}
-                                data={locationList}
+                                data={locations}
+                                onTextInputPress={() => getLocations()}
+                                isLoading={locationLoading}
+                                onChangeTextDelay={(text) => getLocations(text)}
                                 style={{ marginBottom: 5 }}
-                                onChangeTextDelay={() => console.log('API CALLED')}
                                 onSubmit={(text) => setFieldValue('location', text)}
                                 dropdownIcon
                                 error={touched.location && errors.location ? true : false}
@@ -159,12 +127,14 @@ const ApplicantSetup = ({ navigation }) => {
                                 title="Done"
                                 style={{ marginVertical: 25 }}
                                 disabled={
-                                    values.levelOfExperience &&
-                                    values.fieldOfExpertise &&
-                                    values.location
+                                    values.level_of_experience &&
+                                    values.field_of_expertise &&
+                                    values.location &&
+                                    !loading
                                         ? false
                                         : true
                                 }
+                                loading={loading}
                                 onPress={handleSubmit}
                             />
                         </View>

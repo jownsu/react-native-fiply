@@ -1,10 +1,10 @@
 import { StyleSheet, View, ScrollView, TouchableOpacity } from 'react-native'
-import { SafeAreaView, Container, Text, SecondaryButton } from '../../components/FiplyComponents'
+import { SafeAreaView, Container, Text, SecondaryButton } from '../../../components/FiplyComponents'
 import { Avatar } from 'react-native-paper'
-import Header from '../../components/headers/Header'
+import Header from '../../../components/headers/Header'
 import React, { useContext } from 'react'
-import JobContext from '../../../api/context/jobs/JobContext'
-import Colors from '../../../utils/Colors'
+import JobContext from '../../../../api/context/jobs/JobContext'
+import Colors from '../../../../utils/Colors'
 import { Ionicons, FontAwesome, FontAwesome5 } from '@expo/vector-icons'
 import { ProgressBar } from 'react-native-paper'
 
@@ -58,7 +58,7 @@ const ShowJobScreen = ({ navigation }) => {
 
                     <View style={styles.employerInfoContainer}>
                         <Avatar.Image
-                            source={{ uri: job.image }}
+                            source={{ uri: job.company_avatar }}
                             size={75}
                             backgroundColor={Colors.light}
                             style={styles.companyImgContainer}
@@ -71,18 +71,18 @@ const ShowJobScreen = ({ navigation }) => {
                                 adjustsFontSizeToFit
                                 numberOfLines={1}
                             >
-                                {job.company}
+                                {job.company_name}
                             </Text>
                             <>
                                 <Text size={12}>Posted By: </Text>
                                 <View style={styles.postedByContainer}>
                                     <Avatar.Image
-                                        source={{ uri: job.avatar }}
+                                        source={{ uri: job.hiring_manager_avatar }}
                                         size={25}
                                         backgroundColor={Colors.light}
                                         marginRight={10}
                                     />
-                                    <Text>{job.fullname}</Text>
+                                    <Text>{job.hiring_manager}</Text>
                                 </View>
                             </>
                         </View>

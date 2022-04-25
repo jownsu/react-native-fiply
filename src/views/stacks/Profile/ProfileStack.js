@@ -1,7 +1,7 @@
 import React from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
 import ProfileScreen from './ProfileScreen'
-import CommentScreen from '../Home/CommentScreen'
+import CommentScreen from '../../screens/CommentScreen'
 import FollowScreen from './FollowScreen'
 import EditProfileScreen from './EditProfileScreen'
 import EditAboutScreen from './EditAboutScreen'

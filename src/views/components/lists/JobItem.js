@@ -20,37 +20,54 @@ const JobItem = memo(
                 activeOpacity={0.9}
                 onPress={() => onCardPress(data.id)}
             >
-                <View style={jobListTyle.cardHeaderContainer}>
+                {/* <View style={jobListTyle.cardHeaderContainer}>
                     <Text weight="semi-bold" color={Colors.primary} style={jobListTyle.txtTitle}>
                         {data.title}
                     </Text>
                     <Text style={{ marginHorizontal: 10 }}>{'\u25CF'}</Text>
                     <Text size={11}>{data.employment_type}</Text>
-                </View>
+                </View> */}
 
                 <View style={jobListTyle.cardBodyContainer}>
                     <View style={jobListTyle.bodyHeadContainer}>
                         <View style={jobListTyle.imgContainer}>
-                            <Avatar.Image size={75} source={{ uri: data.image }} backgroundColor={Colors.light} />
+                            <Avatar.Image
+                                size={75}
+                                source={{ uri: data.avatar }}
+                                backgroundColor={Colors.light}
+                            />
                         </View>
-
-                        <Text
-                            weight="medium"
-                            numberOfLines={1}
-                            adjustsFontSizeToFit
-                            style={jobListTyle.txtCompany}
-                            flex
-                        >
-                            {data.company}
-                        </Text>
+                        <View style={jobListTyle.infoContainer}>
+                            <Text weight="semi-bold" size={16} style={jobListTyle.txtCompany}>
+                                {data.company}
+                            </Text>
+                            <View style={jobListTyle.subInfoContainer}>
+                                <Text
+                                    weight="medium"
+                                    color={Colors.black}
+                                    style={jobListTyle.txtTitle}
+                                >
+                                    {data.title}
+                                </Text>
+                                <Text style={{ marginHorizontal: 7 }}>{'\u25CF'}</Text>
+                                <Text size={11}>{data.employment_type}</Text>
+                            </View>
+                        </View>
                     </View>
-
                     {/* {!isPending ? renderJobListBodyFoot(item) : renderPendingBodyFoot(item)} */}
                     {/* {!isPending ? renderJobListFooter(item) : renderPendingFooter(item)} */}
 
                     <View style={jobListTyle.bodyFootContainer}>
-                        <Ionicons name="location-sharp" size={24} color={Colors.primary} style={{ marginRight: 10 }} />
-                        <Text size={11}>{data.location}</Text>
+                        <Ionicons
+                            name="location-sharp"
+                            size={24}
+                            color={Colors.primary}
+                            style={{ marginRight: 5 }}
+                        />
+                        <Text size={12}>{data.location}</Text>
+                        <Text size={12} style={{ marginLeft: 'auto' }}>
+                            {data.posted_at}
+                        </Text>
                     </View>
 
                     <View style={jobListTyle.cardFooterContainer}>
@@ -91,7 +108,10 @@ const JobItem = memo(
                                         color={data.is_saved ? Colors.black : Colors.primary}
                                         style={{ marginRight: 15 }}
                                     />
-                                    <Text weight="medium" color={data.is_saved ? Colors.black : Colors.primary}>
+                                    <Text
+                                        weight="medium"
+                                        color={data.is_saved ? Colors.black : Colors.primary}
+                                    >
                                         {data.is_saved ? 'SAVED' : 'SAVE'}
                                     </Text>
                                 </TouchableOpacity>
@@ -103,7 +123,10 @@ const JobItem = memo(
                                     }}
                                     onPress={() => onApplyPress(data.id)}
                                 >
-                                    <Text weight="medium" color={data.is_applied ? Colors.black : Colors.primary}>
+                                    <Text
+                                        weight="medium"
+                                        color={data.is_applied ? Colors.black : Colors.primary}
+                                    >
                                         {data.is_applied ? 'APPLIED' : 'APPLY'}
                                     </Text>
                                 </TouchableOpacity>
@@ -177,5 +200,12 @@ const jobListTyle = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderColor: Colors.grey,
+    },
+    infoContainer: {
+        flex: 1,
+    },
+    subInfoContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
     },
 })

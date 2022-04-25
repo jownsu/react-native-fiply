@@ -26,12 +26,10 @@ const SelectUserTypeScreen = ({ navigation }) => {
                 setBtnDisabled(false)
                 return setUserType({ jobseeker: true, employer: false })
             case 'employer':
-                return
-            // setBtnDisabled(false)
-            // return setUserType({ jobseeker: false, employer: true })
+                setBtnDisabled(false)
+                return setUserType({ jobseeker: false, employer: true })
             default:
                 setBtnDisabled(false)
-
                 return setUserType({ jobseeker: true, employer: false })
         }
     }

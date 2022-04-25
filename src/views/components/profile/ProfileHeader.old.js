@@ -24,7 +24,7 @@ const ProfileHeader = ({ data, onEditPress = () => {}, style }) => {
 
             <View style={styles.bodyContainer}>
                 <Text weight="semi-bold" size={16} numberOfLines={1} center>
-                    {data.fullname}
+                    {data.name}
                 </Text>
                 <Text size={13} numberOfLines={1} center style={{ marginVertical: 2 }}>
                     {data.email}

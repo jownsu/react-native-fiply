@@ -185,6 +185,7 @@ const ProfileScreen = ({ navigation, route }) => {
                             // onSettingPress={() => setShowEditProfileAction(true)}
                             onEditProfilePress={() => navigation.push('EditProfileScreen')}
                             onSeeDetailsPress={() => navigation.push('ProfileInfoScreen')}
+                            onMessagePress={() => console.log(userInfo)}
                         />
                         {userInfo.is_me ? (
                             <CreatePostBar

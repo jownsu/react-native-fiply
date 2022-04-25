@@ -22,7 +22,7 @@ const CancelFollowAction = ({
                             style={{ marginBottom: 20 }}
                         />
                         <Text>
-                            Cancel follow request to <Text weight="medium">{user.fullname}</Text>?
+                            Cancel follow request to <Text weight="medium">{user.name}</Text>?
                         </Text>
                     </View>
                     <TouchableOpacity style={styles.btn} onPress={() => onCancelFollow(user.id)}>

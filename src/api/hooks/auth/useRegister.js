@@ -17,20 +17,20 @@ const useRegister = () => {
         },
     }
 
-    const createExperience = async (data) => {
+    const createExperience = async (data, onCreate = () => {}) => {
         setLoading(true)
         await api({ token: user.token })
-            .post(`/experiences`, data)
-            .then((res) => console.log(res.data))
+            .post(`/me/experiences`, data)
+            .then((res) => onCreate())
             .catch((err) => console.log(err))
             .finally(() => setLoading(false))
     }
 
-    const createEducationalBackground = async (data) => {
+    const createEducationalBackground = async (data, onCreate = () => {}) => {
         setLoading()
         await api({ token: user.token })
-            .post(`/educationalBackgrounds`, data)
-            .then((res) => console.log(res.data))
+            .post(`/me/educationalBackgrounds`, data)
+            .then((res) => onCreate())
             .catch((err) => console.log(err))
             .finally(() => setLoading(false))
     }
@@ -81,11 +81,70 @@ const useRegister = () => {
             .finally(() => setLoading(false))
     }
 
+    const uploadCompanyValidIds = async (uploadData, onUpload = () => {}) => {
+        setLoading(true)
+
+        let fd = new FormData()
+
+        fd.append('valid_id_image_front', {
+            uri: uploadData.front,
+            type: mime.getType(uploadData.front),
+            name: uploadData.front.split('/').pop(),
+        })
+        fd.append('valid_id_image_back', {
+            uri: uploadData.back,
+            type: mime.getType(uploadData.back),
+            name: uploadData.back.split('/').pop(),
+        })
+        fd.append('valid_id', uploadData.valid_id)
+
+        fd.append('_method', 'PUT')
+
+        await api({ token: user.token })
+            .post('/uploadCompanyId', fd, config)
+            .then(() => onUpload())
+            .catch((err) => console.log(err))
+            .finally(() => setLoading(false))
+    }
+
+    const uploadCompanyCertificate = async (uploadData, onUpload = () => {}) => {
+        setLoading(true)
+
+        let fd = new FormData()
+
+        fd.append('certificate_image', {
+            uri: uploadData.certificate_image,
+            type: mime.getType(uploadData.certificate_image),
+            name: uploadData.certificate_image.split('/').pop(),
+        })
+        fd.append('certificate', uploadData.certificate)
+
+        fd.append('_method', 'PUT')
+
+        await api({ token: user.token })
+            .post('/uploadCertificate', fd, config)
+            .then(() => onUpload())
+            .catch((err) => console.log(err))
+            .finally(() => setLoading(false))
+    }
+
+    const createHiringManager = async (data, onCreate = () => {}) => {
+        setLoading(true)
+        await api({ token: user.token })
+            .post(`/me/hiringManagers`, data)
+            .then((res) => onCreate())
+            .catch((err) => console.log(err))
+            .finally(() => setLoading(false))
+    }
+
     return {
         createExperience,
         createEducationalBackground,
         uploadResume,
         uploadValidIds,
+        uploadCompanyValidIds,
+        uploadCompanyCertificate,
+        createHiringManager,
         loading,
     }
 }

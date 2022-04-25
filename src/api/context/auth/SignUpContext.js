@@ -8,11 +8,10 @@ export const SignUpProvider = ({ children }) => {
         email: '',
         password: '',
         password_confirmation: '',
-        firstname: '',
-        lastname: '',
-        birthday: '',
-        language: '',
+        profile: {},
+        company: {},
         job_preference: {},
+        applicant_preference: {},
         experience: {},
         educational_background: {},
         document: {},
@@ -26,56 +25,63 @@ export const SignUpProvider = ({ children }) => {
         }
     }
 
-    const getBasicUserInfo = () => {
-        return {
-            email: state.email,
-            password: state.password,
-            password_confirmation: state.password_confirmation,
-            firstname: state.firstname,
-            lastname: state.lastname,
-            birthday: state.birthday,
-            language: state.language,
-            code: state.code,
-        }
-    }
+    // const getBasicUserInfo = () => {
+    //     return {
+    //         email: state.email,
+    //         password: state.password,
+    //         password_confirmation: state.password_confirmation,
+    //         firstname: state.firstname,
+    //         lastname: state.lastname,
+    //         birthday: state.birthday,
+    //         language: state.language,
+    //         code: state.code,
+    //     }
+    // }
 
-    const setUserInfo1 = (data) => dispatch({ type: 'SET_USER_INFO_1', payload: data })
+    const setUserInfo = (data) => dispatch({ type: 'SET_USER_INFO', payload: data })
 
-    const setUserInfo2 = (data) => dispatch({ type: 'SET_USER_INFO_2', payload: data })
+    const setProfile = (data) => dispatch({ type: 'SET_PROFILE', payload: data })
 
-    const getJobPreference = () => {
-        return { job_preference: state.job_preference }
-    }
+    const setCompany = (data) => dispatch({ type: 'SET_COMPANY', payload: data })
+
+    // const getJobPreference = () => {
+    //     return { job_preference: state.job_preference }
+    // }
 
     const setJobPreference = (data) => dispatch({ type: 'SET_JOB_PREFERENCE', payload: data })
 
+    const setApplicantPreference = (data) =>
+        dispatch({ type: 'SET_APPLICANT_PREFERENCE', payload: data })
+
     const setExperience = (data) => dispatch({ type: 'SET_EXPERIENCE', payload: data })
 
-    const getExperience = () => {
-        return state.experience
-    }
+    // const getExperience = () => {
+    //     return state.experience
+    // }
 
     const setEducationalBackground = (data) =>
         dispatch({ type: 'SET_EDUCATIONAL_BACKGROUND', payload: data })
 
-    const getEducationalBackground = () => {
-        return state.educational_background
-    }
+    // const getEducationalBackground = () => {
+    //     return state.educational_background
+    // }
 
     return (
         <SignUpContext.Provider
             value={{
                 ...state,
-                setUserInfo1,
-                setUserInfo2,
+                setUserInfo,
+                setProfile,
                 setJobPreference,
-                getBasicUserInfo,
-                getJobPreference,
+                setApplicantPreference,
+                setCompany,
+                // getBasicUserInfo,
+                // getJobPreference,
                 getAllSignUpData,
                 setExperience,
-                getExperience,
+                // getExperience,
                 setEducationalBackground,
-                getEducationalBackground,
+                // getEducationalBackground,
             }}
         >
             {children}

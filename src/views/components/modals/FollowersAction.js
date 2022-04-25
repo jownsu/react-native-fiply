@@ -26,8 +26,8 @@ const FollowersAction = ({
                                 Remove Follower?
                             </Text>
                             <Text center size={14}>
-                                Fiply wont tell <Text weight="medium">{user.fullname}</Text> they
-                                were removed from your followers
+                                Fiply wont tell <Text weight="medium">{user.name}</Text> they were
+                                removed from your followers
                             </Text>
                         </View>
                     </View>

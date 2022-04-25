@@ -13,7 +13,7 @@ import Skip from '../../../components/Skip'
 
 const BasicUser = ({ navigation }) => {
     const { setLogged_in } = useContext(AuthContext)
-    const { firstname } = useContext(SignUpContext)
+    const { profile } = useContext(SignUpContext)
     function handleBackButtonClick() {
         setLogged_in('true')
         return true
@@ -32,7 +32,7 @@ const BasicUser = ({ navigation }) => {
                 <FiplyLogo />
                 <View style={{ marginVertical: 30 }}>
                     <Text weight="bold" size={21}>
-                        Welcome {firstname ? firstname : 'User'},
+                        Welcome {profile.firstname ? profile.firstname : 'User'},
                     </Text>
                     <Text weight="bold" size={21}>
                         verify your account now!

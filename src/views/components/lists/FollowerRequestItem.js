@@ -16,7 +16,7 @@ const FollowerRequestItem = memo(
                     />
                     <View style={styles.nameContainer}>
                         <Text weight="semi-bold" size={16} numberOfLines={1} adjustsFontSizeToFit>
-                            {data.fullname}
+                            {data.name}
                         </Text>
                         <Text>{data.preview}</Text>
                         <Button

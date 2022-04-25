@@ -1,20 +1,20 @@
 import React, { useRef, useCallback, useContext } from 'react'
 import { StyleSheet, View, TouchableOpacity, Image, ScrollView } from 'react-native'
-import { Text } from '../components/FiplyComponents'
+import { Text } from '../../components/FiplyComponents'
 import { Avatar } from 'react-native-paper'
-import AuthContext from '../../api/context/auth/AuthContext'
+import AuthContext from '../../../api/context/auth/AuthContext'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { FontAwesome5, MaterialIcons } from '@expo/vector-icons'
 import 'react-native-gesture-handler'
-import Colors from '../../utils/Colors'
+import Colors from '../../../utils/Colors'
 
-import { BottomSheetModal } from '../components/FiplyComponents'
+import { BottomSheetModal } from '../../components/FiplyComponents'
 
 import HomeStack from './Home/HomeStack'
-import CommunityStack from './Community/CommunityStack'
-import NotificationStack from './Notification/NotificationStack'
+import CommunityStack from '../Community/CommunityStack'
+import NotificationStack from '../Notification/NotificationStack'
 import JobStack from './Job/JobStack'
-import AccountLevelBar from '../components/AccountLevelBar'
+import AccountLevelBar from '../../components/AccountLevelBar'
 
 const Tab = createBottomTabNavigator()
 
@@ -153,7 +153,7 @@ const BottomNavigator = ({ navigation }) => {
                                     adjustsFontSizeToFit
                                     numberOfLines={1}
                                 >
-                                    {user.firstname} {user.lastname}
+                                    {user.name}
                                 </Text>
 
                                 <TouchableOpacity activeOpacity={0.7} onPress={handleGoToProfile}>
