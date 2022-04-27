@@ -1,5 +1,16 @@
 const DashboardReducer = (state, action) => {
     switch (action.type) {
+        case 'SET_DASHBOARD':
+            return {
+                ...state,
+                ...action.payload,
+            }
+
+        case 'ADD_HIRING_MANAGER':
+            return {
+                ...state,
+                total_hiring_manager: state.total_hiring_manager + 1,
+            }
         case 'SET_LOADING':
             return {
                 ...state,

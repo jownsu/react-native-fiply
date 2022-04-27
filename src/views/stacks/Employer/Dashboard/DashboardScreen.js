@@ -1,14 +1,42 @@
 import { StyleSheet, View, ScrollView, TouchableOpacity } from 'react-native'
 import { Text, SafeAreaView, Container, Dropdown } from '../../../components/FiplyComponents'
 import HeaderTitle from '../../../components/headers/HeaderTitle'
-import React from 'react'
+import React, { useContext, useEffect } from 'react'
 import { FontAwesome5, AntDesign } from '@expo/vector-icons'
+import { Snackbar } from 'react-native-paper'
+import DashboardContext from '../../../../api/context/EMPLOYER/dashboard/DashboardContext'
 
 import Colors from '../../../../utils/Colors'
-const DashboardScreen = ({ navigation }) => {
+const DashboardScreen = ({ navigation }, offset) => {
+    const { getDashboard, total_hiring_manager, total_job_posts, snackBarMessage, hideSnackBar } =
+        useContext(DashboardContext)
+
+    const onScroll = (e) => {
+        const currentOffset = e.nativeEvent.contentOffset.y
+        const dif = currentOffset - (offset || 0)
+
+        if (dif < 0) {
+            navigation.getParent().setOptions({
+                tabBarStyle: {
+                    display: 'flex',
+                    borderTopWidth: 1,
+                    elevation: 0,
+                },
+            })
+        } else {
+            navigation.getParent().setOptions({
+                tabBarStyle: { display: 'none' },
+            })
+        }
+        // console.log('dif=',dif);
+        offset = currentOffset
+    }
+    useEffect(() => {
+        getDashboard()
+    }, [])
     return (
-        <SafeAreaView statusBarColor={Colors.white}>
-            <ScrollView>
+        <SafeAreaView statusBarColor={Colors.white} flex>
+            <ScrollView onScroll={(e) => onScroll(e)}>
                 <HeaderTitle title={'Dashboard'} style={{ backgroundColor: Colors.white }} />
                 <Container padding={10}>
                     <View style={styles.headerContainer}>
@@ -163,7 +191,7 @@ const DashboardScreen = ({ navigation }) => {
                                     size={36}
                                     style={{ marginBottom: 20 }}
                                 >
-                                    10
+                                    {total_job_posts}
                                 </Text>
                                 <Text>Total Job Posts</Text>
                             </View>
@@ -211,7 +239,7 @@ const DashboardScreen = ({ navigation }) => {
                                     size={36}
                                     style={{ marginBottom: 20 }}
                                 >
-                                    10
+                                    {total_hiring_manager}
                                 </Text>
                                 <Text>Total Hiring Managers</Text>
                             </View>
@@ -219,6 +247,15 @@ const DashboardScreen = ({ navigation }) => {
                     </View>
                 </Container>
             </ScrollView>
+
+            <Snackbar
+                visible={snackBarMessage ? true : false}
+                onDismiss={() => hideSnackBar()}
+                duration={3000}
+                style={{ backgroundColor: Colors.black }}
+            >
+                <Text color={Colors.white}>{snackBarMessage}</Text>
+            </Snackbar>
         </SafeAreaView>
     )
 }

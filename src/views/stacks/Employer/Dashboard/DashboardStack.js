@@ -1,5 +1,5 @@
 import React from 'react'
-import { DashboardProvider } from '../../../../api/context/dashboard/DashboardContext'
+import { DashboardProvider } from '../../../../api/context/EMPLOYER/dashboard/DashboardContext'
 import { createStackNavigator } from '@react-navigation/stack'
 import DashboardScreen from './DashboardScreen'
 import AddHiringManagerScreen from './AddHiringManagerScreen'

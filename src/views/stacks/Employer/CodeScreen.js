@@ -37,6 +37,8 @@ const CodeScreen = ({ navigation, route }) => {
         } else {
             loginAsHiringManager(hiring_manager_id, code.join('').toString())
         }
+
+        setCode([])
     }
 
     return (
