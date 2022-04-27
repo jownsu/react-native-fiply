@@ -167,6 +167,7 @@ const SignUpScreen = ({ navigation, route }) => {
                                     title={'Agree & Join'}
                                     onPress={handleSubmit}
                                     disabled={
+                                        !loading &&
                                         values.email &&
                                         !errors.email &&
                                         values.password &&
@@ -176,6 +177,7 @@ const SignUpScreen = ({ navigation, route }) => {
                                             ? false
                                             : true
                                     }
+                                    loading={loading}
                                 />
                             </View>
                         </View>

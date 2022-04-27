@@ -1,6 +1,7 @@
 import React from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
 import SelectUserScreen from './SelectUserScreen'
+import CodeScreen from './CodeScreen'
 // import EmployerBott from './BottomNavigator'
 // import MessageStack from '../stacks/Message/MessageStack'
 // import InitialInterviewScreen from '../../views/screens/InitialInterviewScreen'
@@ -13,13 +14,19 @@ import BottomNavigator from './BottomNavigator'
 
 const Stack = createStackNavigator()
 
-const EmployerStack = () => {
+const SelectUserStack = () => {
     return (
         <Stack.Navigator>
             <Stack.Screen
                 options={{ headerShown: false }}
-                name={'BottomNavigator'}
-                component={BottomNavigator}
+                name={'SelectUserScreen'}
+                component={SelectUserScreen}
+            ></Stack.Screen>
+            <Stack.Screen
+                options={{ headerShown: false }}
+                name={'CodeScreen'}
+                component={CodeScreen}
+                initialParams={{ isEmployerAdmin: false, hiring_manager_id: 0 }}
             ></Stack.Screen>
 
             {/* <Stack.Screen
@@ -56,4 +63,4 @@ const EmployerStack = () => {
     )
 }
 
-export default EmployerStack
+export default SelectUserStack

@@ -28,6 +28,7 @@ export const TextInput = ({
     autoFocus = false,
     disabled,
     keyboardType = 'default',
+    maxLength = 255,
     loading = false,
 }) => {
     return (
@@ -72,6 +73,7 @@ export const TextInput = ({
                 onSubmitEditing={onSubmitEditing}
                 autoFocus={autoFocus}
                 disabled={disabled}
+                maxLength={maxLength}
             />
             {loading ? <ProgressBar indeterminate color={Colors.primary} /> : null}
             {errorMsg ? <Text color={Colors.red}>{errorMsg}</Text> : null}

@@ -9,7 +9,7 @@ const useDegree = () => {
 
     const getDegrees = async (search = '') => {
         setLoading(true)
-        await api({ token: user.token })
+        await api()
             .get(`/degrees?limit=5&search=${search}`)
             .then((res) => setDegrees(res.data.data))
             .catch((err) => console.log(err))

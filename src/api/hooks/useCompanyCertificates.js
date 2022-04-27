@@ -9,7 +9,7 @@ const useCompanyCertificates = () => {
 
     const getCertificates = async () => {
         setLoading(true)
-        await api({ token: user.token })
+        await api()
             .get(`/companyCertificates`)
             .then((res) => setCertificates(res.data.data))
             .catch((err) => console.log(err))

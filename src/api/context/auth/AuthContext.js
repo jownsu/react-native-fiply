@@ -5,9 +5,10 @@ import * as SecureStore from 'expo-secure-store'
 const AuthContext = createContext()
 
 export const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState({})
+    const [user, setUser] = useState(null)
     const [logged_in, setLogged_in] = useState('false')
     const [company, setCompany] = useState('false')
+    const [hiringManager, setHiringManager] = useState(null)
     const [error, setError] = useState(null)
     const [loading, setLoading] = useState(false)
     const [isFirstLaunched, setIsFirstLaunched] = useState(true)
@@ -20,7 +21,7 @@ export const AuthProvider = ({ children }) => {
             .then((response) => {
                 const userData = response.data.data
                 setUser(userData)
-                setCompany(userData.company ? userData.company.toString() : 'false')
+                setCompany(userData.company ? 'true' : 'false')
                 setLogged_in('true')
                 SecureStore.setItemAsync('user', JSON.stringify(userData))
                 SecureStore.setItemAsync('logged_in', logged_in)
@@ -39,6 +40,45 @@ export const AuthProvider = ({ children }) => {
             .finally(() => setLoading(false))
     }
 
+    const loginAsHiringManager = async (hiring_manager_id, code) => {
+        setLoading(true)
+
+        await api({ token: user.token })
+            .post('/loginAsHiringManager', { hiring_manager_id, code })
+            .then((response) => {
+                const hiringManagerData = response.data.data
+                setHiringManager(hiringManagerData)
+                SecureStore.setItemAsync('hiring_manager', JSON.stringify(hiringManagerData))
+            })
+            .catch((error) => {
+                console.log(error)
+                alert(error.message)
+            })
+            .finally(() => setLoading(false))
+    }
+
+    const loginAsEmployerAdmin = async (code) => {
+        setLoading(true)
+
+        await api({ token: user.token })
+            .post('/loginAsEmployerAdmin', { code })
+            .then((response) => {
+                const token = response.data.data.token
+
+                SecureStore.getItemAsync('user').then((response) => {
+                    let storeUser = JSON.parse(response)
+                    storeUser = { ...storeUser, companyToken: token }
+                    SecureStore.setItemAsync('user', JSON.stringify(storeUser))
+                })
+                setUser({ ...user, companyToken: token })
+            })
+            .catch((error) => {
+                console.log(error)
+                alert(error.message)
+            })
+            .finally(() => setLoading(false))
+    }
+
     const logout = async () => {
         await api({ token: user.token })
             .post('/token/logout', {})
@@ -46,7 +86,10 @@ export const AuthProvider = ({ children }) => {
                 SecureStore.deleteItemAsync('user')
                 SecureStore.deleteItemAsync('logged_in')
                 SecureStore.deleteItemAsync('company')
-                setUser({})
+                SecureStore.deleteItemAsync('hiring_manager')
+                setUser(null)
+                setCompany('false')
+                setHiringManager(null)
                 setLogged_in('false')
             })
             .catch((err) => {
@@ -63,7 +106,7 @@ export const AuthProvider = ({ children }) => {
                 const userData = response.data.data
                 setUser(userData)
                 setError(null)
-                setCompany(userData.company ? userData.company.toString() : 'false')
+                setCompany(userData.company ? 'true' : 'false')
                 SecureStore.setItemAsync('user', JSON.stringify(userData))
                 SecureStore.setItemAsync('company', company)
                 onSignedUp()
@@ -110,11 +153,15 @@ export const AuthProvider = ({ children }) => {
                 loading,
                 logged_in,
                 company,
+                hiringManager,
+                setHiringManager,
                 setCompany,
                 setUser,
                 setLogged_in,
                 setLoading,
                 login,
+                loginAsHiringManager,
+                loginAsEmployerAdmin,
                 logout,
                 signup,
                 verify,

@@ -9,7 +9,7 @@ const useValidIDs = () => {
 
     const getValidIds = async () => {
         setLoading(true)
-        await api({ token: user.token })
+        await api()
             .get(`/validIds`)
             .then((res) => setValidIds(res.data.data))
             .catch((err) => console.log(err))

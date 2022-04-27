@@ -9,7 +9,7 @@ const useLocation = () => {
 
     const getLocations = async (search = '') => {
         setLoading(true)
-        await api({ token: user.token })
+        await api()
             .get(`/locations?limit=5&search=${search}`)
             .then((res) => setLocations(res.data.data))
             .catch((err) => console.log(err))

@@ -5,6 +5,7 @@ import EmployerStack from './views/stacks/Employer/EmployerStack'
 import AuthStack from './views/stacks/Auth/AuthStack'
 import * as SecureStore from 'expo-secure-store'
 import AuthContext from './api/context/auth/AuthContext'
+import SelectUserStack from './views/stacks/Employer/SelectUserStack'
 import TestScreen from './TestScreen'
 import TestScreen1 from './TestScreen1'
 
@@ -16,7 +17,8 @@ const Routes = () => {
         setCompany,
         logged_in,
         setLogged_in,
-        isFirstLaunched,
+        hiringManager,
+        setHiringManager,
         setIsFirstLaunched,
     } = useContext(AuthContext)
 
@@ -26,8 +28,17 @@ const Routes = () => {
                 let user = JSON.parse(response)
                 if (user) {
                     setUser(user)
-                    setCompany(user.company)
+                    setCompany(user.company ? 'true' : 'false')
                     setLogged_in('true')
+                }
+            })
+            .catch((error) => console.log(error))
+
+        SecureStore.getItemAsync('hiring_manager')
+            .then((response) => {
+                let res = JSON.parse(response)
+                if (res) {
+                    setHiringManager(res)
                 }
             })
             .catch((error) => console.log(error))
@@ -59,7 +70,11 @@ const Routes = () => {
         <NavigationContainer>
             {user && logged_in == 'true' ? (
                 company == 'true' ? (
-                    <EmployerStack />
+                    hiringManager || user.companyToken ? (
+                        <EmployerStack />
+                    ) : (
+                        <SelectUserStack />
+                    )
                 ) : (
                     <JobSeekerStack />
                 )

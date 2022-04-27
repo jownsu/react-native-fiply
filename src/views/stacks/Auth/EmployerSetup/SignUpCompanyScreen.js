@@ -26,8 +26,8 @@ const SignUpCompanyScreen = ({ navigation, route }) => {
     let { usertype } = route.params
 
     const { locations, loading: locationLoading, getLocations } = useLocation()
-
     const { loading } = useContext(AuthContext)
+    const [hidePassword, setHidePassword] = useState(true)
     const { setProfile, setCompany } = useContext(SignUpContext)
 
     const signupSchema = yup.object({
@@ -35,6 +35,7 @@ const SignUpCompanyScreen = ({ navigation, route }) => {
         registration_no: yup.string().trim().min(2).required('Registration Number is required'),
         telephone_no: yup.string().trim().min(2).required('Telephone Number is required'),
         location: yup.string().trim().min(2).required('Location is required'),
+        code: yup.number().required('Pin Code is Required'),
     })
 
     return (
@@ -49,6 +50,7 @@ const SignUpCompanyScreen = ({ navigation, route }) => {
                         registration_no: '',
                         telephone_no: '',
                         location: '',
+                        code: '',
                     }}
                     onSubmit={(values) => {
                         if (usertype == 'jobseeker') {
@@ -136,6 +138,30 @@ const SignUpCompanyScreen = ({ navigation, route }) => {
                                         }
                                     />
 
+                                    <TextInput
+                                        label={'Pin Code'}
+                                        value={values.code}
+                                        onChangeText={(text) => {
+                                            const re = /^[0-9\b]+$/
+                                            if (text === '' || re.test(text)) {
+                                                handleChange('code')(text)
+                                            }
+                                        }}
+                                        onBlur={handleBlur('code')}
+                                        error={touched.code && errors.code ? true : false}
+                                        errorMsg={touched.code && errors.code ? errors.code : ''}
+                                        keyboardType="numeric"
+                                        secureTextEntry={hidePassword}
+                                        right={
+                                            <TxtInput.Icon
+                                                name="eye"
+                                                color={Colors.light}
+                                                onPress={() => setHidePassword(!hidePassword)}
+                                            />
+                                        }
+                                        maxLength={4}
+                                    />
+
                                     <Button
                                         title={'Continue'}
                                         onPress={handleSubmit}
@@ -144,7 +170,8 @@ const SignUpCompanyScreen = ({ navigation, route }) => {
                                             values.name &&
                                             values.registration_no &&
                                             values.telephone_no &&
-                                            values.location
+                                            values.location &&
+                                            values.code
                                                 ? false
                                                 : true
                                         }

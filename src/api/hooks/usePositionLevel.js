@@ -9,7 +9,7 @@ const usePositionLevel = () => {
 
     const getPositionLevels = async (search = '') => {
         setLoading(true)
-        await api({ token: user.token })
+        await api()
             .get(`/positionLevels?search=${search}`)
             .then((res) => setPositionLevels(res.data.data))
             .catch((err) => console.log(err))

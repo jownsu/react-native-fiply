@@ -9,7 +9,7 @@ const useJobTitle = () => {
 
     const getJobTitles = async (search = '') => {
         setLoading(true)
-        await api({ token: user.token })
+        await api()
             .get(`/jobTitles?limit=5&search=${search}`)
             .then((res) => setJobTitles(res.data.data))
             .catch((err) => console.log(err))

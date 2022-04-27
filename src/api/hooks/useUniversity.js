@@ -9,7 +9,7 @@ const useUniversity = () => {
 
     const getUniversities = async (search = '') => {
         setLoading(true)
-        await api({ token: user.token })
+        await api()
             .get(`/universities?limit=5&search=${search}`)
             .then((res) => setUniversities(res.data.data))
             .catch((err) => console.log(err))

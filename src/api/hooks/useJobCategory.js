@@ -9,7 +9,7 @@ const useJobCategory = () => {
 
     const getJobCategories = async (search = '') => {
         setLoading(true)
-        await api({ token: user.token })
+        await api()
             .get(`/jobCategories?limit=5&search=${search}`)
             .then((res) => setJobCategories(res.data.data))
             .catch((err) => console.log(err))

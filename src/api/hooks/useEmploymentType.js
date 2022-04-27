@@ -9,7 +9,7 @@ const useEmploymentType = () => {
 
     const getEmploymentTypes = async (search = '') => {
         setLoading(true)
-        await api({ token: user.token })
+        await api()
             .get(`/employmentTypes?search=${search}`)
             .then((res) => setEmploymentTypes(res.data.data))
             .catch((err) => console.log(err))
