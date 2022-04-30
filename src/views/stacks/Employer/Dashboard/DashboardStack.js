@@ -5,6 +5,8 @@ import DashboardScreen from './DashboardScreen'
 import AddHiringManagerScreen from './AddHiringManagerScreen'
 import HiringManagerListScreen from './HiringManagerListScreen'
 import HiringManagerScreen from './HiringManagerScreen'
+import CreateJobScreen from './CreateJobScreen'
+import CreateQuestionnaireScreen from './CreateQuestionnaireScreen'
 
 const Stack = createStackNavigator()
 
@@ -31,6 +33,16 @@ const DashboardStack = () => {
                     options={{ headerShown: false }}
                     name={'HiringManagerScreen'}
                     component={HiringManagerScreen}
+                ></Stack.Screen>
+                <Stack.Screen
+                    options={{ headerShown: false }}
+                    name={'CreateJobScreen'}
+                    component={CreateJobScreen}
+                ></Stack.Screen>
+                <Stack.Screen
+                    options={{ headerShown: false }}
+                    name={'CreateQuestionnaireScreen'}
+                    component={CreateQuestionnaireScreen}
                 ></Stack.Screen>
             </Stack.Navigator>
         </DashboardProvider>

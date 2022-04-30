@@ -1,5 +1,5 @@
 import { StyleSheet, View, ScrollView } from 'react-native'
-import React from 'react'
+import React, { useContext } from 'react'
 import {
     Text,
     SafeAreaView,
@@ -7,18 +7,19 @@ import {
     TextInput,
     Dropdown,
     Button,
+    SecondaryButton,
     FiplyLogo,
-} from '../components/FiplyComponents'
-
-import useJob from '../../api/hooks/useJob'
-import useJobTitle from '../../api/hooks/useJobTitle'
-import useEmploymentType from '../../api/hooks/useEmploymentType'
-import useLocation from '../../api/hooks/useLocation'
-import usePositionLevel from '../../api/hooks/usePositionLevel'
+} from '../../../components/FiplyComponents'
+import DashboardContext from '../../../../api/context/EMPLOYER/dashboard/DashboardContext'
+import { FontAwesome5 } from '@expo/vector-icons'
+import useJobTitle from '../../../../api/hooks/useJobTitle'
+import useEmploymentType from '../../../../api/hooks/useEmploymentType'
+import useLocation from '../../../../api/hooks/useLocation'
+import usePositionLevel from '../../../../api/hooks/usePositionLevel'
 import { Formik } from 'formik'
 import * as yup from 'yup'
-import Header from '../components/headers/Header'
-import Colors from '../../utils/Colors'
+import Header from '../../../components/headers/Header'
+import Colors from '../../../../utils/Colors'
 
 const CreateJobScreen = ({ navigation }) => {
     const { jobTitles, loading: jobTitleLoading, getJobTitles } = useJobTitle()
@@ -30,13 +31,12 @@ const CreateJobScreen = ({ navigation }) => {
     const { locations, loading: locationLoading, getLocations } = useLocation()
     const { positionLevels, loading: positionLevelsLoading, getPositionLevels } = usePositionLevel()
 
-    const { createJob, loading: createJobLoading } = useJob()
+    const { createJob, loading } = useContext(DashboardContext)
 
     const formSchema = yup.object({
         title: yup.string().trim().required('Job Title is required'),
         employment_type: yup.string().trim().required('Job Type is required'),
         position_level: yup.string().trim().required('Position Level is required'),
-        company: yup.string().trim().required('Company is requried'),
         location: yup.string().trim().required('Location is required'),
         job_responsibilities: yup.string().trim().required('Job Responsibilities is required'),
         qualifications: yup.string().trim().required('Qualifications is required'),
@@ -57,17 +57,13 @@ const CreateJobScreen = ({ navigation }) => {
                             title: '',
                             employment_type: '',
                             position_level: '',
-                            company: '',
                             location: '',
                             job_responsibilities: '',
                             qualifications: '',
                         }}
                         validationSchema={formSchema}
                         onSubmit={(values) => {
-                            createJob(values, () => {
-                                navigation.pop()
-                                alert('Job created!')
-                            })
+                            createJob(values, () => navigation.pop())
                         }}
                     >
                         {({
@@ -134,27 +130,6 @@ const CreateJobScreen = ({ navigation }) => {
                                     noTextInput
                                     dropdownIcon
                                 />
-                                {/* <Dropdown
-                                label={'Company'}
-                                value={values.company}
-                                data={companyList}
-                                style={{ marginBottom: 5 }}
-                                onSubmit={(text) => setFieldValue('company', text)}
-                                error={touched.company && errors.company ? true : false}
-                                errorMsg={touched.company && errors.company ? errors.company : ''}
-                            /> */}
-                                <TextInput
-                                    label="Company"
-                                    multiline
-                                    style={{ marginBottom: 5 }}
-                                    value={values.company}
-                                    onChangeText={handleChange('company')}
-                                    onBlur={handleBlur('company')}
-                                    error={touched.company && errors.company ? true : false}
-                                    errorMsg={
-                                        touched.company && errors.company ? errors.company : ''
-                                    }
-                                />
                                 <Dropdown
                                     label={'Location'}
                                     value={values.location}
@@ -206,6 +181,29 @@ const CreateJobScreen = ({ navigation }) => {
                                     }
                                 />
 
+                                <View
+                                    style={{
+                                        flexDirection: 'row',
+                                        marginTop: 10,
+                                        alignItems: 'center',
+                                    }}
+                                >
+                                    <SecondaryButton
+                                        title="Create Questionnaire"
+                                        onPress={() => navigation.push('CreateQuestionnaireScreen')}
+                                        style={{
+                                            marginHorizontal: 0,
+                                            marginRight: 10,
+                                            borderRadius: 15,
+                                        }}
+                                    />
+                                    <FontAwesome5
+                                        name="check-circle"
+                                        size={24}
+                                        color={Colors.grey}
+                                    />
+                                </View>
+
                                 <Button
                                     title="Submit"
                                     style={{ marginVertical: 35 }}
@@ -213,14 +211,15 @@ const CreateJobScreen = ({ navigation }) => {
                                     disabled={
                                         values.title &&
                                         values.employment_type &&
-                                        values.company &&
+                                        values.position_level &&
                                         values.location &&
                                         values.job_responsibilities &&
-                                        values.qualifications
+                                        values.qualifications &&
+                                        !loading
                                             ? false
                                             : true
                                     }
-                                    loading={createJobLoading}
+                                    loading={loading}
                                 />
                             </View>
                         )}

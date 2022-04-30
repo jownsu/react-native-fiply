@@ -19,7 +19,7 @@ import AccountLevelBar from '../../components/AccountLevelBar'
 const Tab = createBottomTabNavigator()
 
 const BottomNavigator = ({ navigation }) => {
-    const { logout, user } = useContext(AuthContext)
+    const { logout, user, logoutAsEmployer, hiringManager } = useContext(AuthContext)
 
     const bottomSheetModalRef = useRef(null)
 
@@ -30,6 +30,14 @@ const BottomNavigator = ({ navigation }) => {
     const handleClosePress = () => bottomSheetModalRef.current.close()
 
     const handleSignoutPress = () => logout()
+
+    const handleSwitchUserPress = () => {
+        if (hiringManager) {
+            logoutAsEmployer('hiring_manager')
+        } else {
+            logoutAsEmployer('company')
+        }
+    }
 
     const handleGoToProfile = () => {
         navigation.navigate('ProfileStack', {
@@ -171,14 +179,16 @@ const BottomNavigator = ({ navigation }) => {
                         <AccountLevelBar level={user.account_level} />
                     </View>
                     <View style={styles.btmFooterContainer}>
-                        <TouchableOpacity style={styles.footerBtn}>
+                        <TouchableOpacity style={styles.footerBtn} onPress={handleSwitchUserPress}>
                             <FontAwesome5
-                                name="user-cog"
+                                name="sign-out-alt"
                                 size={24}
                                 color={Colors.black}
                                 style={{ marginRight: 5 }}
                             />
-                            <Text weight="medium">Settings</Text>
+                            <Text color={Colors.black} weight="medium">
+                                Switch User
+                            </Text>
                         </TouchableOpacity>
 
                         <TouchableOpacity style={styles.footerBtn} onPress={handleSignoutPress}>

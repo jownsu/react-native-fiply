@@ -169,6 +169,7 @@ const DashboardScreen = ({ navigation }, offset) => {
                                     styles.dottedContainer,
                                     { alignItems: 'center', padding: 10 },
                                 ]}
+                                onPress={() => navigation.navigate('CreateJobScreen')}
                             >
                                 <AntDesign
                                     name="pluscircleo"

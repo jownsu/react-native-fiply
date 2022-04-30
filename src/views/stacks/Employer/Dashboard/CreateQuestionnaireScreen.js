@@ -1,9 +1,9 @@
 import { StyleSheet, View } from 'react-native'
 import React from 'react'
-import { SafeAreaView, Text, Container } from '../components/FiplyComponents'
-import Header from '../components/headers/Header'
-import Colors from '../../utils/Colors'
-import CreateQuestionnaire from '../components/CreateQuestionnaire'
+import { SafeAreaView, Text, Container } from '../../../components/FiplyComponents'
+import Header from '../../../components/headers/Header'
+import Colors from '../../../../utils/Colors'
+import CreateQuestionnaire from '../../../components/CreateQuestionnaire'
 
 const CreateQuestionnaireScreen = ({ navigation }) => {
     return (
@@ -14,9 +14,7 @@ const CreateQuestionnaireScreen = ({ navigation }) => {
                 onBackPress={() => navigation.pop()}
             />
             <Container>
-                <CreateQuestionnaire
-                    onSubmit={(questions) => console.log(questions)}
-                />
+                <CreateQuestionnaire onSubmit={(questions) => console.log(questions)} />
             </Container>
         </SafeAreaView>
     )

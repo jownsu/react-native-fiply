@@ -8,7 +8,7 @@ import api from '../../../api'
 const DashboardContext = createContext()
 
 export const DashboardProvider = ({ children }) => {
-    const { user } = useContext(AuthContext)
+    const { user, hiringManager } = useContext(AuthContext)
 
     const initialState = {
         total_hiring_manager: 0,
@@ -46,11 +46,31 @@ export const DashboardProvider = ({ children }) => {
         fd.append('contact_no', data.contact_no)
         fd.append('code', data.code)
 
-        await api({ token: user.token, hiring_token: user.companyToken, hiring_id: user.company })
+        await api({
+            token: user.token,
+            hiring_token: user.companyToken,
+            hiring_id: user.company,
+        })
             .post('/hiringManagers', fd)
             .then((res) => {
                 dispatch({ type: 'ADD_HIRING_MANAGER' })
                 setSnackBarMessage('Hiring Manager Added')
+                callback()
+            })
+            .catch((err) => console.log(err))
+            .finally(() => stopLoading())
+    }
+
+    const createJob = async (data, callback = () => {}) => {
+        setLoading()
+
+        await api({
+            token: user.token,
+        })
+            .post('/jobs', data)
+            .then((res) => {
+                dispatch({ type: 'ADD_JOB' })
+                setSnackBarMessage('Job Posted')
                 callback()
             })
             .catch((err) => console.log(err))
@@ -68,6 +88,7 @@ export const DashboardProvider = ({ children }) => {
             value={{
                 ...state,
                 createHiringManager,
+                createJob,
                 getDashboard,
                 snackBarMessage,
                 hideSnackBar,

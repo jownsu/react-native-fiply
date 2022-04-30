@@ -55,6 +55,7 @@ const Routes = () => {
                 //SecureStore.deleteItemAsync('isFirstLaunch')
             })
             .catch((err) => console.log(err))
+
         // SecureStore.getItemAsync('logged_in')
         //     .then(response => {
         //         let logged = JSON.parse(response)

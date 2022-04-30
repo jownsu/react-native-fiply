@@ -5,10 +5,10 @@ import * as SecureStore from 'expo-secure-store'
 const AuthContext = createContext()
 
 export const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState(null)
+    const [user, setUser] = useState({})
     const [logged_in, setLogged_in] = useState('false')
     const [company, setCompany] = useState('false')
-    const [hiringManager, setHiringManager] = useState(null)
+    const [hiringManager, setHiringManager] = useState({})
     const [error, setError] = useState(null)
     const [loading, setLoading] = useState(false)
     const [isFirstLaunched, setIsFirstLaunched] = useState(true)
@@ -98,6 +98,33 @@ export const AuthProvider = ({ children }) => {
             .finally(() => setLoading(false))
     }
 
+    const logoutAsEmployer = async (type = 'hiring_manager') => {
+        await api({
+            token: user.token,
+            hiring_token: type == 'hiring_manager' ? hiringManager.token : user.companyToken,
+            hiring_id: type == 'hiring_manager' ? hiringManager.id : user.company,
+        })
+            .post('/logoutAsEmployer', { type })
+            .then((response) => {
+                if (type == 'hiring_manager') {
+                    SecureStore.deleteItemAsync('hiring_manager')
+                    setHiringManager(null)
+                } else {
+                    SecureStore.getItemAsync('user').then((response) => {
+                        const storeUser = JSON.parse(response)
+                        delete storeUser.companyToken
+                        SecureStore.setItemAsync('user', JSON.stringify(storeUser))
+                    })
+                    setUser({ ...user, companyToken: '' })
+                }
+                SecureStore.deleteItemAsync('hiring_manager')
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+            .finally(() => setLoading(false))
+    }
+
     const signup = async (signUpInfo, onSignedUp = () => {}) => {
         setLoading(true)
         await api()
@@ -163,6 +190,7 @@ export const AuthProvider = ({ children }) => {
                 loginAsHiringManager,
                 loginAsEmployerAdmin,
                 logout,
+                logoutAsEmployer,
                 signup,
                 verify,
                 isFirstLaunched,
