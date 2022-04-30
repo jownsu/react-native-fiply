@@ -23,6 +23,15 @@ const Routes = () => {
     } = useContext(AuthContext)
 
     useEffect(() => {
+        SecureStore.getItemAsync('hiring_manager')
+            .then((response) => {
+                let res = JSON.parse(response)
+                if (res) {
+                    setHiringManager(res)
+                }
+            })
+            .catch((error) => console.log(error))
+
         SecureStore.getItemAsync('user')
             .then((response) => {
                 let user = JSON.parse(response)
@@ -30,15 +39,6 @@ const Routes = () => {
                     setUser(user)
                     setCompany(user.company ? 'true' : 'false')
                     setLogged_in('true')
-                }
-            })
-            .catch((error) => console.log(error))
-
-        SecureStore.getItemAsync('hiring_manager')
-            .then((response) => {
-                let res = JSON.parse(response)
-                if (res) {
-                    setHiringManager(res)
                 }
             })
             .catch((error) => console.log(error))
@@ -71,7 +71,7 @@ const Routes = () => {
         <NavigationContainer>
             {user && logged_in == 'true' ? (
                 company == 'true' ? (
-                    hiringManager || user.companyToken ? (
+                    user.companyToken || hiringManager.token ? (
                         <EmployerStack />
                     ) : (
                         <SelectUserStack />
@@ -82,7 +82,6 @@ const Routes = () => {
             ) : (
                 <AuthStack />
             )}
-            {/* <EmployerStack /> */}
         </NavigationContainer>
     )
 }

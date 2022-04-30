@@ -12,6 +12,12 @@ const JobReducer = (state, action) => {
                 jobs: action.payload,
             }
 
+        case 'SET_QUESTIONNAIRE':
+            return {
+                ...state,
+                questionnaire: action.payload,
+            }
+
         case 'MORE_JOBS':
             return {
                 ...state,

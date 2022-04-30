@@ -32,7 +32,7 @@ const BottomNavigator = ({ navigation }) => {
     const handleSignoutPress = () => logout()
 
     const handleSwitchUserPress = () => {
-        if (hiringManager) {
+        if (hiringManager.token) {
             logoutAsEmployer('hiring_manager')
         } else {
             logoutAsEmployer('company')

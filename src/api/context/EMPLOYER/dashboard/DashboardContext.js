@@ -13,6 +13,7 @@ export const DashboardProvider = ({ children }) => {
     const initialState = {
         total_hiring_manager: 0,
         total_job_posts: 0,
+        questionList: [],
         loading: false,
     }
     const [state, dispatch] = useReducer(DashboardReducer, initialState)
@@ -66,6 +67,8 @@ export const DashboardProvider = ({ children }) => {
 
         await api({
             token: user.token,
+            hiring_token: hiringManager.token,
+            hiring_id: hiringManager.id,
         })
             .post('/jobs', data)
             .then((res) => {
@@ -76,6 +79,12 @@ export const DashboardProvider = ({ children }) => {
             .catch((err) => console.log(err))
             .finally(() => stopLoading())
     }
+
+    const addQuestion = (data) => dispatch({ type: 'ADD_QUESTION', payload: data })
+
+    const removeQuestion = (data) => dispatch({ type: 'REMOVE_QUESTION', payload: data })
+
+    const clearQuestion = (data) => dispatch({ type: 'CLEAR_QUESTION', payload: data })
 
     const setLoading = () => dispatch({ type: 'SET_LOADING' })
 
@@ -90,6 +99,9 @@ export const DashboardProvider = ({ children }) => {
                 createHiringManager,
                 createJob,
                 getDashboard,
+                addQuestion,
+                removeQuestion,
+                clearQuestion,
                 snackBarMessage,
                 hideSnackBar,
             }}

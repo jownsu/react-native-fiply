@@ -131,12 +131,14 @@ const ShowJobScreen = ({ navigation }) => {
                         </Text>
                         <Text>{job.qualifications}</Text>
                     </View>
-
-                    <SecondaryButton
-                        title="Answer Questionnaire"
-                        labelStyle={{ marginHorizontal: 0 }}
-                        style={{ borderRadius: 15, marginBottom: 10 }}
-                    />
+                    {job.questionnaire && (
+                        <SecondaryButton
+                            onPress={() => navigation.push('QuestionnaireScreen')}
+                            title="Answer Questionnaire"
+                            labelStyle={{ marginHorizontal: 0 }}
+                            style={{ borderRadius: 15, marginBottom: 10 }}
+                        />
+                    )}
                 </Container>
             </ScrollView>
 

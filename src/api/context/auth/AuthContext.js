@@ -89,7 +89,7 @@ export const AuthProvider = ({ children }) => {
                 SecureStore.deleteItemAsync('hiring_manager')
                 setUser(null)
                 setCompany('false')
-                setHiringManager(null)
+                setHiringManager({})
                 setLogged_in('false')
             })
             .catch((err) => {
@@ -108,7 +108,7 @@ export const AuthProvider = ({ children }) => {
             .then((response) => {
                 if (type == 'hiring_manager') {
                     SecureStore.deleteItemAsync('hiring_manager')
-                    setHiringManager(null)
+                    setHiringManager({})
                 } else {
                     SecureStore.getItemAsync('user').then((response) => {
                         const storeUser = JSON.parse(response)

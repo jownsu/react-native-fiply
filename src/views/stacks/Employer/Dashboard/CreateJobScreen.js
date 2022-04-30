@@ -31,7 +31,7 @@ const CreateJobScreen = ({ navigation }) => {
     const { locations, loading: locationLoading, getLocations } = useLocation()
     const { positionLevels, loading: positionLevelsLoading, getPositionLevels } = usePositionLevel()
 
-    const { createJob, loading } = useContext(DashboardContext)
+    const { createJob, loading, questionList, clearQuestion } = useContext(DashboardContext)
 
     const formSchema = yup.object({
         title: yup.string().trim().required('Job Title is required'),
@@ -63,7 +63,11 @@ const CreateJobScreen = ({ navigation }) => {
                         }}
                         validationSchema={formSchema}
                         onSubmit={(values) => {
-                            createJob(values, () => navigation.pop())
+                            //console.log({ ...values, questions: [...questionList] })
+                            createJob({ ...values, questions: [...questionList] }, () => {
+                                clearQuestion()
+                                navigation.pop()
+                            })
                         }}
                     >
                         {({
@@ -200,7 +204,11 @@ const CreateJobScreen = ({ navigation }) => {
                                     <FontAwesome5
                                         name="check-circle"
                                         size={24}
-                                        color={Colors.grey}
+                                        color={
+                                            questionList.length == 0
+                                                ? Colors.grey
+                                                : Colors.secondary
+                                        }
                                     />
                                 </View>
 

@@ -37,6 +37,7 @@ export const JobProvider = ({ children }) => {
                 total: 0,
             },
         },
+        questionnaire: {},
         loading: false,
     }
     const [state, dispatch] = useReducer(JobReducer, initialState)
@@ -46,6 +47,15 @@ export const JobProvider = ({ children }) => {
         await api({ token: user.token })
             .get(`/jobs/${id}`)
             .then((res) => dispatch({ type: 'GET_JOB', payload: res.data.data }))
+            .catch((err) => console.log(err))
+            .finally(() => stopLoading())
+    }
+
+    const getQuestionaire = async (id) => {
+        setLoading()
+        await api({ token: user.token })
+            .get(`/jobs/${id}/questions`)
+            .then((res) => dispatch({ type: 'SET_QUESTIONNAIRE', payload: res.data.data }))
             .catch((err) => console.log(err))
             .finally(() => stopLoading())
     }
@@ -210,6 +220,7 @@ export const JobProvider = ({ children }) => {
                 ...state,
                 getJobs,
                 moreJobs,
+                getQuestionaire,
                 getSavedJobs,
                 moreSavedJobs,
                 getAppliedJobs,

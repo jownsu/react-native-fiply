@@ -18,6 +18,24 @@ const DashboardReducer = (state, action) => {
                 total_job_posts: state.total_job_posts + 1,
             }
 
+        case 'ADD_QUESTION':
+            return {
+                ...state,
+                questionList: [...state.questionList, action.payload],
+            }
+
+        case 'REMOVE_QUESTION':
+            return {
+                ...state,
+                questionList: [...state.questionList.filter((item, i) => i + 1 != action.payload)],
+            }
+
+        case 'CLEAR_QUESTION':
+            return {
+                ...state,
+                questionList: [],
+            }
+
         case 'SET_LOADING':
             return {
                 ...state,
