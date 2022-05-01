@@ -37,7 +37,7 @@ export const JobProvider = ({ children }) => {
                 total: 0,
             },
         },
-        questionnaire: {},
+        questionnaire: [],
         loading: false,
     }
     const [state, dispatch] = useReducer(JobReducer, initialState)

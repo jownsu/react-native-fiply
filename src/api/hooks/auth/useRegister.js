@@ -130,8 +130,27 @@ const useRegister = () => {
 
     const createHiringManager = async (data, onCreate = () => {}) => {
         setLoading(true)
-        await api({ token: user.token })
-            .post(`/me/hiringManagers`, data)
+        let fd = new FormData()
+
+        if (data.avatar) {
+            fd.append('avatar', {
+                uri: data.avatar,
+                type: mime.getType(data.avatar),
+                name: data.avatar.split('/').pop(),
+            })
+        }
+
+        fd.append('firstname', data.firstname)
+        fd.append('lastname', data.lastname)
+        fd.append('email', data.email)
+        fd.append('contact_no', data.contact_no)
+        fd.append('code', data.code)
+        await api({
+            token: user.token,
+            hiring_token: user.companyToken,
+            hiring_id: user.company,
+        })
+            .post(`/hiringManagers`, fd)
             .then((res) => onCreate())
             .catch((err) => console.log(err))
             .finally(() => setLoading(false))

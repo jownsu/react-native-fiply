@@ -26,7 +26,7 @@ const AddHiringManagerScreen = ({ navigation }) => {
         lastname: yup.string().trim().min(2).required('Lastname is required'),
         email: yup.string().trim().min(2).email().required('Email is required'),
         contact_no: yup.string().trim().min(2).required('Contact Number is required'),
-        code: yup.number().required('Pin Code is Required'),
+        code: yup.string().min(4).required('Pin Code is Required'),
     })
 
     return (

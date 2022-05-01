@@ -16,8 +16,8 @@ const useDocumentPicker = () => {
         })
             .then((response) => {
                 if (!response.cancelled) {
-                    if (response.size > 2048000) {
-                        alert('Uploaded file is too large, 2mb is the limit')
+                    if (response.size > 5000000) {
+                        alert('Uploaded file is too large, 5mb is the limit')
                     } else {
                         const imageUri = 'file:///' + response.uri.split('file:/').join('')
                         onUpload(response, imageUri)

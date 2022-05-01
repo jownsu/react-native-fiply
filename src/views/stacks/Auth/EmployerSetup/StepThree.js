@@ -13,6 +13,7 @@ import StepIndicator from '../../../components/StepIndicator'
 import { FontAwesome5 } from '@expo/vector-icons'
 import useRegister from '../../../../api/hooks/auth/useRegister'
 import useDocumentPicker from '../../../../utils/useDocumentPicker'
+import useDocumentScanner from '../../../../utils/useDocumentScanner'
 
 const StepThree = ({ navigation }) => {
     const [certificate, setCertificate] = useState('')
@@ -20,6 +21,8 @@ const StepThree = ({ navigation }) => {
 
     const { certificates, getCertificates, loading: certificateLoading } = useCompanyCertificates()
     const { pickDocument } = useDocumentPicker()
+    const { openScanner } = useDocumentScanner()
+
     const [certificateUri, setcertificateUri] = useState('')
 
     const onUploadBtnPress = () => {
@@ -29,6 +32,12 @@ const StepThree = ({ navigation }) => {
             },
             ['image/*']
         )
+    }
+
+    const onScanBtnPress = () => {
+        openScanner(({ imgUri }) => {
+            setcertificateUri(imgUri)
+        })
     }
 
     const onProceedPress = () => {
@@ -91,7 +100,16 @@ const StepThree = ({ navigation }) => {
                             style={styles.imgScan}
                         />
                         <Text color={Colors.black} center weight="medium" style={{ marginTop: 5 }}>
-                            Upload Certificate
+                            Upload File
+                        </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.optionBtn} onPress={onScanBtnPress}>
+                        <Image
+                            source={require('../../../../assets/img/scan.png')}
+                            style={styles.imgScan}
+                        />
+                        <Text color={Colors.black} weight="medium" center>
+                            Use Scanner
                         </Text>
                     </TouchableOpacity>
                 </View>

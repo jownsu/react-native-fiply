@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet, View, TouchableOpacity } from 'react-native'
 import {
     SafeAreaView,
     Text,
@@ -9,10 +9,12 @@ import {
     Container,
 } from '../../../components/FiplyComponents'
 import Colors from '../../../../utils/Colors'
+import { TextInput as TxtInput, Avatar } from 'react-native-paper'
 import { Formik } from 'formik'
 import * as yup from 'yup'
 import StepIndicator from '../../../components/StepIndicator'
 import useRegister from '../../../../api/hooks/auth/useRegister'
+import usePickImage from '../../../../utils/usePIckImage'
 
 const StepOne = ({ navigation }) => {
     const companySchema = yup.object({
@@ -20,9 +22,13 @@ const StepOne = ({ navigation }) => {
         lastname: yup.string().trim().min(2).required('Lastname is required'),
         email: yup.string().trim().min(2).email().required('Email is required'),
         contact_no: yup.string().trim().min(2).required('Contact Number is required'),
+        code: yup.string().min(4).required('Pin Code is Required'),
     })
+    const [hidePassword, setHidePassword] = useState(true)
 
     const { createHiringManager, loading } = useRegister()
+
+    const { pickImage, pickUri } = usePickImage()
 
     return (
         <SafeAreaView>
@@ -47,10 +53,12 @@ const StepOne = ({ navigation }) => {
                 </Text>
                 <Formik
                     initialValues={{
+                        avatar: '',
                         firstname: '',
                         lastname: '',
                         email: '',
                         contact_no: '',
+                        code: '',
                     }}
                     validationSchema={companySchema}
                     onSubmit={(values) => {
@@ -69,6 +77,20 @@ const StepOne = ({ navigation }) => {
                         setFieldValue,
                     }) => (
                         <View>
+                            <TouchableOpacity
+                                style={styles.uploadBtn}
+                                onPress={() => {
+                                    pickImage([1, 1], (uri) => {
+                                        setFieldValue('avatar', uri)
+                                    })
+                                }}
+                            >
+                                {pickUri ? (
+                                    <Avatar.Image size={125} source={{ uri: pickUri }} />
+                                ) : (
+                                    <Text color={Colors.primary}>Upload Photo</Text>
+                                )}
+                            </TouchableOpacity>
                             <TextInput
                                 label="Firstname"
                                 value={values.firstname}
@@ -109,6 +131,29 @@ const StepOne = ({ navigation }) => {
                                     touched.contact_no && errors.contact_no ? errors.contact_no : ''
                                 }
                             />
+                            <TextInput
+                                label={'Pin Code'}
+                                value={values.code}
+                                onChangeText={(text) => {
+                                    const re = /^[0-9\b]+$/
+                                    if (text === '' || re.test(text)) {
+                                        handleChange('code')(text)
+                                    }
+                                }}
+                                onBlur={handleBlur('code')}
+                                error={touched.code && errors.code ? true : false}
+                                errorMsg={touched.code && errors.code ? errors.code : ''}
+                                keyboardType="numeric"
+                                secureTextEntry={hidePassword}
+                                right={
+                                    <TxtInput.Icon
+                                        name="eye"
+                                        color={Colors.light}
+                                        onPress={() => setHidePassword(!hidePassword)}
+                                    />
+                                }
+                                maxLength={4}
+                            />
 
                             <Button
                                 title="Continue"
@@ -135,4 +180,18 @@ const StepOne = ({ navigation }) => {
 
 export default StepOne
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+    uploadBtn: {
+        borderWidth: 2,
+        borderStyle: 'dashed',
+        borderRadius: 15,
+        borderColor: Colors.primary,
+        alignItems: 'center',
+        height: 125,
+        width: 125,
+        borderRadius: 100,
+        alignSelf: 'center',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+})

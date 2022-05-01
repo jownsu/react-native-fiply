@@ -7,13 +7,13 @@ import { FontAwesome5, FontAwesome } from '@expo/vector-icons'
 import SignUpContext from '../../../../api/context/auth/SignUpContext'
 import useRegister from '../../../../api/hooks/auth/useRegister'
 
-import useCamera from '../../../../utils/useCamera'
 import useDocumentPicker from '../../../../utils/useDocumentPicker'
+import useDocumentScanner from '../../../../utils/useDocumentScanner'
 
 const StepTwo = ({ navigation }) => {
     const { createExperience, createEducationalBackground, uploadResume, loading } = useRegister()
     const { experience, educational_background } = useContext(SignUpContext)
-    const { captureImage } = useCamera()
+    const { imgUri, openScanner } = useDocumentScanner()
     const { pickDocument } = useDocumentPicker()
     const [resumeUri, setResumeUri] = useState('')
     const [uploadedFile, setUploadedFile] = useState({})
@@ -28,10 +28,11 @@ const StepTwo = ({ navigation }) => {
         )
     }
 
-    const onScanImagePress = () => {
-        captureImage((response, uri) => {
-            setUploadedFile(response)
-            setResumeUri(uri)
+    const onScanBtnPress = () => {
+        openScanner(({ pdfUri }) => {
+            // console.log(pdfUri)
+            setResumeUri(pdfUri)
+            setUploadedFile({})
         })
     }
 
@@ -87,11 +88,20 @@ const StepTwo = ({ navigation }) => {
                             Upload File
                         </Text>
                     </TouchableOpacity>
+                    <TouchableOpacity style={styles.optionBtn} onPress={onScanBtnPress}>
+                        <Image
+                            source={require('../../../../assets/img/scan.png')}
+                            style={styles.imgAddFile}
+                        />
+                        <Text color={Colors.black} weight="medium" center>
+                            Use Scanner
+                        </Text>
+                    </TouchableOpacity>
                 </View>
 
-                {resumeUri !== '' && uploadedFile.type == 'image' && (
+                {resumeUri !== '' && imgUri && (
                     <View style={styles.uploadContainer}>
-                        <Image source={{ uri: resumeUri }} style={styles.uploadedImg} />
+                        <Image source={{ uri: imgUri }} style={styles.uploadedImg} />
                     </View>
                 )}
 
@@ -159,11 +169,11 @@ const styles = StyleSheet.create({
     uploadContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        padding: 20,
+        justifyContent: 'center',
     },
     uploadedImg: {
         borderRadius: 10,
-        height: 75,
-        width: 75,
+        height: 100,
+        width: 100,
     },
 })

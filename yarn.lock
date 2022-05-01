@@ -1611,6 +1611,11 @@
   resolved "https://registry.yarnpkg.com/@sideway/pinpoint/-/pinpoint-2.0.0.tgz#cff8ffadc372ad29fd3f78277aeb29e632cc70df"
   integrity sha512-RNiOoTPkptFtSVzQevY/yWtZwf/RxyVnPy/OcA9HBM3MlGDnBEYL5B41H0MTn0Uec8Hi+2qUtTfG2WWZBmMejQ==
 
+"@thegrizzlylabs/react-native-genius-scan@^4.5.0":
+  version "4.5.0"
+  resolved "https://registry.yarnpkg.com/@thegrizzlylabs/react-native-genius-scan/-/react-native-genius-scan-4.5.0.tgz#6b68c9d32e36f3974930c1b33ef5ff9c6ecbda84"
+  integrity sha512-AilbVubQp7Yyg8baDiQPMPiAPHfUgKvwT75Xfx6OwjcEzv0wkaVl+kZjwUd3ZeCEQEUsWVO/JJe/ITVcPSB9HQ==
+
 "@types/graceful-fs@^4.1.2":
   version "4.1.5"
   resolved "https://registry.yarnpkg.com/@types/graceful-fs/-/graceful-fs-4.1.5.tgz#21ffba0d98da4350db64891f92a9e5db3cdb4e15"

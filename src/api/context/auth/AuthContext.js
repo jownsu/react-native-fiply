@@ -139,6 +139,7 @@ export const AuthProvider = ({ children }) => {
                 onSignedUp()
             })
             .catch((error) => {
+                console.log(error)
                 alert(error.message)
             })
             .finally(() => setLoading(false))
