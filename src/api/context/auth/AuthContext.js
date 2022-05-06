@@ -133,6 +133,7 @@ export const AuthProvider = ({ children }) => {
                 const userData = response.data.data
                 setUser(userData)
                 setError(null)
+                console.log(userData)
                 setCompany(userData.company ? 'true' : 'false')
                 SecureStore.setItemAsync('user', JSON.stringify(userData))
                 SecureStore.setItemAsync('company', company)

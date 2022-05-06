@@ -8,23 +8,6 @@ const { width } = Dimensions.get('screen')
 import AuthContext from '../../../api/context/auth/AuthContext'
 import useHiringManager from '../../../api/hooks/employer/useHiringManager'
 
-let userData = [
-    {
-        id: 1,
-        img: require('../../../assets/img/members/digno.jpg'),
-        name: 'Jhones Digno',
-    },
-    {
-        id: 2,
-        img: require('../../../assets/img/members/digno.jpg'),
-        name: 'Jhones Digno',
-    },
-    {
-        id: 3,
-        img: require('../../../assets/img/members/digno.jpg'),
-        name: 'Jhones Digno',
-    },
-]
 const SelectUserScreen = ({ navigation }) => {
     const { hiringManagers, getHiringManagers } = useHiringManager()
     const { user, logout } = useContext(AuthContext)
@@ -63,7 +46,10 @@ const SelectUserScreen = ({ navigation }) => {
                 </Text>
                 <View style={styles.usersContainer}>
                     <TouchableOpacity
-                        style={styles.userBtnContainer}
+                        style={[
+                            styles.userBtnContainer,
+                            { borderColor: Colors.primary, borderWidth: 2 },
+                        ]}
                         onPress={() => {
                             navigation.navigate('CodeScreen', { isEmployerAdmin: true })
                         }}

@@ -42,14 +42,11 @@ const StepOne = ({ navigation }) => {
                 <StepIndicator active />
             </View>
             <Container center padding={20}>
-                <Text
-                    color={Colors.secondary}
-                    weight="medium"
-                    size={24}
-                    center
-                    style={{ marginBottom: 20 }}
-                >
+                <Text color={Colors.secondary} weight="medium" size={24} center>
                     Step 1
+                </Text>
+                <Text center weight="medium" size={16} style={{ marginVertical: 10 }}>
+                    Add a Hiring Manager
                 </Text>
                 <Formik
                     initialValues={{
@@ -62,8 +59,9 @@ const StepOne = ({ navigation }) => {
                     }}
                     validationSchema={companySchema}
                     onSubmit={(values) => {
+                        console.log(values)
                         createHiringManager(values, () => {
-                            navigation.navigate('StepTwo')
+                            navigation.navigate('SemiVerified')
                         })
                     }}
                 >

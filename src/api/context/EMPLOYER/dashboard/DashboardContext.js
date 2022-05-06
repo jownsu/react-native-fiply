@@ -70,7 +70,7 @@ export const DashboardProvider = ({ children }) => {
             hiring_token: hiringManager.token,
             hiring_id: hiringManager.id,
         })
-            .post('/jobs', data)
+            .post('/hm/jobs', data)
             .then((res) => {
                 dispatch({ type: 'ADD_JOB' })
                 setSnackBarMessage('Job Posted')

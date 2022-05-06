@@ -12,26 +12,23 @@ import Colors from '../../../../utils/Colors'
 import StepIndicator from '../../../components/StepIndicator'
 import { FontAwesome5 } from '@expo/vector-icons'
 import useRegister from '../../../../api/hooks/auth/useRegister'
-import useDocumentPicker from '../../../../utils/useDocumentPicker'
 import useDocumentScanner from '../../../../utils/useDocumentScanner'
+import usePickImage from '../../../../utils/usePIckImage'
 
 const StepThree = ({ navigation }) => {
     const [certificate, setCertificate] = useState('')
     const { uploadCompanyCertificate, loading } = useRegister()
 
     const { certificates, getCertificates, loading: certificateLoading } = useCompanyCertificates()
-    const { pickDocument } = useDocumentPicker()
     const { openScanner } = useDocumentScanner()
+    const { pickImage } = usePickImage()
 
     const [certificateUri, setcertificateUri] = useState('')
 
     const onUploadBtnPress = () => {
-        pickDocument(
-            (response, uri) => {
-                setcertificateUri(uri)
-            },
-            ['image/*']
-        )
+        pickImage([], (uri) => {
+            setcertificateUri(uri)
+        })
     }
 
     const onScanBtnPress = () => {

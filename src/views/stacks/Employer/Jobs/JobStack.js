@@ -1,7 +1,11 @@
 import React from 'react'
-import { JobProvider } from '../../../../api/context/jobs/JobContext'
+import { JobProvider } from '../../../../api/context/EMPLOYER/job/JobContext'
 import { createStackNavigator } from '@react-navigation/stack'
-import JobScreeen from './JobScreeen'
+import JobScreen from './JobScreen'
+import JobDetailsScreen from './JobDetailsScreen'
+import ApplicantScreen from './ApplicantScreen'
+import AnswersScreen from './AnswersScreen'
+import ResumeScreen from './ResumeScreen'
 
 const Stack = createStackNavigator()
 
@@ -11,8 +15,28 @@ const JobStack = () => {
             <Stack.Navigator>
                 <Stack.Screen
                     options={{ headerShown: false }}
-                    name={'JobScreeen'}
-                    component={JobScreeen}
+                    name={'JobScreen'}
+                    component={JobScreen}
+                ></Stack.Screen>
+                <Stack.Screen
+                    options={{ headerShown: false }}
+                    name={'JobDetailsScreen'}
+                    component={JobDetailsScreen}
+                ></Stack.Screen>
+                <Stack.Screen
+                    options={{ headerShown: false }}
+                    name={'ApplicantScreen'}
+                    component={ApplicantScreen}
+                ></Stack.Screen>
+                <Stack.Screen
+                    options={{ headerShown: false }}
+                    name={'AnswersScreen'}
+                    component={AnswersScreen}
+                ></Stack.Screen>
+                <Stack.Screen
+                    options={{ headerShown: false }}
+                    name={'ResumeScreen'}
+                    component={ResumeScreen}
                 ></Stack.Screen>
             </Stack.Navigator>
         </JobProvider>

@@ -12,26 +12,24 @@ import Colors from '../../../../utils/Colors'
 import StepIndicator from '../../../components/StepIndicator'
 import { FontAwesome5 } from '@expo/vector-icons'
 import useRegister from '../../../../api/hooks/auth/useRegister'
-import useDocumentPicker from '../../../../utils/useDocumentPicker'
 import useDocumentScanner from '../../../../utils/useDocumentScanner'
+import usePickImage from '../../../../utils/usePIckImage'
 
 const StepTwo = ({ navigation }) => {
     const [validId, setValidId] = useState('')
     const { uploadCompanyValidIds, loading } = useRegister()
 
     const { validIds, getValidIds, loading: validIdLoading } = useValidIDs()
-    const { pickDocument } = useDocumentPicker()
+    const { pickImage, pickUri } = usePickImage()
+
     const { openScanner } = useDocumentScanner()
     const [frontUri, setFrontUri] = useState('')
     const [backUri, setBackUri] = useState('')
 
     const onUploadFrontBtnPress = () => {
-        pickDocument(
-            (response, uri) => {
-                setFrontUri(uri)
-            },
-            ['image/*']
-        )
+        pickImage([], (uri) => {
+            setFrontUri(uri)
+        })
     }
 
     const onScanFrontBtnPress = () => {
@@ -41,12 +39,9 @@ const StepTwo = ({ navigation }) => {
     }
 
     const onUploadBackBtnPress = () => {
-        pickDocument(
-            (response, uri) => {
-                setBackUri(uri)
-            },
-            ['image/*']
-        )
+        pickImage([], (uri) => {
+            setBackUri(uri)
+        })
     }
 
     const onScanBackBtnPress = () => {

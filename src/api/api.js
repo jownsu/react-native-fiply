@@ -17,7 +17,7 @@ const api = ({ token = null, hiring_token = null, hiring_id = null } = {}) => {
     }
 
     if (hiring_id) {
-        api.defaults.headers.post['hiring_id'] = hiring_id
+        api.defaults.headers.common['hiring_id'] = hiring_id
     }
 
     api.interceptors.response.use(

@@ -66,6 +66,19 @@ const Routes = () => {
         //  SecureStore.deleteItemAsync('user')
     }, [])
 
+    // const checkUser = () => {
+    //     if(user && logged_in === 'true'){
+    //         if(company === 'true'){
+    //             if(user.companyToken || hiringManager.token){
+    //                 return <EmployerStack />
+    //             }
+    //             return <SelectUserStack />
+    //         }
+    //         return <JobSeekerStack />
+    //     }
+    //     return <AuthStack />
+    // }
+
     return (
         // <TestScreen1 />
         // <TestScreen />

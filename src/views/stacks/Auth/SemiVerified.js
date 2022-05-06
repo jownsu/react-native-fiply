@@ -13,9 +13,10 @@ import SignUpContext from '../../../api/context/auth/SignUpContext'
 import Colors from '../../../utils/Colors'
 import Skip from '../../components/Skip'
 
-const SemiVerified = ({ navigation }) => {
+const SemiVerified = ({ navigation, route }) => {
     const { setLogged_in } = useContext(AuthContext)
     const { profile } = useContext(SignUpContext)
+    const { usertype } = route.params
 
     function handleBackButtonClick() {
         setLogged_in('true')
@@ -49,7 +50,13 @@ const SemiVerified = ({ navigation }) => {
                 <Button
                     title="Let's go!"
                     style={{ marginTop: 30, marginHorizontal: '5%' }}
-                    onPress={() => navigation.navigate('StepThree')}
+                    onPress={() => {
+                        if (usertype == 'jobseeker') {
+                            navigation.navigate('StepThree')
+                        } else {
+                            navigation.navigate('StepTwo')
+                        }
+                    }}
                 />
                 <Skip onPress={handleBackButtonClick} />
             </Container>
