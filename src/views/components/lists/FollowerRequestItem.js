@@ -1,19 +1,22 @@
 import React, { memo } from 'react'
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet, View, TouchableOpacity } from 'react-native'
 import { Text, Button, SecondaryButton } from '../FiplyComponents'
 import { Avatar } from 'react-native-paper'
 import Colors from '../../../utils/Colors'
 
 const FollowerRequestItem = memo(
-    ({ data, onConfirmPress = () => {}, onDeletePress = () => {} }) => {
+    ({ data, onConfirmPress = () => {}, onAvatarPress = () => {}, onDeletePress = () => {} }) => {
         return (
             <View style={styles.itemContainer}>
                 <View style={styles.itemBodyContainer}>
-                    <Avatar.Image
-                        source={{ uri: data.avatar }}
-                        size={82}
-                        backgroundColor={Colors.light}
-                    />
+                    <TouchableOpacity activeOpacity={0.7} onPress={() => onAvatarPress(data.id)}>
+                        <Avatar.Image
+                            source={{ uri: data.avatar }}
+                            size={82}
+                            backgroundColor={Colors.light}
+                        />
+                    </TouchableOpacity>
+
                     <View style={styles.nameContainer}>
                         <Text weight="semi-bold" size={16} numberOfLines={1} adjustsFontSizeToFit>
                             {data.name}

@@ -34,7 +34,8 @@ const JobItem = memo(
         )
     },
     (prevProps, nextProps) => {
-        if (prevProps.id == nextProps.id) return true
+        if (prevProps.data.applicants_count != nextProps.data.applicants_count) return false
+        if (prevProps.data.id == nextProps.data.id) return true
         return false
     }
 )

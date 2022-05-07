@@ -1,6 +1,7 @@
 import React from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
 import SelectUserScreen from './SelectUserScreen'
+import ProfileStack from '../Profile/ProfileStack'
 // import EmployerBott from './BottomNavigator'
 // import MessageStack from '../stacks/Message/MessageStack'
 // import InitialInterviewScreen from '../../views/screens/InitialInterviewScreen'
@@ -21,7 +22,11 @@ const EmployerStack = () => {
                 name={'BottomNavigator'}
                 component={BottomNavigator}
             ></Stack.Screen>
-
+            <Stack.Screen
+                options={{ headerShown: false }}
+                name={'ProfileStack'}
+                component={ProfileStack}
+            ></Stack.Screen>
             {/* <Stack.Screen
                 options={{ headerShown: false }}
                 name={'ProfileStack'}

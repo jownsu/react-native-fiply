@@ -49,8 +49,9 @@ const JobItem = memo(
                                 >
                                     {data.title}
                                 </Text>
-                                <Text style={{ marginHorizontal: 7 }}>{'\u25CF'}</Text>
-                                <Text size={11}>{data.employment_type}</Text>
+                                <Text size={11}>
+                                    {' \u25CF '} {data.employment_type}
+                                </Text>
                             </View>
                         </View>
                     </View>
@@ -70,7 +71,7 @@ const JobItem = memo(
                         </Text>
                     </View>
 
-                    <View style={jobListTyle.cardFooterContainer}>
+                    {/* <View style={jobListTyle.cardFooterContainer}>
                         {showRemove ? (
                             <>
                                 <TouchableOpacity
@@ -132,7 +133,7 @@ const JobItem = memo(
                                 </TouchableOpacity>
                             </>
                         )}
-                    </View>
+                    </View> */}
                 </View>
             </TouchableOpacity>
         )
@@ -207,5 +208,7 @@ const jobListTyle = StyleSheet.create({
     subInfoContainer: {
         flexDirection: 'row',
         alignItems: 'center',
+        flex: 1,
+        flexWrap: 'wrap',
     },
 })

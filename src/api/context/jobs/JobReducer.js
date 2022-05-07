@@ -60,6 +60,38 @@ const JobReducer = (state, action) => {
                 },
             }
 
+        case 'GET_APPLIED_PENDING_JOBS':
+            return {
+                ...state,
+                appliedPendingJobs: action.payload,
+            }
+
+        case 'MORE_APPLIED_PENDING_JOBS':
+            return {
+                ...state,
+                appliedPendingJobs: {
+                    ...state.appliedPendingJobs,
+                    data: [...state.appliedPendingJobs.data, ...action.payload.data],
+                    links: { ...action.payload.links },
+                },
+            }
+
+        case 'GET_REJECTED_JOBS':
+            return {
+                ...state,
+                rejectedJobs: action.payload,
+            }
+
+        case 'MORE_REJECTED_JOBS':
+            return {
+                ...state,
+                rejectedJobs: {
+                    ...state.rejectedJobs,
+                    data: [...state.rejectedJobs.data, ...action.payload.data],
+                    links: { ...action.payload.links },
+                },
+            }
+
         case 'TOGGLE_SAVED_JOB':
             return {
                 ...state,

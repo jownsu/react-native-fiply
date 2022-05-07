@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useContext, useRef } from 'react'
-import { StyleSheet, FlatList, Alert } from 'react-native'
+import { StyleSheet, FlatList, Alert, StatusBar } from 'react-native'
 import { Snackbar } from 'react-native-paper'
 import ProfileContext from '../../../api/context/profile/ProfileContext'
 import PostContext from '../../../api/context/posts/PostContext'
 import CommentContext from '../../../api/context/comments/CommentContext'
 import FollowContext from '../../../api/context/follow/FollowContext'
-import { Text, Container } from '../../components/FiplyComponents'
+import { Text, Container, SafeAreaView } from '../../components/FiplyComponents'
 import Colors from '../../../utils/Colors'
 import LoadMore from '../../components/lists/LoadMore'
 import CreatePostBar from '../../components/headers/CreatePostBar'
@@ -81,11 +81,14 @@ const ProfileScreen = ({ navigation, route }) => {
         getPosts('/posts', userId)
     }, [])
 
+    const handleAvatarPress = (id) => navigation.push('ProfileStack', { userId: id })
+
     const renderPostItem = ({ item }) => {
         return (
             <PostItem
                 data={item}
                 onDotPress={handleDotPress}
+                onAvatarPress={handleAvatarPress}
                 onCommentPress={() => handleCommentPress(item)}
                 onUpVotePress={handleUpVotePress}
                 is_me={userInfo.is_me}
@@ -161,6 +164,7 @@ const ProfileScreen = ({ navigation, route }) => {
 
     return (
         <Container>
+            <StatusBar backgroundColor={'rgba(0, 0, 0, 0)'} />
             <FlatList
                 ref={flatListRef}
                 data={posts.data}

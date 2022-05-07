@@ -6,6 +6,7 @@ import SearchBar from '../../components/headers/SearchBar'
 import Colors from '../../../utils/Colors'
 import { FontAwesome } from '@expo/vector-icons'
 import TitleFilter from '../../components/headers/TitleFilter'
+import HeaderTitle from '../../components/headers/HeaderTitle'
 import TopNavigation from '../../components/headers/TopNavigation'
 import CommunityContext from '../../../api/context/community/CommunityContext'
 import LoadMore from '../../../views/components/lists/LoadMore'
@@ -18,15 +19,12 @@ import PendingRequestItem from '../../components/lists/PendingRequestItem'
 const CommunityScreen = ({ navigation }, offset) => {
     const {
         users,
-        followedUsers,
         followerRequests,
         pendingRequests,
         getUsers,
         moreUsers,
         follow,
         unFollow,
-        getFollowedUsers,
-        moreFollowedUsers,
         getFollowerRequests,
         moreFollowerRequests,
         getPendingRequests,
@@ -50,11 +48,13 @@ const CommunityScreen = ({ navigation }, offset) => {
             offset: 0,
         })
     }
+    const handleAvatarPress = (id) => navigation.push('ProfileStack', { userId: id })
 
     const renderItem = ({ item }) => (
         <UserItem
             data={item}
             onFollowPress={handleFollowPress}
+            onAvatarPress={handleAvatarPress}
             onViewPress={(id) => alert(`Viewed ${id}`)}
             showView={dataType != 'discover'}
         />
@@ -65,7 +65,11 @@ const CommunityScreen = ({ navigation }, offset) => {
     }
 
     const renderPendingRequestItem = ({ item }) => (
-        <PendingRequestItem data={item} onCancelPress={handleCancelPress} />
+        <PendingRequestItem
+            data={item}
+            onCancelPress={handleCancelPress}
+            onAvatarPress={handleAvatarPress}
+        />
     )
 
     const handleCancelPress = (id) => {
@@ -76,6 +80,7 @@ const CommunityScreen = ({ navigation }, offset) => {
         <FollowerRequestItem
             data={item}
             onConfirmPress={handleConfirmPress}
+            onAvatarPress={handleAvatarPress}
             onDeletePress={(id) => {
                 alert(id)
             }}
@@ -95,18 +100,12 @@ const CommunityScreen = ({ navigation }, offset) => {
                 setDataType('discover')
                 break
             case 1:
-                if (followedUsers.data.length == 0) {
-                    getFollowedUsers()
-                }
-                setDataType('followed')
-                break
-            case 2:
                 if (pendingRequests.data.length == 0) {
                     getPendingRequests()
                 }
                 setDataType('pending_requests')
                 break
-            case 3:
+            case 2:
                 if (followerRequests.data.length == 0) {
                     getFollowerRequests()
                 }
@@ -148,7 +147,7 @@ const CommunityScreen = ({ navigation }, offset) => {
                         refreshControl={
                             <RefreshControl refreshing={loading} onRefresh={() => getUsers()} />
                         }
-                        onScroll={(e) => onScroll(e)}
+                        //onScroll={(e) => onScroll(e)}
                         style={{ flex: 0 }}
                         ref={flatListRef}
                         data={users.data}
@@ -173,52 +172,17 @@ const CommunityScreen = ({ navigation }, offset) => {
                     />
                 )
 
-            case 'followed':
+            case 'pending_requests':
                 return (
                     <FlatList
                         key={2}
                         refreshControl={
                             <RefreshControl
                                 refreshing={loading}
-                                onRefresh={() => getFollowedUsers()}
-                            />
-                        }
-                        onScroll={(e) => onScroll(e)}
-                        style={{ flex: 0 }}
-                        ref={flatListRef}
-                        data={followedUsers.data}
-                        renderItem={renderItem}
-                        onEndReached={() => {
-                            if (followedUsers.data.length < 30 && !loading) {
-                                moreFollowedUsers()
-                            }
-                        }}
-                        onEndReachedThreshold={0}
-                        ListFooterComponent={
-                            <LoadMore
-                                onLoadMorePress={() => {
-                                    moreFollowedUsers(true)
-                                    scrollToTop()
-                                }}
-                                isLoading={followedUsers.data.length >= 30 && !loading}
-                            />
-                        }
-                        ListEmptyComponent={ListEmptyComponent}
-                        numColumns={2}
-                    />
-                )
-
-            case 'pending_requests':
-                return (
-                    <FlatList
-                        key={3}
-                        refreshControl={
-                            <RefreshControl
-                                refreshing={loading}
                                 onRefresh={() => getPendingRequests()}
                             />
                         }
-                        onScroll={(e) => onScroll(e)}
+                        //onScroll={(e) => onScroll(e)}
                         style={{ flex: 0 }}
                         ref={flatListRef}
                         data={pendingRequests.data}
@@ -246,14 +210,14 @@ const CommunityScreen = ({ navigation }, offset) => {
             case 'follower_requests':
                 return (
                     <FlatList
-                        key={4}
+                        key={3}
                         refreshControl={
                             <RefreshControl
                                 refreshing={loading}
                                 onRefresh={() => getFollowerRequests()}
                             />
                         }
-                        onScroll={(e) => onScroll(e)}
+                        //onScroll={(e) => onScroll(e)}
                         style={{ flex: 0 }}
                         ref={flatListRef}
                         data={followerRequests.data}
@@ -284,8 +248,8 @@ const CommunityScreen = ({ navigation }, offset) => {
     }
 
     return (
-        <SafeAreaView flex>
-            <SearchBar
+        <SafeAreaView flex statusBarColor={Colors.white}>
+            {/* <SearchBar
                 rightIcon={() => (
                     <TouchableOpacity
                         onPress={() => navigation.navigate('MessageStack')}
@@ -294,13 +258,18 @@ const CommunityScreen = ({ navigation }, offset) => {
                         <FontAwesome name="paper-plane" size={24} color={Colors.secondary} />
                     </TouchableOpacity>
                 )}
+            /> */}
+
+            <HeaderTitle
+                title={'Community'}
+                style={{ backgroundColor: Colors.white, marginBottom: 10, paddingHorizontal: 10 }}
             />
 
             <Container style={{ paddingHorizontal: 0 }}>
-                <TitleFilter title="COMMUNITY" titleColor={Colors.primary} hideLine />
+                {/* <TitleFilter title="COMMUNITY" titleColor={Colors.primary} hideLine /> */}
 
                 <TopNavigation
-                    navTitles={['Discover', 'Followed', 'Pending', 'Requests']}
+                    navTitles={['Discover', 'Pending', 'Requests']}
                     onBtnPress={handleTopNavigationPress}
                 />
 

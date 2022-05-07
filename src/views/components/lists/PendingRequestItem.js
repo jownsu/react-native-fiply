@@ -1,19 +1,22 @@
 import React, { memo } from 'react'
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet, View, TouchableOpacity } from 'react-native'
 import { Text, Button, SecondaryButton } from '../FiplyComponents'
 import { Avatar } from 'react-native-paper'
 import Colors from '../../../utils/Colors'
 
 const PendingRequestItem = memo(
-    ({ data, onCancelPress = () => {} }) => {
+    ({ data, onCancelPress = () => {}, onAvatarPress = () => {} }) => {
         return (
             <View style={styles.itemContainer}>
                 <View style={styles.itemBodyContainer}>
-                    <Avatar.Image
-                        source={{ uri: data.avatar }}
-                        size={82}
-                        backgroundColor={Colors.light}
-                    />
+                    <TouchableOpacity activeOpacity={0.7} onPress={() => onAvatarPress(data.id)}>
+                        <Avatar.Image
+                            source={{ uri: data.avatar }}
+                            size={82}
+                            backgroundColor={Colors.light}
+                        />
+                    </TouchableOpacity>
+
                     <View style={styles.nameContainer}>
                         <Text weight="semi-bold" size={16} numberOfLines={1} adjustsFontSizeToFit>
                             {data.name}
@@ -31,7 +34,7 @@ const PendingRequestItem = memo(
         )
     },
     (prevProps, nextProps) => {
-        if (prevProps.id == nextProps.id) return true
+        if (prevProps.data.id == nextProps.data.id) return true
         return false
     }
 )
@@ -61,10 +64,12 @@ const styles = StyleSheet.create({
         borderColor: Colors.red,
         marginHorizontal: 0,
         padding: 0,
+        borderRadius: 10,
     },
     confirmLabel: {
         color: Colors.red,
-        fontSize: 12,
+        fontSize: 14,
         paddingVertical: 0,
+        fontFamily: 'EncodeSansExpaded-medium',
     },
 })

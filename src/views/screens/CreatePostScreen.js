@@ -60,7 +60,9 @@ const CreatePostScreen = ({ navigation, route }) => {
 
     useEffect(() => {
         setPostText(data.content)
-        setIsPublic(data.is_public)
+        if (edit) {
+            setIsPublic(data.is_public)
+        }
     }, [])
 
     return (

@@ -136,7 +136,7 @@ const HomeScreen = ({ navigation }, offset) => {
 
     return (
         <SafeAreaView flex>
-            <SearchBar
+            {/* <SearchBar
                 rightIcon={() => (
                     <TouchableOpacity
                         onPress={() => navigation.navigate('MessageStack')}
@@ -145,14 +145,14 @@ const HomeScreen = ({ navigation }, offset) => {
                         <FontAwesome name="paper-plane" size={24} color={Colors.secondary} />
                     </TouchableOpacity>
                 )}
-            />
+            /> */}
             <Container style={{ paddingHorizontal: 0 }}>
                 {posts.data.length != 0 ? (
                     <FlatList
                         refreshControl={
                             <RefreshControl refreshing={loading} onRefresh={() => getPosts()} />
                         }
-                        onScroll={(e) => onScroll(e)}
+                        //onScroll={(e) => onScroll(e)}
                         style={{ flex: 0 }}
                         ref={flatListRef}
                         data={posts.data}

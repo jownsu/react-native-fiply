@@ -19,24 +19,61 @@ import MultipleRadioButton from '../../../components/questionnaire/MultipleRadio
 import { NavigationContainer } from '@react-navigation/native'
 
 const QuestionnaireScreen = ({ navigation }) => {
-    const { getQuestionaire, questionnaire, job } = useContext(JobContext)
+    const { getQuestionaire, questionnaire, job, jobResponses, setJobResponses, toggleAppliedJob } =
+        useContext(JobContext)
 
     const handleSubmit = () => {
-        console.log(questionnaire)
+        //console.log(jobResponses)
+        navigation.pop()
+        //toggleAppliedJob(id, 'apply', jobResponses)
     }
 
     const renderList = ({ item, index }) => <View>{renderQuestionList(item, index + 1)}</View>
 
+    const handleChange = (val, itemId) =>
+        setJobResponses(
+            jobResponses.map((res) => {
+                if (itemId == res.question_id) {
+                    return { ...res, answer: val }
+                }
+                return res
+            })
+        )
+
     const renderQuestionList = (item, index) => {
         switch (item.type) {
             case '1':
-                return <Paragraph item={item} index={index} />
+                return (
+                    <Paragraph
+                        item={item}
+                        index={index}
+                        onChangeText={(val) => handleChange(val, item.id)}
+                    />
+                )
             case '2':
-                return <MultipleCheckbox item={item} index={index} />
+                return (
+                    <MultipleCheckbox
+                        item={item}
+                        index={index}
+                        onChangeText={(val) => handleChange(val, item.id)}
+                    />
+                )
             case '3':
-                return <MultipleRadioButton item={item} index={index} />
+                return (
+                    <MultipleRadioButton
+                        item={item}
+                        index={index}
+                        onChangeText={(val) => handleChange(val, item.id)}
+                    />
+                )
             default:
-                return <Paragraph item={item} index={index} />
+                return (
+                    <Paragraph
+                        item={item}
+                        index={index}
+                        onChangeText={(val) => handleChange(val, item.id)}
+                    />
+                )
         }
     }
 
@@ -47,20 +84,28 @@ const QuestionnaireScreen = ({ navigation }) => {
     return (
         <SafeAreaView>
             <Header title={'Questionnaire'} onBackPress={() => navigation.pop()} />
-            <FlatList
-                data={questionnaire}
-                keyExtractor={(item, index) => index.toString()}
-                extraData={questionnaire}
-                renderItem={renderList}
-                ListFooterComponent={() => (
-                    <Button
-                        title="Submit"
-                        style={{ marginVertical: 10 }}
-                        onPress={handleSubmit}
-                        disabled={!questionnaire.every((val) => val.answer)}
-                    />
-                )}
-            />
+            <Container padding={10}>
+                <FlatList
+                    data={questionnaire}
+                    keyExtractor={(item, index) => index.toString()}
+                    extraData={questionnaire}
+                    renderItem={renderList}
+                    ListFooterComponent={() => (
+                        <Button
+                            title="Submit"
+                            style={{ marginVertical: 10 }}
+                            onPress={handleSubmit}
+                            disabled={
+                                !jobResponses.every(
+                                    (val) =>
+                                        (val.answer && !Array.isArray(val.answer)) ||
+                                        val.answer.length > 0
+                                )
+                            }
+                        />
+                    )}
+                />
+            </Container>
         </SafeAreaView>
     )
 }

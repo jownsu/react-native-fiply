@@ -10,21 +10,15 @@ const MultipleRadioButton = ({
     index,
     onCloseButton = () => {},
     showCloseButton,
+    onChangeText = () => {},
 }) => {
     const [indexRB, setindexRB] = useState()
 
     return (
         <View style={styles.container}>
             {showCloseButton ? (
-                <TouchableOpacity
-                    style={styles.closeBtn}
-                    onPress={onCloseButton}
-                >
-                    <MaterialIcons
-                        name="highlight-remove"
-                        size={28}
-                        color={Colors.red}
-                    />
+                <TouchableOpacity style={styles.closeBtn} onPress={onCloseButton}>
+                    <MaterialIcons name="highlight-remove" size={28} color={Colors.red} />
                 </TouchableOpacity>
             ) : null}
             <Text weight="medium" style={styles.question}>
@@ -37,7 +31,10 @@ const MultipleRadioButton = ({
                         <RadioButton
                             value=""
                             status={index == indexRB ? 'checked' : 'unchecked'}
-                            onPress={() => setindexRB(index)}
+                            onPress={() => {
+                                onChangeText(item)
+                                setindexRB(index)
+                            }}
                         />
                         <Text>{item}</Text>
                     </View>

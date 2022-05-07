@@ -2,6 +2,7 @@ import React from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
 import JobScreen from './JobScreen'
 import ShowJobScreen from './ShowJobScreen'
+import ShowPendingJobScreen from './ShowPendingJobScreen '
 import QuestionnaireScreen from './QuestionnaireScreen'
 import { JobProvider } from '../../../../api/context/jobs/JobContext'
 
@@ -20,6 +21,11 @@ const JobStack = () => {
                     options={{ headerShown: false, tabBar: false }}
                     name={'ShowJobScreen'}
                     component={ShowJobScreen}
+                ></Stack.Screen>
+                <Stack.Screen
+                    options={{ headerShown: false, tabBar: false }}
+                    name={'ShowPendingJobScreen'}
+                    component={ShowPendingJobScreen}
                 ></Stack.Screen>
                 <Stack.Screen
                     options={{ headerShown: false, tabBar: false }}

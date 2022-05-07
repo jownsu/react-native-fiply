@@ -1,22 +1,14 @@
-import {
-    StyleSheet,
-    View,
-    ScrollView,
-    TouchableOpacity,
-    RefreshControl,
-    FlatList,
-} from 'react-native'
-import { SafeAreaView, Container, Text, SecondaryButton } from '../../../components/FiplyComponents'
+import { StyleSheet, View, RefreshControl, FlatList, BackHandler } from 'react-native'
+import { SafeAreaView, Container, Text } from '../../../components/FiplyComponents'
 import { Avatar } from 'react-native-paper'
 import Header from '../../../components/headers/Header'
-import React, { useContext, useRef } from 'react'
+import React, { useContext, useRef, useEffect } from 'react'
 import JobContext from '../../../../api/context/EMPLOYER/job/JobContext'
 import Colors from '../../../../utils/Colors'
 import { Ionicons, FontAwesome, FontAwesome5 } from '@expo/vector-icons'
 import { ProgressBar } from 'react-native-paper'
 import LoadMore from '../../../../views/components/lists/LoadMore'
 import ApplicantItem from '../../../components/lists/EMPLOYER/ApplicantItem'
-import NoData from '../../../components/NoData'
 
 const ShowJobScreen = ({ navigation }) => {
     const { job, loading, getApplicants, getApplicantResponse, moreApplicants, applicants } =
@@ -45,8 +37,8 @@ const ShowJobScreen = ({ navigation }) => {
     const renderItem = ({ item }) => <ApplicantItem data={item} onCardPress={handleCardPress} />
 
     const handleCardPress = (id) => {
-        console.log(job.id)
-        console.log(id)
+        // console.log(job.id)
+        // console.log(id)
         getApplicantResponse(job.id, id)
         navigation.push('ApplicantScreen')
     }

@@ -76,7 +76,7 @@ const ProfileHeader = ({
         )
     }
     const renderEditButton = () => {
-        if (data.is_me) {
+        if (data.is_me && !data.company) {
             return (
                 <Button
                     onPress={onEditProfilePress}

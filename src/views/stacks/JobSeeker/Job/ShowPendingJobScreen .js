@@ -8,7 +8,7 @@ import Colors from '../../../../utils/Colors'
 import { Ionicons, FontAwesome, FontAwesome5 } from '@expo/vector-icons'
 import { ProgressBar } from 'react-native-paper'
 
-const ShowJobScreen = ({ navigation }) => {
+const ShowPendingJobScreen = ({ navigation }) => {
     const { job, loading, toggleSavedJob, toggleAppliedJob, jobResponses, setJobResponses } =
         useContext(JobContext)
 
@@ -31,10 +31,8 @@ const ShowJobScreen = ({ navigation }) => {
 
     const handleApplyPress = () => {
         let action = job.is_applied ? 'unApply' : 'apply'
-        toggleAppliedJob(job.id, action, jobResponses.length > 0 ? jobResponses : null)
+        toggleAppliedJob(job.id, action, jobResponses)
     }
-
-    const handleAvatarPress = () => navigation.push('ProfileStack', { userId: job.user_id })
 
     return (
         <SafeAreaView flex statusBarColor={Colors.white}>
@@ -61,15 +59,12 @@ const ShowJobScreen = ({ navigation }) => {
                     </View>
 
                     <View style={styles.employerInfoContainer}>
-                        <TouchableOpacity activeOpacity={0.7} onPress={handleAvatarPress}>
-                            <Avatar.Image
-                                source={{ uri: job.company_avatar }}
-                                size={75}
-                                backgroundColor={Colors.light}
-                                style={styles.companyImgContainer}
-                            />
-                        </TouchableOpacity>
-
+                        <Avatar.Image
+                            source={{ uri: job.company_avatar }}
+                            size={75}
+                            backgroundColor={Colors.light}
+                            style={styles.companyImgContainer}
+                        />
                         <View style={styles.employerInfo}>
                             <Text
                                 weight="medium"
@@ -80,8 +75,10 @@ const ShowJobScreen = ({ navigation }) => {
                             >
                                 {job.company_name}
                             </Text>
-                            <>
-                                <Text size={12}>Posted By: </Text>
+                            <View style={{ flexDirection: 'row' }}>
+                                <Text size={14} color={Colors.primary} weight="medium">
+                                    Interviewer:{'  '}
+                                </Text>
                                 <View style={styles.postedByContainer}>
                                     <Avatar.Image
                                         source={{ uri: job.hiring_manager_avatar }}
@@ -91,7 +88,19 @@ const ShowJobScreen = ({ navigation }) => {
                                     />
                                     <Text>{job.hiring_manager}</Text>
                                 </View>
-                            </>
+                            </View>
+                            <View style={{ flexDirection: 'row' }}>
+                                <Text weight="medium" color={Colors.primary}>
+                                    Date:{' '}
+                                </Text>
+                                <Text>{job.meet_date}</Text>
+                            </View>
+                            <View style={{ flexDirection: 'row' }}>
+                                <Text weight="medium" color={Colors.primary}>
+                                    Time:{' '}
+                                </Text>
+                                <Text>{job.meet_time}</Text>
+                            </View>
                         </View>
                     </View>
 
@@ -183,53 +192,22 @@ const ShowJobScreen = ({ navigation }) => {
             </ScrollView>
 
             <View style={styles.footerContainer}>
-                <TouchableOpacity
-                    style={styles.saveBtn}
-                    activeOpacity={0.7}
-                    onPress={handleSavePress}
-                >
-                    <FontAwesome
-                        name="bookmark-o"
-                        size={24}
-                        color={job.is_saved ? Colors.black : Colors.primary}
-                        style={{ marginRight: 10 }}
-                    />
-                    <Text
-                        weight="medium"
-                        size={16}
-                        color={job.is_saved ? Colors.black : Colors.primary}
-                    >
-                        {job.is_saved ? 'Saved' : 'Save'}
+                <TouchableOpacity style={styles.saveBtn} activeOpacity={0.7}>
+                    <Text weight="medium" size={16} color={Colors.red}>
+                        Call Off
                     </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={[
                         styles.applyBtn,
                         {
-                            backgroundColor:
-                                job.is_applied ||
-                                (job.questionnaire && jobResponses.length == 0) ||
-                                !jobResponses.every(
-                                    (val) =>
-                                        (val.answer && !Array.isArray(val.answer)) ||
-                                        val.answer.length > 0
-                                )
-                                    ? Colors.black
-                                    : Colors.primary,
+                            backgroundColor: Colors.primary,
                         },
                     ]}
-                    disabled={
-                        (job.questionnaire && jobResponses.length == 0) ||
-                        !jobResponses.every(
-                            (val) =>
-                                (val.answer && !Array.isArray(val.answer)) || val.answer.length > 0
-                        )
-                    }
                     activeOpacity={0.7}
-                    onPress={handleApplyPress}
                 >
                     <Text weight="medium" size={16} color={Colors.white}>
-                        {job.is_applied ? 'Applied' : 'Apply'}
+                        Proceed
                     </Text>
                 </TouchableOpacity>
             </View>
@@ -237,7 +215,7 @@ const ShowJobScreen = ({ navigation }) => {
     )
 }
 
-export default ShowJobScreen
+export default ShowPendingJobScreen
 
 const styles = StyleSheet.create({
     jobTitleContainer: {

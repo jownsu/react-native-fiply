@@ -10,19 +10,13 @@ const Paragraph = ({
     disabled = false,
     onCloseButton = () => {},
     showCloseButton,
+    onChangeText = () => {},
 }) => {
     return (
         <View style={styles.container}>
             {showCloseButton ? (
-                <TouchableOpacity
-                    style={styles.closeBtn}
-                    onPress={onCloseButton}
-                >
-                    <MaterialIcons
-                        name="highlight-remove"
-                        size={28}
-                        color={Colors.red}
-                    />
+                <TouchableOpacity style={styles.closeBtn} onPress={onCloseButton}>
+                    <MaterialIcons name="highlight-remove" size={28} color={Colors.red} />
                 </TouchableOpacity>
             ) : null}
 
@@ -32,6 +26,7 @@ const Paragraph = ({
             </Text>
             <TextInput
                 label="Your answer"
+                onChangeText={(val) => onChangeText(val)}
                 style={{ backgroundColor: Colors.white, maxHeight: 150 }}
                 dense
                 multiline

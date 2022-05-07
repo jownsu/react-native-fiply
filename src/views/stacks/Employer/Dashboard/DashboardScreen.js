@@ -5,11 +5,13 @@ import React, { useContext, useEffect } from 'react'
 import { FontAwesome5, AntDesign } from '@expo/vector-icons'
 import { Snackbar } from 'react-native-paper'
 import DashboardContext from '../../../../api/context/EMPLOYER/dashboard/DashboardContext'
+import AuthContext from '../../../../api/context/auth/AuthContext'
 
 import Colors from '../../../../utils/Colors'
 const DashboardScreen = ({ navigation }, offset) => {
     const { getDashboard, total_hiring_manager, total_job_posts, snackBarMessage, hideSnackBar } =
         useContext(DashboardContext)
+    const { hiringManager, user } = useContext(AuthContext)
 
     const onScroll = (e) => {
         const currentOffset = e.nativeEvent.contentOffset.y
@@ -35,8 +37,8 @@ const DashboardScreen = ({ navigation }, offset) => {
         getDashboard()
     }, [])
     return (
-        <SafeAreaView statusBarColor={Colors.white} flex>
-            <ScrollView onScroll={(e) => onScroll(e)}>
+        <SafeAreaView statusBarColor={Colors.white}>
+            <ScrollView>
                 <HeaderTitle title={'Dashboard'} style={{ backgroundColor: Colors.white }} />
                 <Container padding={10}>
                     <View style={styles.headerContainer}>
@@ -168,13 +170,19 @@ const DashboardScreen = ({ navigation }, offset) => {
                                 style={[
                                     styles.dottedContainer,
                                     { alignItems: 'center', padding: 10 },
+                                    {
+                                        borderColor: hiringManager.token
+                                            ? Colors.primary
+                                            : Colors.grey,
+                                    },
                                 ]}
+                                disabled={!hiringManager.token}
                                 onPress={() => navigation.navigate('CreateJobScreen')}
                             >
                                 <AntDesign
                                     name="pluscircleo"
                                     size={48}
-                                    color={Colors.primary}
+                                    color={hiringManager.token ? Colors.primary : Colors.grey}
                                     style={{ marginBottom: 20 }}
                                 />
                                 <Text>New Job Post</Text>
@@ -216,13 +224,19 @@ const DashboardScreen = ({ navigation }, offset) => {
                                 style={[
                                     styles.dottedContainer,
                                     { alignItems: 'center', padding: 10 },
+                                    {
+                                        borderColor: user.companyToken
+                                            ? Colors.primary
+                                            : Colors.grey,
+                                    },
                                 ]}
+                                disabled={!user.companyToken}
                                 onPress={() => navigation.navigate('AddHiringManagerScreen')}
                             >
                                 <AntDesign
                                     name="pluscircleo"
                                     size={48}
-                                    color={Colors.primary}
+                                    color={user.companyToken ? Colors.primary : Colors.grey}
                                     style={{ marginBottom: 20 }}
                                 />
                                 <Text>New Hiring Manager</Text>

@@ -46,9 +46,9 @@ const JobScreen = ({ navigation }, offset) => {
     const renderItem = ({ item }) => <JobItem data={item} onCardPress={handleCardPress} />
 
     const handleCardPress = (id) => {
-        navigation.getParent().setOptions({
-            tabBarStyle: { display: 'none' },
-        })
+        // navigation.getParent().setOptions({
+        //     tabBarStyle: { display: 'none' },
+        // })
         getJobDetails(id)
         getApplicants(id)
         navigation.push('JobDetailsScreen')
@@ -70,7 +70,7 @@ const JobScreen = ({ navigation }, offset) => {
                     refreshControl={
                         <RefreshControl refreshing={loading} onRefresh={() => getJobs()} />
                     }
-                    onScroll={(e) => onScroll(e)}
+                    // onScroll={(e) => onScroll(e)}
                     style={{ flex: 0 }}
                     ref={flatListRef}
                     keyExtractor={(item) => item.id}

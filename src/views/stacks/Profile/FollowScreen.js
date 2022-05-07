@@ -223,11 +223,11 @@ const FollowScreen = ({ navigation, route }) => {
             renderLabel={({ route }) => {
                 return route.title == 'Following' ? (
                     <Text>
-                        {following.meta.total} {route.title}
+                        {userInfo.following_count} {route.title}
                     </Text>
                 ) : (
                     <Text>
-                        {followers.meta.total} {route.title}
+                        {userInfo.followers_count} {route.title}
                     </Text>
                 )
             }}

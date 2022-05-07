@@ -139,7 +139,10 @@ const BottomNavigator = ({ navigation }) => {
                 ></Tab.Screen>
             </Tab.Navigator>
 
-            <BottomSheetModal bottomSheetModalRef={bottomSheetModalRef} pointsSnap={[200]}>
+            <BottomSheetModal
+                bottomSheetModalRef={bottomSheetModalRef}
+                pointsSnap={[hiringManager.token ? 250 : 200]}
+            >
                 <View style={styles.bottomSheetContainer}>
                     <View style={styles.btmHeaderContainer}>
                         <View
@@ -148,29 +151,73 @@ const BottomNavigator = ({ navigation }) => {
                                 alignItems: 'center',
                             }}
                         >
-                            <Avatar.Image
-                                size={50}
-                                source={{ uri: user.avatar }}
-                                backgroundColor={Colors.light}
-                                style={styles.imgContainer}
-                            />
-                            <View style={{ flex: 1 }}>
-                                <Text
-                                    weight="medium"
-                                    size={18}
-                                    adjustsFontSizeToFit
-                                    numberOfLines={1}
-                                >
-                                    {user.name}
-                                </Text>
-
-                                <TouchableOpacity activeOpacity={0.7} onPress={handleGoToProfile}>
-                                    <Text weight="medium" color={Colors.secondary}>
-                                        See your profile
+                            <View
+                                style={{
+                                    flexDirection: 'row',
+                                    alignItems: 'center',
+                                }}
+                            >
+                                <Avatar.Image
+                                    size={50}
+                                    source={{ uri: user.avatar }}
+                                    backgroundColor={Colors.light}
+                                    style={styles.imgContainer}
+                                />
+                                <View style={{ flex: 1 }}>
+                                    <Text
+                                        weight="medium"
+                                        size={18}
+                                        adjustsFontSizeToFit
+                                        numberOfLines={1}
+                                    >
+                                        {user.name}
                                     </Text>
-                                </TouchableOpacity>
+
+                                    <TouchableOpacity
+                                        activeOpacity={0.7}
+                                        onPress={handleGoToProfile}
+                                    >
+                                        <Text weight="medium" color={Colors.secondary}>
+                                            See Company profile
+                                        </Text>
+                                    </TouchableOpacity>
+                                </View>
                             </View>
                         </View>
+                        {hiringManager.token && (
+                            <View
+                                style={{
+                                    flexDirection: 'row',
+                                    alignItems: 'center',
+                                    marginTop: 10,
+                                }}
+                            >
+                                <View
+                                    style={{
+                                        flexDirection: 'row',
+                                        alignItems: 'center',
+                                    }}
+                                >
+                                    <Avatar.Image
+                                        size={50}
+                                        source={{ uri: hiringManager.avatar }}
+                                        backgroundColor={Colors.light}
+                                        style={styles.imgContainer}
+                                    />
+                                    <View style={{ flex: 1 }}>
+                                        <Text>Hiring Manager</Text>
+                                        <Text
+                                            weight="medium"
+                                            size={16}
+                                            adjustsFontSizeToFit
+                                            numberOfLines={1}
+                                        >
+                                            {hiringManager.name}
+                                        </Text>
+                                    </View>
+                                </View>
+                            </View>
+                        )}
                     </View>
                     <View style={styles.btmBodyContainer}>
                         <Text size={11} color={Colors.secondary}>
@@ -233,7 +280,6 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
     },
     btmHeaderContainer: {
-        flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
     },

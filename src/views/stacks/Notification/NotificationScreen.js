@@ -6,6 +6,7 @@ import { FontAwesome, Entypo } from '@expo/vector-icons'
 import Colors from '../../../utils/Colors'
 import TitleFilter from '../../components/headers/TitleFilter'
 import SampleData from '../../../utils/SampleData'
+import HeaderTitle from '../../components/headers/HeaderTitle'
 
 const NotificationScreen = ({ navigation }) => {
     const renderNotificationList = (item) => (
@@ -26,8 +27,8 @@ const NotificationScreen = ({ navigation }) => {
     )
 
     return (
-        <SafeAreaView flex>
-            <SearchBar
+        <SafeAreaView flex statusBarColor={Colors.white}>
+            {/* <SearchBar
                 rightIcon={() => (
                     <TouchableOpacity
                         onPress={() => navigation.navigate('MessageStack')}
@@ -36,10 +37,13 @@ const NotificationScreen = ({ navigation }) => {
                         <FontAwesome name="paper-plane" size={24} color={Colors.secondary} />
                     </TouchableOpacity>
                 )}
+            /> */}
+            <HeaderTitle
+                title={'Notifications'}
+                style={{ backgroundColor: Colors.white, marginBottom: 10, paddingHorizontal: 10 }}
             />
-
             <Container style={{ paddingHorizontal: 0 }}>
-                <TitleFilter title="NOTIFICATION" titleColor={Colors.primary} hideLine />
+                {/* <TitleFilter title="NOTIFICATION" titleColor={Colors.primary} hideLine /> */}
 
                 <FlatList
                     data={SampleData.notificationList}

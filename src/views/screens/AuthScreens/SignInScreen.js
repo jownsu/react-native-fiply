@@ -90,16 +90,16 @@ const SignInScreen = ({ navigation }) => {
                         )}
                     </Formik>
 
-                    <Text color={Colors.grey} center>
+                    {/* <Text color={Colors.grey} center>
                         - - - Sign in with - - -
-                    </Text>
+                    </Text> */}
 
-                    <View style={styles.googleContainer}>
+                    {/* <View style={styles.googleContainer}>
                         <Image
                             source={require('../../../assets/img/google.png')}
                             style={styles.google}
                         />
-                    </View>
+                    </View> */}
 
                     <View style={styles.signupContainer}>
                         <Text weight="semi-bold" color={Colors.grey}>

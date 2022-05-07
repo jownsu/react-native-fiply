@@ -5,8 +5,9 @@ import ProfileContext from '../../../api/context/profile/ProfileContext'
 import Pdf from 'react-native-pdf'
 import Header from '../../components/headers/Header'
 import Colors from '../../../utils/Colors'
-import { MaterialIcons } from '@expo/vector-icons'
+import { MaterialIcons, AntDesign } from '@expo/vector-icons'
 import { ProgressBar, Snackbar } from 'react-native-paper'
+import useDocumentScanner from '../../../utils/useDocumentScanner'
 
 import useDocumentPicker from '../../../utils/useDocumentPicker'
 
@@ -14,6 +15,7 @@ const ResumeScreen = ({ navigation }) => {
     const { userInfo, resume, getResume, uploadResume, loading, snackBarMessage, hideSnackBar } =
         useContext(ProfileContext)
     const { pickDocument } = useDocumentPicker()
+    const { openScanner } = useDocumentScanner()
 
     useEffect(() => {
         if (!resume) {
@@ -29,6 +31,11 @@ const ResumeScreen = ({ navigation }) => {
             ['application/pdf']
         )
     }
+    const onScanBtnPress = () => {
+        openScanner(({ pdfUri }) => {
+            uploadResume(pdfUri)
+        })
+    }
 
     return (
         <View style={styles.container}>
@@ -39,13 +46,19 @@ const ResumeScreen = ({ navigation }) => {
                 rightIcon={
                     userInfo.is_me
                         ? () => (
-                              <TouchableOpacity activeOpacity={0.7} onPress={onUploadBtnPress}>
-                                  <MaterialIcons
-                                      name="upload-file"
-                                      size={24}
-                                      color={Colors.secondary}
-                                  />
-                              </TouchableOpacity>
+                              <View style={{ flexDirection: 'row' }}>
+                                  <TouchableOpacity activeOpacity={0.7} onPress={onScanBtnPress}>
+                                      <AntDesign name="scan1" size={24} color={Colors.secondary} />
+                                  </TouchableOpacity>
+                                  <TouchableOpacity activeOpacity={0.7} onPress={onUploadBtnPress}>
+                                      <MaterialIcons
+                                          name="upload-file"
+                                          size={24}
+                                          color={Colors.secondary}
+                                          style={{ marginLeft: 10 }}
+                                      />
+                                  </TouchableOpacity>
+                              </View>
                           )
                         : null
                 }
@@ -100,7 +113,6 @@ const styles = StyleSheet.create({
         marginTop: 25,
     },
     pdf: {
-        flex: 1,
         width: Dimensions.get('window').width,
         height: Dimensions.get('window').height,
     },

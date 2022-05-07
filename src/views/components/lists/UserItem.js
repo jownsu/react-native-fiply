@@ -1,5 +1,5 @@
 import { StyleSheet, View, Image, TouchableOpacity, Dimensions } from 'react-native'
-import { Text, SecondaryButton } from '../FiplyComponents'
+import { Text, SecondaryButton, Button } from '../FiplyComponents'
 import React, { memo } from 'react'
 import { Avatar } from 'react-native-paper'
 import { FontAwesome5, FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons'
@@ -9,13 +9,27 @@ const { width } = Dimensions.get('screen')
 const cardWidth = width / 2 - 20
 
 const UserItem = memo(
-    ({ data, onFollowPress = () => {}, onViewPress = () => {}, showView = false }) => {
+    ({
+        data,
+        onFollowPress = () => {},
+        onViewPress = () => {},
+        onAvatarPress = () => {},
+        showView = false,
+    }) => {
         return (
             <View style={discoverListStyles.cardContainer}>
-                <Image source={{ uri: data.avatar }} style={discoverListStyles.img} />
+                <TouchableOpacity activeOpacity={0.7} onPress={() => onAvatarPress(data.id)}>
+                    <Avatar.Image
+                        size={100}
+                        source={{ uri: data.avatar }}
+                        style={discoverListStyles.img}
+                    />
+                </TouchableOpacity>
+
                 <Text center size={16} weight="medium" numberOfLines={1} adjustsFontSizeToFit>
                     {data.name}
                 </Text>
+
                 <Text center size={12} numberOfLines={2} adjustsFontSizeToFit>
                     {data.preview}
                 </Text>
@@ -27,7 +41,7 @@ const UserItem = memo(
                         labelStyle={discoverListStyles.btnLabelStyle}
                     />
                 ) : (
-                    <SecondaryButton
+                    <Button
                         title={'FOLLOW'}
                         style={discoverListStyles.btn}
                         onPress={() => onFollowPress(data.id)}
@@ -47,9 +61,6 @@ export default UserItem
 
 const discoverListStyles = StyleSheet.create({
     img: {
-        height: 100,
-        width: 100,
-        borderRadius: 100,
         alignSelf: 'center',
         backgroundColor: Colors.white,
     },
@@ -64,12 +75,13 @@ const discoverListStyles = StyleSheet.create({
         paddingHorizontal: 5,
     },
     btn: {
-        borderRadius: 25,
+        borderRadius: 10,
+        borderWidth: 1,
         marginHorizontal: '10%',
         alignSelf: 'stretch',
         marginTop: 15,
     },
     btnLabelStyle: {
-        fontFamily: 'EncodeSansExpaded-SemiBold',
+        fontFamily: 'EncodeSansExpaded-medium',
     },
 })

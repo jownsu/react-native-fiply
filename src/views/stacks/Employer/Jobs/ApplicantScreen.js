@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { StyleSheet, View, TouchableOpacity } from 'react-native'
 import { Avatar } from 'react-native-paper'
 import { SafeAreaView, Text, Container, SecondaryButton } from '../../../components/FiplyComponents'
@@ -6,9 +6,19 @@ import { Ionicons, FontAwesome, FontAwesome5 } from '@expo/vector-icons'
 import JobContext from '../../../../api/context/EMPLOYER/job/JobContext'
 import Header from '../../../components/headers/Header'
 import Colors from '../../../../utils/Colors'
+import Approval from '../../../components/modals/Approval'
+import Confirmation from '../../../components/dialog/Confirmation'
 
 const ApplicantScreen = ({ navigation }) => {
-    const { response } = useContext(JobContext)
+    const { response, approveApplicant, job, rejectApplicant } = useContext(JobContext)
+    const [showModal, setShowModal] = useState(false)
+    const [showConfirmation, setShowConfirmation] = useState(false)
+
+    const handleApprovePress = () => {
+        setShowModal(true)
+    }
+    const handleRejectPress = () => {}
+
     return (
         <SafeAreaView flex statusBarColor={Colors.white}>
             <Header
@@ -23,7 +33,7 @@ const ApplicantScreen = ({ navigation }) => {
                         source={{ uri: response.avatar }}
                         style={{ marginRight: 10 }}
                     />
-                    <View>
+                    <View style={{ flex: 1 }}>
                         <Text weight="medium" size={16}>
                             {response.name}
                         </Text>
@@ -74,7 +84,11 @@ const ApplicantScreen = ({ navigation }) => {
                         {response.job_responses.map((item) => (
                             <View key={item.id} style={styles.experienceItemContainer}>
                                 <Text weight="medium">{item.question}</Text>
-                                <Text>{item.answer}</Text>
+                                {Array.isArray(item.answer) ? (
+                                    <Text>{item.answer.join(', ')} </Text>
+                                ) : (
+                                    <Text>{item.answer}</Text>
+                                )}
                             </View>
                         ))}
                     </View>
@@ -90,7 +104,11 @@ const ApplicantScreen = ({ navigation }) => {
             </Container>
 
             <View style={styles.footerContainer}>
-                <TouchableOpacity style={styles.btn} activeOpacity={0.7}>
+                <TouchableOpacity
+                    style={styles.btn}
+                    activeOpacity={0.7}
+                    onPress={() => setShowConfirmation(true)}
+                >
                     <Text weight="medium" size={16} color={Colors.red}>
                         Reject
                     </Text>
@@ -98,12 +116,27 @@ const ApplicantScreen = ({ navigation }) => {
                 <TouchableOpacity
                     style={[styles.btn, { backgroundColor: Colors.primary }]}
                     activeOpacity={0.7}
+                    onPress={handleApprovePress}
                 >
                     <Text weight="medium" color={Colors.white} size={16}>
-                        Apply
+                        Approve
                     </Text>
                 </TouchableOpacity>
             </View>
+
+            <Approval
+                visible={showModal}
+                onDismiss={() => setShowModal(false)}
+                onSubmitPress={(data) => {
+                    approveApplicant(job.id, response.id, data, navigation.pop(2))
+                }}
+            />
+            <Confirmation
+                visible={showConfirmation}
+                dialogText={`Reject ${response.name}?`}
+                onDismiss={() => setShowConfirmation(false)}
+                onOkPress={() => rejectApplicant(job.id, response.id, navigation.pop(2))}
+            />
         </SafeAreaView>
     )
 }
