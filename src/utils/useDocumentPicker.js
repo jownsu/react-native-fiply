@@ -15,7 +15,7 @@ const useDocumentPicker = () => {
             multiple: true,
         })
             .then((response) => {
-                if (!response.cancelled) {
+                if (response.type != 'cancel') {
                     if (response.size > 5000000) {
                         alert('Uploaded file is too large, 5mb is the limit')
                     } else {

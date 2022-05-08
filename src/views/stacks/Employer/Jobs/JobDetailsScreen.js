@@ -39,6 +39,9 @@ const ShowJobScreen = ({ navigation }) => {
     const handleCardPress = (id) => {
         // console.log(job.id)
         // console.log(id)
+        navigation.getParent().setOptions({
+            tabBarStyle: { display: 'none' },
+        })
         getApplicantResponse(job.id, id)
         navigation.push('ApplicantScreen')
     }

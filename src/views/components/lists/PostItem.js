@@ -162,7 +162,6 @@ const postStyles = StyleSheet.create({
         marginVertical: 10,
     },
     postImg: {
-        marginVertical: 7,
         height: 250,
     },
     postFooterContainer: {
@@ -182,6 +181,6 @@ const postStyles = StyleSheet.create({
         marginRight: 5,
     },
     content: {
-        marginTop: 20,
+        marginVertical: 10,
     },
 })

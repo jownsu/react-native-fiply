@@ -64,7 +64,7 @@ const JobScreen = ({ navigation }, offset) => {
         <SafeAreaView statusBarColor={Colors.white} flex>
             <HeaderTitle title={'Job Posts'} style={{ backgroundColor: Colors.white }} />
 
-            <SearchBar style={{ marginVertical: 10 }} />
+            {/* <SearchBar style={{ marginVertical: 10 }} /> */}
             <Container>
                 <FlatList
                     refreshControl={

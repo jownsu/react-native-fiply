@@ -1,5 +1,5 @@
-import React, { useContext, useState } from 'react'
-import { StyleSheet, View, TouchableOpacity } from 'react-native'
+import React, { useContext, useState, useEffect } from 'react'
+import { StyleSheet, View, TouchableOpacity, BackHandler } from 'react-native'
 import { Avatar } from 'react-native-paper'
 import { SafeAreaView, Text, Container, SecondaryButton } from '../../../components/FiplyComponents'
 import { Ionicons, FontAwesome, FontAwesome5 } from '@expo/vector-icons'
@@ -18,12 +18,31 @@ const ApplicantScreen = ({ navigation }) => {
         setShowModal(true)
     }
     const handleRejectPress = () => {}
+    const showBottomNav = () => {
+        navigation.getParent().setOptions({
+            tabBarStyle: {
+                display: 'flex',
+                borderTopWidth: 1,
+                elevation: 0,
+            },
+        })
+    }
+
+    useEffect(() => {
+        BackHandler.addEventListener('hardwareBackPress', showBottomNav)
+        return () => {
+            BackHandler.removeEventListener('hardwareBackPress', showBottomNav)
+        }
+    }, [])
 
     return (
         <SafeAreaView flex statusBarColor={Colors.white}>
             <Header
                 title="Application Details"
-                onBackPress={() => navigation.pop()}
+                onBackPress={() => {
+                    showBottomNav()
+                    navigation.pop()
+                }}
                 style={{ backgroundColor: Colors.white, marginBottom: 10 }}
             />
             <Container padding={20}>
@@ -128,14 +147,22 @@ const ApplicantScreen = ({ navigation }) => {
                 visible={showModal}
                 onDismiss={() => setShowModal(false)}
                 onSubmitPress={(data) => {
-                    approveApplicant(job.id, response.id, data, navigation.pop(2))
+                    approveApplicant(job.id, response.id, data, () => {
+                        showBottomNav()
+                        navigation.pop(2)
+                    })
                 }}
             />
             <Confirmation
                 visible={showConfirmation}
                 dialogText={`Reject ${response.name}?`}
                 onDismiss={() => setShowConfirmation(false)}
-                onOkPress={() => rejectApplicant(job.id, response.id, navigation.pop(2))}
+                onOkPress={() =>
+                    rejectApplicant(job.id, response.id, () => {
+                        showBottomNav()
+                        navigation.pop(2)
+                    })
+                }
             />
         </SafeAreaView>
     )
