@@ -150,7 +150,7 @@ const useRegister = () => {
             hiring_token: user.companyToken,
             hiring_id: user.company,
         })
-            .post(`/hiringManagers`, fd)
+            .post(`/ea/hiringManagers`, fd)
             .then((res) => onCreate())
             .catch((err) => console.log(err))
             .finally(() => setLoading(false))

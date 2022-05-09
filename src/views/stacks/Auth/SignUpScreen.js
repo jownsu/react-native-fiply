@@ -15,6 +15,7 @@ import {
     Button,
     TextInput,
     SafeAreaView,
+    FormContainer,
 } from '../../components/FiplyComponents'
 import PasswordStrengthBar from '../../components/PasswordStrengthBar'
 
@@ -51,7 +52,7 @@ const SignUpScreen = ({ navigation, route }) => {
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <WaveHeader waveimg={require('../../../assets/img/waves/2.png')} />
-            <Container center padding={20}>
+            <FormContainer center padding={20}>
                 <FiplyLogo style={{ marginBottom: 25 }} />
 
                 <Formik
@@ -78,7 +79,7 @@ const SignUpScreen = ({ navigation, route }) => {
                     validationSchema={signupSchema}
                 >
                     {({ handleChange, handleSubmit, handleBlur, values, errors, touched }) => (
-                        <View style={styles.formContainer}>
+                        <View>
                             <View>
                                 <TextInput
                                     label={'Email'}
@@ -183,7 +184,7 @@ const SignUpScreen = ({ navigation, route }) => {
                         </View>
                     )}
                 </Formik>
-            </Container>
+            </FormContainer>
         </SafeAreaView>
     )
 }

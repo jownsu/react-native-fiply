@@ -95,6 +95,7 @@ const StepThree = ({ navigation }) => {
                         <Image
                             source={require('../../../../assets/img/addfile.png')}
                             style={styles.imgScan}
+                            resizeMode={'contain'}
                         />
                         <Text color={Colors.black} center weight="medium" style={{ marginTop: 5 }}>
                             Upload File
@@ -104,6 +105,7 @@ const StepThree = ({ navigation }) => {
                         <Image
                             source={require('../../../../assets/img/scan.png')}
                             style={styles.imgScan}
+                            resizeMode={'contain'}
                         />
                         <Text color={Colors.black} weight="medium" center>
                             Use Scanner
@@ -115,7 +117,11 @@ const StepThree = ({ navigation }) => {
                     {certificateUri ? (
                         <View style={styles.uploadContainer}>
                             <Text weight="medium">Certificate</Text>
-                            <Image source={{ uri: certificateUri }} style={styles.uploadedImg} />
+                            <Image
+                                source={{ uri: certificateUri }}
+                                style={styles.uploadedImg}
+                                resizeMode={'contain'}
+                            />
                         </View>
                     ) : null}
                 </View>

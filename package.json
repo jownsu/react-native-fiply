@@ -48,7 +48,6 @@
     "react-native-screens": "~3.10.1",
     "react-native-svg": "12.1.1",
     "react-native-tab-view": "^3.1.1",
-    "react-native-tesseract-ocr": "^2.0.3",
     "react-native-web": "0.17.1",
     "yup": "^0.32.11"
   },

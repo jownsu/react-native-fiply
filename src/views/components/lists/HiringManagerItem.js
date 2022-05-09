@@ -5,33 +5,27 @@ import React, { memo } from 'react'
 import Colors from '../../../utils/Colors'
 import { Entypo } from '@expo/vector-icons'
 
-const HiringManagerItem = memo(
-    ({ item = {}, onItemPress = () => {} }) => {
-        return (
-            <TouchableOpacity style={styles.cardContainer} onPress={onItemPress}>
-                <Avatar.Image
-                    source={item.avatar}
-                    style={styles.img}
-                    backgroundColor={Colors.white}
-                />
-                <View style={styles.cardInfoContainer}>
-                    <Text weight="semi-bold">{item.name}</Text>
-                    <Text>{item.email}</Text>
-                </View>
-                <View style={styles.rightContainer}>
-                    <Entypo name="dots-three-horizontal" size={24} color={Colors.black} />
-                    <Text size={10} color={Colors.grey}>
-                        {item.time}
-                    </Text>
-                </View>
-            </TouchableOpacity>
-        )
-    },
-    (prevProps, nextProps) => {
-        if (prevProps.item.id == nextProps.item.id) return true
-        return false
-    }
-)
+const HiringManagerItem = ({ item = {}, onItemPress = () => {} }) => {
+    return (
+        <TouchableOpacity style={styles.cardContainer} onPress={onItemPress}>
+            <Avatar.Image
+                source={{ uri: item.avatar }}
+                style={styles.img}
+                backgroundColor={Colors.white}
+            />
+            <View style={styles.cardInfoContainer}>
+                <Text weight="semi-bold">{item.name}</Text>
+                <Text>{item.email}</Text>
+            </View>
+            <View style={styles.rightContainer}>
+                <Entypo name="dots-three-horizontal" size={24} color={Colors.black} />
+                <Text size={10} color={Colors.grey}>
+                    {item.time}
+                </Text>
+            </View>
+        </TouchableOpacity>
+    )
+}
 
 export default HiringManagerItem
 

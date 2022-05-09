@@ -1,18 +1,31 @@
-import { StyleSheet, View, FlatList, Image } from 'react-native'
-import React from 'react'
+import { StyleSheet, View, FlatList, Image, RefreshControl } from 'react-native'
+import React, { useContext } from 'react'
 import { Text, Container, SafeAreaView } from '../../../components/FiplyComponents'
-import { Avatar } from 'react-native-paper'
+import { ProgressBar, Snackbar } from 'react-native-paper'
 import Header from '../../../components/headers/Header'
 import SearchBar from '../../../components/headers/SearchBar'
 import { MaterialIcons } from '@expo/vector-icons'
 import Colors from '../../../../utils/Colors'
+import DashboardContext from '../../../../api/context/EMPLOYER/dashboard/DashboardContext'
 import HiringManagerItem from '../../../components/lists/HiringManagerItem'
 
 const HiringManagerListScreen = ({ navigation }) => {
+    const {
+        hiringManagers,
+        getHiringManager,
+        getHiringManagers,
+        loading,
+        snackBarMessage,
+        hideSnackBar,
+    } = useContext(DashboardContext)
+
     const renderItem = ({ item }) => (
         <HiringManagerItem
             item={item}
-            onItemPress={() => navigation.navigate('HiringManagerScreen')}
+            onItemPress={() => {
+                getHiringManager(item.id)
+                navigation.navigate('HiringManagerScreen')
+            }}
         />
     )
 
@@ -24,25 +37,25 @@ const HiringManagerListScreen = ({ navigation }) => {
                 onBackPress={() => navigation.pop()}
                 rightIcon={() => <MaterialIcons name="menu" size={24} color={Colors.black} />}
             />
-            <SearchBar style={{ marginVertical: 10 }} />
+            <ProgressBar indeterminate color={Colors.secondary} visible={loading} />
+
+            {/* <SearchBar style={{ marginVertical: 10 }} /> */}
 
             <FlatList
-                data={[
-                    {
-                        id: 1,
-                        name: 'Margarette De Etits',
-                        email: 'margarette@gmail.com',
-                        avatar: require('../../../../assets/img/members/hular.jpg'),
-                    },
-                    {
-                        id: 2,
-                        name: 'Rold de Susej',
-                        email: 'rold@gmail.com',
-                        avatar: require('../../../../assets/img/members/tumanon.jpg'),
-                    },
-                ]}
+                data={hiringManagers}
+                refreshControl={
+                    <RefreshControl refreshing={loading} onRefresh={() => getHiringManagers()} />
+                }
                 renderItem={renderItem}
             />
+            <Snackbar
+                visible={snackBarMessage ? true : false}
+                onDismiss={() => hideSnackBar()}
+                duration={3000}
+                style={{ backgroundColor: Colors.black, elevation: 7, zIndex: 99 }}
+            >
+                <Text color={Colors.white}>{snackBarMessage}</Text>
+            </Snackbar>
         </SafeAreaView>
     )
 }

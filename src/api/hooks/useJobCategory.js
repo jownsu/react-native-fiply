@@ -7,10 +7,10 @@ const useJobCategory = () => {
     const [jobCategories, setJobCategories] = useState([])
     const [loading, setLoading] = useState(false)
 
-    const getJobCategories = async (search = '') => {
+    const getJobCategories = async () => {
         setLoading(true)
         await api()
-            .get(`/jobCategories?limit=5&search=${search}`)
+            .get(`/jobCategories`)
             .then((res) => setJobCategories(res.data.data))
             .catch((err) => console.log(err))
             .finally(() => setLoading(false))

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { StyleSheet, View } from 'react-native'
 import {
     SafeAreaView,
@@ -22,6 +22,12 @@ const ApplicantSetup = ({ navigation }) => {
     const { locations, loading: locationLoading, getLocations } = useLocation()
     const { positionLevels, loading: positionLevelsLoading, getPositionLevels } = usePositionLevel()
     const { jobCategories, loading: jobCategoriesLoading, getJobCategories } = useJobCategory()
+
+    useEffect(() => {
+        getLocations()
+        getPositionLevels()
+        getJobCategories()
+    }, [])
 
     const { setApplicantPreference, getAllSignUpData } = useContext(SignUpContext)
     const { verify, loading } = useContext(AuthContext)
@@ -68,7 +74,6 @@ const ApplicantSetup = ({ navigation }) => {
                                 label={'Level of experience'}
                                 value={values.level_of_experience}
                                 data={positionLevels}
-                                onTextInputPress={() => getPositionLevels()}
                                 isLoading={positionLevelsLoading}
                                 style={{ marginBottom: 5 }}
                                 onSubmit={(text) => setFieldValue('level_of_experience', text)}
@@ -90,9 +95,7 @@ const ApplicantSetup = ({ navigation }) => {
                                 label={'Field of expertise'}
                                 value={values.field_of_expertise}
                                 data={jobCategories}
-                                onTextInputPress={() => getJobCategories()}
                                 isLoading={jobCategoriesLoading}
-                                onChangeTextDelay={(text) => getJobCategories(text)}
                                 style={{ marginBottom: 5 }}
                                 onSubmit={(text) => setFieldValue('field_of_expertise', text)}
                                 error={
@@ -111,9 +114,7 @@ const ApplicantSetup = ({ navigation }) => {
                                 label={'Location'}
                                 value={values.location}
                                 data={locations}
-                                onTextInputPress={() => getLocations()}
                                 isLoading={locationLoading}
-                                onChangeTextDelay={(text) => getLocations(text)}
                                 style={{ marginBottom: 5 }}
                                 onSubmit={(text) => setFieldValue('location', text)}
                                 dropdownIcon

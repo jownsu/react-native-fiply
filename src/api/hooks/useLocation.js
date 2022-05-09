@@ -7,10 +7,10 @@ const useLocation = () => {
     const [locations, setLocations] = useState([])
     const [loading, setLoading] = useState(false)
 
-    const getLocations = async (search = '') => {
+    const getLocations = async () => {
         setLoading(true)
         await api()
-            .get(`/locations?limit=5&search=${search}`)
+            .get(`/locations`)
             .then((res) => setLocations(res.data.data))
             .catch((err) => console.log(err))
             .finally(() => setLoading(false))

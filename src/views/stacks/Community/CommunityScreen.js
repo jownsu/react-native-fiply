@@ -148,7 +148,7 @@ const CommunityScreen = ({ navigation }, offset) => {
                             <RefreshControl refreshing={loading} onRefresh={() => getUsers()} />
                         }
                         //onScroll={(e) => onScroll(e)}
-                        style={{ flex: 0 }}
+                        contentContainerStyle={{ alignItems: 'center' }}
                         ref={flatListRef}
                         data={users.data}
                         renderItem={renderItem}
@@ -183,7 +183,7 @@ const CommunityScreen = ({ navigation }, offset) => {
                             />
                         }
                         //onScroll={(e) => onScroll(e)}
-                        style={{ flex: 0 }}
+                        contentContainerStyle={{ alignItems: 'center' }}
                         ref={flatListRef}
                         data={pendingRequests.data}
                         renderItem={renderPendingRequestItem}
@@ -218,7 +218,7 @@ const CommunityScreen = ({ navigation }, offset) => {
                             />
                         }
                         //onScroll={(e) => onScroll(e)}
-                        style={{ flex: 0 }}
+                        contentContainerStyle={{ alignItems: 'center' }}
                         ref={flatListRef}
                         data={followerRequests.data}
                         renderItem={renderFollowerRequestItem}

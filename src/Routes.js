@@ -6,7 +6,6 @@ import AuthStack from './views/stacks/Auth/AuthStack'
 import * as SecureStore from 'expo-secure-store'
 import AuthContext from './api/context/auth/AuthContext'
 import SelectUserStack from './views/stacks/Employer/SelectUserStack'
-import TestScreen from './TestScreen'
 import TestScreen1 from './TestScreen1'
 import DocumentScanner from './views/screens/DocumentScanner'
 
@@ -81,7 +80,6 @@ const Routes = () => {
 
     return (
         // <TestScreen1 />
-        // <TestScreen />
 
         <NavigationContainer>
             {user && logged_in == 'true' ? (

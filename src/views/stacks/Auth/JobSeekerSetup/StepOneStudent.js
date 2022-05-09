@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { StyleSheet, View, TouchableOpacity } from 'react-native'
 import {
     SafeAreaView,
@@ -25,6 +25,12 @@ const StepOneStudent = ({ navigation }) => {
     const { degrees, getDegrees, loading: degreeLoading } = useDegree()
     const { jobCategories, getJobCategories, loading: jobCategoryLoading } = useJobCategory()
     const { setEducationalBackground } = useContext(SignUpContext)
+
+    useEffect(() => {
+        getUniversities()
+        getDegrees()
+        getJobCategories()
+    }, [])
 
     const studentSchema = yup.object({
         university: yup.string().trim().required('University is required'),
@@ -72,9 +78,8 @@ const StepOneStudent = ({ navigation }) => {
                     }}
                     validationSchema={studentSchema}
                     onSubmit={(values) => {
-                        setEducationalBackground(values, () => {
-                            navigation.navigate('StepTwo')
-                        })
+                        setEducationalBackground(values)
+                        navigation.navigate('StepTwo')
                     }}
                 >
                     {({
@@ -92,8 +97,6 @@ const StepOneStudent = ({ navigation }) => {
                                 value={values.university}
                                 data={universities}
                                 style={{ marginBottom: 5 }}
-                                onChangeTextDelay={(text) => getUniversities(text)}
-                                onTextInputPress={() => getUniversities()}
                                 isLoading={universityLoading}
                                 onSubmit={(text) => setFieldValue('university', text)}
                                 error={touched.university && errors.university ? true : false}
@@ -107,8 +110,6 @@ const StepOneStudent = ({ navigation }) => {
                                 value={values.degree}
                                 data={degrees}
                                 style={{ marginBottom: 5 }}
-                                onChangeTextDelay={(text) => getDegrees(text)}
-                                onTextInputPress={() => getDegrees()}
                                 isLoading={degreeLoading}
                                 onSubmit={(text) => setFieldValue('degree', text)}
                                 error={touched.degree && errors.degree ? true : false}
@@ -120,8 +121,6 @@ const StepOneStudent = ({ navigation }) => {
                                 value={values.field_of_study}
                                 data={jobCategories}
                                 style={{ marginBottom: 5 }}
-                                onChangeTextDelay={(text) => getJobCategories(text)}
-                                onTextInputPress={() => getJobCategories()}
                                 onSubmit={(text) => setFieldValue('field_of_study', text)}
                                 isLoading={jobCategoryLoading}
                                 error={

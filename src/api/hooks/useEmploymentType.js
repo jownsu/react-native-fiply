@@ -7,10 +7,10 @@ const useEmploymentType = () => {
     const [employmentTypes, setEmploymentTypes] = useState([])
     const [loading, setLoading] = useState(false)
 
-    const getEmploymentTypes = async (search = '') => {
+    const getEmploymentTypes = async () => {
         setLoading(true)
         await api()
-            .get(`/employmentTypes?search=${search}`)
+            .get(`/employmentTypes`)
             .then((res) => setEmploymentTypes(res.data.data))
             .catch((err) => console.log(err))
             .finally(() => setLoading(false))

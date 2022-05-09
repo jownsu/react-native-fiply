@@ -5171,11 +5171,6 @@ react-native-tab-view@^3.1.1:
   resolved "https://registry.yarnpkg.com/react-native-tab-view/-/react-native-tab-view-3.1.1.tgz#1f8d7a835ab4f5b1b1407ec8dddc1053b53fa3c6"
   integrity sha512-M5pRN6utQfytKWoKlKVzg5NbkYu308qNoW1khGTtEOTs1k14p2dHJ/BWOJoJYHKbPVUyZldbG9MFT7gUl4YHnw==
 
-react-native-tesseract-ocr@^2.0.3:
-  version "2.0.3"
-  resolved "https://registry.yarnpkg.com/react-native-tesseract-ocr/-/react-native-tesseract-ocr-2.0.3.tgz#a8145344922e0d74ef9d9645ddc715481cd6e1cc"
-  integrity sha512-GD1pKVD+BwfAs/o6FvdKIecOJHamMx/WIdxZxdGB2/tRiIy1uFukptvii7XS5HC7gAiFvMTKFu05DX/LTdWwWw==
-
 react-native-typing-animation@^0.1.7:
   version "0.1.7"
   resolved "https://registry.yarnpkg.com/react-native-typing-animation/-/react-native-typing-animation-0.1.7.tgz#8f2cf08d9400ae543a110292eb7d71523dda5528"

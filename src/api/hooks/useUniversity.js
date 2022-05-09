@@ -7,10 +7,10 @@ const useUniversity = () => {
     const [universities, setUniversities] = useState([])
     const [loading, setLoading] = useState(false)
 
-    const getUniversities = async (search = '') => {
+    const getUniversities = async () => {
         setLoading(true)
         await api()
-            .get(`/universities?limit=5&search=${search}`)
+            .get(`/universities`)
             .then((res) => setUniversities(res.data.data))
             .catch((err) => console.log(err))
             .finally(() => setLoading(false))

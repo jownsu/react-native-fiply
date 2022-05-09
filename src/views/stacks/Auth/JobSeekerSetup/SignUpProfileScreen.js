@@ -13,6 +13,7 @@ import {
     Text,
     FiplyLogo,
     WaveHeader,
+    FormContainer,
     Container,
     Button,
     TextInput,
@@ -52,7 +53,7 @@ const SignUpProfileScreen = ({ navigation, route }) => {
     })
 
     return (
-        <SafeAreaView>
+        <SafeAreaView flex>
             <WaveHeader waveimg={require('../../../../assets/img/waves/2.png')} />
             <Container center padding={20}>
                 <FiplyLogo style={{ marginBottom: 25 }} />
@@ -139,7 +140,7 @@ const SignUpProfileScreen = ({ navigation, route }) => {
                                         <DateTimePicker
                                             testID="dateTimePicker"
                                             value={date}
-                                            display="default"
+                                            display="spinner"
                                             onChange={(e, val) =>
                                                 onChange(e, val, (strVal) => {
                                                     setFieldValue('birthday', strVal)

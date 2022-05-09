@@ -21,7 +21,7 @@ const AddHiringManagerScreen = ({ navigation }) => {
 
     const { pickImage, pickUri } = usePickImage()
 
-    const companySchema = yup.object({
+    const formSchema = yup.object({
         firstname: yup.string().trim().min(2).required('Firstname is required'),
         lastname: yup.string().trim().min(2).required('Lastname is required'),
         email: yup.string().trim().min(2).email().required('Email is required'),
@@ -31,7 +31,7 @@ const AddHiringManagerScreen = ({ navigation }) => {
 
     return (
         <SafeAreaView>
-            <Header title="New Hiring Manager" />
+            <Header title="New Hiring Manager" onBackPress={() => navigation.pop()} />
             <Container center padding={20}>
                 <Formik
                     initialValues={{
@@ -42,7 +42,7 @@ const AddHiringManagerScreen = ({ navigation }) => {
                         contact_no: '',
                         code: '',
                     }}
-                    validationSchema={companySchema}
+                    validationSchema={formSchema}
                     onSubmit={(values) => {
                         createHiringManager(values, () => {
                             navigation.pop()

@@ -7,10 +7,10 @@ const usePositionLevel = () => {
     const [positionLevels, setPositionLevels] = useState([])
     const [loading, setLoading] = useState(false)
 
-    const getPositionLevels = async (search = '') => {
+    const getPositionLevels = async () => {
         setLoading(true)
         await api()
-            .get(`/positionLevels?search=${search}`)
+            .get(`/positionLevels`)
             .then((res) => setPositionLevels(res.data.data))
             .catch((err) => console.log(err))
             .finally(() => setLoading(false))

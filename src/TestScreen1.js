@@ -1,44 +1,40 @@
-import { StyleSheet, Dimensions, Text, View } from 'react-native'
-import React from 'react'
-import Pdf from 'react-native-pdf'
-
-const source = { uri: 'http://samples.leanpub.com/thereactnativebook-sample.pdf', cache: true }
+import {
+    StyleSheet,
+    Dimensions,
+    Text,
+    View,
+    ScrollView,
+    TouchableWithoutFeedback,
+    Keyboard,
+} from 'react-native'
+import { Dropdown } from './views/components/FiplyComponents'
+import React, { useEffect, useState } from 'react'
+import useJobTitle from './api/hooks/useJobTitle'
 
 const TestScreen1 = () => {
+    const { jobTitles, loading: jobTitleLoading, getJobTitles } = useJobTitle()
+
+    useEffect(() => {
+        getJobTitles()
+    }, [])
+
+    const [job, setJob] = useState('')
     return (
-        <View style={styles.container}>
-            <Pdf
-                source={source}
-                onLoadComplete={(numberOfPages, filePath) => {
-                    console.log(`Number of pages: ${numberOfPages}`)
-                }}
-                onPageChanged={(page, numberOfPages) => {
-                    console.log(`Current page: ${page}`)
-                }}
-                onError={(error) => {
-                    console.log(error)
-                }}
-                onPressLink={(uri) => {
-                    console.log(`Link pressed: ${uri}`)
-                }}
-                style={styles.pdf}
-            />
-        </View>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <ScrollView keyboardShouldPersistTaps={'handled'}>
+                <Dropdown
+                    label={'Most recent job'}
+                    value={job}
+                    isLoading={jobTitleLoading}
+                    onSubmit={(text) => setJob(text)}
+                    data={jobTitles}
+                    style={{ marginBottom: 5 }}
+                />
+            </ScrollView>
+        </TouchableWithoutFeedback>
     )
 }
 
 export default TestScreen1
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'flex-start',
-        alignItems: 'center',
-        marginTop: 25,
-    },
-    pdf: {
-        flex: 1,
-        width: Dimensions.get('window').width,
-        height: Dimensions.get('window').height,
-    },
-})
+const styles = StyleSheet.create({})

@@ -83,6 +83,7 @@ const StepTwo = ({ navigation }) => {
                         <Image
                             source={require('../../../../assets/img/addfile.png')}
                             style={styles.imgAddFile}
+                            resizeMode={'contain'}
                         />
                         <Text color={Colors.black} weight="medium" center>
                             Upload File
@@ -92,6 +93,7 @@ const StepTwo = ({ navigation }) => {
                         <Image
                             source={require('../../../../assets/img/scan.png')}
                             style={styles.imgAddFile}
+                            resizeMode={'contain'}
                         />
                         <Text color={Colors.black} weight="medium" center>
                             Use Scanner
@@ -101,7 +103,11 @@ const StepTwo = ({ navigation }) => {
 
                 {resumeUri !== '' && imgUri && (
                     <View style={styles.uploadContainer}>
-                        <Image source={{ uri: imgUri }} style={styles.uploadedImg} />
+                        <Image
+                            source={{ uri: imgUri }}
+                            style={styles.uploadedImg}
+                            resizeMode={'contain'}
+                        />
                     </View>
                 )}
 

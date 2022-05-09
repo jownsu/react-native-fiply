@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { View, StyleSheet, TouchableOpacity } from 'react-native'
 import { Dialog, Portal, Avatar } from 'react-native-paper'
 import { Text, TextInput, Dropdown, Button, SecondaryButton } from '../../FiplyComponents'
@@ -25,6 +25,12 @@ const EditEducationalBackgroundAction = ({
     const { universities, getUniversities, loading: universityLoading } = useUniversity()
     const { degrees, getDegrees, loading: degreeLoading } = useDegree()
     const { jobCategories, getJobCategories, loading: jobCategoryLoading } = useJobCategory()
+
+    useEffect(() => {
+        getUniversities()
+        getDegrees()
+        getJobCategories()
+    }, [])
 
     const [date, setDate] = useState(new Date())
     const [showDatePicker, setShowDatePicker] = useState({ modal: false, type: '' })
@@ -75,12 +81,6 @@ const EditEducationalBackgroundAction = ({
                                 <Dropdown
                                     data={universities}
                                     isLoading={universityLoading}
-                                    onChangeTextDelay={(text) => getUniversities(text)}
-                                    onTextInputPress={() => {
-                                        if (universities.length == 0) {
-                                            getUniversities()
-                                        }
-                                    }}
                                     onSubmit={handleChange('university')}
                                     label="University"
                                     value={values.university}
@@ -96,12 +96,6 @@ const EditEducationalBackgroundAction = ({
                                 <Dropdown
                                     data={degrees}
                                     isLoading={degreeLoading}
-                                    onChangeTextDelay={(text) => getDegrees(text)}
-                                    onTextInputPress={() => {
-                                        if (degrees.length == 0) {
-                                            getDegrees()
-                                        }
-                                    }}
                                     value={values.degree}
                                     onBlur={handleBlur('degree')}
                                     error={touched.degree && errors.degreee ? true : false}
@@ -113,12 +107,6 @@ const EditEducationalBackgroundAction = ({
                                 <Dropdown
                                     data={jobCategories}
                                     isLoading={jobCategoryLoading}
-                                    onChangeTextDelay={(text) => getJobCategories(text)}
-                                    onTextInputPress={() => {
-                                        if (jobCategories.length == 0) {
-                                            getJobCategories()
-                                        }
-                                    }}
                                     value={values.field_of_study}
                                     onBlur={handleBlur('field_of_study')}
                                     error={
@@ -195,7 +183,7 @@ const EditEducationalBackgroundAction = ({
                                     <DateTimePicker
                                         testID="dateTimePicker"
                                         value={date}
-                                        display="default"
+                                        display="spinner"
                                         onChange={(e, val) =>
                                             onChange(e, val, (strVal) => {
                                                 if (showDatePicker.type == 'starting_date') {

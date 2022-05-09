@@ -7,10 +7,10 @@ const useDegree = () => {
     const [degrees, setDegrees] = useState([])
     const [loading, setLoading] = useState(false)
 
-    const getDegrees = async (search = '') => {
+    const getDegrees = async () => {
         setLoading(true)
         await api()
-            .get(`/degrees?limit=5&search=${search}`)
+            .get(`/degrees`)
             .then((res) => setDegrees(res.data.data))
             .catch((err) => console.log(err))
             .finally(() => setLoading(false))

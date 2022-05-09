@@ -1,5 +1,5 @@
 import { StyleSheet, View, ScrollView } from 'react-native'
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import {
     Text,
     SafeAreaView,
@@ -30,6 +30,13 @@ const CreateJobScreen = ({ navigation }) => {
     } = useEmploymentType()
     const { locations, loading: locationLoading, getLocations } = useLocation()
     const { positionLevels, loading: positionLevelsLoading, getPositionLevels } = usePositionLevel()
+
+    useEffect(() => {
+        getJobTitles()
+        getEmploymentTypes()
+        getLocations()
+        getPositionLevels()
+    }, [])
 
     const { createJob, loading, questionList, clearQuestion } = useContext(DashboardContext)
 
@@ -85,11 +92,9 @@ const CreateJobScreen = ({ navigation }) => {
                                     value={values.title}
                                     data={jobTitles}
                                     style={{ marginBottom: 5 }}
-                                    onChangeTextDelay={(text) => getJobTitles(text)}
                                     onSubmit={(text) => setFieldValue('title', text)}
                                     error={touched.title && errors.title ? true : false}
                                     isLoading={jobTitleLoading}
-                                    onTextInputPress={() => getJobTitles()}
                                     errorMsg={touched.title && errors.title ? errors.title : ''}
                                 />
                                 <Dropdown
@@ -109,7 +114,6 @@ const CreateJobScreen = ({ navigation }) => {
                                             ? errors.employment_type
                                             : ''
                                     }
-                                    onTextInputPress={() => getEmploymentTypes()}
                                     noTextInput
                                     dropdownIcon
                                 />
@@ -130,7 +134,6 @@ const CreateJobScreen = ({ navigation }) => {
                                             ? errors.position_level
                                             : ''
                                     }
-                                    onTextInputPress={() => getPositionLevels()}
                                     noTextInput
                                     dropdownIcon
                                 />
@@ -139,11 +142,9 @@ const CreateJobScreen = ({ navigation }) => {
                                     value={values.location}
                                     data={locations}
                                     style={{ marginBottom: 5 }}
-                                    onChangeTextDelay={(text) => getLocations(text)}
                                     onSubmit={(text) => setFieldValue('location', text)}
                                     error={touched.location && errors.location ? true : false}
                                     isLoading={locationLoading}
-                                    onTextInputPress={() => getLocations()}
                                     errorMsg={
                                         touched.location && errors.location ? errors.location : ''
                                     }

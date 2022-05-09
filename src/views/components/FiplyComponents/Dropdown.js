@@ -22,8 +22,8 @@ export const Dropdown = ({
     noTextInput,
     isLoading = false,
     mode = 'outlined',
-    onChangeTextDelay = () => {},
-    onTextInputPress = () => {},
+    // onChangeTextDelay = () => {},
+    //onTextInputPress = () => {},
     delay = 500,
 }) => {
     const [filteredData, setFilteredData] = useState(data)
@@ -35,32 +35,44 @@ export const Dropdown = ({
         if (txt) {
             let searchText = txt.toLowerCase()
 
-            let test = data.filter((item) => {
+            let filtered = data.filter((item) => {
                 if (item.name.toLowerCase().match(searchText)) {
                     return item
                 }
             })
-            // setFilteredData(test.slice(0, 5))
-            setFilteredData(test)
+            setFilteredData(filtered.slice(0, 20))
+            // setFilteredData(filtered)
         }
     }
 
     const onChangeText = (text) => {
-        clearTimeout(timer)
-        const newTimer = setTimeout(() => {
-            onChangeTextDelay(text)
-        }, delay)
-        setTimer(newTimer)
-        // onSearch(text)
+        // clearTimeout(timer)
+        // const newTimer = setTimeout(() => {
+        //     onChangeTextDelay(text)
+        // }, delay)
+        // setTimer(newTimer)
+        onSearch(text)
         setTxtVal(text)
     }
+
+    const renderItem = ({ item }) => (
+        <TouchableOpacity
+            style={{ ...styles.dropdownTextContainer }}
+            onPress={() => {
+                onSubmit(item.name)
+                setVisibleDialog(false)
+            }}
+        >
+            <Text>{item.name}</Text>
+        </TouchableOpacity>
+    )
 
     return (
         <View style={{ ...style }}>
             <TouchableOpacity
                 activeOpacity={0.6}
                 onPress={() => {
-                    onTextInputPress()
+                    //     onTextInputPress()
                     setVisibleDialog(true)
                 }}
             >
@@ -119,21 +131,10 @@ export const Dropdown = ({
                         />
                     )}
                     <FlatList
-                        data={data}
+                        keyboardShouldPersistTaps={'handled'}
+                        data={noTextInput ? data : filteredData}
                         keyExtractor={(item) => item.id}
-                        renderItem={({ item }) => {
-                            return (
-                                <TouchableOpacity
-                                    style={{ ...styles.dropdownTextContainer }}
-                                    onPress={() => {
-                                        onSubmit(item.name)
-                                        setVisibleDialog(false)
-                                    }}
-                                >
-                                    <Text>{item.name}</Text>
-                                </TouchableOpacity>
-                            )
-                        }}
+                        renderItem={renderItem}
                     />
 
                     {!noTextInput ? (

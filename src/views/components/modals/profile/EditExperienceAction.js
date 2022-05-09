@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { View, StyleSheet, TouchableOpacity } from 'react-native'
 import { Dialog, Portal, Avatar } from 'react-native-paper'
 import { Text, TextInput, Button, SecondaryButton, Dropdown } from '../../FiplyComponents'
@@ -28,6 +28,12 @@ const EditExperienceAction = ({
         getEmploymentTypes,
     } = useEmploymentType()
     const { locations, loading: locationLoading, getLocations } = useLocation()
+
+    useEffect(() => {
+        getJobTitles()
+        getEmploymentTypes()
+        getLocations()
+    }, [])
 
     const [date, setDate] = useState(new Date())
     const [showDatePicker, setShowDatePicker] = useState({ modal: false, type: '' })
@@ -91,12 +97,6 @@ const EditExperienceAction = ({
                                 <Dropdown
                                     data={locations}
                                     isLoading={locationLoading}
-                                    onChangeTextDelay={(text) => getLocations(text)}
-                                    onTextInputPress={() => {
-                                        if (locations.length == 0) {
-                                            getLocations()
-                                        }
-                                    }}
                                     onSubmit={handleChange('location')}
                                     label="Location"
                                     value={values.location}
@@ -110,12 +110,6 @@ const EditExperienceAction = ({
                                 <Dropdown
                                     data={jobTitles}
                                     isLoading={jobTitleLoading}
-                                    onChangeTextDelay={(text) => getJobTitles(text)}
-                                    onTextInputPress={() => {
-                                        if (jobTitles.length == 0) {
-                                            getJobTitles()
-                                        }
-                                    }}
                                     onSubmit={handleChange('job_title')}
                                     label="Job Title"
                                     value={values.job_title}
@@ -131,11 +125,6 @@ const EditExperienceAction = ({
                                 <Dropdown
                                     data={employmentTypes}
                                     isLoading={employmentTypeLoading}
-                                    onTextInputPress={() => {
-                                        if (employmentTypes.length == 0) {
-                                            getEmploymentTypes()
-                                        }
-                                    }}
                                     onSubmit={handleChange('employment_type')}
                                     label="Employment Type"
                                     value={values.employment_type}
@@ -216,7 +205,7 @@ const EditExperienceAction = ({
                                     <DateTimePicker
                                         testID="dateTimePicker"
                                         value={date}
-                                        display="default"
+                                        display="spinner"
                                         onChange={(e, val) =>
                                             onChange(e, val, (strVal) => {
                                                 if (showDatePicker.type == 'starting_date') {

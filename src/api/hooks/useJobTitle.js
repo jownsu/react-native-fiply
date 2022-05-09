@@ -7,11 +7,14 @@ const useJobTitle = () => {
     const [jobTitles, setJobTitles] = useState([])
     const [loading, setLoading] = useState(false)
 
-    const getJobTitles = async (search = '') => {
+    const getJobTitles = async () => {
         setLoading(true)
         await api()
-            .get(`/jobTitles?limit=5&search=${search}`)
-            .then((res) => setJobTitles(res.data.data))
+            .get(`/jobTitles`)
+            .then((res) => {
+                console.log('huli')
+                setJobTitles(res.data.data)
+            })
             .catch((err) => console.log(err))
             .finally(() => setLoading(false))
     }

@@ -40,6 +40,8 @@ const EditJobPreferenceScreen = ({ navigation }) => {
             getJobPreference()
         }
         getEmploymentTypes()
+        getLocations()
+        getJobTitles()
     }, [])
 
     const formSchema = yup.object({
@@ -83,8 +85,6 @@ const EditJobPreferenceScreen = ({ navigation }) => {
                                 data={jobTitles}
                                 label="Job Title"
                                 value={values.job_title}
-                                onTextInputPress={() => getJobTitles()}
-                                onChangeTextDelay={(text) => getJobTitles(text)}
                                 isLoading={jobTitleLoading}
                                 onSubmit={handleChange('job_title')}
                                 onBlur={handleBlur('job_title')}
@@ -98,8 +98,6 @@ const EditJobPreferenceScreen = ({ navigation }) => {
                                 data={locations}
                                 label="Location"
                                 value={values.location}
-                                onTextInputPress={() => getLocations()}
-                                onChangeTextDelay={(text) => getLocations(text)}
                                 isLoading={locationLoading}
                                 onSubmit={handleChange('location')}
                                 onBlur={handleBlur('location')}
@@ -112,7 +110,6 @@ const EditJobPreferenceScreen = ({ navigation }) => {
                             <Dropdown
                                 label="Employment Type"
                                 value={values.employment_type}
-                                onChangeText={handleChange('employment_type')}
                                 onBlur={handleBlur('employment_type')}
                                 error={
                                     touched.employment_type && errors.employment_type ? true : false

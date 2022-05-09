@@ -116,6 +116,7 @@ const StepThree = ({ navigation }) => {
                             <Image
                                 source={require('../../../../assets/img/scan.png')}
                                 style={styles.imgScan}
+                                resizeMode={'contain'}
                             />
                             <Text>Scan</Text>
                         </TouchableOpacity>
@@ -123,6 +124,7 @@ const StepThree = ({ navigation }) => {
                             <Image
                                 source={require('../../../../assets/img/addfile.png')}
                                 style={styles.imgScan}
+                                resizeMode={'contain'}
                             />
                             <Text>Upload</Text>
                         </TouchableOpacity>
@@ -135,6 +137,7 @@ const StepThree = ({ navigation }) => {
                             <Image
                                 source={require('../../../../assets/img/scan.png')}
                                 style={styles.imgScan}
+                                resizeMode={'contain'}
                             />
                             <Text>Scan</Text>
                         </TouchableOpacity>
@@ -142,6 +145,7 @@ const StepThree = ({ navigation }) => {
                             <Image
                                 source={require('../../../../assets/img/addfile.png')}
                                 style={styles.imgScan}
+                                resizeMode={'contain'}
                             />
                             <Text>Upload</Text>
                         </TouchableOpacity>
@@ -151,13 +155,21 @@ const StepThree = ({ navigation }) => {
                         {frontUri ? (
                             <View style={styles.uploadContainer}>
                                 <Text weight="medium">Front</Text>
-                                <Image source={{ uri: frontUri }} style={styles.uploadedImg} />
+                                <Image
+                                    source={{ uri: frontUri }}
+                                    style={styles.uploadedImg}
+                                    resizeMode={'contain'}
+                                />
                             </View>
                         ) : null}
                         {backUri ? (
                             <View style={styles.uploadContainer}>
                                 <Text weight="medium">Back</Text>
-                                <Image source={{ uri: backUri }} style={styles.uploadedImg} />
+                                <Image
+                                    source={{ uri: backUri }}
+                                    style={styles.uploadedImg}
+                                    resizeMode={'contain'}
+                                />
                             </View>
                         ) : null}
                     </View>
@@ -201,8 +213,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     imgScan: {
-        width: 73,
-        height: 68,
+        width: 75,
+        height: 75,
     },
     uploadContainer: {
         alignItems: 'center',

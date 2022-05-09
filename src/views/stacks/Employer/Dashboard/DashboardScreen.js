@@ -9,8 +9,15 @@ import AuthContext from '../../../../api/context/auth/AuthContext'
 
 import Colors from '../../../../utils/Colors'
 const DashboardScreen = ({ navigation }, offset) => {
-    const { getDashboard, total_hiring_manager, total_job_posts, snackBarMessage, hideSnackBar } =
-        useContext(DashboardContext)
+    const {
+        getDashboard,
+        total_hiring_manager,
+        total_job_posts,
+        snackBarMessage,
+        hideSnackBar,
+        hiringManagers,
+        getHiringManagers,
+    } = useContext(DashboardContext)
     const { hiringManager, user } = useContext(AuthContext)
 
     const onScroll = (e) => {
@@ -213,7 +220,13 @@ const DashboardScreen = ({ navigation }, offset) => {
                                 Hiring Managers
                             </Text>
                             <TouchableOpacity
-                                onPress={() => navigation.navigate('HiringManagerListScreen')}
+                                onPress={() => {
+                                    if (hiringManagers.length == 0) {
+                                        getHiringManagers()
+                                    }
+                                    navigation.push('HiringManagerListScreen')
+                                }}
+                                disabled={!user.companyToken}
                             >
                                 <Text>View List</Text>
                             </TouchableOpacity>
@@ -231,7 +244,7 @@ const DashboardScreen = ({ navigation }, offset) => {
                                     },
                                 ]}
                                 disabled={!user.companyToken}
-                                onPress={() => navigation.navigate('AddHiringManagerScreen')}
+                                onPress={() => navigation.push('AddHiringManagerScreen')}
                             >
                                 <AntDesign
                                     name="pluscircleo"

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { StyleSheet, View } from 'react-native'
 import {
     SafeAreaView,
@@ -29,6 +29,12 @@ const JobSetup = ({ navigation }) => {
 
     const { setJobPreference, getAllSignUpData } = useContext(SignUpContext)
     const { verify, loading } = useContext(AuthContext)
+
+    useEffect(() => {
+        getJobTitles()
+        getEmploymentTypes()
+        getLocations()
+    }, [])
 
     const formSchema = yup.object({
         job_title: yup.string().trim().min(2).required('Job title is required'),
@@ -73,8 +79,6 @@ const JobSetup = ({ navigation }) => {
                                 value={values.job_title}
                                 data={jobTitles}
                                 style={{ marginBottom: 5 }}
-                                onChangeTextDelay={(text) => getJobTitles(text)}
-                                onTextInputPress={() => getJobTitles()}
                                 isLoading={jobTitleLoading}
                                 onSubmit={(text) => setFieldValue('job_title', text)}
                                 error={touched.job_title && errors.job_title ? true : false}
@@ -87,8 +91,6 @@ const JobSetup = ({ navigation }) => {
                                 value={values.location}
                                 data={locations}
                                 style={{ marginBottom: 5 }}
-                                onChangeTextDelay={(text) => getLocations(text)}
-                                onTextInputPress={() => getLocations()}
                                 isLoading={locationLoading}
                                 onSubmit={(text) => setFieldValue('location', text)}
                                 error={touched.location && errors.location ? true : false}
@@ -102,7 +104,6 @@ const JobSetup = ({ navigation }) => {
                                 data={employmentTypes}
                                 style={{ marginBottom: 5 }}
                                 onSubmit={(text) => setFieldValue('employment_type', text)}
-                                onTextInputPress={() => getEmploymentTypes()}
                                 isLoading={employmentTypeLoading}
                                 noTextInput
                                 dropdownIcon

@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { StyleSheet, View, TouchableOpacity } from 'react-native'
 import AuthContext from '../../../../api/context/auth/AuthContext'
 import SignUpContext from '../../../../api/context/auth/SignUpContext'
@@ -29,6 +29,10 @@ const SignUpCompanyScreen = ({ navigation, route }) => {
     const { loading } = useContext(AuthContext)
     const [hidePassword, setHidePassword] = useState(true)
     const { setProfile, setCompany } = useContext(SignUpContext)
+
+    useEffect(() => {
+        getLocations()
+    }, [])
 
     const signupSchema = yup.object({
         name: yup.string().trim().min(2).required('Company Name is required'),
@@ -126,8 +130,6 @@ const SignUpCompanyScreen = ({ navigation, route }) => {
                                         value={values.location}
                                         data={locations}
                                         style={{ marginBottom: 5 }}
-                                        onChangeTextDelay={(text) => getLocations(text)}
-                                        onTextInputPress={() => getLocations()}
                                         isLoading={locationLoading}
                                         onSubmit={(text) => setFieldValue('location', text)}
                                         error={touched.location && errors.location ? true : false}

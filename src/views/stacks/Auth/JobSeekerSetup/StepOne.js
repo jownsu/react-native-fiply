@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { StyleSheet, View, TouchableOpacity } from 'react-native'
 import {
     SafeAreaView,
@@ -26,6 +26,13 @@ const StepOne = ({ navigation }) => {
         getEmploymentTypes,
     } = useEmploymentType()
     const { locations, loading: locationLoading, getLocations } = useLocation()
+
+    useEffect(() => {
+        getJobTitles()
+        getEmploymentTypes()
+        getLocations()
+    }, [])
+
     const { setExperience } = useContext(SignUpContext)
 
     const experienceSchema = yup.object({
@@ -77,13 +84,12 @@ const StepOne = ({ navigation }) => {
                         errors,
                         touched,
                         setFieldValue,
+                        resetForm,
                     }) => (
                         <View>
                             <Dropdown
                                 label={'Most recent job'}
                                 value={values.job_title}
-                                onChangeTextDelay={(text) => getJobTitles(text)}
-                                onTextInputPress={() => getJobTitles()}
                                 isLoading={jobTitleLoading}
                                 onSubmit={(text) => setFieldValue('job_title', text)}
                                 data={jobTitles}
@@ -99,8 +105,6 @@ const StepOne = ({ navigation }) => {
                                 value={values.employment_type}
                                 data={employmentTypes}
                                 isLoading={employmentTypeLoading}
-                                onChangeTextDelay={(text) => getEmploymentTypes(text)}
-                                onTextInputPress={() => getEmploymentTypes()}
                                 onSubmit={(text) => setFieldValue('employment_type', text)}
                                 error={
                                     touched.employment_type && errors.employment_type ? true : false
@@ -126,28 +130,11 @@ const StepOne = ({ navigation }) => {
                                 style={{ marginBottom: 5 }}
                             />
 
-                            {/* <Dropdown
-                                label={'Most recent company'}
-                                value={values.recentCompany}
-                                data={companyList}
-                                onChangeTextDelay={() => console.log('API CALLED')}
-                                onSubmit={(text) => setFieldValue('recentCompany', text)}
-                                error={touched.recentCompany && errors.recentCompany ? true : false}
-                                errorMsg={
-                                    touched.recentCompany && errors.recentCompany
-                                        ? errors.recentCompany
-                                        : ''
-                                }
-                                style={{ marginBottom: 5 }}
-                            /> */}
-
                             <Dropdown
                                 label={'Location'}
                                 value={values.location}
                                 data={locations}
                                 isLoading={locationLoading}
-                                onChangeTextDelay={(text) => getLocations(text)}
-                                onTextInputPress={() => getLocations()}
                                 onSubmit={(text) => setFieldValue('location', text)}
                                 error={touched.location && errors.location ? true : false}
                                 errorMsg={
@@ -157,7 +144,10 @@ const StepOne = ({ navigation }) => {
 
                             <SecondaryButton
                                 title="I'm a student"
-                                onPress={() => navigation.push('StepOneStudent')}
+                                onPress={() => {
+                                    resetForm()
+                                    navigation.push('StepOneStudent')
+                                }}
                                 style={{ marginVertical: 20 }}
                             />
 
