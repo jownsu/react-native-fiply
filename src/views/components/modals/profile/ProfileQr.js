@@ -11,12 +11,12 @@ const ProfileQr = ({ visible = false, id = {}, onDismiss = () => {} }) => {
             <Portal>
                 <Dialog style={styles.dialogContainer} visible={visible} onDismiss={onDismiss}>
                     <QRCode
-                        logo={require('../../../../assets/img/logo.png')}
-                        logoSize={50}
-                        logoBackgroundColor={Colors.white}
-                        logoBorderRadius={5}
+                        logo={require('../../../../assets/img/icon.png')}
+                        logoBorderRadius={3}
+                        logoMargin={0}
+                        quietZone={10}
                         value={id.toString()}
-                        color={Colors.white}
+                        color={Colors.light}
                         size={200}
                         backgroundColor={Colors.primary}
                     />

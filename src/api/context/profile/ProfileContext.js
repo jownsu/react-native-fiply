@@ -33,7 +33,7 @@ export const ProfileProvider = ({ children }) => {
     const [state, dispatch] = useReducer(ProfileReducer, initialState)
     const [snackBarMessage, setSnackBarMessage] = useState(null)
 
-    const getUserInfo = async (id = 'me') => {
+    const getUserInfo = async (id = 'me', onError = () => {}) => {
         setLoading()
         await api({ token: user.token })
             .get(`/${id}`)
@@ -63,7 +63,10 @@ export const ProfileProvider = ({ children }) => {
 
                 dispatch({ type: 'GET_USER_INFO', payload: profileData })
             })
-            .catch((err) => console.log(err))
+            .catch((err) => {
+                alert('User Not Found')
+                onError()
+            })
             .finally(() => stopLoading())
     }
 

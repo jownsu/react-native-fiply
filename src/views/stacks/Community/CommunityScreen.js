@@ -50,6 +50,13 @@ const CommunityScreen = ({ navigation }, offset) => {
     }
     const handleAvatarPress = (id) => navigation.push('ProfileStack', { userId: id })
 
+    const handleScanPress = () => {
+        navigation.getParent().setOptions({
+            tabBarStyle: { display: 'none' },
+        })
+        navigation.navigate('ScanScreen')
+    }
+
     const renderItem = ({ item }) => (
         <UserItem
             data={item}
@@ -264,7 +271,7 @@ const CommunityScreen = ({ navigation }, offset) => {
                 title={'Community'}
                 style={{ backgroundColor: Colors.white, marginBottom: 10, paddingHorizontal: 10 }}
                 rightIcon={() => (
-                    <TouchableOpacity activeOpacity={0.7} onPress={() => {}}>
+                    <TouchableOpacity activeOpacity={0.7} onPress={handleScanPress}>
                         <AntDesign name="scan1" size={24} color={Colors.secondary} />
                     </TouchableOpacity>
                 )}

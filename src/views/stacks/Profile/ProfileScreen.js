@@ -77,7 +77,7 @@ const ProfileScreen = ({ navigation, route }) => {
     }
 
     useEffect(() => {
-        getUserInfo(userId)
+        getUserInfo(userId, () => navigation.pop())
         getPosts('/posts', userId)
     }, [])
 

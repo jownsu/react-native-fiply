@@ -1,40 +1,50 @@
-import {
-    StyleSheet,
-    Dimensions,
-    Text,
-    View,
-    ScrollView,
-    TouchableWithoutFeedback,
-    Keyboard,
-} from 'react-native'
-import { Dropdown } from './views/components/FiplyComponents'
-import React, { useEffect, useState } from 'react'
-import useJobTitle from './api/hooks/useJobTitle'
+import React, { useState, useEffect } from 'react'
+import { Text, View, StyleSheet, Button } from 'react-native'
+import { BarCodeScanner } from 'expo-barcode-scanner'
 
 const TestScreen1 = () => {
-    const { jobTitles, loading: jobTitleLoading, getJobTitles } = useJobTitle()
+    const [hasPermission, setHasPermission] = useState(null)
+    const [scanned, setScanned] = useState(false)
 
     useEffect(() => {
-        getJobTitles()
+        ;(async () => {
+            const { status } = await BarCodeScanner.requestPermissionsAsync()
+            setHasPermission(status === 'granted')
+        })()
     }, [])
 
-    const [job, setJob] = useState('')
+    const handleBarCodeScanned = ({ type, data }) => {
+        setScanned(true)
+        alert(`Bar code with type ${type} and data ${data} has been scanned!`)
+        console.log(type)
+        console.log(data)
+    }
+
+    if (hasPermission === null) {
+        return <Text>Requesting for camera permission</Text>
+    }
+    if (hasPermission === false) {
+        return <Text>No access to camera</Text>
+    }
+
     return (
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-            <ScrollView keyboardShouldPersistTaps={'handled'}>
-                <Dropdown
-                    label={'Most recent job'}
-                    value={job}
-                    isLoading={jobTitleLoading}
-                    onSubmit={(text) => setJob(text)}
-                    data={jobTitles}
-                    style={{ marginBottom: 5 }}
-                />
-            </ScrollView>
-        </TouchableWithoutFeedback>
+        <View style={styles.container}>
+            <BarCodeScanner
+                barCodeTypes={[BarCodeScanner.Constants.BarCodeType.qr]}
+                onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+                style={StyleSheet.absoluteFillObject}
+            />
+            {scanned && <Button title={'Tap to Scan Again'} onPress={() => setScanned(false)} />}
+        </View>
     )
 }
 
-export default TestScreen1
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'center',
+    },
+})
 
-const styles = StyleSheet.create({})
+export default TestScreen1
