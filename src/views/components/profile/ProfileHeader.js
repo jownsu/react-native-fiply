@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { StyleSheet, View, Image, TouchableOpacity, ImageBackground } from 'react-native'
 import { Avatar, Badge } from 'react-native-paper'
 import { Text, SecondaryButton, Button } from '../FiplyComponents'
@@ -6,6 +6,7 @@ import Colors from '../../../utils/Colors'
 import { FontAwesome, MaterialIcons, FontAwesome5, Ionicons } from '@expo/vector-icons'
 import usePickImage from '../../../utils/usePIckImage'
 import ProfileContext from '../../../api/context/profile/ProfileContext'
+import ProfileQr from '../modals/profile/ProfileQr'
 
 {
     /* {data.is_me && (
@@ -28,6 +29,7 @@ const ProfileHeader = ({
 }) => {
     const { pickImage } = usePickImage()
     const { uploadAvatar, uploadCover } = useContext(ProfileContext)
+    const [showQR, setShowQR] = useState(false)
 
     const renderFollowBtn = () => {
         if (!data.is_me) {
@@ -67,9 +69,9 @@ const ProfileHeader = ({
         }
         return (
             <Button
-                onPress={() => {}}
                 title={'Profile Link'}
                 style={styles.btnStyle}
+                onPress={() => setShowQR(true)}
                 labelStyle={styles.btnLabelStyle}
                 labelWeight={'Light'}
             />
@@ -219,6 +221,7 @@ const ProfileHeader = ({
                     </TouchableOpacity>
                 </View>
             </View>
+            <ProfileQr id={data.id} visible={showQR} onDismiss={() => setShowQR(false)} />
         </View>
     )
 }

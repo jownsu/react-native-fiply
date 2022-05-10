@@ -1,8 +1,8 @@
-import { StyleSheet, View, ScrollView, TouchableOpacity } from 'react-native'
+import { StyleSheet, View, ScrollView, TouchableOpacity, BackHandler } from 'react-native'
 import { SafeAreaView, Container, Text, SecondaryButton } from '../../../components/FiplyComponents'
 import { Avatar } from 'react-native-paper'
 import Header from '../../../components/headers/Header'
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import JobContext from '../../../../api/context/jobs/JobContext'
 import Colors from '../../../../utils/Colors'
 import { Ionicons, FontAwesome, FontAwesome5 } from '@expo/vector-icons'
@@ -13,6 +13,12 @@ const ShowPendingJobScreen = ({ navigation }) => {
         useContext(JobContext)
 
     const handleBackPress = () => {
+        setJobResponses([])
+        showBottomNav()
+        navigation.pop()
+    }
+
+    const showBottomNav = () => {
         navigation.getParent().setOptions({
             tabBarStyle: {
                 display: 'flex',
@@ -20,8 +26,6 @@ const ShowPendingJobScreen = ({ navigation }) => {
                 elevation: 0,
             },
         })
-        setJobResponses([])
-        navigation.pop()
     }
 
     const handleSavePress = () => {
@@ -33,6 +37,13 @@ const ShowPendingJobScreen = ({ navigation }) => {
         let action = job.is_applied ? 'unApply' : 'apply'
         toggleAppliedJob(job.id, action, jobResponses)
     }
+
+    useEffect(() => {
+        BackHandler.addEventListener('hardwareBackPress', showBottomNav)
+        return () => {
+            BackHandler.removeEventListener('hardwareBackPress', showBottomNav)
+        }
+    }, [])
 
     return (
         <SafeAreaView flex statusBarColor={Colors.white}>

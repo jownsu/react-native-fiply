@@ -35,7 +35,7 @@ const HiringManagerListScreen = ({ navigation }) => {
                 title={'Hiring Managers'}
                 style={{ backgroundColor: Colors.white }}
                 onBackPress={() => navigation.pop()}
-                rightIcon={() => <MaterialIcons name="menu" size={24} color={Colors.black} />}
+                // rightIcon={() => <MaterialIcons name="menu" size={24} color={Colors.black} />}
             />
             <ProgressBar indeterminate color={Colors.secondary} visible={loading} />
 

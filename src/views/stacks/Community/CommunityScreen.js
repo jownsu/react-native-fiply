@@ -4,7 +4,7 @@ import { SafeAreaView, Text, Container, ActivityIndicator } from '../../componen
 import NoData from '../../components/NoData'
 import SearchBar from '../../components/headers/SearchBar'
 import Colors from '../../../utils/Colors'
-import { FontAwesome } from '@expo/vector-icons'
+import { FontAwesome, AntDesign } from '@expo/vector-icons'
 import TitleFilter from '../../components/headers/TitleFilter'
 import HeaderTitle from '../../components/headers/HeaderTitle'
 import TopNavigation from '../../components/headers/TopNavigation'
@@ -263,6 +263,11 @@ const CommunityScreen = ({ navigation }, offset) => {
             <HeaderTitle
                 title={'Community'}
                 style={{ backgroundColor: Colors.white, marginBottom: 10, paddingHorizontal: 10 }}
+                rightIcon={() => (
+                    <TouchableOpacity activeOpacity={0.7} onPress={() => {}}>
+                        <AntDesign name="scan1" size={24} color={Colors.secondary} />
+                    </TouchableOpacity>
+                )}
             />
 
             <Container style={{ paddingHorizontal: 0 }}>

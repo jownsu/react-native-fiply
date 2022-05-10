@@ -1,8 +1,8 @@
-import { StyleSheet, View, ScrollView, TouchableOpacity } from 'react-native'
+import { StyleSheet, View, ScrollView, TouchableOpacity, BackHandler } from 'react-native'
 import { SafeAreaView, Container, Text, SecondaryButton } from '../../../components/FiplyComponents'
 import { Avatar } from 'react-native-paper'
 import Header from '../../../components/headers/Header'
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import JobContext from '../../../../api/context/jobs/JobContext'
 import Colors from '../../../../utils/Colors'
 import { Ionicons, FontAwesome, FontAwesome5 } from '@expo/vector-icons'
@@ -13,6 +13,11 @@ const ShowJobScreen = ({ navigation }) => {
         useContext(JobContext)
 
     const handleBackPress = () => {
+        showBottomNav()
+        setJobResponses([])
+        navigation.pop()
+    }
+    const showBottomNav = () => {
         navigation.getParent().setOptions({
             tabBarStyle: {
                 display: 'flex',
@@ -20,10 +25,7 @@ const ShowJobScreen = ({ navigation }) => {
                 elevation: 0,
             },
         })
-        setJobResponses([])
-        navigation.pop()
     }
-
     const handleSavePress = () => {
         let action = job.is_saved ? 'unSave' : 'save'
         toggleSavedJob(job.id, action)
@@ -35,6 +37,13 @@ const ShowJobScreen = ({ navigation }) => {
     }
 
     const handleAvatarPress = () => navigation.push('ProfileStack', { userId: job.user_id })
+
+    useEffect(() => {
+        BackHandler.addEventListener('hardwareBackPress', showBottomNav)
+        return () => {
+            BackHandler.removeEventListener('hardwareBackPress', showBottomNav)
+        }
+    }, [])
 
     return (
         <SafeAreaView flex statusBarColor={Colors.white}>

@@ -1,4 +1,4 @@
-const domain = 'http://192.168.1.6:80'
+const domain = 'http://api.fiply.tech'
 
 const config = {
     api: domain + '/api',

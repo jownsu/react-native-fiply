@@ -91,7 +91,7 @@ const HomeScreen = ({ navigation }, offset) => {
         )
     }
 
-    const handleAvatarPress = (id) => navigation.navigate('ProfileStack', { userId: id })
+    const handleAvatarPress = (id) => navigation.push('ProfileStack', { userId: id })
 
     const handleCommentPress = (item) => {
         navigation.getParent().setOptions({

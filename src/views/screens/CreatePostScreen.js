@@ -5,6 +5,7 @@ import {
     TextInput,
     TouchableOpacity,
     KeyboardAvoidingView,
+    BackHandler,
 } from 'react-native'
 import React, { useState, useContext, useEffect } from 'react'
 import PostContext from '../../api/context/posts/PostContext'
@@ -32,6 +33,10 @@ const CreatePostScreen = ({ navigation, route }) => {
     const { pickImage, pickUri } = usePickImage()
 
     const handleBackPress = () => {
+        showBottomNav()
+        navigation.pop()
+    }
+    const showBottomNav = () => {
         navigation.getParent().setOptions({
             tabBarStyle: {
                 display: 'flex',
@@ -39,7 +44,6 @@ const CreatePostScreen = ({ navigation, route }) => {
                 elevation: 0,
             },
         })
-        navigation.pop()
     }
 
     function isEmpty(obj) {
@@ -62,6 +66,10 @@ const CreatePostScreen = ({ navigation, route }) => {
         setPostText(data.content)
         if (edit) {
             setIsPublic(data.is_public)
+        }
+        BackHandler.addEventListener('hardwareBackPress', showBottomNav)
+        return () => {
+            BackHandler.removeEventListener('hardwareBackPress', showBottomNav)
         }
     }, [])
 

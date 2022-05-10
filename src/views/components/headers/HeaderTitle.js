@@ -13,6 +13,7 @@ const HeaderTitle = ({
     textWeight = 'medium',
     textSize = 16,
     iconColor = Colors.black,
+    rightIcon = false,
 }) => {
     let containerStyle = centerTitle ? { justifyContent: 'center' } : {}
 
@@ -26,6 +27,7 @@ const HeaderTitle = ({
             >
                 {title}
             </Text>
+            {rightIcon ? <View style={styles.rightIcon}>{rightIcon()}</View> : null}
         </View>
     )
 }
@@ -38,5 +40,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         width: '100%',
         height: 50,
+    },
+    rightIcon: {
+        position: 'absolute',
+        right: 20,
     },
 })
