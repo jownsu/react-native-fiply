@@ -1,5 +1,12 @@
-import { StyleSheet, View, FlatList, RefreshControl, TouchableOpacity } from 'react-native'
-import React, { useState, memo, useMemo, useContext, useRef } from 'react'
+import {
+    StyleSheet,
+    View,
+    FlatList,
+    RefreshControl,
+    TouchableOpacity,
+    BackHandler,
+} from 'react-native'
+import React, { useState, useEffect, useMemo, useContext, useRef } from 'react'
 import CommentContext from '../../api/context/comments/CommentContext'
 import AuthContext from '../../api/context/auth/AuthContext'
 import { Avatar } from 'react-native-paper'
@@ -39,6 +46,21 @@ const CommentScreen = ({ navigation, route }) => {
         setShowConfirmation(false)
     }
 
+    const handleBackPress = () => {
+        showBottomNav()
+        navigation.pop()
+    }
+
+    const showBottomNav = () => {
+        navigation.getParent().setOptions({
+            tabBarStyle: {
+                display: 'flex',
+                borderTopWidth: 1,
+                elevation: 0,
+            },
+        })
+    }
+
     const scrollToTop = () => {
         flatListRef.current.scrollToOffset({
             animated: true,
@@ -51,6 +73,13 @@ const CommentScreen = ({ navigation, route }) => {
             moreComments()
         }
     }
+
+    useEffect(() => {
+        BackHandler.addEventListener('hardwareBackPress', showBottomNav)
+        return () => {
+            BackHandler.removeEventListener('hardwareBackPress', showBottomNav)
+        }
+    }, [])
 
     const renderItem = ({ item }) => {
         return (
@@ -104,7 +133,7 @@ const CommentScreen = ({ navigation, route }) => {
                 <TouchableOpacity
                     activeOpacity={0.8}
                     style={styles.backContainer}
-                    onPress={() => navigation.pop()}
+                    onPress={handleBackPress}
                 >
                     <MaterialIcons name="arrow-back" size={16} color={Colors.white} />
                 </TouchableOpacity>

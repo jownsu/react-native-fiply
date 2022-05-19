@@ -4,7 +4,7 @@ import React, { memo } from 'react'
 import { Avatar } from 'react-native-paper'
 import Colors from '../../../../utils/Colors'
 
-const ApplicantItem = memo(
+const ApplicantInterviewItem = memo(
     ({ data, onCardPress = () => {} }) => {
         return (
             <TouchableOpacity
@@ -17,7 +17,18 @@ const ApplicantItem = memo(
                     <Text weight="medium" size={16}>
                         {data.name}
                     </Text>
-                    <Text color={Colors.primary}>View Application</Text>
+                    <View style={{ flexDirection: 'row' }}>
+                        <Text weight="medium" color={Colors.primary}>
+                            Date:{' '}
+                        </Text>
+                        <Text>{data.meet_date}</Text>
+                    </View>
+                    <View style={{ flexDirection: 'row' }}>
+                        <Text weight="medium" color={Colors.primary}>
+                            Time:{' '}
+                        </Text>
+                        <Text>{data.meet_time}</Text>
+                    </View>
                 </View>
                 <Text size={11} style={styles.date}>
                     {data.applied_at}
@@ -31,7 +42,7 @@ const ApplicantItem = memo(
     }
 )
 
-export default ApplicantItem
+export default ApplicantInterviewItem
 
 const styles = StyleSheet.create({
     container: {

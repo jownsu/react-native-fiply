@@ -184,7 +184,7 @@ const ProfileHeader = ({
                     {!data.is_me && (
                         <Button
                             onPress={onMessagePress}
-                            title={'Message'}
+                            title={'Send Email'}
                             style={styles.btnEditStyle}
                             labelStyle={styles.btnLabelStyle}
                             icon={

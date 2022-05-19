@@ -92,6 +92,22 @@ const JobReducer = (state, action) => {
                 },
             }
 
+        case 'GET_PASSED_JOBS':
+            return {
+                ...state,
+                passedJobs: action.payload,
+            }
+
+        case 'MORE_PASSED_JOBS':
+            return {
+                ...state,
+                passedJobs: {
+                    ...state.passedJobs,
+                    data: [...state.passedJobs.data, ...action.payload.data],
+                    links: { ...action.payload.links },
+                },
+            }
+
         case 'TOGGLE_SAVED_JOB':
             return {
                 ...state,

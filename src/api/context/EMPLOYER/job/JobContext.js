@@ -19,8 +19,26 @@ export const JobProvider = ({ children }) => {
                 total: 0,
             },
         },
+        jobInterviews: {
+            data: [],
+            links: {
+                next: '',
+            },
+            meta: {
+                total: 0,
+            },
+        },
         job: {},
         applicants: {
+            data: [],
+            links: {
+                next: '',
+            },
+            meta: {
+                total: 0,
+            },
+        },
+        applicantInterviews: {
             data: [],
             links: {
                 next: '',
@@ -71,6 +89,38 @@ export const JobProvider = ({ children }) => {
         }
     }
 
+    const getJobInterviews = async () => {
+        setLoading()
+        await api({
+            token: user.token,
+            hiring_token: hiringManager.token,
+            hiring_id: hiringManager.id,
+        })
+            .get('/hm/jobs/interviews')
+            .then((res) => dispatch({ type: 'SET_JOB_INTERVIEWS', payload: res.data }))
+            .catch((err) => console.log(err))
+            .finally(() => stopLoading())
+    }
+
+    const moreJobInterviews = async (reset = false) => {
+        if (state.jobInterviews.links.next) {
+            setLoading()
+            await api({
+                token: user.token,
+                hiring_token: hiringManager.token,
+                hiring_id: hiringManager.id,
+            })
+                .get(state.jobInterviews.links.next)
+                .then((res) => {
+                    reset
+                        ? dispatch({ type: 'SET_JOB_INTERVIEWS', payload: res.data })
+                        : dispatch({ type: 'MORE_JOB_INTERVIEWS', payload: res.data })
+                })
+                .catch((err) => console.log(err))
+                .finally(() => stopLoading())
+        }
+    }
+
     const getJobDetails = async (id) => {
         setLoading()
         await api({
@@ -82,6 +132,40 @@ export const JobProvider = ({ children }) => {
             .then((res) => dispatch({ type: 'SET_JOB_DETAILS', payload: res.data.data }))
             .catch((err) => console.log(err))
             .finally(() => stopLoading())
+    }
+
+    const getApplicantInterviews = async (id) => {
+        setLoading()
+        await api({
+            token: user.token,
+            hiring_token: hiringManager.token,
+            hiring_id: hiringManager.id,
+        })
+            .get(`/hm/jobs/${id}/applicantsInterview`)
+            .then((res) => {
+                dispatch({ type: 'SET_APPLICANT_INTERVIEWS', payload: res.data })
+            })
+            .catch((err) => console.log(err))
+            .finally(() => stopLoading())
+    }
+
+    const moreApplicantInterviews = async (reset = false) => {
+        if (state.applicantInterviews.links.next) {
+            setLoading()
+            await api({
+                token: user.token,
+                hiring_token: hiringManager.token,
+                hiring_id: hiringManager.id,
+            })
+                .get(state.applicantInterviews.links.next)
+                .then((res) => {
+                    reset
+                        ? dispatch({ type: 'SET_APPLICANT_INTERVIEWS', payload: res.data })
+                        : dispatch({ type: 'MORE_APPLICANT_INTERVIEWS', payload: res.data })
+                })
+                .catch((err) => console.log(err))
+                .finally(() => stopLoading())
+        }
     }
 
     const getApplicants = async (id) => {
@@ -150,14 +234,31 @@ export const JobProvider = ({ children }) => {
             .finally(() => stopLoading())
     }
 
-    const rejectApplicant = async (jobId, applyId, callback = () => {}) => {
+    const rejectApplicant = async (jobId, applyId, data = {}, callback = () => {}) => {
         setLoading()
         await api({
             token: user.token,
             hiring_token: hiringManager.token,
             hiring_id: hiringManager.id,
         })
-            .post(`/hm/jobs/${jobId}/response/${applyId}/reject`)
+            .post(`/hm/jobs/${jobId}/response/${applyId}/reject`, data)
+            .then((res) => {
+                console.log(res.data.data)
+                callback()
+                //dispatch({ type: 'SET_APPLICANT_RESPONSE', payload: res.data.data })
+            })
+            .catch((err) => console.log(err))
+            .finally(() => stopLoading())
+    }
+
+    const hireApplicant = async (jobId, applyId, data = {}, callback = () => {}) => {
+        setLoading()
+        await api({
+            token: user.token,
+            hiring_token: hiringManager.token,
+            hiring_id: hiringManager.id,
+        })
+            .post(`/hm/jobs/${jobId}/response/${applyId}/hire`, data)
             .then((res) => {
                 console.log(res.data.data)
                 callback()
@@ -182,9 +283,14 @@ export const JobProvider = ({ children }) => {
                 getJobDetails,
                 getApplicants,
                 moreApplicants,
+                getJobInterviews,
+                moreJobInterviews,
                 getApplicantResponse,
+                getApplicantInterviews,
+                moreApplicantInterviews,
                 approveApplicant,
                 rejectApplicant,
+                hireApplicant,
                 snackBarMessage,
                 hideSnackBar,
             }}

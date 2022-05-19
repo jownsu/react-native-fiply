@@ -18,6 +18,7 @@ import {
     TextInput,
     SafeAreaView,
     Dropdown,
+    FormContainer,
 } from '../../../components/FiplyComponents'
 
 import useLocation from '../../../../api/hooks/useLocation'
@@ -77,110 +78,98 @@ const SignUpCompanyScreen = ({ navigation, route }) => {
                         setFieldValue,
                     }) => (
                         <View style={styles.formContainer}>
-                            <View>
-                                <View>
-                                    <TextInput
-                                        label={'Company Name'}
-                                        value={values.name}
-                                        onChangeText={handleChange('name')}
-                                        onBlur={handleBlur('name')}
-                                        autoCapitalize={'words'}
-                                        error={touched.name && errors.name ? true : false}
-                                        errorMsg={touched.name && errors.name ? errors.name : ''}
-                                    />
+                            <TextInput
+                                label={'Company Name'}
+                                value={values.name}
+                                onChangeText={handleChange('name')}
+                                onBlur={handleBlur('name')}
+                                autoCapitalize={'words'}
+                                error={touched.name && errors.name ? true : false}
+                                errorMsg={touched.name && errors.name ? errors.name : ''}
+                            />
 
-                                    <TextInput
-                                        label={'Company Registration Number'}
-                                        value={values.registration_no}
-                                        onChangeText={handleChange('registration_no')}
-                                        onBlur={handleBlur('registration_no')}
-                                        autoCapitalize={'words'}
-                                        error={
-                                            touched.registration_no && errors.registration_no
-                                                ? true
-                                                : false
-                                        }
-                                        errorMsg={
-                                            touched.registration_no && errors.registration_no
-                                                ? errors.registration_no
-                                                : ''
-                                        }
-                                    />
+                            <TextInput
+                                label={'Company Registration Number'}
+                                value={values.registration_no}
+                                onChangeText={handleChange('registration_no')}
+                                onBlur={handleBlur('registration_no')}
+                                autoCapitalize={'words'}
+                                error={
+                                    touched.registration_no && errors.registration_no ? true : false
+                                }
+                                errorMsg={
+                                    touched.registration_no && errors.registration_no
+                                        ? errors.registration_no
+                                        : ''
+                                }
+                            />
 
-                                    <TextInput
-                                        label={'Telephone Number'}
-                                        value={values.telephone_no}
-                                        onChangeText={handleChange('telephone_no')}
-                                        onBlur={handleBlur('telephone_no')}
-                                        autoCapitalize={'words'}
-                                        error={
-                                            touched.telephone_no && errors.telephone_no
-                                                ? true
-                                                : false
-                                        }
-                                        errorMsg={
-                                            touched.telephone_no && errors.telephone_no
-                                                ? errors.telephone_no
-                                                : ''
-                                        }
-                                    />
+                            <TextInput
+                                label={'Telephone Number'}
+                                value={values.telephone_no}
+                                onChangeText={handleChange('telephone_no')}
+                                onBlur={handleBlur('telephone_no')}
+                                autoCapitalize={'words'}
+                                error={touched.telephone_no && errors.telephone_no ? true : false}
+                                errorMsg={
+                                    touched.telephone_no && errors.telephone_no
+                                        ? errors.telephone_no
+                                        : ''
+                                }
+                            />
 
-                                    <Dropdown
-                                        label={'Location'}
-                                        value={values.location}
-                                        data={locations}
-                                        style={{ marginBottom: 5 }}
-                                        isLoading={locationLoading}
-                                        onSubmit={(text) => setFieldValue('location', text)}
-                                        error={touched.location && errors.location ? true : false}
-                                        errorMsg={
-                                            touched.location && errors.location
-                                                ? errors.location
-                                                : ''
-                                        }
-                                    />
+                            <Dropdown
+                                label={'Location'}
+                                value={values.location}
+                                data={locations}
+                                style={{ marginBottom: 5 }}
+                                isLoading={locationLoading}
+                                onSubmit={(text) => setFieldValue('location', text)}
+                                error={touched.location && errors.location ? true : false}
+                                errorMsg={
+                                    touched.location && errors.location ? errors.location : ''
+                                }
+                            />
 
-                                    <TextInput
-                                        label={'Pin Code'}
-                                        value={values.code}
-                                        onChangeText={(text) => {
-                                            const re = /^[0-9\b]+$/
-                                            if (text === '' || re.test(text)) {
-                                                handleChange('code')(text)
-                                            }
-                                        }}
-                                        onBlur={handleBlur('code')}
-                                        error={touched.code && errors.code ? true : false}
-                                        errorMsg={touched.code && errors.code ? errors.code : ''}
-                                        keyboardType="numeric"
-                                        secureTextEntry={hidePassword}
-                                        right={
-                                            <TxtInput.Icon
-                                                name="eye"
-                                                color={Colors.light}
-                                                onPress={() => setHidePassword(!hidePassword)}
-                                            />
-                                        }
-                                        maxLength={4}
+                            <TextInput
+                                label={'Pin Code'}
+                                value={values.code}
+                                onChangeText={(text) => {
+                                    const re = /^[0-9\b]+$/
+                                    if (text === '' || re.test(text)) {
+                                        handleChange('code')(text)
+                                    }
+                                }}
+                                onBlur={handleBlur('code')}
+                                error={touched.code && errors.code ? true : false}
+                                errorMsg={touched.code && errors.code ? errors.code : ''}
+                                keyboardType="numeric"
+                                secureTextEntry={hidePassword}
+                                right={
+                                    <TxtInput.Icon
+                                        name="eye"
+                                        color={Colors.light}
+                                        onPress={() => setHidePassword(!hidePassword)}
                                     />
+                                }
+                                maxLength={4}
+                            />
 
-                                    <Button
-                                        title={'Continue'}
-                                        onPress={handleSubmit}
-                                        style={{ marginTop: 30 }}
-                                        disabled={
-                                            values.name &&
-                                            values.registration_no &&
-                                            values.telephone_no &&
-                                            values.location &&
-                                            values.code
-                                                ? false
-                                                : true
-                                        }
-                                        loading={loading}
-                                    />
-                                </View>
-                            </View>
+                            <Button
+                                title={'Continue'}
+                                onPress={handleSubmit}
+                                style={{ marginTop: 30 }}
+                                disabled={
+                                    values.name &&
+                                    values.registration_no &&
+                                    values.telephone_no &&
+                                    values.location &&
+                                    values.code
+                                        ? false
+                                        : true
+                                }
+                                loading={loading}
+                            />
                         </View>
                     )}
                 </Formik>

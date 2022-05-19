@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useRef, useMemo, useContext } from 'react'
-import { StyleSheet, TouchableOpacity, View, FlatList, RefreshControl } from 'react-native'
+import React, { useState, useEffect, useRef, useContext } from 'react'
+import { FlatList, RefreshControl, TouchableOpacity, Alert } from 'react-native'
 import JobContext from '../../../../api/context/jobs/JobContext'
-import { FontAwesome } from '@expo/vector-icons'
+import { FontAwesome, MaterialIcons } from '@expo/vector-icons'
 import Colors from '../../../../utils/Colors'
 
 import {
@@ -16,8 +16,10 @@ import TitleFilter from '../../../../views/components/headers/TitleFilter'
 import HeaderTitle from '../../../components/headers/HeaderTitle'
 import TopNavigation from '../../../../views/components/headers/TopNavigation'
 import JobItem from '../../../../views/components/lists/JobItem'
+import PassedRejectedJobItem from '../../../components/lists/PassedRejectedJobItem'
 import JobPendingItem from '../../../components/lists/JobPendingItem'
 import LoadMore from '../../../../views/components/lists/LoadMore'
+import NavigationModal from '../../../components/modals/NavigationModal'
 
 const JobsScreen = ({ navigation }, offset) => {
     const {
@@ -25,6 +27,7 @@ const JobsScreen = ({ navigation }, offset) => {
         savedJobs,
         appliedJobs,
         rejectedJobs,
+        passedJobs,
         getAppliedPendingJob,
         appliedPendingJobs,
         searchJobs,
@@ -35,6 +38,8 @@ const JobsScreen = ({ navigation }, offset) => {
         moreSavedJobs,
         getRejectedJobs,
         moreRejectedJobs,
+        getPassedJobs,
+        morePassedJobs,
         getAppliedJobs,
         moreAppliedJobs,
         getAppliedPendingJobs,
@@ -49,6 +54,8 @@ const JobsScreen = ({ navigation }, offset) => {
     const flatListRef = useRef(null)
 
     const [dataType, setDataType] = useState('discover')
+    const [showNavigationModal, setShowNavigationModal] = useState(false)
+    const [headerTitle, setHeaderTitle] = useState('Discover')
 
     useEffect(() => {
         getJobs()
@@ -71,6 +78,24 @@ const JobsScreen = ({ navigation }, offset) => {
             showRemove={dataType !== 'discover'}
         />
     )
+
+    const renderPassedRejectedItem = ({ item }) => (
+        <PassedRejectedJobItem
+            data={item}
+            onCardPress={() => handlePassedRejectedPress(item)}
+            onRemovePress={handleRemovePress}
+            showRemove={dataType !== 'discover'}
+        />
+    )
+
+    const handlePassedRejectedPress = (item) => {
+        console.log(item)
+        if (item.remarks) {
+            Alert.alert('Remarks', item.remarks)
+        } else {
+            Alert.alert('Remarks', 'No remarks')
+        }
+    }
 
     const renderPendingItem = ({ item }) => (
         <JobPendingItem
@@ -123,30 +148,42 @@ const JobsScreen = ({ navigation }, offset) => {
                     getJobs()
                 }
                 setDataType('discover')
+                setHeaderTitle('Discover Jobs')
                 break
             case 1:
                 if (savedJobs.data.length == 0) {
                     getSavedJobs()
                 }
                 setDataType('saved')
+                setHeaderTitle('Saved Jobs')
                 break
             case 2:
                 if (appliedJobs.data.length == 0) {
                     getAppliedJobs()
                 }
                 setDataType('applied')
+                setHeaderTitle('Pending Jobs')
                 break
             case 3:
                 if (appliedPendingJobs.data.length == 0) {
                     getAppliedPendingJobs()
                 }
                 setDataType('appliedPending')
+                setHeaderTitle('Confirmed Jobs')
                 break
             case 4:
                 if (rejectedJobs.data.length == 0) {
                     getRejectedJobs()
                 }
                 setDataType('reject')
+                setHeaderTitle('Rejected Jobs')
+                break
+            case 5:
+                if (passedJobs.data.length == 0) {
+                    getPassedJobs()
+                }
+                setDataType('passed')
+                setHeaderTitle('Passed Jobs')
                 break
         }
         scrollToTop()
@@ -327,7 +364,7 @@ const JobsScreen = ({ navigation }, offset) => {
                         style={{ flex: 0 }}
                         ref={flatListRef}
                         data={rejectedJobs.data}
-                        renderItem={renderItem}
+                        renderItem={renderPassedRejectedItem}
                         keyExtractor={(item) => item.id}
                         ListFooterComponent={
                             <LoadMore
@@ -342,6 +379,39 @@ const JobsScreen = ({ navigation }, offset) => {
                         onEndReached={() => {
                             if (rejectedJobs.data.length < 30 && !loading) {
                                 moreRejectedJobs()
+                            }
+                        }}
+                        onEndReachedThreshold={0}
+                    />
+                )
+            case 'passed':
+                return (
+                    <FlatList
+                        refreshControl={
+                            <RefreshControl
+                                refreshing={loading}
+                                onRefresh={() => getPassedJobs()}
+                            />
+                        }
+                        //onScroll={(e) => onScroll(e)}
+                        style={{ flex: 0 }}
+                        ref={flatListRef}
+                        data={passedJobs.data}
+                        renderItem={renderPassedRejectedItem}
+                        keyExtractor={(item) => item.id}
+                        ListFooterComponent={
+                            <LoadMore
+                                onLoadMorePress={() => {
+                                    morePassedJobs(true)
+                                    scrollToTop()
+                                }}
+                                isLoading={passedJobs.data.length >= 30 && !loading}
+                            />
+                        }
+                        ListEmptyComponent={ListEmptyComponent}
+                        onEndReached={() => {
+                            if (passedJobs.data.length < 30 && !loading) {
+                                morePassedJobs()
                             }
                         }}
                         onEndReachedThreshold={0}
@@ -366,20 +436,35 @@ const JobsScreen = ({ navigation }, offset) => {
                 )}
             /> */}
             <HeaderTitle
-                title={'Jobs'}
+                title={headerTitle}
                 style={{ backgroundColor: Colors.white, marginBottom: 10, paddingHorizontal: 10 }}
+                rightIcon={() => (
+                    <TouchableOpacity
+                        activeOpacity={0.7}
+                        onPress={() => setShowNavigationModal(true)}
+                    >
+                        <MaterialIcons name="menu" size={24} color={Colors.black} />
+                    </TouchableOpacity>
+                )}
             />
 
             <Container style={{ paddingHorizontal: 0 }}>
                 {/* <TitleFilter title="JOBS" titleColor={Colors.primary} hideLine /> */}
 
-                <TopNavigation
-                    navTitles={['Discover', 'Saved', 'Pending', 'Confimed', 'Rejected']}
+                {/* <TopNavigation
+                    navTitles={['Discover', 'Saved', 'Pending', 'Confirmed', 'Rejected']}
                     onBtnPress={handleTopNavigationPress}
-                />
+                /> */}
 
                 {renderFlatList(dataType)}
             </Container>
+
+            <NavigationModal
+                navTitles={['Discover', 'Saved', 'Pending', 'Confirmed', 'Rejected', 'Passed']}
+                visible={showNavigationModal}
+                onDismiss={() => setShowNavigationModal(false)}
+                onBtnPress={handleTopNavigationPress}
+            />
         </SafeAreaView>
     )
 }

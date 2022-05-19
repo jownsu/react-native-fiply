@@ -6,6 +6,7 @@ import JobDetailsScreen from './JobDetailsScreen'
 import ApplicantScreen from './ApplicantScreen'
 import AnswersScreen from './AnswersScreen'
 import ResumeScreen from './ResumeScreen'
+import ApplicantInterviewListScreen from './ApplicantInterviewListScreen'
 
 const Stack = createStackNavigator()
 
@@ -37,6 +38,11 @@ const JobStack = () => {
                     options={{ headerShown: false }}
                     name={'ResumeScreen'}
                     component={ResumeScreen}
+                ></Stack.Screen>
+                <Stack.Screen
+                    options={{ headerShown: false }}
+                    name={'ApplicantInterviewListScreen'}
+                    component={ApplicantInterviewListScreen}
                 ></Stack.Screen>
             </Stack.Navigator>
         </JobProvider>

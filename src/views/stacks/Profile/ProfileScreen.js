@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext, useRef } from 'react'
-import { StyleSheet, FlatList, Alert, StatusBar } from 'react-native'
+import { StyleSheet, FlatList, Alert, StatusBar, Linking } from 'react-native'
 import { Snackbar } from 'react-native-paper'
 import ProfileContext from '../../../api/context/profile/ProfileContext'
 import PostContext from '../../../api/context/posts/PostContext'
@@ -189,7 +189,7 @@ const ProfileScreen = ({ navigation, route }) => {
                             // onSettingPress={() => setShowEditProfileAction(true)}
                             onEditProfilePress={() => navigation.push('EditProfileScreen')}
                             onSeeDetailsPress={() => navigation.push('ProfileInfoScreen')}
-                            onMessagePress={() => console.log(userInfo)}
+                            onMessagePress={() => Linking.openURL(`mailto:${userInfo.email}`)}
                         />
                         {userInfo.is_me ? (
                             <CreatePostBar

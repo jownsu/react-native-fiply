@@ -158,7 +158,7 @@ const ApplicantScreen = ({ navigation }) => {
                 dialogText={`Reject ${response.name}?`}
                 onDismiss={() => setShowConfirmation(false)}
                 onOkPress={() =>
-                    rejectApplicant(job.id, response.id, () => {
+                    rejectApplicant(job.id, response.id, {}, () => {
                         showBottomNav()
                         navigation.pop(2)
                     })

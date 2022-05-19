@@ -60,9 +60,9 @@ const LandingScreen = ({ navigation }) => {
                     <Button
                         title={'Join Now'}
                         style={{ marginBottom: 10 }}
-                        onPress={() => navigation.navigate('SignInScreen')}
+                        onPress={() => navigation.navigate('SignUpStack')}
                     />
-                    <TouchableOpacity onPress={() => navigation.navigate('SignUpStack')}>
+                    <TouchableOpacity onPress={() => navigation.navigate('SignInScreen')}>
                         <Text weight="semi-bold" center color={Colors.grey}>
                             ALREADY HAVE AN ACCOUNT?
                         </Text>

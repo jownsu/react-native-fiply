@@ -156,6 +156,7 @@ const CreateJobScreen = ({ navigation }) => {
                                     value={values.job_responsibilities}
                                     onChangeText={handleChange('job_responsibilities')}
                                     onBlur={handleBlur('job_responsibilities')}
+                                    maxLength={1000}
                                     error={
                                         touched.job_responsibilities && errors.job_responsibilities
                                             ? true
@@ -174,6 +175,7 @@ const CreateJobScreen = ({ navigation }) => {
                                     value={values.qualifications}
                                     onChangeText={handleChange('qualifications')}
                                     onBlur={handleBlur('qualifications')}
+                                    maxLength={1000}
                                     error={
                                         touched.qualifications && errors.qualifications
                                             ? true

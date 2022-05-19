@@ -59,7 +59,7 @@ export const Dropdown = ({
         <TouchableOpacity
             style={{ ...styles.dropdownTextContainer }}
             onPress={() => {
-                onSubmit(item.name)
+                onSubmit(item.name, item.id)
                 setVisibleDialog(false)
             }}
         >

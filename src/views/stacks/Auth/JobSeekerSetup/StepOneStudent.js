@@ -18,18 +18,22 @@ import DateTimePicker from '@react-native-community/datetimepicker'
 import SignUpContext from '../../../../api/context/auth/SignUpContext'
 import useUniversity from '../../../../api/hooks/useUniversity'
 import useDegree from '../../../../api/hooks/useDegree'
-import useJobCategory from '../../../../api/hooks/useJobCategory'
+import useDegreeCategory from '../../../../api/hooks/useDegreeCategory'
 
 const StepOneStudent = ({ navigation }) => {
     const { universities, getUniversities, loading: universityLoading } = useUniversity()
-    const { degrees, getDegrees, loading: degreeLoading } = useDegree()
-    const { jobCategories, getJobCategories, loading: jobCategoryLoading } = useJobCategory()
+    const { degrees, getDegrees, getCategory, loading: degreeLoading } = useDegree()
+    const {
+        degreeCategories,
+        getDegreeCategories,
+        loading: degreeCategoryLoading,
+    } = useDegreeCategory()
     const { setEducationalBackground } = useContext(SignUpContext)
 
     useEffect(() => {
         getUniversities()
         getDegrees()
-        getJobCategories()
+        getDegreeCategories()
     }, [])
 
     const studentSchema = yup.object({
@@ -111,7 +115,12 @@ const StepOneStudent = ({ navigation }) => {
                                 data={degrees}
                                 style={{ marginBottom: 5 }}
                                 isLoading={degreeLoading}
-                                onSubmit={(text) => setFieldValue('degree', text)}
+                                onSubmit={(text, id) => {
+                                    getCategory(id, (degreeCategory) => {
+                                        setFieldValue('field_of_study', degreeCategory)
+                                    })
+                                    setFieldValue('degree', text)
+                                }}
                                 error={touched.degree && errors.degree ? true : false}
                                 errorMsg={touched.degree && errors.degree ? errors.degree : ''}
                             />
@@ -119,10 +128,10 @@ const StepOneStudent = ({ navigation }) => {
                             <Dropdown
                                 label={'Field of study'}
                                 value={values.field_of_study}
-                                data={jobCategories}
+                                data={degreeCategories}
                                 style={{ marginBottom: 5 }}
                                 onSubmit={(text) => setFieldValue('field_of_study', text)}
-                                isLoading={jobCategoryLoading}
+                                isLoading={degreeCategoryLoading}
                                 error={
                                     touched.field_of_study && errors.field_of_study ? true : false
                                 }

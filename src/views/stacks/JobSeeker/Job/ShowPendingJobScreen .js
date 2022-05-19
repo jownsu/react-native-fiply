@@ -202,7 +202,7 @@ const ShowPendingJobScreen = ({ navigation }) => {
                 </Container>
             </ScrollView>
 
-            <View style={styles.footerContainer}>
+            {/* <View style={styles.footerContainer}>
                 <TouchableOpacity style={styles.saveBtn} activeOpacity={0.7}>
                     <Text weight="medium" size={16} color={Colors.red}>
                         Call Off
@@ -221,7 +221,7 @@ const ShowPendingJobScreen = ({ navigation }) => {
                         Proceed
                     </Text>
                 </TouchableOpacity>
-            </View>
+            </View> */}
         </SafeAreaView>
     )
 }

@@ -2,25 +2,28 @@ import { StyleSheet, View, RefreshControl, FlatList, BackHandler } from 'react-n
 import { SafeAreaView, Container, Text } from '../../../components/FiplyComponents'
 import { Avatar } from 'react-native-paper'
 import Header from '../../../components/headers/Header'
-import React, { useContext, useRef, useEffect } from 'react'
+import React, { useContext, useRef, useEffect, useState } from 'react'
 import JobContext from '../../../../api/context/EMPLOYER/job/JobContext'
 import Colors from '../../../../utils/Colors'
 import { Ionicons, FontAwesome, FontAwesome5 } from '@expo/vector-icons'
 import { ProgressBar } from 'react-native-paper'
 import LoadMore from '../../../../views/components/lists/LoadMore'
 import ApplicantItem from '../../../components/lists/EMPLOYER/ApplicantItem'
+import ApplicantInterviewItem from '../../../components/lists/EMPLOYER/ApplicantInterviewItem'
+import InterviewAction from '../../../components/modals/InterviewAction'
 
-const ShowJobScreen = ({ navigation }) => {
+const ApplicantInterviewListScreen = ({ navigation }) => {
     const {
         job,
+        getApplicantInterviews,
+        moreApplicantInterviews,
+        applicantInterviews,
+        hireApplicant,
+        rejectApplicant,
         loading,
-        getApplicants,
-        getApplicantResponse,
-        moreApplicants,
-        applicants,
-        jobInterviews,
-        moreJobInterviews,
     } = useContext(JobContext)
+    const [showModal, setShowModal] = useState(false)
+    const [selectedApplication, setSelectedApplication] = useState(0)
 
     const handleBackPress = () => {
         navigation.getParent().setOptions({
@@ -42,16 +45,26 @@ const ShowJobScreen = ({ navigation }) => {
         })
     }
 
-    const renderItem = ({ item }) => <ApplicantItem data={item} onCardPress={handleCardPress} />
+    const renderItem = ({ item }) => (
+        <ApplicantInterviewItem data={item} onCardPress={handleCardPress} />
+    )
 
     const handleCardPress = (id) => {
-        // console.log(job.id)
-        // console.log(id)
-        navigation.getParent().setOptions({
-            tabBarStyle: { display: 'none' },
-        })
-        getApplicantResponse(job.id, id)
-        navigation.push('ApplicantScreen')
+        setSelectedApplication(id)
+        setShowModal(true)
+    }
+
+    const handleOnDismiss = () => {
+        setShowModal(false)
+        setSelectedApplication(0)
+    }
+
+    const handlePassedPress = (remarks) => {
+        hireApplicant(job.id, selectedApplication, { remarks }, alert('Passed'))
+    }
+
+    const handleFailedPress = (remarks) => {
+        rejectApplicant(job.id, selectedApplication, { remarks }, alert('Rejected'))
     }
 
     const renderHeader = () => (
@@ -125,7 +138,7 @@ const ShowJobScreen = ({ navigation }) => {
                 </View>
             </View>
 
-            <View style={styles.responsibilitiesContainer}>
+            {/* <View style={styles.responsibilitiesContainer}>
                 <Text size={21} weight="medium" style={{ marginBottom: 5 }}>
                     Job Responsibilites
                 </Text>
@@ -137,11 +150,11 @@ const ShowJobScreen = ({ navigation }) => {
                     Qualifications
                 </Text>
                 <Text>{job.qualifications}</Text>
-            </View>
+            </View> */}
 
-            {applicants.data.length > 0 && (
+            {applicantInterviews.data.length > 0 && (
                 <Text weight="medium" size={18} style={{ marginBottom: 10 }}>
-                    Applicant List
+                    To be Interview Applicant List
                 </Text>
             )}
         </Container>
@@ -152,7 +165,7 @@ const ShowJobScreen = ({ navigation }) => {
     return (
         <SafeAreaView flex statusBarColor={Colors.white}>
             <Header
-                title="Job Details"
+                title="Interview"
                 centerTitle
                 style={{
                     backgroundColor: Colors.white,
@@ -166,36 +179,46 @@ const ShowJobScreen = ({ navigation }) => {
 
             <FlatList
                 refreshControl={
-                    <RefreshControl refreshing={loading} onRefresh={() => getApplicants()} />
+                    <RefreshControl
+                        refreshing={loading}
+                        onRefresh={() => getApplicantInterviews(job.id)}
+                    />
                 }
                 style={{ flex: 0 }}
                 contentContainerStyle={{ paddingBottom: 25 }}
                 ref={flatListRef}
                 keyExtractor={(item) => item.id}
-                data={applicants.data}
+                data={applicantInterviews.data}
                 renderItem={renderItem}
                 ListHeaderComponent={renderHeader}
                 ListFooterComponent={
                     <LoadMore
                         onLoadMorePress={() => {
-                            moreApplicants(true)
+                            moreApplicantInterviews(true)
                             scrollToTop()
                         }}
-                        isLoading={applicants.data.length >= 30 && !loading}
+                        isLoading={applicantInterviews.data.length >= 30 && !loading}
                     />
                 }
                 onEndReached={() => {
-                    if (applicants.data.length < 30 && !loading) {
-                        moreApplicants()
+                    if (applicantInterviews.data.length < 30 && !loading) {
+                        moreApplicantInterviews()
                     }
                 }}
                 onEndReachedThreshold={0}
+            />
+
+            <InterviewAction
+                visible={showModal}
+                onDismiss={handleOnDismiss}
+                onPassedPress={handlePassedPress}
+                onFailedPress={handleFailedPress}
             />
         </SafeAreaView>
     )
 }
 
-export default ShowJobScreen
+export default ApplicantInterviewListScreen
 
 const styles = StyleSheet.create({
     jobTitleContainer: {

@@ -55,6 +55,15 @@ export const JobProvider = ({ children }) => {
                 total: 0,
             },
         },
+        passedJobs: {
+            data: [],
+            links: {
+                next: '',
+            },
+            meta: {
+                total: 0,
+            },
+        },
         questionnaire: [],
         loading: false,
     }
@@ -223,6 +232,30 @@ export const JobProvider = ({ children }) => {
         }
     }
 
+    const getPassedJobs = async () => {
+        setLoading()
+        await api({ token: user.token })
+            .get('/me/passedJobs')
+            .then((res) => dispatch({ type: 'GET_PASSED_JOBS', payload: res.data }))
+            .catch((err) => console.log(err))
+            .finally(() => stopLoading())
+    }
+
+    const morePassedJobs = async (reset = false) => {
+        if (state.passedJobs.links.next) {
+            setLoading()
+            await api({ token: user.token })
+                .get(state.passedJobs.links.next)
+                .then((res) => {
+                    reset
+                        ? dispatch({ type: 'GET_PASSED_JOBS', payload: res.data })
+                        : dispatch({ type: 'MORE_PASSED_JOBS', payload: res.data })
+                })
+                .catch((err) => console.log(err))
+                .finally(() => stopLoading())
+        }
+    }
+
     const toggleSavedJob = async (id, action = 'save') => {
         setLoading()
 
@@ -332,6 +365,8 @@ export const JobProvider = ({ children }) => {
                 toggleAppliedJob,
                 removeAppliedJob,
                 removeSavedJob,
+                getPassedJobs,
+                morePassedJobs,
                 jobResponses,
                 setJobResponses,
             }}

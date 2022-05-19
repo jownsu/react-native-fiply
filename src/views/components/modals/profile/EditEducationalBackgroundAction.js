@@ -10,8 +10,8 @@ import * as yup from 'yup'
 
 import useUniversity from '../../../../api/hooks/useUniversity'
 import useDegree from '../../../../api/hooks/useDegree'
-import useJobCategory from '../../../../api/hooks/useJobCategory'
 import DateTimePicker from '@react-native-community/datetimepicker'
+import useDegreeCategory from '../../../../api/hooks/useDegreeCategory'
 
 const EditEducationalBackgroundAction = ({
     visible = false,
@@ -23,13 +23,17 @@ const EditEducationalBackgroundAction = ({
     loading = false,
 }) => {
     const { universities, getUniversities, loading: universityLoading } = useUniversity()
-    const { degrees, getDegrees, loading: degreeLoading } = useDegree()
-    const { jobCategories, getJobCategories, loading: jobCategoryLoading } = useJobCategory()
+    const { degrees, getDegrees, loading: degreeLoading, getCategory } = useDegree()
+    const {
+        degreeCategories,
+        getDegreeCategories,
+        loading: degreeCategoryLoading,
+    } = useDegreeCategory()
 
     useEffect(() => {
         getUniversities()
         getDegrees()
-        getJobCategories()
+        getDegreeCategories()
     }, [])
 
     const [date, setDate] = useState(new Date())
@@ -100,13 +104,18 @@ const EditEducationalBackgroundAction = ({
                                     onBlur={handleBlur('degree')}
                                     error={touched.degree && errors.degreee ? true : false}
                                     errorMsg={touched.degree && errors.degree ? errors.degree : ''}
-                                    onSubmit={handleChange('degree')}
+                                    onSubmit={(text, id) => {
+                                        getCategory(id, (degreeCategory) => {
+                                            setFieldValue('field_of_study', degreeCategory)
+                                        })
+                                        setFieldValue('degree', text)
+                                    }}
                                     label="Degree"
                                     mode="flat"
                                 />
                                 <Dropdown
-                                    data={jobCategories}
-                                    isLoading={jobCategoryLoading}
+                                    data={degreeCategories}
+                                    isLoading={degreeCategoryLoading}
                                     value={values.field_of_study}
                                     onBlur={handleBlur('field_of_study')}
                                     error={

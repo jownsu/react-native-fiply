@@ -1,4 +1,4 @@
-import { StyleSheet, View, TouchableOpacity, Image } from 'react-native'
+import { StyleSheet, View, TouchableOpacity, ScrollView } from 'react-native'
 import React, { useContext, useState } from 'react'
 import {
     Text,
@@ -30,7 +30,7 @@ const AddHiringManagerScreen = ({ navigation }) => {
     })
 
     return (
-        <SafeAreaView>
+        <SafeAreaView flex>
             <Header title="New Hiring Manager" onBackPress={() => navigation.pop()} />
             <Container center padding={20}>
                 <Formik
@@ -58,7 +58,7 @@ const AddHiringManagerScreen = ({ navigation }) => {
                         touched,
                         setFieldValue,
                     }) => (
-                        <View>
+                        <ScrollView>
                             <TouchableOpacity
                                 style={styles.uploadBtn}
                                 onPress={() => {
@@ -152,7 +152,7 @@ const AddHiringManagerScreen = ({ navigation }) => {
                                         : true
                                 }
                             />
-                        </View>
+                        </ScrollView>
                     )}
                 </Formik>
             </Container>
