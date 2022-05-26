@@ -31,6 +31,7 @@ const Paragraph = ({
                 dense
                 multiline
                 disabled={disabled}
+                maxLength={1000}
             />
         </View>
     )

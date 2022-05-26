@@ -151,18 +151,23 @@ const SignUpScreen = ({ navigation, route }) => {
                                     }
                                     secureTextEntry={hidePassword}
                                 />
-                                <Text
-                                    style={{
-                                        textAlign: 'center',
-                                        marginBottom: 20,
-                                        marginTop: 35,
-                                    }}
+                                <TouchableOpacity
+                                    activeOpacity={0.7}
+                                    onPress={() => navigation.navigate('TermsConditionScreen')}
                                 >
-                                    By clicking Agree and Join, you agree to the Fiply
-                                    <Text color={Colors.primary}> User Agreement</Text>,
-                                    <Text color={Colors.primary}> Privacy Policy</Text>, and
-                                    <Text color={Colors.primary}> Cookie Policy</Text>.
-                                </Text>
+                                    <Text
+                                        style={{
+                                            textAlign: 'center',
+                                            marginBottom: 20,
+                                            marginTop: 35,
+                                        }}
+                                    >
+                                        By clicking Agree and Join, you agree to the Fiply
+                                        <Text color={Colors.primary}> User Agreement</Text>,
+                                        <Text color={Colors.primary}> Privacy Policy</Text>, and
+                                        <Text color={Colors.primary}> Cookie Policy</Text>.
+                                    </Text>
+                                </TouchableOpacity>
 
                                 <Button
                                     title={'Agree & Join'}

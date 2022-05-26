@@ -43,15 +43,11 @@ const HomeScreen = ({ navigation }, offset) => {
     }
 
     const handleCreatePostPress = () => {
-        if (user.account_level == 0) {
-            Alert.alert('Not Verified', 'This is not available for basic users')
-        } else {
-            //setShowCreatePost(true)
-            navigation.getParent().setOptions({
-                tabBarStyle: { display: 'none' },
-            })
-            navigation.push('CreatePostScreen')
-        }
+        //setShowCreatePost(true)
+        navigation.getParent().setOptions({
+            tabBarStyle: { display: 'none' },
+        })
+        navigation.push('CreatePostScreen')
     }
 
     const ListHeaderComponent = useMemo(() => {

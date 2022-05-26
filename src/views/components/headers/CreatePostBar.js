@@ -19,10 +19,7 @@ const CreatePostBar = ({
         <View style={{ ...createPostySTyles.createPostContainer, ...style }}>
             <TouchableOpacity
                 activeOpacity={0.5}
-                style={[
-                    createPostySTyles.textInputContainer,
-                    user.account_level == 0 ? { backgroundColor: Colors.light } : {},
-                ]}
+                style={createPostySTyles.textInputContainer}
                 onPress={onInputPress}
             >
                 <Text>Create a post</Text>

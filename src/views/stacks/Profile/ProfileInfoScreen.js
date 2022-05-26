@@ -44,8 +44,9 @@ const ProfileInfoScreen = ({ navigation }) => {
                     <CardInfo
                         style={styles.detailsContainer}
                         title="Contact Information"
-                        headers={['Mobile Number', 'Telephone Number', 'Website']}
+                        headers={['Email', 'Mobile Number', 'Telephone Number', 'Website']}
                         infos={{
+                            email: userInfo.email,
                             mobile_no: userInfo.mobile_no,
                             telephone_no: userInfo.telephone_no,
                             website: userInfo.website,
@@ -108,6 +109,7 @@ const styles = StyleSheet.create({
     },
     actionContainer: {
         paddingVertical: 10,
+        paddingHorizontal: 20,
     },
     actionBtn: {
         paddingVertical: 10,

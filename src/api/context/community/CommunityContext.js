@@ -60,6 +60,15 @@ export const CommunityProvider = ({ children }) => {
             .finally(() => stopLoading())
     }
 
+    const searchUsers = async (search = '') => {
+        setLoading()
+        await api({ token: user.token })
+            .get(`/users?search=${search}`)
+            .then((res) => dispatch({ type: 'GET_USERS', payload: res.data }))
+            .catch((err) => console.log(err))
+            .finally(() => stopLoading())
+    }
+
     const moreUsers = async (reset = false) => {
         if (state.users.links.next) {
             setLoading()
@@ -198,6 +207,7 @@ export const CommunityProvider = ({ children }) => {
                 ...state,
                 getUsers,
                 moreUsers,
+                searchUsers,
                 getFollowedUsers,
                 moreFollowedUsers,
                 getFollowerRequests,

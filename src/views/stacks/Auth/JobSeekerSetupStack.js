@@ -67,11 +67,6 @@ const JobSeekerSetupStack = () => {
             ></Stack.Screen>
             <Stack.Screen
                 options={{ headerShown: false }}
-                name={'StepFour'}
-                component={StepFour}
-            ></Stack.Screen>
-            <Stack.Screen
-                options={{ headerShown: false }}
                 name={'Done'}
                 component={Done}
                 initialParams={{ usertype: 'jobseeker' }}

@@ -22,6 +22,7 @@ const CommunityScreen = ({ navigation }, offset) => {
         followerRequests,
         pendingRequests,
         getUsers,
+        searchUsers,
         moreUsers,
         follow,
         unFollow,
@@ -102,7 +103,7 @@ const CommunityScreen = ({ navigation }, offset) => {
         switch (id) {
             case 0:
                 if (users.length == 0) {
-                    getUsers()
+                    getUsers('?q=notFollowing')
                 }
                 setDataType('discover')
                 break
@@ -149,34 +150,46 @@ const CommunityScreen = ({ navigation }, offset) => {
         switch (dataType) {
             case 'discover':
                 return (
-                    <FlatList
-                        key={1}
-                        refreshControl={
-                            <RefreshControl refreshing={loading} onRefresh={() => getUsers()} />
-                        }
-                        //onScroll={(e) => onScroll(e)}
-                        contentContainerStyle={{ alignItems: 'center' }}
-                        ref={flatListRef}
-                        data={users.data}
-                        renderItem={renderItem}
-                        onEndReached={() => {
-                            if (users.data.length < 30 && !loading) {
-                                moreUsers()
+                    <>
+                        <SearchBar
+                            style={{ marginBottom: 10 }}
+                            onSubmit={(searchVal) => {
+                                searchUsers(searchVal)
+                            }}
+                            onBlurClear={() => getUsers('?q=notFollowing')}
+                        />
+                        <FlatList
+                            key={1}
+                            refreshControl={
+                                <RefreshControl
+                                    refreshing={loading}
+                                    onRefresh={() => getUsers('?q=notFollowing')}
+                                />
                             }
-                        }}
-                        onEndReachedThreshold={0}
-                        ListFooterComponent={
-                            <LoadMore
-                                onLoadMorePress={() => {
-                                    moreUsers(true)
-                                    scrollToTop()
-                                }}
-                                isLoading={users.data.length >= 30 && !loading}
-                            />
-                        }
-                        ListEmptyComponent={ListEmptyComponent}
-                        numColumns={2}
-                    />
+                            //onScroll={(e) => onScroll(e)}
+                            contentContainerStyle={{ alignItems: 'center' }}
+                            ref={flatListRef}
+                            data={users.data}
+                            renderItem={renderItem}
+                            onEndReached={() => {
+                                if (users.data.length < 30 && !loading) {
+                                    moreUsers()
+                                }
+                            }}
+                            onEndReachedThreshold={0}
+                            ListFooterComponent={
+                                <LoadMore
+                                    onLoadMorePress={() => {
+                                        moreUsers(true)
+                                        scrollToTop()
+                                    }}
+                                    isLoading={users.data.length >= 30 && !loading}
+                                />
+                            }
+                            ListEmptyComponent={ListEmptyComponent}
+                            numColumns={2}
+                        />
+                    </>
                 )
 
             case 'pending_requests':

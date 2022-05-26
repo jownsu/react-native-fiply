@@ -9,7 +9,7 @@ const useDegreeCategory = () => {
     const getDegreeCategories = async () => {
         setLoading(true)
         await api()
-            .get(`/degrees`)
+            .get(`/degreeCategories`)
             .then((res) => setDegreeCategories(res.data.data))
             .catch((err) => console.log(err))
             .finally(() => setLoading(false))

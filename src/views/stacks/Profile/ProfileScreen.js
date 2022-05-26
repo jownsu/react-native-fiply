@@ -155,11 +155,7 @@ const ProfileScreen = ({ navigation, route }) => {
     }
 
     const handleCreatePostBarInputPress = () => {
-        if (userInfo.account_level == 0) {
-            Alert.alert('Not Verified', 'This is not available for basic users')
-        } else {
-            navigation.push('CreatePostScreen')
-        }
+        navigation.push('CreatePostScreen')
     }
 
     return (

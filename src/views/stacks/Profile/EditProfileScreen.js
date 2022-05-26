@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { StyleSheet, View, TouchableOpacity } from 'react-native'
+import { StyleSheet, View, TouchableOpacity, ScrollView } from 'react-native'
 import { Avatar, Snackbar } from 'react-native-paper'
 import {
     Text,
@@ -54,163 +54,169 @@ const EditProfileScreen = ({ navigation }) => {
                 style={{ backgroundColor: Colors.white }}
                 onBackPress={() => navigation.pop()}
             />
-            <Container style={styles.container} padding={10}>
-                <View style={styles.headerContainer}>
-                    <Avatar.Image
-                        source={{ uri: userInfo.avatar }}
-                        size={100}
-                        style={styles.avatar}
-                    />
+            <ScrollView>
+                <Container style={styles.container} padding={10}>
+                    <View style={styles.headerContainer}>
+                        <Avatar.Image
+                            source={{ uri: userInfo.avatar }}
+                            size={100}
+                            style={styles.avatar}
+                        />
 
-                    <SecondaryButton
-                        onPress={() => {
-                            pickImage([1, 1], (uri) => {
-                                uploadAvatar(uri)
-                            })
+                        <SecondaryButton
+                            onPress={() => {
+                                pickImage([1, 1], (uri) => {
+                                    uploadAvatar(uri)
+                                })
+                            }}
+                            title={'Change photo'}
+                            style={styles.changeProfileBtn}
+                            labelStyle={styles.changeProfileLabel}
+                        />
+                    </View>
+                    <View
+                        style={{
+                            flexDirection: 'row',
                         }}
-                        title={'Change photo'}
-                        style={styles.changeProfileBtn}
-                        labelStyle={styles.changeProfileLabel}
-                    />
-                </View>
-                <View
-                    style={{
-                        flexDirection: 'row',
-                    }}
-                >
-                    <Dropdown
-                        label={'Audience'}
-                        data={[
-                            { id: 1, name: 'Public' },
-                            { id: 2, name: 'Only Followers' },
-                        ]}
-                        value={userInfo.is_public ? 'Public' : 'Only Followers'}
-                        onSubmit={(text) => {
-                            if (text == 'Public') {
-                                setAudience(true)
-                            } else {
-                                setAudience(false)
-                            }
-                        }}
-                        iconSize={28}
-                        iconStyle={{ marginTop: 15 }}
-                        style={{ height: 40, marginBottom: 15, marginLeft: 15 }}
-                        textInputStyle={{
-                            height: 40,
-                            fontSize: 14,
-                        }}
-                        noTextInput
-                        dropdownIcon
-                    />
-                </View>
-
-                <Formik
-                    initialValues={{
-                        firstname: userInfo.firstname,
-                        lastname: userInfo.lastname,
-                    }}
-                    validationSchema={formSchema}
-                    onSubmit={(values) => {
-                        updateProfile(values)
-                    }}
-                >
-                    {({ handleChange, handleSubmit, handleBlur, values, errors, touched }) => (
-                        <>
-                            <TextInput
-                                label={'Firstname'}
-                                mode={'flat'}
-                                value={values.firstname}
-                                onChangeText={handleChange('firstname')}
-                                onBlur={handleBlur('firstname')}
-                                error={touched.firstname && errors.firstname ? true : false}
-                                errorMsg={
-                                    touched.firstname && errors.firstname ? errors.firstname : ''
+                    >
+                        <Dropdown
+                            label={'Audience'}
+                            data={[
+                                { id: 1, name: 'Public' },
+                                { id: 2, name: 'Only Followers' },
+                            ]}
+                            value={userInfo.is_public ? 'Public' : 'Only Followers'}
+                            onSubmit={(text) => {
+                                if (text == 'Public') {
+                                    setAudience(true)
+                                } else {
+                                    setAudience(false)
                                 }
-                            />
-                            <TextInput
-                                label={'Lastname'}
-                                mode={'flat'}
-                                value={values.lastname}
-                                onChangeText={handleChange('lastname')}
-                                onBlur={handleBlur('lastname')}
-                                error={touched.lastname && errors.lastname ? true : false}
-                                errorMsg={
-                                    touched.lastname && errors.lastname ? errors.lastname : ''
-                                }
-                            />
-                            <SecondaryButton
-                                title="Save"
-                                style={{ borderWidth: 0, marginTop: 20 }}
-                                onPress={handleSubmit}
-                                loading={loading}
-                                disabled={loading}
-                            />
-                        </>
-                    )}
-                </Formik>
+                            }}
+                            iconSize={28}
+                            iconStyle={{ marginTop: 15 }}
+                            style={{ marginBottom: 15, marginLeft: 15 }}
+                            textInputStyle={{
+                                fontSize: 14,
+                            }}
+                            noTextInput
+                            dropdownIcon
+                        />
+                    </View>
+                    <Text center size={16}>
+                        {userInfo.email}
+                    </Text>
 
-                {/* <TextInput value={userInfo.bio} label={'Bio'} mode={'flat'} /> */}
+                    <Formik
+                        initialValues={{
+                            firstname: userInfo.firstname,
+                            lastname: userInfo.lastname,
+                        }}
+                        validationSchema={formSchema}
+                        onSubmit={(values) => {
+                            updateProfile(values)
+                        }}
+                    >
+                        {({ handleChange, handleSubmit, handleBlur, values, errors, touched }) => (
+                            <>
+                                <TextInput
+                                    label={'Firstname'}
+                                    mode={'flat'}
+                                    value={values.firstname}
+                                    onChangeText={handleChange('firstname')}
+                                    onBlur={handleBlur('firstname')}
+                                    error={touched.firstname && errors.firstname ? true : false}
+                                    errorMsg={
+                                        touched.firstname && errors.firstname
+                                            ? errors.firstname
+                                            : ''
+                                    }
+                                />
+                                <TextInput
+                                    label={'Lastname'}
+                                    mode={'flat'}
+                                    value={values.lastname}
+                                    onChangeText={handleChange('lastname')}
+                                    onBlur={handleBlur('lastname')}
+                                    error={touched.lastname && errors.lastname ? true : false}
+                                    errorMsg={
+                                        touched.lastname && errors.lastname ? errors.lastname : ''
+                                    }
+                                />
+                                <SecondaryButton
+                                    title="Save"
+                                    style={{ borderWidth: 0, marginTop: 20 }}
+                                    onPress={handleSubmit}
+                                    loading={loading}
+                                    disabled={loading}
+                                />
+                            </>
+                        )}
+                    </Formik>
 
-                <View style={styles.actionContainer}>
-                    <TouchableOpacity
-                        style={styles.actionBtn}
-                        onPress={() => navigation.push('ResumeScreen')}
-                    >
-                        <Text color={Colors.secondary} weight="medium" size={16}>
-                            Resume
-                        </Text>
-                    </TouchableOpacity>
+                    {/* <TextInput value={userInfo.bio} label={'Bio'} mode={'flat'} /> */}
 
-                    <TouchableOpacity
-                        style={styles.actionBtn}
-                        onPress={() => navigation.push('EditAboutScreen')}
+                    <View style={styles.actionContainer}>
+                        <TouchableOpacity
+                            style={styles.actionBtn}
+                            onPress={() => navigation.push('ResumeScreen')}
+                        >
+                            <Text color={Colors.secondary} weight="medium" size={16}>
+                                Resume
+                            </Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                            style={styles.actionBtn}
+                            onPress={() => navigation.push('EditAboutScreen')}
+                        >
+                            <Text color={Colors.secondary} weight="medium" size={16}>
+                                Personal Info
+                            </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={styles.actionBtn}
+                            onPress={() => navigation.push('EditJobPreferenceScreen')}
+                        >
+                            <Text color={Colors.secondary} weight="medium" size={16}>
+                                Job Preference
+                            </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={styles.actionBtn}
+                            onPress={() => navigation.push('EditEducationalBackgroundScreen')}
+                        >
+                            <Text color={Colors.secondary} weight="medium" size={16}>
+                                Educational Background
+                            </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={styles.actionBtn}
+                            onPress={() => navigation.push('EditExperienceScreen')}
+                        >
+                            <Text color={Colors.secondary} weight="medium" size={16}>
+                                Work Experiences
+                            </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={styles.actionBtn}
+                            onPress={() => navigation.push('ChangePasswordScreen')}
+                        >
+                            <Text color={Colors.secondary} weight="medium" size={16}>
+                                Change Password
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+                    <Snackbar
+                        visible={snackBarMessage ? true : false}
+                        onDismiss={() => hideSnackBar()}
+                        duration={3000}
+                        style={{ backgroundColor: Colors.black, zIndex: 99, elevation: 10 }}
                     >
-                        <Text color={Colors.secondary} weight="medium" size={16}>
-                            Personal Info
-                        </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={styles.actionBtn}
-                        onPress={() => navigation.push('EditJobPreferenceScreen')}
-                    >
-                        <Text color={Colors.secondary} weight="medium" size={16}>
-                            Job Preference
-                        </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={styles.actionBtn}
-                        onPress={() => navigation.push('EditEducationalBackgroundScreen')}
-                    >
-                        <Text color={Colors.secondary} weight="medium" size={16}>
-                            Educational Background
-                        </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={styles.actionBtn}
-                        onPress={() => navigation.push('EditExperienceScreen')}
-                    >
-                        <Text color={Colors.secondary} weight="medium" size={16}>
-                            Work Experiences
-                        </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={styles.actionBtn}
-                        onPress={() => navigation.push('ChangePasswordScreen')}
-                    >
-                        <Text color={Colors.secondary} weight="medium" size={16}>
-                            Change Password
-                        </Text>
-                    </TouchableOpacity>
-                </View>
-                <Snackbar
-                    visible={snackBarMessage ? true : false}
-                    onDismiss={() => hideSnackBar()}
-                    duration={3000}
-                    style={{ backgroundColor: Colors.black, zIndex: 99, elevation: 10 }}
-                >
-                    <Text color={Colors.white}>{snackBarMessage}</Text>
-                </Snackbar>
-            </Container>
+                        <Text color={Colors.white}>{snackBarMessage}</Text>
+                    </Snackbar>
+                </Container>
+            </ScrollView>
         </SafeAreaView>
     )
 }

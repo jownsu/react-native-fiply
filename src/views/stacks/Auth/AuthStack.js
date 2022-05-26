@@ -4,6 +4,7 @@ import SignInScreen from '../../screens/AuthScreens/SignInScreen'
 import SignUpStack from './SignUpStack'
 import LandingScreen from '../../screens/LandingScreen'
 import AuthContext from '../../../api/context/auth/AuthContext'
+import TermsConditionScreen from './TermsConditionScreen'
 const Stack = createStackNavigator()
 
 const AuthStack = () => {
@@ -27,6 +28,11 @@ const AuthStack = () => {
                 options={{ headerShown: false }}
                 name={'SignUpStack'}
                 component={SignUpStack}
+            ></Stack.Screen>
+            <Stack.Screen
+                options={{ headerShown: false }}
+                name={'TermsConditionScreen'}
+                component={TermsConditionScreen}
             ></Stack.Screen>
         </Stack.Navigator>
     )

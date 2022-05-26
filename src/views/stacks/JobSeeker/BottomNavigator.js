@@ -27,6 +27,15 @@ const BottomNavigator = ({ navigation }) => {
         bottomSheetModalRef.current?.present()
     }, [])
 
+    const handleAccountLevelPress = () => {
+        if (user.account_level == 0) {
+            navigation.navigate('StepOne')
+        }
+        if (user.account_level == 1) {
+            navigation.navigate('StepThree')
+        }
+    }
+
     const handleClosePress = () => bottomSheetModalRef.current.close()
 
     const handleSignoutPress = () => logout()
@@ -168,10 +177,12 @@ const BottomNavigator = ({ navigation }) => {
                         <Text size={11} color={Colors.secondary}>
                             Your profile progress
                         </Text>
-                        <AccountLevelBar level={user.account_level} />
+                        <TouchableOpacity activeOpacity={0.7} onPress={handleAccountLevelPress}>
+                            <AccountLevelBar level={user.account_level} />
+                        </TouchableOpacity>
                     </View>
                     <View style={styles.btmFooterContainer}>
-                        <TouchableOpacity style={styles.footerBtn}>
+                        {/* <TouchableOpacity style={styles.footerBtn}>
                             <FontAwesome5
                                 name="user-cog"
                                 size={24}
@@ -179,7 +190,7 @@ const BottomNavigator = ({ navigation }) => {
                                 style={{ marginRight: 5 }}
                             />
                             <Text weight="medium">Settings</Text>
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
 
                         <TouchableOpacity style={styles.footerBtn} onPress={handleSignoutPress}>
                             <FontAwesome5
