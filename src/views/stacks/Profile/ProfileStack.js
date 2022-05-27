@@ -12,6 +12,7 @@ import ChangePasswordScreen from './ChangePasswordScreen'
 import ProfileInfoScreen from './ProfileInfoScreen'
 import CreatePostScreen from '../../screens/CreatePostScreen'
 import ResumeScreen from './ResumeScreen'
+import UpVotesScreen from '../../screens/UpVotesScreen'
 import { PostProvider } from '../../../api/context/posts/PostContext'
 import { ProfileProvider } from '../../../api/context/profile/ProfileContext'
 const Stack = createStackNavigator()
@@ -82,6 +83,11 @@ const ProfileStack = ({ route }) => {
                         name={'CreatePostScreen'}
                         component={CreatePostScreen}
                         initialParams={{ edit: false, data: {} }}
+                    ></Stack.Screen>
+                    <Stack.Screen
+                        options={{ headerShown: false }}
+                        name={'UpVotesScreen'}
+                        component={UpVotesScreen}
                     ></Stack.Screen>
                 </Stack.Navigator>
             </ProfileProvider>

@@ -7,44 +7,19 @@ import {
     BackHandler,
 } from 'react-native'
 import React, { useState, useEffect, useMemo, useContext, useRef } from 'react'
-import CommentContext from '../../api/context/comments/CommentContext'
-import AuthContext from '../../api/context/auth/AuthContext'
+import PostContext from '../../api/context/posts/PostContext'
 import { Avatar } from 'react-native-paper'
-import {
-    Container,
-    Text,
-    TextInput,
-    ActivityIndicator,
-    SafeAreaView,
-} from '../components/FiplyComponents'
-import Confirmation from '../components/dialog/Confirmation'
+import { Container, Text, SafeAreaView } from '../components/FiplyComponents'
 import LoadMore from '../components/lists/LoadMore'
-import { TextInput as TxtInput } from 'react-native-paper'
-import { FontAwesome5, AntDesign, MaterialIcons } from '@expo/vector-icons'
+import { AntDesign, MaterialIcons } from '@expo/vector-icons'
 import Colors from '../../utils/Colors'
 import NoData from '../components/NoData'
 
-const CommentScreen = ({ navigation, route }) => {
-    const { post } = route.params
-    const [txtComment, setTxtComment] = useState('')
-    const [showConfirmation, setShowConfirmation] = useState(false)
-    const [selectedComment, setSelectedComment] = useState(0)
-
-    const { comments, moreComments, getComments, loading, createComment, deleteComment } =
-        useContext(CommentContext)
-    const { user } = useContext(AuthContext)
+const UpVotesScreen = ({ navigation, route }) => {
+    const { postId } = route.params
+    const { upVotes, getUpVotes, moreUpVotes, loading } = useContext(PostContext)
 
     const flatListRef = useRef(null)
-
-    const handleSend = () => {
-        createComment(post.id, txtComment)
-        setTxtComment('')
-    }
-
-    const handleDelete = () => {
-        deleteComment(selectedComment)
-        setShowConfirmation(false)
-    }
 
     const handleBackPress = () => {
         showBottomNav()
@@ -69,12 +44,13 @@ const CommentScreen = ({ navigation, route }) => {
     }
 
     const onEndReached = () => {
-        if (comments.data.length < 30 && !loading) {
-            moreComments()
+        if (upVotes.data.length < 30 && !loading) {
+            moreUpVotes()
         }
     }
 
     useEffect(() => {
+        getUpVotes(postId)
         BackHandler.addEventListener('hardwareBackPress', showBottomNav)
         return () => {
             BackHandler.removeEventListener('hardwareBackPress', showBottomNav)
@@ -88,41 +64,27 @@ const CommentScreen = ({ navigation, route }) => {
                     size={40}
                     source={{ uri: item.avatar }}
                     backgroundColor={Colors.light}
+                    style={styles.avatarContainer}
                 />
-                <View style={styles.commentContainer}>
-                    <Text weight="medium" numberOfLines={1} adjustsFontSizeToFit>
-                        {item.commented_by}
-                    </Text>
-                    <Text>{item.content}</Text>
-                    {user.id == item.user_id && (
-                        <AntDesign
-                            name="close"
-                            size={18}
-                            color={Colors.red}
-                            style={styles.closeBtn}
-                            onPress={() => {
-                                setSelectedComment(item.id)
-                                setShowConfirmation(true)
-                            }}
-                        />
-                    )}
-                </View>
+                <Text adjustsFontSizeToFit numberOfLines={1}>
+                    {item.name}
+                </Text>
             </View>
         )
     }
 
     const ListEmptyComponent = useMemo(() => {
-        return <NoData noDataMessage="No Comment" />
+        return <NoData noDataMessage="No Likes" />
     }, [])
 
     const ListFooterComponent = () => {
         return (
             <LoadMore
                 onLoadMorePress={() => {
-                    moreComments(true)
+                    moreUpVotes(true)
                     scrollToTop()
                 }}
-                isLoading={comments.data.length >= 30 && !loading}
+                isLoading={upVotes.data.length >= 30 && !loading}
             />
         )
     }
@@ -138,7 +100,7 @@ const CommentScreen = ({ navigation, route }) => {
                     <MaterialIcons name="arrow-back" size={16} color={Colors.white} />
                 </TouchableOpacity>
                 <View style={styles.headerContainer}>
-                    <Text weight="medium">{post.upVotes_count}</Text>
+                    <Text weight="medium">{upVotes.meta.total}</Text>
                     <AntDesign
                         style={{ marginLeft: 5 }}
                         name="like1"
@@ -146,55 +108,25 @@ const CommentScreen = ({ navigation, route }) => {
                         color={Colors.secondary}
                     />
                 </View>
-
                 <FlatList
                     refreshControl={
-                        <RefreshControl
-                            refreshing={loading}
-                            onRefresh={() => getComments(post.id)}
-                        />
+                        <RefreshControl refreshing={loading} onRefresh={() => getUpVotes(postId)} />
                     }
                     ref={flatListRef}
                     style={{ flex: 0 }}
-                    data={comments.data}
+                    data={upVotes.data}
                     renderItem={renderItem}
                     ListEmptyComponent={ListEmptyComponent}
                     ListFooterComponent={ListFooterComponent}
                     onEndReached={onEndReached}
                     onEndReachedThreshold={0}
                 />
-
-                <TextInput
-                    label="Write a comment"
-                    value={txtComment}
-                    onChangeText={setTxtComment}
-                    multiline
-                    style={{ fontSize: 14, maxHeight: 150 }}
-                    dense
-                    right={
-                        txtComment ? (
-                            <TxtInput.Icon
-                                name="send"
-                                color={Colors.primary}
-                                onPress={handleSend}
-                            />
-                        ) : null
-                    }
-                    roundness={15}
-                />
             </Container>
-
-            <Confirmation
-                visible={showConfirmation}
-                dialogText="Are you sure to delete this comment? It cannot be undone."
-                onDismiss={() => setShowConfirmation(false)}
-                onOkPress={handleDelete}
-            />
         </SafeAreaView>
     )
 }
 
-export default CommentScreen
+export default UpVotesScreen
 
 const styles = StyleSheet.create({
     headerContainer: {
@@ -205,6 +137,7 @@ const styles = StyleSheet.create({
     },
     listContainer: {
         flexDirection: 'row',
+        alignItems: 'center',
         marginBottom: 15,
     },
     commentContainer: {
@@ -226,5 +159,8 @@ const styles = StyleSheet.create({
         width: 25,
         backgroundColor: 'rgba(0,0,0,.5)',
         borderRadius: 50,
+    },
+    avatarContainer: {
+        marginRight: 5,
     },
 })

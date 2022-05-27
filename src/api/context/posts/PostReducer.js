@@ -21,7 +21,10 @@ const PostReducer = (state, action) => {
                 ...state,
                 posts: {
                     ...state.posts,
-                    data: [action.payload, ...state.posts.data],
+                    data: [
+                        { ...action.payload, upVotes_count: 0, comments_count: 0 },
+                        ...state.posts.data,
+                    ],
                 },
             }
 
@@ -72,11 +75,37 @@ const PostReducer = (state, action) => {
                 },
             }
 
+        case 'GET_UPVOTES':
+            return {
+                ...state,
+                upVotes: action.payload,
+            }
+
+        case 'MORE_UPVOTES':
+            return {
+                ...state,
+                upVotes: {
+                    ...state.upVotes,
+                    data: [...state.upVotes.data, ...action.payload.data],
+                    links: { ...action.payload.links },
+                },
+            }
+
         case 'RESET_POSTS':
             return {
                 ...state,
                 posts: {
                     ...state.posts,
+                    data: [],
+                },
+                loading: false,
+            }
+
+        case 'RESET_UPVOTES':
+            return {
+                ...state,
+                upVotes: {
+                    ...state.upVotes,
                     data: [],
                 },
                 loading: false,

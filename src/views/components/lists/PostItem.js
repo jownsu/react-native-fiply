@@ -7,6 +7,7 @@ import {
     FontAwesome,
     MaterialCommunityIcons,
     MaterialIcons,
+    AntDesign,
 } from '@expo/vector-icons'
 import FastImage from 'react-native-fast-image'
 import Colors from '../../../utils/Colors'
@@ -17,6 +18,8 @@ const PostItem = memo(
         onAvatarPress = () => {},
         onCommentPress = () => {},
         onUpVotePress = () => {},
+        onUpVoteCountPress = () => {},
+        onCommentCountPress = () => {},
         is_me = false,
     }) => {
         return (
@@ -86,18 +89,35 @@ const PostItem = memo(
                     />
                 ) : null}
 
+                <View style={postStyles.likesContainer}>
+                    <TouchableOpacity
+                        style={postStyles.like}
+                        onPress={() => onUpVoteCountPress(data.id)}
+                    >
+                        <Text color={Colors.grey} size={11}>
+                            {data.upVotes_count} Likes
+                        </Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={postStyles.comment} onPress={onCommentCountPress}>
+                        <Text color={Colors.grey} size={11}>
+                            {data.comments_count} Comments
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+
                 <View style={postStyles.postFooterContainer}>
                     <TouchableOpacity
                         style={postStyles.postAction}
                         onPress={() => onUpVotePress(data.id)}
                     >
-                        <FontAwesome5
+                        <AntDesign
                             style={postStyles.icon}
-                            name="caret-up"
+                            name="like1"
                             size={21}
                             color={data.is_upVoted ? Colors.secondary : Colors.black}
                         />
-                        <Text>{data.upVotes_count}</Text>
+                        <Text color={data.is_upVoted ? Colors.secondary : Colors.black}>Like</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={postStyles.postAction}
@@ -182,5 +202,16 @@ const postStyles = StyleSheet.create({
     },
     content: {
         marginVertical: 10,
+    },
+    likesContainer: {
+        paddingBottom: 10,
+        paddingHorizontal: 5,
+        flexDirection: 'row',
+    },
+    like: {
+        paddingHorizontal: 5,
+    },
+    comment: {
+        paddingHorizontal: 5,
     },
 })

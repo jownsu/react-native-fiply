@@ -21,6 +21,15 @@ export const PostProvider = ({ children }) => {
                 total: 0,
             },
         },
+        upVotes: {
+            data: [],
+            links: {
+                next: '',
+            },
+            meta: {
+                total: 0,
+            },
+        },
         loading: false,
     }
     const [state, dispatch] = useReducer(PostReducer, initialState)
@@ -160,6 +169,33 @@ export const PostProvider = ({ children }) => {
             .finally(() => stopLoading())
     }
 
+    const getUpVotes = async (id) => {
+        setLoading()
+        await api({ token: user.token })
+            .get(`/posts/${id}/upVotes`)
+            .then((res) => {
+                dispatch({ type: 'RESET_UPVOTES' })
+                dispatch({ type: 'GET_UPVOTES', payload: res.data })
+            })
+            .catch((err) => console.log(err))
+            .finally(() => stopLoading())
+    }
+
+    const moreUpVotes = async (reset = false) => {
+        if (state.upVotes.links.next) {
+            setLoading()
+            await api({ token: user.token })
+                .get(state.upVotes.links.next)
+                .then((res) => {
+                    reset
+                        ? dispatch({ type: 'GET_UPVOTES', payload: res.data })
+                        : dispatch({ type: 'MORE_UPVOTES', payload: res.data })
+                })
+                .catch((err) => console.log(err))
+                .finally(() => stopLoading())
+        }
+    }
+
     const setLoading = () => dispatch({ type: 'SET_LOADING' })
 
     const stopLoading = () => dispatch({ type: 'STOP_LOADING' })
@@ -177,6 +213,8 @@ export const PostProvider = ({ children }) => {
                 deletePost,
                 toggleUpVote,
                 savePost,
+                getUpVotes,
+                moreUpVotes,
                 snackBarMessage,
                 hideSnackBar,
             }}

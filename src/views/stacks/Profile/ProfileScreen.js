@@ -90,7 +90,9 @@ const ProfileScreen = ({ navigation, route }) => {
                 onDotPress={handleDotPress}
                 onAvatarPress={handleAvatarPress}
                 onCommentPress={() => handleCommentPress(item)}
+                onCommentCountPress={() => handleCommentPress(item)}
                 onUpVotePress={handleUpVotePress}
+                onUpVoteCountPress={handleUpVoteCountPress}
                 is_me={userInfo.is_me}
             />
         )
@@ -109,6 +111,10 @@ const ProfileScreen = ({ navigation, route }) => {
             default:
                 break
         }
+    }
+
+    const handleUpVoteCountPress = (id) => {
+        navigation.navigate('UpVotesScreen', { postId: id })
     }
 
     const handleCommentPress = (item) => {

@@ -1,22 +1,8 @@
-import {
-    StyleSheet,
-    View,
-    Image,
-    TextInput,
-    TouchableOpacity,
-    KeyboardAvoidingView,
-    BackHandler,
-} from 'react-native'
+import { StyleSheet, View, Image, TextInput, TouchableOpacity, BackHandler } from 'react-native'
 import React, { useState, useContext, useEffect } from 'react'
 import PostContext from '../../api/context/posts/PostContext'
 import AuthContext from '../../api/context/auth/AuthContext'
-import {
-    Text,
-    SafeAreaView,
-    Container,
-    InputDropdown,
-    Dropdown,
-} from '../components/FiplyComponents'
+import { Text, SafeAreaView, Container, Dropdown } from '../components/FiplyComponents'
 import usePickImage from '../../utils/usePIckImage'
 import { Avatar, ProgressBar } from 'react-native-paper'
 import Header from '../components/headers/Header'
@@ -51,9 +37,10 @@ const CreatePostScreen = ({ navigation, route }) => {
     }
 
     const handlePostPress = () => {
-        createPost({ content: postText, image: pickUri, is_public: isPublic }, () =>
+        createPost({ content: postText, image: pickUri, is_public: isPublic }, () => {
+            showBottomNav()
             navigation.pop()
-        )
+        })
     }
 
     const handleEditPress = () => {
@@ -177,7 +164,7 @@ const CreatePostScreen = ({ navigation, route }) => {
                     ) : null}
 
                     <View style={styles.footerContainer}>
-                        <TouchableOpacity onPress={() => pickImage([3, 2])}>
+                        <TouchableOpacity onPress={() => pickImage([16, 9])}>
                             <FontAwesome5 name="image" size={24} color={Colors.secondary} />
                         </TouchableOpacity>
                         <TouchableOpacity>

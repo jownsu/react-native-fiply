@@ -82,7 +82,9 @@ const HomeScreen = ({ navigation }, offset) => {
                 onDotPress={() => handleDotPress(item.id)}
                 onAvatarPress={handleAvatarPress}
                 onCommentPress={() => handleCommentPress(item)}
+                onCommentCountPress={() => handleCommentPress(item)}
                 onUpVotePress={handleUpVotePress}
+                onUpVoteCountPress={handleUpVoteCountPress}
             />
         )
     }
@@ -98,6 +100,13 @@ const HomeScreen = ({ navigation }, offset) => {
     }
 
     const handleUpVotePress = (id) => toggleUpVote(id)
+
+    const handleUpVoteCountPress = (id) => {
+        navigation.getParent().setOptions({
+            tabBarStyle: { display: 'none' },
+        })
+        navigation.navigate('UpVotesScreen', { postId: id })
+    }
 
     const onEndReached = () => {
         if (posts.data.length < 30 && !loading) {
