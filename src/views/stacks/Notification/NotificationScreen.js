@@ -1,43 +1,54 @@
-import React from 'react'
-import { StyleSheet, View, TouchableOpacity, Image } from 'react-native'
-import { SafeAreaView, Text, Container, FlatList } from '../../components/FiplyComponents'
-import SearchBar from '../../components/headers/SearchBar'
-import { FontAwesome, Entypo } from '@expo/vector-icons'
+import React, { useEffect, useContext } from 'react'
+import { StyleSheet, View, TouchableOpacity, RefreshControl, FlatList } from 'react-native'
+import NotificationContext from '../../../api/context/notifications/NotificationContext'
+import { SafeAreaView, Text, Container } from '../../components/FiplyComponents'
+import { Avatar } from 'react-native-paper'
+import { MaterialIcons } from '@expo/vector-icons'
 import Colors from '../../../utils/Colors'
-import TitleFilter from '../../components/headers/TitleFilter'
 import SampleData from '../../../utils/SampleData'
 import HeaderTitle from '../../components/headers/HeaderTitle'
 
 const NotificationScreen = ({ navigation }) => {
-    const renderNotificationList = (item) => (
+    const { notifications, loading, getNotifications, deleteNotification } =
+        useContext(NotificationContext)
+
+    useEffect(() => {
+        getNotifications()
+    }, [])
+
+    const renderNotificationList = ({ item }) => (
         <View style={styles.cardContainer}>
-            <Image source={item.image} style={styles.img} resizeMode="contain" />
+            <Avatar.Image
+                source={require('../../../assets/img/icon.png')}
+                size={64}
+                style={styles.icon}
+            />
             <View style={styles.cardInfoContainer}>
-                <Text weight="semi-bold">{item.name}</Text>
-                <Text>{item.description}</Text>
+                <Text weight="semi-bold">{item.title}</Text>
+                <Text>{item.message}</Text>
             </View>
 
             <View style={styles.rightContainer}>
-                <Entypo name="dots-three-horizontal" size={24} color={Colors.black} />
                 <Text size={10} color={Colors.grey}>
-                    {item.time}
+                    {item.date}
                 </Text>
+                <TouchableOpacity
+                    activeOpacity={0.7}
+                    style={styles.deleteIcon}
+                    onPress={() => handleDeleteNotification(item.id)}
+                >
+                    <MaterialIcons name="delete" size={24} color={Colors.red} />
+                </TouchableOpacity>
             </View>
         </View>
     )
 
+    const handleDeleteNotification = (id) => {
+        deleteNotification(id)
+    }
+
     return (
         <SafeAreaView flex statusBarColor={Colors.white}>
-            {/* <SearchBar
-                rightIcon={() => (
-                    <TouchableOpacity
-                        onPress={() => navigation.navigate('MessageStack')}
-                        activeOpacity={0.5}
-                    >
-                        <FontAwesome name="paper-plane" size={24} color={Colors.secondary} />
-                    </TouchableOpacity>
-                )}
-            /> */}
             <HeaderTitle
                 title={'Notifications'}
                 style={{ backgroundColor: Colors.white, marginBottom: 10, paddingHorizontal: 10 }}
@@ -46,8 +57,11 @@ const NotificationScreen = ({ navigation }) => {
                 {/* <TitleFilter title="NOTIFICATION" titleColor={Colors.primary} hideLine /> */}
 
                 <FlatList
-                    data={SampleData.notificationList}
-                    renderItem={(item) => renderNotificationList(item)}
+                    refreshControl={
+                        <RefreshControl refreshing={loading} onRefresh={() => getNotifications()} />
+                    }
+                    data={notifications}
+                    renderItem={renderNotificationList}
                     noDataMessage="No Notification"
                 />
             </Container>
@@ -58,10 +72,7 @@ const NotificationScreen = ({ navigation }) => {
 export default NotificationScreen
 
 const styles = StyleSheet.create({
-    img: {
-        height: 50,
-        width: 50,
-        borderRadius: 100,
+    icon: {
         alignSelf: 'center',
         backgroundColor: Colors.white,
         marginRight: 10,
@@ -81,7 +92,10 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     rightContainer: {
-        justifyContent: 'space-between',
         alignItems: 'flex-end',
+    },
+    deleteIcon: {
+        marginTop: 'auto',
+        marginBottom: 'auto',
     },
 })
