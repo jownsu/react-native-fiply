@@ -118,17 +118,6 @@ const BottomNavigator = ({ navigation }) => {
                 ></Tab.Screen>
 
                 <Tab.Screen
-                    name={'NotificationStack'}
-                    component={NotificationStack}
-                    options={{
-                        tabBarIcon: ({ color }) => (
-                            <MaterialIcons name="notifications" size={26} color={color} />
-                        ),
-                        title: 'Notification',
-                    }}
-                ></Tab.Screen>
-
-                <Tab.Screen
                     name={'JobStack'}
                     component={JobStack}
                     options={{
@@ -136,6 +125,17 @@ const BottomNavigator = ({ navigation }) => {
                             <FontAwesome5 name="briefcase" size={24} color={color} />
                         ),
                         title: 'Jobs',
+                    }}
+                ></Tab.Screen>
+
+                <Tab.Screen
+                    name={'NotificationStack'}
+                    component={NotificationStack}
+                    options={{
+                        tabBarIcon: ({ color }) => (
+                            <MaterialIcons name="notifications" size={26} color={color} />
+                        ),
+                        title: 'Notification',
                     }}
                 ></Tab.Screen>
             </Tab.Navigator>

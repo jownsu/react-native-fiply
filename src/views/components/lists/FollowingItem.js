@@ -1,5 +1,5 @@
 import React, { memo } from 'react'
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet, View, TouchableOpacity } from 'react-native'
 import { Avatar } from 'react-native-paper'
 import { SecondaryButton, Button, Text } from '../FiplyComponents'
 import Colors from '../../../utils/Colors'
@@ -10,6 +10,7 @@ const FollowingItem = memo(
         onFollowingBtnPress = () => {},
         onFollowBtnPress = () => {},
         onPendingtBtnPress = () => {},
+        onAvatarPress = () => {},
     }) => {
         const renderBtn = () => {
             switch (true) {
@@ -52,11 +53,13 @@ const FollowingItem = memo(
         return (
             <View style={styles.itemContainer}>
                 <View style={styles.itemBodyContainer}>
-                    <Avatar.Image
-                        source={{ uri: item.avatar }}
-                        size={70}
-                        backgroundColor={Colors.light}
-                    />
+                    <TouchableOpacity activeOpacity={0.7} onPress={() => onAvatarPress(item.id)}>
+                        <Avatar.Image
+                            source={{ uri: item.avatar }}
+                            size={70}
+                            backgroundColor={Colors.light}
+                        />
+                    </TouchableOpacity>
 
                     <View style={styles.nameContainer}>
                         <Text weight="semi-bold" size={14} numberOfLines={2} adjustsFontSizeToFit>

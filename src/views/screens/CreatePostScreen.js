@@ -163,7 +163,7 @@ const CreatePostScreen = ({ navigation, route }) => {
                         </View>
                     ) : null}
 
-                    <View style={styles.footerContainer}>
+                    {/* <View style={styles.footerContainer}>
                         <TouchableOpacity onPress={() => pickImage([16, 9])}>
                             <FontAwesome5 name="image" size={24} color={Colors.secondary} />
                         </TouchableOpacity>
@@ -179,7 +179,7 @@ const CreatePostScreen = ({ navigation, route }) => {
                         <TouchableOpacity>
                             <FontAwesome5 name="paperclip" size={24} color={Colors.grey} />
                         </TouchableOpacity>
-                    </View>
+                    </View> */}
                 </View>
             </Container>
         </SafeAreaView>

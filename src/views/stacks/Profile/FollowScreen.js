@@ -95,10 +95,13 @@ const FollowScreen = ({ navigation, route }) => {
         setShowCancelFollowAction(false)
     }
 
+    const handleAvatarPress = (id) => navigation.push('ProfileStack', { userId: id })
+
     const renderFollowingItem = ({ item }) => {
         return (
             <FollowingItem
                 item={item}
+                onAvatarPress={(id) => handleAvatarPress(id)}
                 onPendingtBtnPress={(item) => handlePendingBtnPress(item, 'followingItem')}
                 onFollowingBtnPress={(item) => handleFollowingBtnPress(item, 'followingItem')}
                 onFollowBtnPress={(item) => handleFollowBtnPress(item, 'followingItem')}
@@ -111,6 +114,7 @@ const FollowScreen = ({ navigation, route }) => {
             <FollowerItem
                 item={item}
                 is_me={userInfo.is_me}
+                onAvatarPress={(id) => handleAvatarPress(id)}
                 onPendingtBtnPress={(item) => handlePendingBtnPress(item, 'followerItem')}
                 onFollowingBtnPress={(item) => handleFollowingBtnPress(item, 'followerItem')}
                 onFollowBtnPress={(item) => handleFollowBtnPress(item, 'followerItem')}

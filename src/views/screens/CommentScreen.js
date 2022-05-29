@@ -84,11 +84,17 @@ const CommentScreen = ({ navigation, route }) => {
     const renderItem = ({ item }) => {
         return (
             <View style={styles.listContainer}>
-                <Avatar.Image
-                    size={40}
-                    source={{ uri: item.avatar }}
-                    backgroundColor={Colors.light}
-                />
+                <TouchableOpacity
+                    activeOpacity={0.7}
+                    onPress={() => handleAvatarPress(item.user_id)}
+                >
+                    <Avatar.Image
+                        size={40}
+                        source={{ uri: item.avatar }}
+                        backgroundColor={Colors.light}
+                    />
+                </TouchableOpacity>
+
                 <View style={styles.commentContainer}>
                     <Text weight="medium" numberOfLines={1} adjustsFontSizeToFit>
                         {item.commented_by}
@@ -110,6 +116,8 @@ const CommentScreen = ({ navigation, route }) => {
             </View>
         )
     }
+
+    const handleAvatarPress = (id) => navigation.push('ProfileStack', { userId: id })
 
     const ListEmptyComponent = useMemo(() => {
         return <NoData noDataMessage="No Comment" />

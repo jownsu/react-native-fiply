@@ -6,7 +6,6 @@ import { Formik } from 'formik'
 import * as yup from 'yup'
 import Colors from '../../../utils/Colors'
 import { TextInput as TxtInput } from 'react-native-paper'
-import { BarPasswordStrengthDisplay } from 'react-native-password-strength-meter'
 import {
     Text,
     FiplyLogo,
@@ -33,7 +32,7 @@ const SignUpScreen = ({ navigation, route }) => {
             .string()
             .trim()
             .required('Password is required')
-            .min(8)
+            .min(8, 'Must be atleast 8 characters')
             .matches(/^(?=.*[0-9])/, 'At least have a number.')
             .matches(/^(?=.*[a-z])/, 'There must be at least one lowercase letters')
             .matches(/^(?=.*[A-Z])/, 'There must be at least one uppercase letters')
@@ -113,7 +112,7 @@ const SignUpScreen = ({ navigation, route }) => {
                                     value={values.password}
                                     onChangeText={handleChange('password')}
                                     onBlur={handleBlur('password')}
-                                    // error={touched.password && errors.password ? true : false}
+                                    error={touched.password && errors.password ? true : false}
                                     // errorMsg={
                                     //     touched.password && errors.password ? errors.password : ''
                                     // }

@@ -25,7 +25,7 @@ const CreatePostBar = ({
                 <Text>Create a post</Text>
             </TouchableOpacity>
 
-            <View style={createPostySTyles.postActionContainer}>
+            {/* <View style={createPostySTyles.postActionContainer}>
                 <TouchableOpacity style={createPostySTyles.actionBtn} onPress={onPhotoPress}>
                     <FontAwesome name="picture-o" size={24} color={Colors.secondary} />
                     <Text weight="medium" size={12} style={createPostySTyles.actionText}>
@@ -46,7 +46,7 @@ const CreatePostBar = ({
                         File
                     </Text>
                 </TouchableOpacity>
-            </View>
+            </View> */}
         </View>
     )
 }

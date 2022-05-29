@@ -25,7 +25,7 @@ const PostAction = ({
                             />
                             <Text weight="medium">Save this post</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.btn} onPress={onReportPress}>
+                        {/* <TouchableOpacity style={styles.btn} onPress={onReportPress}>
                             <FontAwesome5
                                 name="font-awesome-flag"
                                 size={24}
@@ -33,7 +33,7 @@ const PostAction = ({
                                 style={{ width: 30 }}
                             />
                             <Text weight="medium">Report this post</Text>
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
                     </View>
                 </Dialog>
             </Portal>

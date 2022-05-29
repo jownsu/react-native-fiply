@@ -1,4 +1,5 @@
 import React, { useState, useContext, useReducer, createContext } from 'react'
+import { Alert } from 'react-native'
 import AuthContext from '../auth/AuthContext'
 import { FollowProvider } from '../follow/FollowContext'
 import api from '../../api'
@@ -341,7 +342,19 @@ export const ProfileProvider = ({ children }) => {
                 })
                 setSnackBarMessage(`Audience Updated to ${data ? 'Public' : 'Only Followers'}`)
             })
-            .catch((err) => setSnackBarMessage(err.message))
+            .catch((err) => alert(err.message))
+            .finally(() => stopLoading())
+    }
+
+    const changePassword = async (data, callback = () => {}) => {
+        setLoading()
+        await api({ token: user.token })
+            .put('/me/changePassword', data)
+            .then((res) => {
+                setSnackBarMessage('Changed Password Successfully')
+                callback()
+            })
+            .catch((err) => Alert.alert('Error', err.message))
             .finally(() => stopLoading())
     }
 
@@ -375,6 +388,7 @@ export const ProfileProvider = ({ children }) => {
                 unFollow,
                 cancelFollowRequest,
                 setAudience,
+                changePassword,
                 snackBarMessage,
                 hideSnackBar,
             }}

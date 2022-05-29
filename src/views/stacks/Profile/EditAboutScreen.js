@@ -16,7 +16,6 @@ import ProfileContext from '../../../api/context/profile/ProfileContext'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import Header from '../../components/headers/Header'
 import Colors from '../../../utils/Colors'
-import { MaterialIcons } from '@expo/vector-icons'
 import moment from 'moment'
 
 const EditAboutScreen = ({ navigation }) => {
