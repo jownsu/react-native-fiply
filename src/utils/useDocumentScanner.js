@@ -9,7 +9,7 @@ const useDocumentScanner = () => {
     const openScanner = (callback = () => {}) => {
         setLoading(true)
         RNGeniusScan.setLicenceKey(
-            '533c50065150060404510f5139525a0e4a095d135a454717045f440a4e555f520b58013d09030301530a01005b55'
+            '533c5006515f05080055055139525a0e4a095d135a454717045f440a4e555f520b58013d0903030e500a0307565b'
         )
             .then(() => {
                 return RNGeniusScan.scanWithConfiguration({
