@@ -1,0 +1,14 @@
+{
+    "git.decorations.enabled": false,
+    "diffEditor.renderIndicators": true,
+    "git.suggestSmartCommit": true,
+    "git.untrackedChanges": "mixed",
+    "scm.diffDecorationsGutterAction": "diff",
+    "scm.diffDecorationsGutterPattern": {
+        "modified": false
+    },
+    "scm.diffDecorationsGutterVisibility": "hover",
+    "scm.diffDecorationsGutterWidth": 1,
+    "testing.gutterEnabled": false,
+    "editor.renderLineHighlight": "line"
+}

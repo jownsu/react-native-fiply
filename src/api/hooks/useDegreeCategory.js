@@ -7,7 +7,7 @@ const useDegreeCategory = () => {
     const [loading, setLoading] = useState(false)
 
     const getDegreeCategories = async () => {
-        setLoading(true)
+        setLoading(false)
         await api()
             .get(`/degreeCategories`)
             .then((res) => setDegreeCategories(res.data.data))
