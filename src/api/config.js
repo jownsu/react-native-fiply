@@ -1,4 +1,4 @@
-const domain = 'http://192.168.1.5:3232'
+const domain = 'http://192.168.43.180:8000'
 
 const config = {
     api: domain + '/api',

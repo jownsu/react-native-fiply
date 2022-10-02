@@ -28,22 +28,11 @@ const api = ({ token = null, hiring_token = null, hiring_id = null } = {}) => {
                 NativeModules.DevSettings.reload()
                 return Promise.reject({ status: 401, errors: ['Unauthorized'] })
             }
-
-            // if(error.response?.status == 422){
-            //     let errors = Object.values(error?.response?.data?.errors || {})
-            //     return Promise.reject({status:422, errorsRaw: errors, errors:errors.reduce(error => error)})
-            // }
-
-            // console.log(error)
-
-            //return Promise.reject({status: error.response?.status, errors: ['Server Error xD!']});
             return Promise.reject(error.response.data)
         }
     )
 
     return api
 }
-
-// axios.defaults.baseURL = config.api
 
 export default api
